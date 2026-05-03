@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Pending Payments - Modern POS</title>
+        <title>Invoices Management - Date Filtering</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -26,145 +26,176 @@
                     sans-serif;
                 color: var(--color-primary);
             }
-            .table-row-hover:hover {
+            .group-header {
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
+            .group-header:hover {
                 background-color: #f1f5f9;
-                transform: scale(1.002);
-                transition: all 0.2s ease;
+            }
+            .collapsible-content {
+                display: table-row-group;
+            }
+            .collapsed {
+                display: none;
             }
             .status-badge {
                 padding: 4px 12px;
                 border-radius: 9999px;
-                font-size: 0.75rem;
-                font-weight: 700;
+                font-size: 0.65rem;
+                font-weight: 800;
                 text-transform: uppercase;
-                letter-spacing: 0.025em;
+            }
+            .chevron-icon {
+                transition: transform 0.3s ease;
+            }
+            .rotate-icon {
+                transform: rotate(-90deg);
+            }
+            .hidden-row {
+                display: none !important;
+            }
+            /* Custom styling for date inputs to match the theme */
+            input[type='date'] {
+                color: #2a4858;
+                font-weight: 600;
             }
         </style>
     </head>
     <body class="p-4 md:p-8">
-        <div class="mx-auto max-w-6xl">
-            <!-- Header Section -->
+        <div class="mx-auto max-w-7xl">
+            <!-- Header -->
             <div
                 class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center"
             >
                 <div>
                     <h1 class="text-3xl font-black text-[#2A4858]">
-                        Pending Payments
+                        Invoice Management
                     </h1>
-                    <p class="font-medium text-gray-500">
-                        Manage unpaid invoices and deferred orders
+                    <p class="text-sm font-medium text-gray-500">
+                        Filter activity by date range and terminal
                     </p>
                 </div>
                 <div class="flex gap-3">
                     <button
-                        onclick="window.history.back()"
-                        class="rounded-xl border-2 border-gray-200 bg-white px-6 py-3 text-sm font-bold transition-all hover:bg-gray-50"
+                        class="rounded-xl border-2 border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-[#2A4858] transition-all hover:bg-gray-50"
                     >
-                        <i class="fas fa-arrow-left mr-2"></i> Back to POS
+                        <i class="fas fa-arrow-left mr-2"></i> Back
                     </button>
                     <button
-                        onclick="location.reload()"
-                        class="rounded-xl bg-[#007882] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-[#007882]/20 transition-all hover:bg-[#2A4858]"
+                        onclick="resetFilters()"
+                        class="rounded-xl bg-[#007882] px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-[#007882]/20"
                     >
-                        <i class="fas fa-sync-alt mr-2"></i> Refresh
+                        <i class="fas fa-undo mr-2"></i> Reset
                     </button>
-                </div>
-            </div>
-
-            <!-- Summary Cards -->
-            <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-                <div
-                    class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
-                >
-                    <span
-                        class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                        >Total Pending (USD)</span
-                    >
-                    <div class="mt-1 text-2xl font-black text-[#2A4858]">
-                        $1,240.50
-                    </div>
-                </div>
-                <div
-                    class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
-                >
-                    <span
-                        class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                        >Total Pending (KHR)</span
-                    >
-                    <div class="mt-1 text-2xl font-black text-[#23AA8F]">
-                        5,086,050 KHR
-                    </div>
-                </div>
-                <div
-                    class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
-                >
-                    <span
-                        class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                        >Open Invoices</span
-                    >
-                    <div class="mt-1 text-2xl font-black text-orange-400">
-                        14 Orders
-                    </div>
                 </div>
             </div>
 
             <!-- Filter Bar -->
             <div
-                class="mb-6 flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm md:flex-row"
+                class="mb-6 space-y-4 rounded-3xl border border-gray-100 bg-white p-4 shadow-sm"
             >
-                <div class="relative flex-1">
-                    <i
-                        class="fas fa-search absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"
-                    ></i>
-                    <input
-                        type="text"
-                        placeholder="Search by Invoice #, Customer, or Table..."
-                        class="w-full rounded-xl border-transparent bg-gray-50 py-3 pr-4 pl-12 transition-all outline-none focus:bg-white focus:ring-2 focus:ring-[#23AA8F]"
-                    />
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <!-- Start Date -->
+                    <div class="relative">
+                        <label
+                            class="mb-1 ml-1 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                            >Start Date</label
+                        >
+                        <div class="relative">
+                            <i
+                                class="fas fa-calendar absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"
+                            ></i>
+                            <input
+                                type="date"
+                                id="startDate"
+                                onchange="applyAllFilters()"
+                                class="w-full rounded-2xl border-none bg-gray-50 py-3 pr-4 pl-12 text-sm outline-none focus:ring-2 focus:ring-[#23AA8F]"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- End Date -->
+                    <div class="relative">
+                        <label
+                            class="mb-1 ml-1 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                            >End Date</label
+                        >
+                        <div class="relative">
+                            <i
+                                class="fas fa-calendar absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"
+                            ></i>
+                            <input
+                                type="date"
+                                id="endDate"
+                                onchange="applyAllFilters()"
+                                class="w-full rounded-2xl border-none bg-gray-50 py-3 pr-4 pl-12 text-sm outline-none focus:ring-2 focus:ring-[#23AA8F]"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="relative">
+                        <label
+                            class="mb-1 ml-1 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                            >Keywords</label
+                        >
+                        <div class="relative">
+                            <i
+                                class="fas fa-search absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"
+                            ></i>
+                            <input
+                                type="text"
+                                id="invoiceSearch"
+                                onkeyup="applyAllFilters()"
+                                placeholder="Search #INV, phone, seat..."
+                                class="w-full rounded-2xl border-none bg-gray-50 py-3 pr-4 pl-12 text-sm outline-none focus:ring-2 focus:ring-[#23AA8F]"
+                            />
+                        </div>
+                    </div>
                 </div>
-                <select
-                    class="cursor-pointer rounded-xl border-transparent bg-gray-50 px-4 py-3 text-sm font-bold outline-none"
-                >
-                    <option>All Registers</option>
-                    <option>Register #01</option>
-                    <option>Register #02</option>
-                </select>
             </div>
 
-            <!-- Table View -->
+            <!-- Table -->
             <div
                 class="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm"
             >
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
+                    <table
+                        class="w-full border-collapse text-left"
+                        id="invoiceTable"
+                    >
                         <thead>
-                            <tr
-                                class="border-bottom border-gray-100 bg-gray-50"
-                            >
+                            <tr class="bg-gray-50/50">
                                 <th
-                                    class="px-6 py-4 text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                    class="w-12 px-4 py-4 text-center text-[10px] font-black tracking-widest text-gray-400 uppercase"
                                 >
-                                    Invoice
+                                    +/-
                                 </th>
                                 <th
-                                    class="px-6 py-4 text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                    class="px-4 py-4 text-[10px] font-black tracking-widest text-gray-400 uppercase"
                                 >
-                                    Date / Time
+                                    Date / Invoice
                                 </th>
                                 <th
-                                    class="px-6 py-4 text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                    class="px-4 py-4 text-[10px] font-black tracking-widest text-gray-400 uppercase"
                                 >
-                                    Customer / Table
+                                    POS Name
                                 </th>
                                 <th
-                                    class="px-6 py-4 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                    class="px-4 py-4 text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                >
+                                    Customer / Phone
+                                </th>
+                                <th
+                                    class="px-4 py-4 text-center text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                >
+                                    Seat
+                                </th>
+                                <th
+                                    class="px-4 py-4 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
                                 >
                                     Amount
-                                </th>
-                                <th
-                                    class="px-6 py-4 text-center text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                                >
-                                    Status
                                 </th>
                                 <th
                                     class="px-6 py-4 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
@@ -173,256 +204,350 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            <!-- Row 1 -->
-                            <tr class="table-row-hover">
-                                <td class="px-6 py-4">
-                                    <span class="font-black text-[#2A4858]"
-                                        >#INV-8821</span
-                                    >
+
+                        <!-- UNPAID GROUP -->
+                        <tbody
+                            class="group-header"
+                            onclick="toggleGroup('group-unpaid', this)"
+                        >
+                            <tr
+                                class="border-y border-orange-100/50 bg-orange-50/40"
+                            >
+                                <td class="px-4 py-4 text-center">
+                                    <i
+                                        class="fas fa-chevron-down chevron-icon text-xs text-orange-500"
+                                    ></i>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div
-                                        class="text-sm font-bold text-[#2A4858]"
-                                    >
-                                        Today
-                                    </div>
-                                    <div
-                                        class="text-[10px] font-medium text-gray-400"
-                                    >
-                                        12:45 PM
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div
-                                        class="text-sm font-bold text-[#2A4858]"
-                                    >
-                                        Table #05
-                                    </div>
-                                    <div
-                                        class="text-[10px] font-medium text-gray-400"
-                                    >
-                                        Walk-in Guest
+                                <td colspan="4" class="px-2 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <span
+                                            class="status-badge bg-orange-100 font-black text-orange-600"
+                                            >UNPAID</span
+                                        >
+                                        <span
+                                            class="group-count text-xs font-bold text-gray-400"
+                                            id="count-unpaid"
+                                            >2 Invoices</span
+                                        >
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-right">
+                                <td class="px-4 py-4 text-right">
+                                    <span
+                                        class="text-sm font-black text-orange-600"
+                                        >$212.50</span
+                                    >
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                        <tbody id="group-unpaid" class="collapsible-content">
+                            <!-- Invoice 1 (Today) -->
+                            <tr
+                                class="invoice-row border-b border-gray-50 transition-colors hover:bg-gray-50/50"
+                                data-date="2024-05-03"
+                            >
+                                <td
+                                    class="px-4 py-4 text-center text-xs font-bold text-gray-300"
+                                >
+                                    1
+                                </td>
+                                <td class="px-4 py-4">
+                                    <div
+                                        class="text-[10px] font-bold text-gray-400 uppercase"
+                                    >
+                                        May 03, 2024
+                                    </div>
                                     <div
                                         class="text-sm font-black text-[#2A4858]"
                                     >
-                                        $45.50
-                                    </div>
-                                    <div
-                                        class="text-[10px] font-bold text-gray-400"
-                                    >
-                                        186,550 KHR
+                                        #INV-8821
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 py-4">
                                     <span
-                                        class="status-badge bg-orange-100 text-orange-600"
-                                        >Unpaid</span
+                                        class="rounded bg-gray-100 px-2 py-1 text-[10px] font-black text-gray-500"
+                                        >Terminal-01</span
                                     >
+                                </td>
+                                <td class="px-4 py-4">
+                                    <div
+                                        class="text-sm font-black text-[#2A4858]"
+                                    >
+                                        Sok Phalla
+                                    </div>
+                                    <div class="text-[11px] text-gray-500">
+                                        012 555 999
+                                    </div>
+                                </td>
+                                <td class="px-4 py-4 text-center">
+                                    <span
+                                        class="rounded bg-gray-100 px-2 py-1 text-[10px] font-black text-gray-600"
+                                        >TABLE #05</span
+                                    >
+                                </td>
+                                <td
+                                    class="px-4 py-4 text-right text-sm font-black"
+                                >
+                                    $45.50
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <button
-                                        onclick="payInvoice('8821')"
-                                        class="rounded-lg bg-[#23AA8F] px-4 py-2 text-xs font-black text-white transition-colors hover:bg-[#007882]"
+                                        class="rounded-lg bg-[#23AA8F] px-3 py-1.5 text-[10px] font-black text-white"
                                     >
-                                        RECEIVE PAYMENT
+                                        RECEIVE
                                     </button>
                                 </td>
                             </tr>
-
-                            <!-- Row 2 -->
-                            <tr class="table-row-hover">
-                                <td class="px-6 py-4">
-                                    <span class="font-black text-[#2A4858]"
-                                        >#INV-8819</span
-                                    >
+                            <!-- Invoice 2 (Yesterday) -->
+                            <tr
+                                class="invoice-row border-b border-gray-50 transition-colors hover:bg-gray-50/50"
+                                data-date="2024-05-02"
+                            >
+                                <td
+                                    class="px-4 py-4 text-center text-xs font-bold text-gray-300"
+                                >
+                                    2
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-4 py-4">
                                     <div
-                                        class="text-sm font-bold text-[#2A4858]"
+                                        class="text-[10px] font-bold text-gray-400 uppercase"
                                     >
-                                        Today
+                                        May 02, 2024
                                     </div>
-                                    <div
-                                        class="text-[10px] font-medium text-gray-400"
-                                    >
-                                        11:20 AM
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div
-                                        class="text-sm font-bold text-[#2A4858]"
-                                    >
-                                        John Doe
-                                    </div>
-                                    <div
-                                        class="text-[10px] font-medium text-gray-400"
-                                    >
-                                        VIP Member
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
                                     <div
                                         class="text-sm font-black text-[#2A4858]"
                                     >
-                                        $12.00
-                                    </div>
-                                    <div
-                                        class="text-[10px] font-bold text-gray-400"
-                                    >
-                                        49,200 KHR
+                                        #INV-8825
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 py-4">
                                     <span
-                                        class="status-badge bg-orange-100 text-orange-600"
-                                        >Unpaid</span
+                                        class="rounded bg-gray-100 px-2 py-1 text-[10px] font-black text-gray-500"
+                                        >Terminal-02</span
                                     >
+                                </td>
+                                <td class="px-4 py-4">
+                                    <div
+                                        class="text-sm font-black text-[#2A4858]"
+                                    >
+                                        Ly Hour
+                                    </div>
+                                    <div class="text-[11px] text-gray-500">
+                                        099 888 777
+                                    </div>
+                                </td>
+                                <td class="px-4 py-4 text-center">
+                                    <span
+                                        class="rounded bg-indigo-50 px-2 py-1 text-[10px] font-black text-indigo-600"
+                                        >VIP ROOM 02</span
+                                    >
+                                </td>
+                                <td
+                                    class="px-4 py-4 text-right text-sm font-black"
+                                >
+                                    $167.00
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <button
-                                        onclick="payInvoice('8819')"
-                                        class="rounded-lg bg-[#23AA8F] px-4 py-2 text-xs font-black text-white transition-colors hover:bg-[#007882]"
+                                        class="rounded-lg bg-[#23AA8F] px-3 py-1.5 text-[10px] font-black text-white"
                                     >
-                                        RECEIVE PAYMENT
+                                        RECEIVE
                                     </button>
                                 </td>
                             </tr>
+                        </tbody>
 
-                            <!-- Row 3 -->
-                            <tr class="table-row-hover">
-                                <td class="px-6 py-4">
-                                    <span class="font-black text-[#2A4858]"
-                                        >#INV-8815</span
-                                    >
+                        <!-- SETTLED GROUP -->
+                        <tbody
+                            class="group-header"
+                            onclick="toggleGroup('group-settled', this)"
+                        >
+                            <tr
+                                class="border-y border-green-100/50 bg-green-50/40"
+                            >
+                                <td class="px-4 py-4 text-center">
+                                    <i
+                                        class="fas fa-chevron-down chevron-icon text-xs text-green-500"
+                                    ></i>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div
-                                        class="text-sm font-bold text-[#2A4858]"
-                                    >
-                                        Yesterday
-                                    </div>
-                                    <div
-                                        class="text-[10px] font-medium text-gray-400"
-                                    >
-                                        08:15 PM
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div
-                                        class="text-sm font-bold text-[#2A4858]"
-                                    >
-                                        Table #12
-                                    </div>
-                                    <div
-                                        class="text-[10px] font-medium text-gray-400"
-                                    >
-                                        Direct Delivery
+                                <td colspan="4" class="px-2 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <span
+                                            class="status-badge bg-green-100 font-black text-green-600"
+                                            >SETTLED</span
+                                        >
+                                        <span
+                                            class="group-count text-xs font-bold text-gray-400"
+                                            id="count-settled"
+                                            >1 Invoice</span
+                                        >
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-right">
+                                <td class="px-4 py-4 text-right">
+                                    <span
+                                        class="text-sm font-black text-green-600"
+                                        >$20.25</span
+                                    >
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                        <tbody id="group-settled" class="collapsible-content">
+                            <!-- Invoice 3 (Last Week) -->
+                            <tr
+                                class="invoice-row border-b border-gray-50 transition-colors hover:bg-gray-50/50"
+                                data-date="2024-04-25"
+                            >
+                                <td
+                                    class="px-4 py-4 text-center text-xs font-bold text-gray-300"
+                                >
+                                    3
+                                </td>
+                                <td class="px-4 py-4">
+                                    <div
+                                        class="text-[10px] font-bold text-gray-400 uppercase"
+                                    >
+                                        Apr 25, 2024
+                                    </div>
                                     <div
                                         class="text-sm font-black text-[#2A4858]"
                                     >
-                                        $155.00
-                                    </div>
-                                    <div
-                                        class="text-[10px] font-bold text-gray-400"
-                                    >
-                                        635,500 KHR
+                                        #INV-8805
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 py-4">
                                     <span
-                                        class="status-badge bg-orange-100 text-orange-600"
-                                        >Unpaid</span
+                                        class="rounded bg-gray-50 px-2 py-1 text-[10px] font-black text-gray-400"
+                                        >Terminal-01</span
                                     >
+                                </td>
+                                <td class="px-4 py-4">
+                                    <div
+                                        class="text-sm font-black text-[#2A4858]"
+                                    >
+                                        Vannak Long
+                                    </div>
+                                    <div class="text-[11px] text-gray-500">
+                                        010 333 444
+                                    </div>
+                                </td>
+                                <td class="px-4 py-4 text-center">
+                                    <span
+                                        class="rounded bg-gray-100 px-2 py-1 text-[10px] font-black text-gray-400"
+                                        >TABLE #01</span
+                                    >
+                                </td>
+                                <td
+                                    class="px-4 py-4 text-right text-sm font-black text-gray-400"
+                                >
+                                    $20.25
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <button
-                                        onclick="payInvoice('8815')"
-                                        class="rounded-lg bg-[#23AA8F] px-4 py-2 text-xs font-black text-white transition-colors hover:bg-[#007882]"
+                                    <span
+                                        class="text-[10px] font-black text-gray-300 uppercase"
+                                        >Settled</span
                                     >
-                                        RECEIVE PAYMENT
-                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Pagination / Footer -->
-                <div
-                    class="flex items-center justify-between border-t border-gray-100 bg-gray-50 px-6 py-4"
-                >
-                    <span class="text-xs font-bold text-gray-400"
-                        >Showing 3 of 14 pending orders</span
+                <!-- Empty State -->
+                <div id="noResults" class="hidden p-20 text-center">
+                    <div
+                        class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-50"
                     >
-                    <div class="flex gap-2">
-                        <button
-                            class="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-400 hover:text-[#2A4858]"
-                        >
-                            <i class="fas fa-chevron-left text-[10px]"></i>
-                        </button>
-                        <button
-                            class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2A4858] text-xs font-black text-white"
-                        >
-                            1
-                        </button>
-                        <button
-                            class="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-400"
-                        >
-                            2
-                        </button>
-                        <button
-                            class="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-400 hover:text-[#2A4858]"
-                        >
-                            <i class="fas fa-chevron-right text-[10px]"></i>
-                        </button>
+                        <i class="fas fa-filter text-2xl text-gray-200"></i>
                     </div>
+                    <h3 class="font-black text-[#2A4858]">
+                        No matching records
+                    </h3>
+                    <p class="text-sm font-medium text-gray-400">
+                        Try adjusting your date range or search terms
+                    </p>
                 </div>
-            </div>
-        </div>
-
-        <!-- Processing Modal (Simulated) -->
-        <div
-            id="processingModal"
-            class="fixed inset-0 z-50 flex hidden items-center justify-center bg-[#2A4858]/80 backdrop-blur-sm"
-        >
-            <div class="w-full max-w-sm rounded-3xl bg-white p-8 text-center">
-                <div
-                    class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#23AA8F]/10 text-[#23AA8F]"
-                >
-                    <i class="fas fa-circle-notch fa-spin text-3xl"></i>
-                </div>
-                <h3 class="text-xl font-black text-[#2A4858]">
-                    Redirecting to Payment
-                </h3>
-                <p class="mt-2 text-sm text-gray-500">
-                    Opening payment gateway for invoice
-                    <span id="targetInvoice" class="font-bold"></span>...
-                </p>
             </div>
         </div>
 
         <script>
-            function payInvoice(id) {
-                const modal = document.getElementById('processingModal');
-                const targetSpan = document.getElementById('targetInvoice');
-
-                targetSpan.innerText = '#' + id;
-                modal.classList.remove('hidden');
-
-                // Simulate navigation to the payment popup
-                setTimeout(() => {
-                    window.location.href = 'payment_popup.html?invoice=' + id;
-                }, 1200);
+            function toggleGroup(groupId, header) {
+                const content = document.getElementById(groupId);
+                const icon = header.querySelector('.chevron-icon');
+                content.classList.toggle('collapsed');
+                icon.classList.toggle('rotate-icon');
             }
 
-            // Logic for search filtering could be added here
+            function applyAllFilters() {
+                const searchVal = document
+                    .getElementById('invoiceSearch')
+                    .value.toUpperCase();
+                const startVal = document.getElementById('startDate').value;
+                const endVal = document.getElementById('endDate').value;
+
+                const rows = document.querySelectorAll('.invoice-row');
+                let globalMatchCount = 0;
+
+                rows.forEach((row) => {
+                    const rowDate = row.getAttribute('data-date');
+                    const rowText = row.innerText.toUpperCase();
+
+                    // Date logic
+                    let dateMatch = true;
+                    if (startVal && rowDate < startVal) dateMatch = false;
+                    if (endVal && rowDate > endVal) dateMatch = false;
+
+                    // Keyword logic
+                    const keywordMatch = rowText.indexOf(searchVal) > -1;
+
+                    if (dateMatch && keywordMatch) {
+                        row.classList.remove('hidden-row');
+                        globalMatchCount++;
+                    } else {
+                        row.classList.add('hidden-row');
+                    }
+                });
+
+                // Update Headers and Counts
+                const groups = ['group-unpaid', 'group-settled'];
+                groups.forEach((id) => {
+                    const groupBody = document.getElementById(id);
+                    const header = groupBody.previousElementSibling;
+                    const visibleRows = groupBody.querySelectorAll(
+                        '.invoice-row:not(.hidden-row)',
+                    ).length;
+                    const countBadge = header.querySelector('.group-count');
+
+                    if (visibleRows === 0) {
+                        header.classList.add('hidden-row');
+                    } else {
+                        header.classList.remove('hidden-row');
+                        countBadge.innerText = `${visibleRows} Invoice${visibleRows > 1 ? 's' : ''}`;
+                    }
+                });
+
+                // Empty state display
+                document
+                    .getElementById('noResults')
+                    .classList.toggle('hidden', globalMatchCount > 0);
+                document
+                    .getElementById('invoiceTable')
+                    .classList.toggle('hidden', globalMatchCount === 0);
+            }
+
+            function resetFilters() {
+                document.getElementById('startDate').value = '';
+                document.getElementById('endDate').value = '';
+                document.getElementById('invoiceSearch').value = '';
+                applyAllFilters();
+            }
+
+            // Initialize with realistic current dates for demo
+            window.onload = () => {
+                // Optional: Auto-set to current month?
+                // For now leaving blank so user sees all data
+                applyAllFilters();
+            };
         </script>
     </body>
 </html>

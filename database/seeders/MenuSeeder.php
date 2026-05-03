@@ -15,10 +15,7 @@ class MenuSeeder extends Seeder
 {
     public function run(): void
     {
-        $company = Company::first();
-        $branch = Branch::first();
-
-        if (!$company || !$branch) {
+        if (! Company::exists() || ! Branch::exists()) {
             return;
         }
 
@@ -42,33 +39,98 @@ class MenuSeeder extends Seeder
             ['name' => 'Piece']
         );
 
-        $foodCategory = MenuCategory::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'name' => 'Food',
-            'code' => 'FOOD',
-        ]);
+        Branch::with('company')->orderBy('id')->get()->each(function (Branch $branch) use ($bottle, $kg, $pcs) {
+            $company = $branch->company;
+            $isFirstBranch = $branch->is(Branch::orderBy('id')->first());
 
-        $drinkCategory = MenuCategory::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'name' => 'Drink',
-            'code' => 'DRINK',
-        ]);
+            $this->seedStockItems($company, $branch, $kg, $pcs, $bottle, $isFirstBranch);
 
-        $serviceCategory = MenuCategory::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'name' => 'Service',
-            'code' => 'SERVICE',
-        ]);
+            $menuCategories = [
+                'Appetizers' => [
+                    ['Spring Rolls', 2.50],
+                    ['Chicken Satay', 3.25],
+                    ['Garlic Bread', 2.00],
+                    ['Fried Wontons', 2.75],
+                    ['Fresh Salad', 3.00],
+                ],
+                'Mains' => [
+                    ['Fried Rice', 3.50],
+                    ['Grilled Chicken', 5.50],
+                    ['Beef Lok Lak', 6.25],
+                    ['Seafood Noodles', 5.75],
+                    ['Vegetable Curry', 4.75],
+                ],
+                'Drinks' => [
+                    ['Coca Cola', 1.00],
+                    ['Iced Lemon Tea', 1.25],
+                    ['Fresh Orange Juice', 2.00],
+                    ['Mineral Water', 0.75],
+                    ['Hot Coffee', 1.50],
+                ],
+                'Desserts' => [
+                    ['Mango Sticky Rice', 2.75],
+                    ['Chocolate Brownie', 2.50],
+                    ['Coconut Jelly', 1.75],
+                    ['Ice Cream Scoop', 1.50],
+                    ['Banana Fritter', 2.25],
+                ],
+                'Services' => [
+                    ['Special Room Service', 5.00],
+                    ['Cake Cutting Service', 3.00],
+                    ['Private Dining Setup', 8.00],
+                    ['Corkage Service', 4.00],
+                    ['Event Cleanup Service', 6.00],
+                ],
+            ];
+
+            foreach ($menuCategories as $categoryIndex => $menus) {
+                $categoryName = is_string($categoryIndex) ? $categoryIndex : '';
+                $categoryCode = strtoupper(substr($categoryName, 0, 3));
+
+                $category = MenuCategory::create([
+                    'company_id' => $company->id,
+                    'branch_id' => $branch->id,
+                    'name' => $categoryName,
+                    'code' => $branch->code.'-'.$categoryCode,
+                ]);
+
+                foreach ($menus as $menuIndex => [$menuName, $price]) {
+                    $menuType = $categoryName === 'Services' ? 'service' : 'product';
+                    $code = $this->menuCode($branch, $menuName, $categoryName, $menuIndex, $isFirstBranch);
+
+                    $menu = Menu::create([
+                        'company_id' => $company->id,
+                        'branch_id' => $branch->id,
+                        'menu_category_id' => $category->id,
+                        'name' => $menuName,
+                        'code' => $code,
+                        'menu_type' => $menuType,
+                        'base_price' => $price,
+                        'description' => $menuName.' for '.$branch->name,
+                    ]);
+
+                    MenuPrice::create([
+                        'menu_id' => $menu->id,
+                        'branch_id' => $branch->id,
+                        'price_name' => 'Default Price',
+                        'price' => $price,
+                        'is_default' => true,
+                    ]);
+                }
+            }
+        });
+    }
+
+    private function seedStockItems(Company $company, Branch $branch, Unit $kg, Unit $pcs, Unit $bottle, bool $useLegacyCodes): void
+    {
+        $suffix = $useLegacyCodes ? '' : '-'.$branch->code;
 
         Item::create([
             'company_id' => $company->id,
             'branch_id' => $branch->id,
             'unit_id' => $kg->id,
             'name' => 'Rice',
-            'code' => 'RM-RICE',
+            'code' => 'RM-RICE'.$suffix,
             'item_type' => 'raw_material',
             'cost' => 0.80,
         ]);
@@ -78,7 +140,7 @@ class MenuSeeder extends Seeder
             'branch_id' => $branch->id,
             'unit_id' => $pcs->id,
             'name' => 'Egg',
-            'code' => 'RM-EGG',
+            'code' => 'RM-EGG'.$suffix,
             'item_type' => 'ingredient',
             'cost' => 0.15,
         ]);
@@ -88,63 +150,28 @@ class MenuSeeder extends Seeder
             'branch_id' => $branch->id,
             'unit_id' => $bottle->id,
             'name' => 'Coca Cola Bottle',
-            'code' => 'DRK-COKE',
+            'code' => 'DRK-COKE'.$suffix,
             'item_type' => 'drink',
             'cost' => 0.45,
         ]);
+    }
 
-        $friedRice = Menu::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'menu_category_id' => $foodCategory->id,
-            'name' => 'Fried Rice',
-            'code' => 'M-FRIED-RICE',
-            'menu_type' => 'product',
-            'base_price' => 3.50,
-        ]);
+    private function menuCode(Branch $branch, string $menuName, string $categoryName, int $menuIndex, bool $useLegacyCodes): string
+    {
+        if ($useLegacyCodes && $menuName === 'Fried Rice') {
+            return 'M-FRIED-RICE';
+        }
 
-        MenuPrice::create([
-            'menu_id' => $friedRice->id,
-            'branch_id' => $branch->id,
-            'price_name' => 'Default Price',
-            'price' => 3.50,
-            'is_default' => true,
-        ]);
+        if ($useLegacyCodes && $menuName === 'Coca Cola') {
+            return 'M-COKE';
+        }
 
-        $coke = Menu::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'menu_category_id' => $drinkCategory->id,
-            'name' => 'Coca Cola',
-            'code' => 'M-COKE',
-            'menu_type' => 'product',
-            'base_price' => 1.00,
-        ]);
+        if ($useLegacyCodes && $menuName === 'Special Room Service') {
+            return 'S-ROOM-SERVICE';
+        }
 
-        MenuPrice::create([
-            'menu_id' => $coke->id,
-            'branch_id' => $branch->id,
-            'price_name' => 'Default Price',
-            'price' => 1.00,
-            'is_default' => true,
-        ]);
+        $categoryCode = strtoupper(substr($categoryName, 0, 3));
 
-        $specialService = Menu::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'menu_category_id' => $serviceCategory->id,
-            'name' => 'Special Room Service',
-            'code' => 'S-ROOM-SERVICE',
-            'menu_type' => 'service',
-            'base_price' => 5.00,
-        ]);
-
-        MenuPrice::create([
-            'menu_id' => $specialService->id,
-            'branch_id' => $branch->id,
-            'price_name' => 'Default Price',
-            'price' => 5.00,
-            'is_default' => true,
-        ]);
+        return $branch->code.'-'.$categoryCode.'-'.str_pad((string) ($menuIndex + 1), 2, '0', STR_PAD_LEFT);
     }
 }

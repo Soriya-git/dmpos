@@ -18,6 +18,11 @@ class Branch extends Model
         return $this->hasMany(PosTerminal::class);
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
     public function customers()
     {
         return $this->hasMany(Customer::class);
@@ -41,6 +46,11 @@ class Branch extends Model
     public function menus()
     {
         return $this->hasMany(Menu::class);
+    }
+
+    public function menuCategories()
+    {
+        return $this->hasMany(MenuCategory::class);
     }
 
     public function warehouses()

@@ -14,10 +14,12 @@ import {
     Maximize2,
     Minimize2,
     Pencil,
+    ReceiptText,
     Search,
     ShoppingCart,
     Trash2,
     Utensils,
+    X,
 } from 'lucide-vue-next';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
@@ -52,11 +54,33 @@ type OrderData = {
     id: number;
     order_no: string;
     status: string;
+    invoice_no?: string | null;
+    invoice_status?: string | null;
     subtotal: number;
     tax_amount: number;
     total_amount: number;
     created_at?: string | null;
     lines: CartLine[];
+};
+
+type InvoiceData = {
+    id: number;
+    invoice_no: string;
+    status: string;
+    subtotal: number;
+    discount_amount: number;
+    tax_amount: number;
+    grand_total: number;
+    paid_amount: number;
+    balance_amount: number;
+    created_at?: string | null;
+    lines: {
+        id: number;
+        menu_name: string;
+        qty: number;
+        total_amount: number;
+        note?: string | null;
+    }[];
 };
 
 const props = defineProps<{
@@ -67,22 +91,27 @@ const props = defineProps<{
     diningSession: {
         id: number;
         session_no: string;
+        status?: string | null;
         seat_name?: string | null;
         seat_type?: string | null;
         customer_name?: string | null;
         customer_phone?: string | null;
+        invoice_no?: string | null;
+        invoice_status?: string | null;
+        invoice_total?: number | null;
     };
     menus: MenuItem[];
     categories: Category[];
     cart: OrderData;
     historyOrders: OrderData[];
+    invoices: InvoiceData[];
     filters: {
         category_id?: string | number | null;
         search?: string | null;
     };
 }>();
 
-const activeTab = ref<'cart' | 'history'>('cart');
+const activeTab = ref<'cart' | 'orders' | 'invoice'>('cart');
 const search = ref(props.filters.search ?? '');
 const categoryId = ref<string | number | null>(props.filters.category_id ?? '');
 const pageRoot = ref<HTMLElement | null>(null);
@@ -91,7 +120,15 @@ const instructionNotes = ref<Record<number, string>>({});
 const discountMode = ref<'percent' | 'amount'>('percent');
 const discountValue = ref(0);
 const paymentOpen = ref(false);
+const editCustomerOpen = ref(false);
 const { imageUrl, money } = usePosFormatting();
+
+type PaymentPayload = {
+    method: string;
+    currency: 'USD' | 'KHR';
+    receivedAmount: number;
+    operationStatus: 'invoice' | 'invoice_receipt_done';
+};
 
 const addForm = useForm({
     menu_id: null as number | null,
@@ -103,7 +140,34 @@ const updateForm = useForm({
     qty: 1,
 });
 
+const customerForm = useForm({
+    customer_phone: props.diningSession.customer_phone ?? '',
+    customer_name: props.diningSession.customer_name ?? '',
+});
+
 const cartLineCount = computed(() => props.cart.lines.length);
+const hasInvoice = computed(() => Boolean(props.diningSession.invoice_no));
+const billableOrders = computed(() => {
+    return props.historyOrders.filter((order) => {
+        return (
+            !order.invoice_no && !['draft', 'cancelled'].includes(order.status)
+        );
+    });
+});
+const hasBillableOrders = computed(() => billableOrders.value.length > 0);
+const canCloseOrder = computed(() => {
+    return (
+        hasInvoice.value &&
+        !hasBillableOrders.value &&
+        ['invoiced', 'paid', 'pay_later'].includes(
+            props.diningSession.status ?? '',
+        )
+    );
+});
+
+const invoiceHeaderStatus = computed(() => {
+    return props.diningSession.invoice_status === 'paid' ? 'Paid' : 'Pending';
+});
 
 const cartLinesByMenuId = computed(() => {
     return new Map(props.cart.lines.map((line) => [line.menu_id, line]));
@@ -122,19 +186,25 @@ const tabs = computed(() => [
     },
     {
         icon: History,
-        label: 'All Orders',
-        value: 'history',
+        label: 'Orders',
+        value: 'orders',
+    },
+    {
+        count: props.invoices.length,
+        icon: ReceiptText,
+        label: 'Invoice',
+        value: 'invoice',
     },
 ]);
 
 const allOrdersSubtotal = computed(() => {
-    return props.historyOrders.reduce((total, order) => {
+    return billableOrders.value.reduce((total, order) => {
         return total + Number(order.subtotal ?? 0);
     }, 0);
 });
 
 const allOrdersTax = computed(() => {
-    return props.historyOrders.reduce((total, order) => {
+    return billableOrders.value.reduce((total, order) => {
         return total + Number(order.tax_amount ?? 0);
     }, 0);
 });
@@ -242,13 +312,54 @@ function sendToKitchen() {
 }
 
 function checkBill() {
-    if (cartLineCount.value > 0) return;
+    if (cartLineCount.value > 0 || !hasBillableOrders.value) return;
 
     paymentOpen.value = true;
 }
 
-function confirmPayment() {
-    paymentOpen.value = false;
+function confirmPayment(payload: PaymentPayload) {
+    router.post(
+        `/orders/${props.diningSession.id}/settle`,
+        {
+            method: payload.method,
+            currency: payload.currency,
+            received_amount: payload.receivedAmount,
+            operation_status: payload.operationStatus,
+            discount_amount: discountAmount.value,
+        },
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                paymentOpen.value = false;
+                activeTab.value = 'invoice';
+            },
+        },
+    );
+}
+
+function openEditCustomer() {
+    customerForm.customer_phone = props.diningSession.customer_phone ?? '';
+    customerForm.customer_name = props.diningSession.customer_name ?? '';
+    editCustomerOpen.value = true;
+}
+
+function saveCustomer() {
+    customerForm.patch(`/orders/${props.diningSession.id}/customer`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            editCustomerOpen.value = false;
+        },
+    });
+}
+
+function closeOrder() {
+    router.post(
+        `/orders/${props.diningSession.id}/close`,
+        {},
+        {
+            preserveScroll: true,
+        },
+    );
 }
 
 async function toggleFullscreen() {
@@ -297,6 +408,29 @@ function updateInstructionNote(menu: MenuItem, note: string) {
         ...instructionNotes.value,
         [menu.id]: note,
     };
+}
+
+function orderStatusLabel(order: OrderData) {
+    const status = order.invoice_status ?? order.status;
+
+    const labels: Record<string, string> = {
+        draft: 'Draft',
+        sent_to_kitchen: 'Confirmed',
+        preparing: 'Preparing',
+        ready: 'Ready',
+        served: 'Served',
+        paid: 'Paid',
+        pay_later: 'Invoiced',
+        issued: 'Invoiced',
+        partially_paid: 'Partially Paid',
+        cancelled: 'Cancelled',
+    };
+
+    return labels[status] ?? status.replaceAll('_', ' ').toUpperCase();
+}
+
+function invoiceStatusLabel(status: string) {
+    return status === 'paid' ? 'Paid' : 'Pending';
 }
 
 function commitInstructionNote(menu: MenuItem) {
@@ -492,12 +626,31 @@ onBeforeUnmount(() => {
                                 </template>
                                 <template v-else>Walk-in Customer</template>
                             </p>
+                            <p
+                                v-if="diningSession.invoice_no"
+                                class="mt-0.5 truncate text-[10px] font-black text-[#007882] uppercase"
+                            >
+                                Invoice {{ diningSession.invoice_no }}
+                            </p>
+                            <p
+                                v-if="diningSession.invoice_no"
+                                class="mt-0.5 truncate text-[10px] font-bold text-[#2A4858]"
+                            >
+                                {{
+                                    money(
+                                        diningSession.invoice_total ??
+                                            allOrdersFinalAmount,
+                                    )
+                                }}
+                                ({{ invoiceHeaderStatus }})
+                            </p>
                         </div>
 
                         <button
                             type="button"
                             class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-400 hover:text-[#007882]"
                             title="Edit customer"
+                            @click="openEditCustomer"
                         >
                             <Pencil class="h-3.5 w-3.5" />
                         </button>
@@ -555,7 +708,7 @@ onBeforeUnmount(() => {
                         </div>
                     </div>
 
-                    <div v-if="activeTab === 'history'" class="space-y-3 py-2">
+                    <div v-if="activeTab === 'orders'" class="space-y-3 py-2">
                         <article
                             v-for="order in historyOrders"
                             :key="order.id"
@@ -576,7 +729,7 @@ onBeforeUnmount(() => {
                                 <span
                                     class="rounded-full bg-gray-100 px-2 py-1 text-[9px] font-bold text-gray-500 uppercase"
                                 >
-                                    {{ order.status }}
+                                    {{ orderStatusLabel(order) }}
                                 </span>
                             </div>
 
@@ -622,9 +775,97 @@ onBeforeUnmount(() => {
                             No previous order history for this seat.
                         </div>
                     </div>
+
+                    <div v-if="activeTab === 'invoice'" class="space-y-3 py-2">
+                        <article
+                            v-for="invoice in invoices"
+                            :key="invoice.id"
+                            class="rounded-xl border border-gray-100 bg-white p-3 shadow-sm"
+                        >
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <h3
+                                        class="truncate text-xs font-black text-[#2A4858]"
+                                    >
+                                        {{ invoice.invoice_no }}
+                                    </h3>
+                                    <p class="mt-0.5 text-[10px] text-gray-400">
+                                        {{ invoice.created_at }}
+                                    </p>
+                                </div>
+
+                                <span
+                                    class="rounded-full px-2 py-1 text-[9px] font-bold uppercase"
+                                    :class="
+                                        invoice.status === 'paid'
+                                            ? 'bg-[#23AA8F]/10 text-[#007882]'
+                                            : 'bg-orange-50 text-orange-500'
+                                    "
+                                >
+                                    {{ invoiceStatusLabel(invoice.status) }}
+                                </span>
+                            </div>
+
+                            <div class="mt-3 space-y-1.5">
+                                <div
+                                    v-for="line in invoice.lines"
+                                    :key="line.id"
+                                    class="space-y-0.5"
+                                >
+                                    <div
+                                        class="flex justify-between gap-3 text-[11px]"
+                                    >
+                                        <span
+                                            class="min-w-0 truncate text-gray-500"
+                                        >
+                                            {{ line.menu_name }} x
+                                            {{ line.qty }}
+                                        </span>
+                                        <span class="font-bold text-[#2A4858]">
+                                            {{ money(line.total_amount) }}
+                                        </span>
+                                    </div>
+                                    <p
+                                        v-if="line.note"
+                                        class="truncate pl-2 text-[10px] font-medium text-[#007882]"
+                                    >
+                                        {{ line.note }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div
+                                class="mt-3 space-y-1 border-t border-dashed pt-2"
+                            >
+                                <div
+                                    class="flex justify-between text-[10px] font-bold"
+                                >
+                                    <span class="text-gray-400">Discount</span>
+                                    <span class="text-[#2A4858]">
+                                        {{ money(invoice.discount_amount) }}
+                                    </span>
+                                </div>
+                                <div
+                                    class="flex justify-between text-xs font-black text-[#007882]"
+                                >
+                                    <span>Total</span>
+                                    <span>{{
+                                        money(invoice.grand_total)
+                                    }}</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <div
+                            v-if="invoices.length === 0"
+                            class="rounded-xl border border-dashed border-gray-200 p-8 text-center text-sm text-gray-400"
+                        >
+                            No invoices for this seat yet.
+                        </div>
+                    </div>
                 </div>
 
-                <template v-if="activeTab === 'cart'">
+                <template v-if="activeTab === 'cart' && cart.lines.length > 0">
                     <PosTotalsPanel
                         :subtotal="money(cart.subtotal)"
                         action-label="SEND TO KITCHEN"
@@ -634,7 +875,36 @@ onBeforeUnmount(() => {
                     />
                 </template>
 
-                <div v-else class="border-t border-gray-100 bg-gray-50/50 p-4">
+                <div
+                    v-else-if="
+                        activeTab === 'cart' &&
+                        (hasBillableOrders || canCloseOrder)
+                    "
+                    class="border-t border-gray-100 bg-gray-50/50 p-4"
+                >
+                    <button
+                        v-if="activeTab === 'cart' && hasBillableOrders"
+                        type="button"
+                        class="w-full rounded-xl bg-[#23AA8F] py-3 text-xs font-black text-white shadow-lg shadow-[#23AA8F]/20 transition hover:bg-[#007882]"
+                        @click="checkBill"
+                    >
+                        CHECK BILL
+                    </button>
+
+                    <button
+                        v-else-if="activeTab === 'cart' && canCloseOrder"
+                        type="button"
+                        class="w-full rounded-xl bg-[#2A4858] py-3 text-xs font-black text-white shadow-lg shadow-[#2A4858]/15 transition hover:bg-[#203946]"
+                        @click="closeOrder"
+                    >
+                        CLOSE ORDER
+                    </button>
+                </div>
+
+                <div
+                    v-if="activeTab === 'orders'"
+                    class="border-t border-gray-100 bg-gray-50/50 p-4"
+                >
                     <div
                         class="mb-3 space-y-2 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm"
                     >
@@ -715,12 +985,34 @@ onBeforeUnmount(() => {
                     </div>
 
                     <button
-                        v-if="cart.lines.length === 0"
+                        v-if="cart.lines.length === 0 && hasBillableOrders"
                         type="button"
                         class="w-full rounded-xl bg-[#23AA8F] py-3 text-xs font-black text-white shadow-lg shadow-[#23AA8F]/20 transition hover:bg-[#007882]"
                         @click="checkBill"
                     >
                         CHECK BILL
+                    </button>
+
+                    <button
+                        v-else-if="hasInvoice && canCloseOrder"
+                        type="button"
+                        class="w-full rounded-xl bg-[#2A4858] py-3 text-xs font-black text-white shadow-lg shadow-[#2A4858]/15 transition hover:bg-[#203946]"
+                        @click="closeOrder"
+                    >
+                        CLOSE ORDER
+                    </button>
+                </div>
+
+                <div
+                    v-if="activeTab === 'invoice' && canCloseOrder"
+                    class="border-t border-gray-100 bg-gray-50/50 p-4"
+                >
+                    <button
+                        type="button"
+                        class="w-full rounded-xl bg-[#2A4858] py-3 text-xs font-black text-white shadow-lg shadow-[#2A4858]/15 transition hover:bg-[#203946]"
+                        @click="closeOrder"
+                    >
+                        CLOSE ORDER
                     </button>
                 </div>
             </aside>
@@ -734,6 +1026,82 @@ onBeforeUnmount(() => {
                 @close="paymentOpen = false"
                 @confirm="confirmPayment"
             />
+
+            <div
+                v-if="editCustomerOpen"
+                class="fixed inset-0 z-[75] flex items-center justify-center bg-[#2A4858]/20 p-4 backdrop-blur-sm"
+            >
+                <div
+                    class="w-full max-w-sm rounded-2xl bg-white p-5 shadow-2xl"
+                >
+                    <div class="mb-4 flex items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-base font-black text-[#2A4858]">
+                                Edit Customer
+                            </h3>
+                            <p class="mt-0.5 text-xs text-gray-400">
+                                Enter an existing phone number or add a new one.
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-400 hover:text-[#2A4858]"
+                            @click="editCustomerOpen = false"
+                        >
+                            <X class="h-4 w-4" />
+                        </button>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label
+                                class="mb-1 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                            >
+                                Phone Number
+                            </label>
+                            <input
+                                v-model="customerForm.customer_phone"
+                                type="tel"
+                                class="h-10 w-full rounded-xl border border-gray-100 bg-gray-50 px-3 text-sm font-bold text-[#2A4858] outline-none focus:border-[#23AA8F]/60"
+                                placeholder="Customer phone"
+                            />
+                        </div>
+
+                        <div>
+                            <label
+                                class="mb-1 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                            >
+                                Customer Name
+                            </label>
+                            <input
+                                v-model="customerForm.customer_name"
+                                type="text"
+                                class="h-10 w-full rounded-xl border border-gray-100 bg-gray-50 px-3 text-sm font-bold text-[#2A4858] outline-none focus:border-[#23AA8F]/60"
+                                placeholder="Customer name"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="mt-5 flex gap-2">
+                        <button
+                            type="button"
+                            class="h-10 flex-1 rounded-xl border border-gray-100 text-xs font-black text-[#2A4858] hover:bg-gray-50"
+                            @click="editCustomerOpen = false"
+                        >
+                            CANCEL
+                        </button>
+                        <button
+                            type="button"
+                            class="h-10 flex-1 rounded-xl bg-[#23AA8F] text-xs font-black text-white shadow-lg shadow-[#23AA8F]/20 hover:bg-[#007882] disabled:opacity-60"
+                            :disabled="customerForm.processing"
+                            @click="saveCustomer"
+                        >
+                            SAVE
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </AppLayout>
 </template>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Crm;
 use App\Http\Controllers\Feature;
 use App\Http\Controllers\POS\PosSessionController;
+use App\Http\Controllers\Sales\SaleInvoiceController;
 use App\Http\Controllers\Seats\SeatController;
 use App\Http\Controllers\Seats\SeatOrderController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/pos-sessions/{posSession}/close', [PosSessionController::class, 'close'])
         ->name('pos-sessions.close');
+
+    // Sales invoice routes
+    Route::get('/sales', [SaleInvoiceController::class, 'index'])->name('sales.index');
+    Route::post('/sales/invoices/{invoice}/receive', [SaleInvoiceController::class, 'receive'])
+        ->name('sales.invoices.receive');
 
     // Seat; Resource routes
     Route::get('/orders', [SeatController::class, 'index'])->name('seats.index');
@@ -44,6 +50,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/orders/{diningSession}/send-kitchen', [SeatOrderController::class, 'sendToKitchen'])
         ->name('seats.orders.send-kitchen');
+
+    Route::post('/orders/{diningSession}/settle', [SeatOrderController::class, 'settle'])
+        ->name('seats.orders.settle');
+
+    Route::patch('/orders/{diningSession}/customer', [SeatOrderController::class, 'updateCustomer'])
+        ->name('seats.orders.customer.update');
+
+    Route::post('/orders/{diningSession}/close', [SeatOrderController::class, 'closeOrder'])
+        ->name('seats.orders.close');
 
     // CRM Routes
     Route::resource('contacts', Crm\ContactController::class);

@@ -15,17 +15,18 @@ class PosSessionController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        $branchIds = $this->workableBranchIds($user);
         $currentSession = $this->currentUserOpenSession($request);
 
         return Inertia::render('POS/Index', [
             'sessions' => PosSession::with(['branch', 'posTerminal', 'opener', 'closer'])
-                ->where('branch_id', $user->branch_id)
+                ->whereIn('branch_id', $branchIds)
                 ->latest()
                 ->limit(50)
                 ->get(),
 
             'terminals' => PosTerminal::with(['branch'])
-                ->where('branch_id', $user->branch_id)
+                ->whereIn('branch_id', $branchIds)
                 ->where('is_active', true)
                 ->orderBy('name')
                 ->get(),
@@ -45,8 +46,9 @@ class PosSessionController extends Controller
 
         return DB::transaction(function () use ($data, $request) {
             $user = $request->user();
+            $branchIds = $this->workableBranchIds($user);
 
-            if (! $user->branch_id) {
+            if ($branchIds->isEmpty()) {
                 return back()->withErrors([
                     'pos_terminal_id' => 'Your user account is not assigned to a branch.',
                 ]);
@@ -64,13 +66,13 @@ class PosSessionController extends Controller
             }
 
             $terminal = PosTerminal::where('id', $data['pos_terminal_id'])
-                ->where('branch_id', $user->branch_id)
+                ->whereIn('branch_id', $branchIds)
                 ->where('is_active', true)
                 ->first();
 
             if (! $terminal) {
                 return back()->withErrors([
-                    'pos_terminal_id' => 'Please select an active POS terminal under your branch.',
+                    'pos_terminal_id' => 'Please select an active POS terminal under one of your branches.',
                 ]);
             }
 
@@ -154,5 +156,16 @@ class PosSessionController extends Controller
             ->where('status', 'open')
             ->latest()
             ->first();
+    }
+
+    private function workableBranchIds($user)
+    {
+        return $user->branches()
+            ->where('branches.company_id', $user->company_id)
+            ->pluck('branches.id')
+            ->push($user->branch_id)
+            ->filter()
+            ->unique()
+            ->values();
     }
 }

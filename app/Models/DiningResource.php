@@ -40,6 +40,6 @@ class DiningResource extends Model
     public function activeSession()
     {
         return $this->hasOne(DiningSession::class)
-            ->whereIn('status', ['open', 'invoiced', 'partially_paid', 'pay_later']);
+            ->whereIn('status', ['open', 'invoiced', 'partially_paid', 'paid', 'pay_later']);
     }
 }

@@ -29,6 +29,7 @@ const props = defineProps<{
     taxAmount: number;
     finalAmount: number;
     exchangeRate?: number;
+    allowPayLater?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -86,10 +87,17 @@ const methods: PaymentMethod[] = [
     },
 ];
 
+const availableMethods = computed(() => {
+    if (props.allowPayLater ?? true) return methods;
+
+    return methods.filter((method) => method.type !== 'pay_later');
+});
+
 const selectedMethod = computed(() => {
     return (
-        methods.find((method) => method.id === selectedMethodId.value) ??
-        methods[0]
+        availableMethods.value.find(
+            (method) => method.id === selectedMethodId.value,
+        ) ?? availableMethods.value[0]
     );
 });
 
@@ -273,7 +281,7 @@ function confirmPayment() {
 
                 <div class="grid grid-cols-2 gap-3 lg:grid-cols-3">
                     <button
-                        v-for="method in methods"
+                        v-for="method in availableMethods"
                         :key="method.id"
                         type="button"
                         class="group flex flex-col items-center gap-2 rounded-2xl border-2 p-4 transition"
