@@ -1,12 +1,4 @@
 <script setup lang="ts">
-import PosCategoryPills from '@/components/pos/PosCategoryPills.vue';
-import PosMenuCard from '@/components/pos/PosMenuCard.vue';
-import PosOrderLineItem from '@/components/pos/PosOrderLineItem.vue';
-import PosSegmentedTabs from '@/components/pos/PosSegmentedTabs.vue';
-import PosTotalsPanel from '@/components/pos/PosTotalsPanel.vue';
-import { usePosFormatting } from '@/composables/usePosFormatting';
-import AppLayout from '@/layouts/AppLayout.vue';
-import Payment from '@/pages/Seats/Payment.vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import {
     ArrowLeft,
@@ -22,6 +14,14 @@ import {
     X,
 } from 'lucide-vue-next';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import PosCategoryPills from '@/components/pos/PosCategoryPills.vue';
+import PosMenuCard from '@/components/pos/PosMenuCard.vue';
+import PosOrderLineItem from '@/components/pos/PosOrderLineItem.vue';
+import PosSegmentedTabs from '@/components/pos/PosSegmentedTabs.vue';
+import PosTotalsPanel from '@/components/pos/PosTotalsPanel.vue';
+import { usePosFormatting } from '@/composables/usePosFormatting';
+import AppLayout from '@/layouts/AppLayout.vue';
+import Payment from '@/pages/Seats/Payment.vue';
 
 type MenuItem = {
     id: number;

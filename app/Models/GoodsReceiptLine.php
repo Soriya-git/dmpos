@@ -3,12 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\GoodsReceipt;
-use App\Models\PurchaseOrderLine;
-use App\Models\Item;
-use App\Models\Unit;    
 
 class GoodsReceiptLine extends Model
 {

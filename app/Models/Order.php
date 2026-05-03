@@ -3,14 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Company;
-use App\Models\Branch;
-use App\Models\DiningSession;
-use App\Models\OrderLine;
-use App\Models\KitchenTicket;
-use App\Models\User;
 
 class Order extends Model
 {

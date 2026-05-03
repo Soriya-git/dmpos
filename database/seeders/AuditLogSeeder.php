@@ -21,7 +21,7 @@ class AuditLogSeeder extends Seeder
         $company = Company::first();
         $branch = Branch::first();
 
-        if (!$company || !$branch) {
+        if (! $company || ! $branch) {
             return;
         }
 

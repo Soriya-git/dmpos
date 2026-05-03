@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
-import InputError from '@/components/InputError.vue';
-import PosSessionPanel from '@/components/pos/PosSessionPanel.vue';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import {
     Banknote,
@@ -17,6 +12,11 @@ import {
     UserCircle,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import InputError from '@/components/InputError.vue';
+import PosSessionPanel from '@/components/pos/PosSessionPanel.vue';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 type Terminal = {
     id: number;

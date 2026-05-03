@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { usePosFormatting } from '@/composables/usePosFormatting';
-import AppLayout from '@/layouts/AppLayout.vue';
-import Payment from '@/pages/Seats/Payment.vue';
 import { Head, router } from '@inertiajs/vue3';
 import {
     ArrowLeft,
@@ -14,6 +9,11 @@ import {
     Search,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { usePosFormatting } from '@/composables/usePosFormatting';
+import AppLayout from '@/layouts/AppLayout.vue';
+import Payment from '@/pages/Seats/Payment.vue';
 
 type InvoiceStatus =
     | 'draft'

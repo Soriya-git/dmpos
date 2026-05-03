@@ -3,12 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Company;
-use App\Models\Branch;
-use App\Models\Printer;
-use App\Models\PrintTemplate;
-use App\Models\User;    
 
 class PrintJob extends Model
 {

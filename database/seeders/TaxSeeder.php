@@ -12,7 +12,7 @@ class TaxSeeder extends Seeder
     {
         $company = Company::first();
 
-        if (!$company) {
+        if (! $company) {
             return;
         }
 

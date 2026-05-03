@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { Utensils } from 'lucide-vue-next';
+import { computed } from 'vue';
 
 type MenuItem = {
     id: number;

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
     CalendarCheck,
     Clock,
@@ -13,6 +11,8 @@ import {
     Users,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 type ActiveSession = {
     id: number;

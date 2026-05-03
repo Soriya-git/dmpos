@@ -3,14 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Company;
-use App\Models\Branch;
-use App\Models\Warehouse;
-use App\Models\StockLocation;
-use App\Models\StockTransferLine;
-use App\Models\User;
 
 class StockTransfer extends Model
 {

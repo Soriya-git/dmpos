@@ -3,12 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Company;
-use App\Models\Branch;
-use App\Models\DiningSession;
-use App\Models\DiningResource;
-use App\Models\User;
 
 class SessionLog extends Model
 {
@@ -47,5 +41,4 @@ class SessionLog extends Model
     {
         return $this->belongsTo(User::class, 'performed_by');
     }
-
 }

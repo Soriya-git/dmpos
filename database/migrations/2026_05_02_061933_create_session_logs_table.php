@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('branch_id')->constrained()->cascadeOnDelete();
             $table->foreignId('dining_session_id')->constrained()->cascadeOnDelete();
 
-            $table->string('action'); 
+            $table->string('action');
             // opened, closed, moved, merged, split, cancelled, pay_later
 
             $table->foreignId('from_resource_id')
@@ -42,6 +42,7 @@ return new class extends Migration
             $table->index(['dining_session_id'], 'session_logs_session_idx');
         });
     }
+
     /**
      * Reverse the migrations.
      */

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { Head, router, useForm } from '@inertiajs/vue3';
+import { Maximize2, Minimize2, Search } from 'lucide-vue-next';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import DiningResourceCard, {
     type DiningCustomerOption,
     type DiningResourceCardItem,
@@ -6,9 +9,6 @@ import DiningResourceCard, {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, router, useForm } from '@inertiajs/vue3';
-import { Maximize2, Minimize2, Search } from 'lucide-vue-next';
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 type TypeItem = {
     id: number;
