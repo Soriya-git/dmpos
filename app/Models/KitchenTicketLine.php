@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\KitchenTicket;
+use App\Models\OrderLine;
+use App\Models\Menu;  
 
 class KitchenTicketLine extends Model
 {

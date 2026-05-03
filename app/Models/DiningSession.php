@@ -3,6 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Company;
+use App\Models\Branch;
+use App\Models\PosTerminal;
+use App\Models\Customer;
+use App\Models\DiningResource;
+use App\Models\ResourceBooking;
+use App\Models\Order;
+use App\Models\Invoice;
+use App\Models\User;
+use App\Models\SessionLog;
+use App\Models\PosSession;  
 
 class DiningSession extends Model
 {

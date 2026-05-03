@@ -3,6 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Company;
+use App\Models\Branch;
+use App\Models\Order;
+use App\Models\DiningSession;
+use App\Models\DiningResource;
+use App\Models\KitchenTicketLine;
+use App\Models\User;
 
 class KitchenTicket extends Model
 {

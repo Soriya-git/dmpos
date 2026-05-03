@@ -3,6 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\Company;
+use App\Models\Branch;
+use App\Models\MenuCategory;
+use App\Models\Tax;
+use App\Models\MenuPrice;
+use App\Models\BomHeader;
+use App\Models\OrderLine;
 
 class Menu extends Model
 {

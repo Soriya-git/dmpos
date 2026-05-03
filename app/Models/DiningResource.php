@@ -3,6 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\Company;
+use App\Models\Branch;
+use App\Models\DiningResourceType;
+use App\Models\ResourceBooking;
+use App\Models\DiningSession;
+
+
 
 class DiningResource extends Model
 {

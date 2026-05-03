@@ -3,6 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Invoice;
+use App\Models\Order;
+use App\Models\OrderLine;
+use App\Models\Menu;
+use App\Models\Tax;
 
 class InvoiceLine extends Model
 {
