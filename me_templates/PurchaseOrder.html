@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Purchase Order Management</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --primary-dark: #2a4858;
+                --primary-teal: #007882;
+                --accent-green: #23aa8f;
+                --light-green: #86d780;
+                --accent-yellow: #fafa6e;
+            }
+            body {
+                background-color: #f8fafc;
+                font-family: 'Inter', sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            .bg-primary-dark {
+                background-color: var(--primary-dark);
+            }
+            .bg-primary-teal {
+                background-color: var(--primary-teal);
+            }
+            .text-primary-teal {
+                color: var(--primary-teal);
+            }
+            .border-primary-teal {
+                border-color: var(--primary-teal);
+            }
+            .bg-accent-green {
+                background-color: var(--accent-green);
+            }
+            .hover-accent-green:hover {
+                background-color: #1e917a;
+            }
+
+            .view-container {
+                transition: all 0.3s ease-in-out;
+            }
+            .hidden-view {
+                display: none;
+            }
+
+            input:focus,
+            select:focus,
+            textarea:focus {
+                outline: none;
+                border-color: var(--primary-teal);
+                box-shadow: 0 0 0 2px rgba(0, 120, 130, 0.2);
+            }
+
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: #ccc;
+                border-radius: 10px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--primary-teal);
+            }
+
+            .pagination-btn {
+                padding: 0.5rem 0.75rem;
+                border: 1px solid #e2e8f0;
+                background: white;
+                color: #64748b;
+                font-size: 0.875rem;
+                font-weight: 500;
+                transition: all 0.2s;
+            }
+            .pagination-btn:hover:not(:disabled) {
+                background-color: #f1f5f9;
+                color: var(--primary-teal);
+            }
+            .pagination-btn.active {
+                background-color: var(--primary-teal);
+                color: white;
+                border-color: var(--primary-teal);
+            }
+        </style>
+    </head>
+    <body class="text-slate-800">
+        <!-- MAIN DASHBOARD VIEW -->
+        <main
+            id="view-dashboard"
+            class="view-container mx-auto max-w-7xl p-4 md:p-6"
+        >
+            <!-- Summary Cards -->
+            <div class="mb-8 grid grid-cols-1 gap-4 md:grid-cols-4">
+                <div
+                    class="border-primary-teal rounded-xl border-l-4 bg-white p-5 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Total POs
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold">128</h3>
+                </div>
+                <div
+                    class="border-accent-green rounded-xl border-l-4 bg-white p-5 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Pending Approval
+                    </p>
+                    <h3 class="text-accent-green mt-1 text-2xl font-bold">
+                        14
+                    </h3>
+                </div>
+                <div
+                    class="rounded-xl border-l-4 border-amber-400 bg-white p-5 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Awaiting Delivery
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold text-amber-600">8</h3>
+                </div>
+                <div
+                    class="rounded-xl border-l-4 border-red-400 bg-white p-5 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Overdue
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold text-red-500">3</h3>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div
+                class="mb-6 flex flex-col items-center justify-between space-y-4 md:flex-row md:space-y-0"
+            >
+                <div class="flex w-full items-center space-x-2 md:w-auto">
+                    <div class="relative w-full md:w-80">
+                        <i
+                            class="fas fa-search absolute top-3 left-3 text-slate-400"
+                        ></i>
+                        <input
+                            type="text"
+                            placeholder="Search PO # or Supplier..."
+                            class="w-full rounded-lg border border-slate-200 py-2 pr-4 pl-10"
+                        />
+                    </div>
+                    <button
+                        class="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
+                    >
+                        <i class="fas fa-filter"></i>
+                    </button>
+                </div>
+                <button
+                    onclick="navigateTo('view-new-po')"
+                    class="bg-primary-teal hover:bg-opacity-90 flex w-full items-center justify-center space-x-2 rounded-lg px-6 py-2.5 font-bold text-white shadow-md transition md:w-auto"
+                >
+                    <i class="fas fa-plus"></i>
+                    <span>New Purchase Order</span>
+                </button>
+            </div>
+
+            <!-- PO Table -->
+            <div
+                class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm"
+            >
+                <table class="w-full border-collapse text-left">
+                    <thead
+                        class="bg-slate-50 text-xs font-bold text-slate-600 uppercase"
+                    >
+                        <tr>
+                            <th class="px-6 py-4">PO Number</th>
+                            <th class="px-6 py-4">Supplier</th>
+                            <th class="px-6 py-4">Order Date</th>
+                            <th class="px-6 py-4 text-right">Total Amount</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        <!-- Row 1 -->
+                        <tr class="transition hover:bg-slate-50/50">
+                            <td
+                                class="text-primary-teal px-6 py-4 font-mono font-bold"
+                            >
+                                PO-2024-001
+                            </td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">
+                                Global Foods Co.
+                            </td>
+                            <td class="px-6 py-4 text-slate-600">
+                                Oct 24, 2024
+                            </td>
+                            <td class="px-6 py-4 text-right font-bold">
+                                $1,250.00
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-700 uppercase"
+                                    >Pending</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button
+                                    class="hover:text-primary-teal text-slate-400"
+                                >
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Row 2 -->
+                        <tr class="transition hover:bg-slate-50/50">
+                            <td
+                                class="text-primary-teal px-6 py-4 font-mono font-bold"
+                            >
+                                PO-2024-002
+                            </td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">
+                                Fresh Harvests Ltd.
+                            </td>
+                            <td class="px-6 py-4 text-slate-600">
+                                Oct 23, 2024
+                            </td>
+                            <td class="px-6 py-4 text-right font-bold">
+                                $840.50
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="rounded-full bg-green-100 px-2.5 py-1 text-xs font-bold text-green-700 uppercase"
+                                    >Approved</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button
+                                    class="hover:text-primary-teal text-slate-400"
+                                >
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Row 3 -->
+                        <tr class="transition hover:bg-slate-50/50">
+                            <td
+                                class="text-primary-teal px-6 py-4 font-mono font-bold"
+                            >
+                                PO-2024-003
+                            </td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">
+                                City Logistics
+                            </td>
+                            <td class="px-6 py-4 text-slate-600">
+                                Oct 22, 2024
+                            </td>
+                            <td class="px-6 py-4 text-right font-bold">
+                                $2,100.00
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-bold text-blue-700 uppercase"
+                                    >Delivered</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button
+                                    class="hover:text-primary-teal text-slate-400"
+                                >
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Row 4 -->
+                        <tr class="transition hover:bg-slate-50/50">
+                            <td
+                                class="text-primary-teal px-6 py-4 font-mono font-bold"
+                            >
+                                PO-2024-004
+                            </td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">
+                                Oceanic Imports
+                            </td>
+                            <td class="px-6 py-4 text-slate-600">
+                                Oct 21, 2024
+                            </td>
+                            <td class="px-6 py-4 text-right font-bold">
+                                $4,520.00
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="rounded-full bg-red-100 px-2.5 py-1 text-xs font-bold text-red-700 uppercase"
+                                    >Overdue</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button
+                                    class="hover:text-primary-teal text-slate-400"
+                                >
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Row 5 -->
+                        <tr class="transition hover:bg-slate-50/50">
+                            <td
+                                class="text-primary-teal px-6 py-4 font-mono font-bold"
+                            >
+                                PO-2024-005
+                            </td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">
+                                K-Wholesale Mart
+                            </td>
+                            <td class="px-6 py-4 text-slate-600">
+                                Oct 20, 2024
+                            </td>
+                            <td class="px-6 py-4 text-right font-bold">
+                                $315.25
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600 uppercase"
+                                    >Draft</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button
+                                    class="hover:text-primary-teal text-slate-400"
+                                >
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Pagination Bar -->
+                <div
+                    class="flex flex-col items-center justify-between space-y-3 border-t border-slate-100 bg-slate-50 px-6 py-4 md:flex-row md:space-y-0"
+                >
+                    <p class="text-sm text-slate-500">
+                        Showing
+                        <span class="font-bold text-slate-800">1</span> to
+                        <span class="font-bold text-slate-800">5</span> of
+                        <span class="font-bold text-slate-800">128</span>
+                        entries
+                    </p>
+                    <div class="flex -space-x-px">
+                        <button class="pagination-btn rounded-l-lg" disabled>
+                            <i class="fas fa-chevron-left text-xs"></i>
+                        </button>
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn">2</button>
+                        <button class="pagination-btn">3</button>
+                        <span
+                            class="border border-slate-200 bg-white px-4 py-2 text-slate-400"
+                            >...</span
+                        >
+                        <button class="pagination-btn">26</button>
+                        <button class="pagination-btn rounded-r-lg">
+                            <i class="fas fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- NEW PURCHASE ORDER SCREEN -->
+        <section
+            id="view-new-po"
+            class="view-container hidden-view mx-auto max-w-7xl p-4 md:p-6"
+        >
+            <!-- New PO content remains same as previous -->
+            <div class="mb-8 flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button
+                        onclick="navigateTo('view-dashboard')"
+                        class="hover:text-primary-teal flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-white hover:shadow-sm"
+                    >
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">
+                            Create Purchase Order
+                        </h2>
+                        <p class="text-sm text-slate-500">
+                            Fill in the details to issue a new inventory request
+                        </p>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <button
+                        onclick="navigateTo('view-dashboard')"
+                        class="px-4 py-2 font-semibold text-slate-600 transition hover:text-red-500"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        class="bg-primary-teal rounded-lg px-6 py-2 font-bold text-white shadow-md hover:opacity-90"
+                    >
+                        Save Order
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                <div class="space-y-6 lg:col-span-1">
+                    <div
+                        class="rounded-xl border border-slate-100 bg-white p-6 shadow-sm"
+                    >
+                        <h3
+                            class="mb-4 flex items-center text-sm font-bold text-slate-700 uppercase"
+                        >
+                            <i
+                                class="fas fa-info-circle text-primary-teal mr-2"
+                            ></i>
+                            Info
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label
+                                    class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                    >PO Number</label
+                                >
+                                <input
+                                    type="text"
+                                    value="PO-2024-00129"
+                                    readonly
+                                    class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-slate-500"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                    >Supplier</label
+                                >
+                                <select
+                                    class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
+                                >
+                                    <option>-- Select Supplier --</option>
+                                    <option>Global Foods Co.</option>
+                                    <option>City Logistics Ltd.</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label
+                                        class="mb-1 block text-xs font-bold text-amber-600 text-slate-500 uppercase"
+                                        >Expected Date</label
+                                    >
+                                    <input
+                                        type="date"
+                                        class="w-full rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs"
+                                    />
+                                </div>
+                                <div>
+                                    <label
+                                        class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                        >Order Date</label
+                                    >
+                                    <input
+                                        type="date"
+                                        class="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6 lg:col-span-2">
+                    <div
+                        class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm"
+                    >
+                        <div
+                            class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4"
+                        >
+                            <h3
+                                class="text-xs font-bold tracking-wider text-slate-700 uppercase"
+                            >
+                                Order Items
+                            </h3>
+                            <button
+                                onclick="addItemRow()"
+                                class="bg-accent-green rounded px-3 py-1.5 text-xs font-bold text-white hover:opacity-90"
+                            >
+                                <i class="fas fa-plus mr-1"></i> Add Item
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead
+                                    class="border-b border-slate-100 text-slate-500"
+                                >
+                                    <tr>
+                                        <th
+                                            class="px-4 py-3 text-left font-semibold"
+                                        >
+                                            Item Details
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-center font-semibold"
+                                            style="width: 80px"
+                                        >
+                                            Qty
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-right font-semibold"
+                                            style="width: 120px"
+                                        >
+                                            Cost
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-right font-semibold"
+                                            style="width: 120px"
+                                        >
+                                            Total
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-center"
+                                            style="width: 40px"
+                                        ></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="po-items-body">
+                                    <tr
+                                        class="border-b border-slate-50 last:border-0"
+                                    >
+                                        <td class="px-4 py-4">
+                                            <select
+                                                class="w-full border-0 font-medium text-slate-800 focus:ring-0"
+                                            >
+                                                <option>
+                                                    Organic Coffee Beans
+                                                </option>
+                                                <option>
+                                                    Premium Green Tea
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td class="px-4 py-4">
+                                            <input
+                                                type="number"
+                                                value="1"
+                                                class="w-full rounded border-slate-200 py-1 text-center"
+                                            />
+                                        </td>
+                                        <td
+                                            class="px-4 py-4 text-right font-mono"
+                                        >
+                                            $15.00
+                                        </td>
+                                        <td
+                                            class="px-4 py-4 text-right font-mono font-bold text-slate-700"
+                                        >
+                                            $15.00
+                                        </td>
+                                        <td class="px-4 py-4 text-center">
+                                            <button
+                                                class="text-slate-300 hover:text-red-400"
+                                            >
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-primary-dark rounded-xl p-6 text-white shadow-lg"
+                    >
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-bold"
+                                >Estimated Grand Total</span
+                            >
+                            <span class="text-accent-yellow text-2xl font-bold"
+                                >$15.00</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            function navigateTo(viewId) {
+                const views = document.querySelectorAll('.view-container');
+                views.forEach((view) => view.classList.add('hidden-view'));
+                const targetView = document.getElementById(viewId);
+                if (targetView) {
+                    targetView.classList.remove('hidden-view');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+
+            function addItemRow() {
+                const tbody = document.getElementById('po-items-body');
+                const newRow = document.createElement('tr');
+                newRow.className = 'border-b border-slate-50 last:border-0';
+                newRow.innerHTML = `
+                <td class="px-4 py-4">
+                    <select class="w-full border-0 focus:ring-0 font-medium text-slate-800 text-sm">
+                        <option>-- Select Product --</option>
+                        <option>Item C - Milk Powder</option>
+                        <option>Item D - Cane Sugar</option>
+                    </select>
+                </td>
+                <td class="px-4 py-4">
+                    <input type="number" value="1" class="w-full text-center border-slate-200 rounded py-1 text-sm">
+                </td>
+                <td class="px-4 py-4 text-right font-mono text-sm">$0.00</td>
+                <td class="px-4 py-4 text-right font-bold text-slate-700 font-mono text-sm">$0.00</td>
+                <td class="px-4 py-4 text-center">
+                    <button onclick="this.closest('tr').remove()" class="text-slate-300 hover:text-red-400"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            `;
+                tbody.appendChild(newRow);
+            }
+        </script>
+    </body>
+</html>
