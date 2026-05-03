@@ -10,6 +10,7 @@ import {
     RotateCcw,
     Search,
     X,
+    AArrowUp,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { Button } from '@/components/ui/button';
