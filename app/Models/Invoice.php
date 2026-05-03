@@ -2,8 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read Customer|null $customer
+ * @property-read DiningSession|null $diningSession
+ * @property-read PosTerminal|null $posTerminal
+ * @property-read Collection<int, InvoiceLine> $lines
+ */
 class Invoice extends Model
 {
     protected $guarded = [];
@@ -21,47 +30,56 @@ class Invoice extends Model
         'cancelled_at' => 'datetime',
     ];
 
-    public function company()
+    /** @return BelongsTo<Company, $this> */
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function branch()
+    /** @return BelongsTo<Branch, $this> */
+    public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
     }
 
-    public function posTerminal()
+    /** @return BelongsTo<PosTerminal, $this> */
+    public function posTerminal(): BelongsTo
     {
         return $this->belongsTo(PosTerminal::class);
     }
 
-    public function diningSession()
+    /** @return BelongsTo<DiningSession, $this> */
+    public function diningSession(): BelongsTo
     {
         return $this->belongsTo(DiningSession::class);
     }
 
-    public function customer()
+    /** @return BelongsTo<Customer, $this> */
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
     }
 
-    public function lines()
+    /** @return HasMany<InvoiceLine, $this> */
+    public function lines(): HasMany
     {
         return $this->hasMany(InvoiceLine::class);
     }
 
-    public function payments()
+    /** @return HasMany<Payment, $this> */
+    public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
     }
 
-    public function issuer()
+    /** @return BelongsTo<User, $this> */
+    public function issuer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'issued_by');
     }
 
-    public function canceller()
+    /** @return BelongsTo<User, $this> */
+    public function canceller(): BelongsTo
     {
         return $this->belongsTo(User::class, 'cancelled_by');
     }

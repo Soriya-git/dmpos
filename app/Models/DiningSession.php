@@ -2,8 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read Customer|null $customer
+ * @property-read DiningResource|null $diningResource
+ * @property-read Collection<int, Order> $orders
+ * @property-read Collection<int, Invoice> $invoices
+ */
 class DiningSession extends Model
 {
     protected $guarded = [];
@@ -13,62 +22,74 @@ class DiningSession extends Model
         'closed_at' => 'datetime',
     ];
 
-    public function company()
+    /** @return BelongsTo<Company, $this> */
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function branch()
+    /** @return BelongsTo<Branch, $this> */
+    public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
     }
 
-    public function posTerminal()
+    /** @return BelongsTo<PosTerminal, $this> */
+    public function posTerminal(): BelongsTo
     {
         return $this->belongsTo(PosTerminal::class);
     }
 
-    public function customer()
+    /** @return BelongsTo<Customer, $this> */
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
     }
 
-    public function diningResource()
+    /** @return BelongsTo<DiningResource, $this> */
+    public function diningResource(): BelongsTo
     {
         return $this->belongsTo(DiningResource::class);
     }
 
-    public function resourceBooking()
+    /** @return BelongsTo<ResourceBooking, $this> */
+    public function resourceBooking(): BelongsTo
     {
         return $this->belongsTo(ResourceBooking::class);
     }
 
-    public function orders()
+    /** @return HasMany<Order, $this> */
+    public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
     }
 
-    public function invoices()
+    /** @return HasMany<Invoice, $this> */
+    public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);
     }
 
-    public function opener()
+    /** @return BelongsTo<User, $this> */
+    public function opener(): BelongsTo
     {
         return $this->belongsTo(User::class, 'opened_by');
     }
 
-    public function closer()
+    /** @return BelongsTo<User, $this> */
+    public function closer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'closed_by');
     }
 
-    public function logs()
+    /** @return HasMany<SessionLog, $this> */
+    public function logs(): HasMany
     {
         return $this->hasMany(SessionLog::class);
     }
 
-    public function posSession()
+    /** @return BelongsTo<PosSession, $this> */
+    public function posSession(): BelongsTo
     {
         return $this->belongsTo(PosSession::class);
     }

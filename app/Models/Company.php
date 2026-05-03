@@ -3,52 +3,62 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Company extends Model
 {
     protected $guarded = [];
 
-    public function branches()
+    /** @return HasMany<Branch, $this> */
+    public function branches(): HasMany
     {
         return $this->hasMany(Branch::class);
     }
 
-    public function users()
+    /** @return HasMany<User, $this> */
+    public function users(): HasMany
     {
         return $this->hasMany(User::class);
     }
 
-    public function posTerminals()
+    /** @return HasMany<PosTerminal, $this> */
+    public function posTerminals(): HasMany
     {
         return $this->hasMany(PosTerminal::class);
     }
 
-    public function customers()
+    /** @return HasMany<Customer, $this> */
+    public function customers(): HasMany
     {
         return $this->hasMany(Customer::class);
     }
 
-    public function diningResources()
+    /** @return HasMany<DiningResource, $this> */
+    public function diningResources(): HasMany
     {
         return $this->hasMany(DiningResource::class);
     }
 
-    public function menus()
+    /** @return HasMany<Menu, $this> */
+    public function menus(): HasMany
     {
         return $this->hasMany(Menu::class);
     }
 
-    public function items()
+    /** @return HasMany<Item, $this> */
+    public function items(): HasMany
     {
         return $this->hasMany(Item::class);
     }
 
-    public function warehouses()
+    /** @return HasMany<Warehouse, $this> */
+    public function warehouses(): HasMany
     {
         return $this->hasMany(Warehouse::class);
     }
 
-    public function printers()
+    /** @return HasMany<Printer, $this> */
+    public function printers(): HasMany
     {
         return $this->hasMany(Printer::class);
     }

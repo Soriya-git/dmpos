@@ -4,9 +4,12 @@ import {
     ArrowLeft,
     Calendar,
     ChevronDown,
+    Eye,
     Filter,
+    Printer,
     RotateCcw,
     Search,
+    X,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { Button } from '@/components/ui/button';
@@ -39,6 +42,19 @@ type SaleInvoice = {
     paid_amount: number;
     balance_amount: number;
     exchange_rate?: number | null;
+    lines: SaleInvoiceLine[];
+};
+
+type SaleInvoiceLine = {
+    id: number;
+    menu_name: string;
+    quantity: number;
+    unit_price: number;
+    discount_amount: number;
+    tax_amount: number;
+    line_subtotal: number;
+    line_total: number;
+    note?: string | null;
 };
 
 type PaymentPayload = {
@@ -70,6 +86,7 @@ const collapsedGroups = ref<Record<'unpaid' | 'settled', boolean>>({
 });
 const paymentOpen = ref(false);
 const selectedInvoice = ref<SaleInvoice | null>(null);
+const detailInvoice = ref<SaleInvoice | null>(null);
 const { money } = usePosFormatting();
 
 const unpaidInvoices = computed(() => {
@@ -162,6 +179,18 @@ function openPayment(invoice: SaleInvoice) {
 function closePayment() {
     paymentOpen.value = false;
     selectedInvoice.value = null;
+}
+
+function showInvoiceDetail(invoice: SaleInvoice) {
+    detailInvoice.value = invoice;
+}
+
+function closeInvoiceDetail() {
+    detailInvoice.value = null;
+}
+
+function printInvoice(_invoice: SaleInvoice) {
+    // Printing will be wired in a later pass.
 }
 
 function confirmPayment(payload: PaymentPayload) {
@@ -498,25 +527,60 @@ function statusLabel(status: InvoiceStatus) {
                                                 )
                                             }}
                                         </td>
-                                        <td class="px-6 py-4 text-right">
-                                            <Button
-                                                v-if="invoice.status !== 'paid'"
-                                                type="button"
-                                                class="h-8 rounded-lg bg-[#23AA8F] px-3 text-[10px] font-black text-white hover:bg-[#007882]"
-                                                @click.stop="
-                                                    openPayment(invoice)
-                                                "
+                                        <td class="px-6 py-4">
+                                            <div
+                                                class="flex items-center justify-end gap-2"
                                             >
-                                                Receive
-                                            </Button>
-                                            <span
-                                                v-else
-                                                class="text-[10px] font-black text-gray-300 uppercase"
-                                            >
-                                                {{
-                                                    statusLabel(invoice.status)
-                                                }}
-                                            </span>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    class="h-8 w-8 rounded-lg border-gray-100 bg-white p-0 text-[#2A4858] hover:border-[#23AA8F]/40 hover:bg-[#23AA8F]/10"
+                                                    title="View invoice items"
+                                                    @click.stop="
+                                                        showInvoiceDetail(
+                                                            invoice,
+                                                        )
+                                                    "
+                                                >
+                                                    <Eye class="h-4 w-4" />
+                                                </Button>
+
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    class="h-8 w-8 rounded-lg border-gray-100 bg-white p-0 text-[#2A4858] hover:border-[#23AA8F]/40 hover:bg-[#23AA8F]/10"
+                                                    title="Print invoice"
+                                                    @click.stop="
+                                                        printInvoice(invoice)
+                                                    "
+                                                >
+                                                    <Printer class="h-4 w-4" />
+                                                </Button>
+
+                                                <Button
+                                                    v-if="
+                                                        invoice.status !==
+                                                        'paid'
+                                                    "
+                                                    type="button"
+                                                    class="h-8 rounded-lg bg-[#23AA8F] px-3 text-[10px] font-black text-white hover:bg-[#007882]"
+                                                    @click.stop="
+                                                        openPayment(invoice)
+                                                    "
+                                                >
+                                                    Receive
+                                                </Button>
+                                                <span
+                                                    v-else
+                                                    class="text-[10px] font-black text-gray-300 uppercase"
+                                                >
+                                                    {{
+                                                        statusLabel(
+                                                            invoice.status,
+                                                        )
+                                                    }}
+                                                </span>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -552,6 +616,176 @@ function statusLabel(status: InvoiceStatus) {
                 @close="closePayment"
                 @confirm="confirmPayment"
             />
+
+            <div
+                v-if="detailInvoice"
+                class="fixed inset-0 z-[75] flex items-center justify-center bg-[#2A4858]/20 p-4 backdrop-blur-sm"
+                @click.self="closeInvoiceDetail"
+            >
+                <section
+                    class="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
+                >
+                    <header
+                        class="flex items-start justify-between gap-4 border-b border-gray-100 p-5"
+                    >
+                        <div>
+                            <p
+                                class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                            >
+                                Invoice Detail
+                            </p>
+                            <h2 class="mt-1 text-xl font-black text-[#2A4858]">
+                                #{{ detailInvoice.invoice_no }}
+                            </h2>
+                            <p class="mt-1 text-xs font-medium text-gray-400">
+                                {{ detailInvoice.display_date }} /
+                                {{
+                                    detailInvoice.customer_name ??
+                                    'Walk-in Customer'
+                                }}
+                            </p>
+                        </div>
+
+                        <Button
+                            type="button"
+                            variant="outline"
+                            class="h-9 w-9 rounded-xl border-gray-100 p-0 text-gray-400 hover:bg-gray-50 hover:text-[#2A4858]"
+                            @click="closeInvoiceDetail"
+                        >
+                            <X class="h-4 w-4" />
+                        </Button>
+                    </header>
+
+                    <div class="min-h-0 flex-1 overflow-y-auto p-5">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="border-b border-gray-100">
+                                        <th
+                                            class="py-3 pr-4 text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                        >
+                                            Item
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                        >
+                                            Qty
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                        >
+                                            Price
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                        >
+                                            Tax
+                                        </th>
+                                        <th
+                                            class="py-3 pl-4 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                        >
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        v-for="line in detailInvoice.lines"
+                                        :key="line.id"
+                                        class="border-b border-gray-50"
+                                    >
+                                        <td class="py-4 pr-4">
+                                            <div
+                                                class="text-sm font-black text-[#2A4858]"
+                                            >
+                                                {{ line.menu_name }}
+                                            </div>
+                                            <p
+                                                v-if="line.note"
+                                                class="mt-1 text-[11px] font-medium text-[#007882]"
+                                            >
+                                                {{ line.note }}
+                                            </p>
+                                        </td>
+                                        <td
+                                            class="px-4 py-4 text-right text-sm font-bold text-[#2A4858]"
+                                        >
+                                            {{ line.quantity }}
+                                        </td>
+                                        <td
+                                            class="px-4 py-4 text-right text-sm font-bold text-[#2A4858]"
+                                        >
+                                            {{ money(line.unit_price) }}
+                                        </td>
+                                        <td
+                                            class="px-4 py-4 text-right text-sm font-bold text-[#2A4858]"
+                                        >
+                                            {{ money(line.tax_amount) }}
+                                        </td>
+                                        <td
+                                            class="py-4 pl-4 text-right text-sm font-black text-[#007882]"
+                                        >
+                                            {{ money(line.line_total) }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div
+                            v-if="detailInvoice.lines.length === 0"
+                            class="rounded-2xl border border-dashed border-gray-200 p-8 text-center text-sm font-medium text-gray-400"
+                        >
+                            No items found for this invoice.
+                        </div>
+                    </div>
+
+                    <footer
+                        class="grid gap-2 border-t border-gray-100 bg-gray-50/60 p-5 text-sm sm:grid-cols-4"
+                    >
+                        <div>
+                            <p
+                                class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                            >
+                                Subtotal
+                            </p>
+                            <p class="font-black text-[#2A4858]">
+                                {{ money(detailInvoice.subtotal) }}
+                            </p>
+                        </div>
+                        <div>
+                            <p
+                                class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                            >
+                                Discount
+                            </p>
+                            <p class="font-black text-[#2A4858]">
+                                {{ money(detailInvoice.discount_amount) }}
+                            </p>
+                        </div>
+                        <div>
+                            <p
+                                class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                            >
+                                Tax
+                            </p>
+                            <p class="font-black text-[#2A4858]">
+                                {{ money(detailInvoice.tax_amount) }}
+                            </p>
+                        </div>
+                        <div class="sm:text-right">
+                            <p
+                                class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                            >
+                                Grand Total
+                            </p>
+                            <p class="text-lg font-black text-[#007882]">
+                                {{ money(detailInvoice.grand_total) }}
+                            </p>
+                        </div>
+                    </footer>
+                </section>
+            </div>
         </main>
     </AppLayout>
 </template>

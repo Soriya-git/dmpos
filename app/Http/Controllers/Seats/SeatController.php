@@ -56,6 +56,17 @@ class SeatController extends Controller
             ->get()
             ->map(function ($resource) {
                 $session = $resource->activeSession;
+                $customer = $this->customerFor($session?->customer_id);
+                $customerName = null;
+                $customerPhone = null;
+
+                if ($customer) {
+                    $customerName = $customer->name ?? $customer->customer_name;
+                    $customerPhone = $customer->phone_number
+                        ?? $customer->phone
+                        ?? $customer->customer_phone
+                        ?? $customer->mobile;
+                }
 
                 return [
                     'id' => $resource->id,
@@ -75,14 +86,8 @@ class SeatController extends Controller
                         'status' => $session->status,
                         'guest_count' => $session->guest_count,
                         'opened_at' => $session->opened_at?->format('Y-m-d H:i'),
-                        'customer_name' => $session->customer?->name
-                            ?? $session->customer?->customer_name
-                            ?? null,
-                        'customer_phone' => $session->customer?->phone_number
-                            ?? $session->customer?->phone
-                            ?? $session->customer?->customer_phone
-                            ?? $session->customer?->mobile
-                            ?? null,
+                        'customer_name' => $customerName,
+                        'customer_phone' => $customerPhone,
                     ] : null,
                 ];
             });
@@ -196,5 +201,14 @@ class SeatController extends Controller
         });
 
         return back()->with('success', 'Seat checked in successfully.');
+    }
+
+    private function customerFor(?int $customerId): ?Customer
+    {
+        if (! $customerId) {
+            return null;
+        }
+
+        return Customer::query()->find($customerId);
     }
 }

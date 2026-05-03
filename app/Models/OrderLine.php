@@ -3,7 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read Order|null $order
+ */
 class OrderLine extends Model
 {
     protected $guarded = [];
@@ -18,27 +23,32 @@ class OrderLine extends Model
         'line_total' => 'decimal:2',
     ];
 
-    public function order()
+    /** @return BelongsTo<Order, $this> */
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
-    public function menu()
+    /** @return BelongsTo<Menu, $this> */
+    public function menu(): BelongsTo
     {
         return $this->belongsTo(Menu::class);
     }
 
-    public function tax()
+    /** @return BelongsTo<Tax, $this> */
+    public function tax(): BelongsTo
     {
         return $this->belongsTo(Tax::class);
     }
 
-    public function kitchenTicketLines()
+    /** @return HasMany<KitchenTicketLine, $this> */
+    public function kitchenTicketLines(): HasMany
     {
         return $this->hasMany(KitchenTicketLine::class);
     }
 
-    public function invoiceLines()
+    /** @return HasMany<InvoiceLine, $this> */
+    public function invoiceLines(): HasMany
     {
         return $this->hasMany(InvoiceLine::class);
     }

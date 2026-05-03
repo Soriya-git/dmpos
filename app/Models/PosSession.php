@@ -3,7 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read Branch|null $branch
+ * @property-read PosTerminal|null $posTerminal
+ * @property-read User|null $opener
+ * @property-read User|null $closer
+ */
 class PosSession extends Model
 {
     protected $fillable = [
@@ -67,37 +75,44 @@ class PosSession extends Model
         'closed_at' => 'datetime',
     ];
 
-    public function company()
+    /** @return BelongsTo<Company, $this> */
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function branch()
+    /** @return BelongsTo<Branch, $this> */
+    public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
     }
 
-    public function posTerminal()
+    /** @return BelongsTo<PosTerminal, $this> */
+    public function posTerminal(): BelongsTo
     {
         return $this->belongsTo(PosTerminal::class);
     }
 
-    public function opener()
+    /** @return BelongsTo<User, $this> */
+    public function opener(): BelongsTo
     {
         return $this->belongsTo(User::class, 'opened_by');
     }
 
-    public function closer()
+    /** @return BelongsTo<User, $this> */
+    public function closer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'closed_by');
     }
 
-    public function canceller()
+    /** @return BelongsTo<User, $this> */
+    public function canceller(): BelongsTo
     {
         return $this->belongsTo(User::class, 'cancelled_by');
     }
 
-    public function diningSessions()
+    /** @return HasMany<DiningSession, $this> */
+    public function diningSessions(): HasMany
     {
         return $this->hasMany(DiningSession::class);
     }

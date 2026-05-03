@@ -2,8 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read Collection<int, OrderLine> $orderLines
+ */
 class Order extends Model
 {
     protected $guarded = [];
@@ -12,37 +18,44 @@ class Order extends Model
         'sent_to_kitchen_at' => 'datetime',
     ];
 
-    public function company()
+    /** @return BelongsTo<Company, $this> */
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function branch()
+    /** @return BelongsTo<Branch, $this> */
+    public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
     }
 
-    public function diningSession()
+    /** @return BelongsTo<DiningSession, $this> */
+    public function diningSession(): BelongsTo
     {
         return $this->belongsTo(DiningSession::class);
     }
 
-    public function orderLines()
+    /** @return HasMany<OrderLine, $this> */
+    public function orderLines(): HasMany
     {
         return $this->hasMany(OrderLine::class);
     }
 
-    public function kitchenTickets()
+    /** @return HasMany<KitchenTicket, $this> */
+    public function kitchenTickets(): HasMany
     {
         return $this->hasMany(KitchenTicket::class);
     }
 
-    public function creator()
+    /** @return BelongsTo<User, $this> */
+    public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function canceller()
+    /** @return BelongsTo<User, $this> */
+    public function canceller(): BelongsTo
     {
         return $this->belongsTo(User::class, 'cancelled_by');
     }

@@ -3,67 +3,82 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Branch extends Model
 {
     protected $guarded = [];
 
-    public function company()
+    /** @return BelongsTo<Company, $this> */
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function posTerminals()
+    /** @return HasMany<PosTerminal, $this> */
+    public function posTerminals(): HasMany
     {
         return $this->hasMany(PosTerminal::class);
     }
 
-    public function users()
+    /** @return BelongsToMany<User, $this> */
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withTimestamps();
     }
 
-    public function customers()
+    /** @return HasMany<Customer, $this> */
+    public function customers(): HasMany
     {
         return $this->hasMany(Customer::class);
     }
 
-    public function diningResources()
+    /** @return HasMany<DiningResource, $this> */
+    public function diningResources(): HasMany
     {
         return $this->hasMany(DiningResource::class);
     }
 
-    public function diningSessions()
+    /** @return HasMany<DiningSession, $this> */
+    public function diningSessions(): HasMany
     {
         return $this->hasMany(DiningSession::class);
     }
 
-    public function resourceBookings()
+    /** @return HasMany<ResourceBooking, $this> */
+    public function resourceBookings(): HasMany
     {
         return $this->hasMany(ResourceBooking::class);
     }
 
-    public function menus()
+    /** @return HasMany<Menu, $this> */
+    public function menus(): HasMany
     {
         return $this->hasMany(Menu::class);
     }
 
-    public function menuCategories()
+    /** @return HasMany<MenuCategory, $this> */
+    public function menuCategories(): HasMany
     {
         return $this->hasMany(MenuCategory::class);
     }
 
-    public function warehouses()
+    /** @return HasMany<Warehouse, $this> */
+    public function warehouses(): HasMany
     {
         return $this->hasMany(Warehouse::class);
     }
 
-    public function paymentMethods()
+    /** @return HasMany<PaymentMethod, $this> */
+    public function paymentMethods(): HasMany
     {
         return $this->hasMany(PaymentMethod::class);
     }
 
-    public function printers()
+    /** @return HasMany<Printer, $this> */
+    public function printers(): HasMany
     {
         return $this->hasMany(Printer::class);
     }

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Sales;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Models\PosSession;
+use App\Models\PosTerminal;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +37,12 @@ class SaleInvoiceController extends Controller
             : null;
 
         $invoices = Invoice::query()
-            ->with(['customer', 'posTerminal', 'diningSession.diningResource'])
+            ->with([
+                'customer',
+                'lines',
+                'posTerminal',
+                'diningSession.diningResource',
+            ])
             ->where('branch_id', $activePosSession->branch_id)
             ->where('status', '!=', 'cancelled')
             ->when($filters['start_date'] ?? null, fn ($query, $date) => $query->whereDate('created_at', '>=', $date))
@@ -161,7 +168,20 @@ class SaleInvoiceController extends Controller
 
     private function formatInvoice(Invoice $invoice): array
     {
-        $customer = $invoice->customer;
+        $customer = $this->customerFor($invoice->customer_id);
+        $posTerminal = $this->posTerminalFor($invoice->pos_terminal_id);
+        $customerName = 'Walk-in Customer';
+        $customerPhone = null;
+        $posName = 'Terminal';
+
+        if ($customer) {
+            $customerName = $customer->name ?? $customer->customer_name ?? $customerName;
+            $customerPhone = $customer->phone_number ?? $customer->phone ?? $customer->mobile;
+        }
+
+        if ($posTerminal) {
+            $posName = $posTerminal->name;
+        }
 
         return [
             'id' => $invoice->id,
@@ -169,9 +189,9 @@ class SaleInvoiceController extends Controller
             'status' => $invoice->status,
             'date' => $invoice->created_at?->toDateString(),
             'display_date' => $invoice->created_at?->format('M d, Y'),
-            'pos_name' => $invoice->posTerminal?->name ?? 'Terminal',
-            'customer_name' => $customer?->name ?? $customer?->customer_name ?? 'Walk-in Customer',
-            'customer_phone' => $customer?->phone_number ?? $customer?->phone ?? $customer?->mobile ?? null,
+            'pos_name' => $posName,
+            'customer_name' => $customerName,
+            'customer_phone' => $customerPhone,
             'seat_name' => $invoice->diningSession?->diningResource?->name,
             'subtotal' => (float) $invoice->subtotal,
             'discount_amount' => (float) $invoice->discount_amount,
@@ -180,6 +200,35 @@ class SaleInvoiceController extends Controller
             'paid_amount' => (float) $invoice->paid_amount,
             'balance_amount' => (float) $invoice->balance_amount,
             'exchange_rate' => (float) $invoice->exchange_rate_snapshot,
+            'lines' => $invoice->lines->map(fn ($line) => [
+                'id' => $line->id,
+                'menu_name' => $line->menu_name_snapshot,
+                'quantity' => (float) $line->quantity,
+                'unit_price' => (float) $line->unit_price,
+                'discount_amount' => (float) $line->discount_amount,
+                'tax_amount' => (float) $line->tax_amount,
+                'line_subtotal' => (float) $line->line_subtotal,
+                'line_total' => (float) $line->line_total,
+                'note' => $line->note,
+            ]),
         ];
+    }
+
+    private function customerFor(?int $customerId): ?Customer
+    {
+        if (! $customerId) {
+            return null;
+        }
+
+        return Customer::query()->find($customerId);
+    }
+
+    private function posTerminalFor(?int $posTerminalId): ?PosTerminal
+    {
+        if (! $posTerminalId) {
+            return null;
+        }
+
+        return PosTerminal::query()->find($posTerminalId);
     }
 }

@@ -3,7 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property-read MenuCategory|null $menuCategory
+ * @property-read MenuPrice|null $defaultPrice
+ */
 class Menu extends Model
 {
     protected $guarded = [];
@@ -14,47 +21,56 @@ class Menu extends Model
         'is_active' => 'boolean',
     ];
 
-    public function company()
+    /** @return BelongsTo<Company, $this> */
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function branch()
+    /** @return BelongsTo<Branch, $this> */
+    public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
     }
 
-    public function menuCategory()
+    /** @return BelongsTo<MenuCategory, $this> */
+    public function menuCategory(): BelongsTo
     {
         return $this->belongsTo(MenuCategory::class);
     }
 
-    public function tax()
+    /** @return BelongsTo<Tax, $this> */
+    public function tax(): BelongsTo
     {
         return $this->belongsTo(Tax::class);
     }
 
-    public function prices()
+    /** @return HasMany<MenuPrice, $this> */
+    public function prices(): HasMany
     {
         return $this->hasMany(MenuPrice::class);
     }
 
-    public function defaultPrice()
+    /** @return HasOne<MenuPrice, $this> */
+    public function defaultPrice(): HasOne
     {
         return $this->hasOne(MenuPrice::class)->where('is_default', true);
     }
 
-    public function bomHeaders()
+    /** @return HasMany<BomHeader, $this> */
+    public function bomHeaders(): HasMany
     {
         return $this->hasMany(BomHeader::class);
     }
 
-    public function activeBom()
+    /** @return HasOne<BomHeader, $this> */
+    public function activeBom(): HasOne
     {
         return $this->hasOne(BomHeader::class)->where('status', 'active');
     }
 
-    public function orderLines()
+    /** @return HasMany<OrderLine, $this> */
+    public function orderLines(): HasMany
     {
         return $this->hasMany(OrderLine::class);
     }

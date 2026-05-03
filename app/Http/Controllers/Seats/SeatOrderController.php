@@ -9,6 +9,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceLine;
 use App\Models\Menu;
 use App\Models\MenuCategory;
+use App\Models\MenuPrice;
 use App\Models\Order;
 use App\Models\OrderLine;
 use App\Models\Payment;
@@ -64,15 +65,24 @@ class SeatOrderController extends Controller
             })
             ->orderBy('name')
             ->get()
-            ->map(fn ($menu) => [
-                'id' => $menu->id,
-                'name' => $menu->name,
-                'code' => $menu->code,
-                'image' => $menu->image,
-                'category_name' => $menu->menuCategory?->name,
-                'menu_type' => $menu->menu_type,
-                'unit_price' => (float) ($menu->defaultPrice?->price ?? $menu->base_price ?? 0),
-            ]);
+            ->map(function ($menu) {
+                $defaultPrice = $this->defaultMenuPriceFor($menu);
+                $unitPrice = $menu->base_price ?? 0;
+
+                if ($defaultPrice) {
+                    $unitPrice = $defaultPrice->price;
+                }
+
+                return [
+                    'id' => $menu->id,
+                    'name' => $menu->name,
+                    'code' => $menu->code,
+                    'image' => $menu->image,
+                    'category_name' => $menu->menuCategory?->name,
+                    'menu_type' => $menu->menu_type,
+                    'unit_price' => (float) $unitPrice,
+                ];
+            });
 
         $categories = MenuCategory::query()
             ->where('company_id', $activePosSession->company_id)
@@ -86,6 +96,18 @@ class SeatOrderController extends Controller
 
         $cartOrder = $this->getCartOrder($diningSession);
         $cartOrder->load(['orderLines.menu']);
+        $customer = $this->customerFor($diningSession->customer_id);
+        $customerName = 'Walk-in / General Customer';
+        $customerPhone = null;
+
+        if ($customer) {
+            $customerName = $customer->name ?? $customer->customer_name ?? $customerName;
+            $customerPhone = $customer->phone_number
+                ?? $customer->phone
+                ?? $customer->customer_phone
+                ?? $customer->mobile;
+        }
+
         $latestInvoice = $diningSession->invoices()
             ->where('status', '!=', 'cancelled')
             ->latest()
@@ -105,14 +127,8 @@ class SeatOrderController extends Controller
                 'invoice_total' => $latestInvoice ? (float) $latestInvoice->grand_total : null,
                 'seat_name' => $diningSession->diningResource?->name,
                 'seat_type' => $diningSession->diningResource?->diningResourceType?->name,
-                'customer_name' => $diningSession->customer?->name
-                    ?? $diningSession->customer?->customer_name
-                    ?? 'Walk-in / General Customer',
-                'customer_phone' => $diningSession->customer?->phone_number
-                    ?? $diningSession->customer?->phone
-                    ?? $diningSession->customer?->customer_phone
-                    ?? $diningSession->customer?->mobile
-                    ?? null,
+                'customer_name' => $customerName,
+                'customer_phone' => $customerPhone,
             ],
             'menus' => $menus,
             'categories' => $categories,
@@ -148,7 +164,13 @@ class SeatOrderController extends Controller
 
         DB::transaction(function () use ($diningSession, $menu, $data) {
             $qty = (float) ($data['qty'] ?? 1);
-            $unitPrice = (float) ($menu->defaultPrice?->price ?? $menu->base_price ?? 0);
+            $defaultPrice = $this->defaultMenuPriceFor($menu);
+            $unitPrice = (float) ($menu->base_price ?? 0);
+
+            if ($defaultPrice) {
+                $unitPrice = (float) $defaultPrice->price;
+            }
+
             $taxRate = 10;
 
             $order = $this->getCartOrder($diningSession);
@@ -591,5 +613,22 @@ class SeatOrderController extends Controller
                 'note' => $line->note,
             ]),
         ];
+    }
+
+    private function customerFor(?int $customerId): ?Customer
+    {
+        if (! $customerId) {
+            return null;
+        }
+
+        return Customer::query()->find($customerId);
+    }
+
+    private function defaultMenuPriceFor(Menu $menu): ?MenuPrice
+    {
+        return MenuPrice::query()
+            ->where('menu_id', $menu->id)
+            ->where('is_default', true)
+            ->first();
     }
 }
