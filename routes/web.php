@@ -2,12 +2,48 @@
 
 use App\Http\Controllers\Crm;
 use App\Http\Controllers\Feature;
+use App\Http\Controllers\POS\PosSessionController;
+use App\Http\Controllers\Seats\SeatController;
+use App\Http\Controllers\Seats\SeatOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', Crm\DashboardController::class)->name('dashboard');
+
+    // POS session routes
+    Route::get('/pos-sessions', [PosSessionController::class, 'index'])
+        ->name('pos-sessions.index');
+
+    Route::post('/pos-sessions/open', [PosSessionController::class, 'open'])
+        ->name('pos-sessions.open');
+
+    Route::post('/pos-sessions/{posSession}/close', [PosSessionController::class, 'close'])
+        ->name('pos-sessions.close');
+
+    // Seat; Resource routes
+    Route::get('/orders', [SeatController::class, 'index'])->name('seats.index');
+    Route::post('/orders/{resource}/check-in', [SeatController::class, 'checkIn'])->name('seats.check-in');
+
+    // Seat order routes
+    Route::get('/orders/{diningSession}/menu', [SeatOrderController::class, 'show'])
+        ->name('seats.orders.show');
+
+    Route::post('/orders/{diningSession}/items', [SeatOrderController::class, 'addItem'])
+        ->name('seats.orders.items.add');
+
+    Route::patch('/orders/{diningSession}/items/{orderLine}', [SeatOrderController::class, 'updateItem'])
+        ->name('seats.orders.items.update');
+
+    Route::delete('/orders/{diningSession}/items', [SeatOrderController::class, 'clearItems'])
+        ->name('seats.orders.items.clear');
+
+    Route::delete('/orders/{diningSession}/items/{orderLine}', [SeatOrderController::class, 'removeItem'])
+        ->name('seats.orders.items.remove');
+
+    Route::post('/orders/{diningSession}/send-kitchen', [SeatOrderController::class, 'sendToKitchen'])
+        ->name('seats.orders.send-kitchen');
 
     // CRM Routes
     Route::resource('contacts', Crm\ContactController::class);

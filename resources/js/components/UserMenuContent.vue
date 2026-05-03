@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, router } from '@inertiajs/vue3';
-import { LogOut, Monitor, Moon, Sun } from 'lucide-vue-next';
+import { LogOut, Monitor, Moon, Palette, Sun } from 'lucide-vue-next';
 import {
     DropdownMenuGroup,
     DropdownMenuItem,
@@ -56,6 +56,15 @@ defineProps<Props>();
             System
             <span
                 v-if="appearance === 'system'"
+                class="ml-auto text-xs text-muted-foreground"
+                >&#10003;</span
+            >
+        </DropdownMenuItem>
+        <DropdownMenuItem @click="updateAppearance('oe')">
+            <Palette class="mr-2 h-4 w-4" />
+            OE Theme
+            <span
+                v-if="appearance === 'oe'"
                 class="ml-auto text-xs text-muted-foreground"
                 >&#10003;</span
             >

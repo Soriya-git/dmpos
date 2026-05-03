@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Kitchen Order - 80mm</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            @media print {
+                body {
+                    width: 80mm;
+                    margin: 0;
+                    padding: 0;
+                    background: white;
+                }
+                .no-print {
+                    display: none;
+                }
+                .slip {
+                    box-shadow: none;
+                    border: none;
+                    width: 100%;
+                    padding: 2mm;
+                }
+            }
+            body {
+                background-color: #f1f5f9;
+                font-family: "Courier New", Courier, monospace;
+                display: flex;
+                justify-content: center;
+                padding: 20px;
+            }
+            .slip {
+                width: 80mm;
+                background: white;
+                padding: 15px;
+                color: #000;
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            }
+            .dashed-line {
+                border-bottom: 1px dashed #000;
+                margin: 8px 0;
+            }
+            .text-bold {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="slip">
+            <div class="text-center">
+                <h1 class="text-xl font-black uppercase">*** KITCHEN ***</h1>
+                <p class="text-lg font-bold mt-1">TABLE: 04</p>
+            </div>
+
+            <div class="dashed-line"></div>
+
+            <!-- Session and Order Info -->
+            <div class="text-[12px] space-y-1">
+                <div class="flex justify-between">
+                    <span>Session:</span>
+                    <span class="text-bold">#SESS-8842</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Order No:</span>
+                    <span class="text-bold">#ORD-003</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Time:</span>
+                    <span>02-MAY-2024 14:20</span>
+                </div>
+            </div>
+
+            <div class="dashed-line"></div>
+
+            <!-- Items Table -->
+            <table class="w-full text-left text-sm">
+                <thead>
+                    <tr class="border-b border-black">
+                        <th class="py-1">QTY</th>
+                        <th class="py-1">ITEM</th>
+                    </tr>
+                </thead>
+                <tbody class="text-bold">
+                    <tr>
+                        <td class="py-2 align-top text-xl">2</td>
+                        <td class="py-2">
+                            <span class="text-xl">CHESS BURGER</span><br />
+                            <span class="text-[10px] font-normal italic"
+                                >- NO ONIONS</span
+                            ><br />
+                            <span class="text-[10px] font-normal italic"
+                                >- EXTRA CHEESE</span
+                            >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 align-top text-xl">1</td>
+                        <td class="py-2 text-xl">MARGARITA PIZZA</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 align-top text-xl">2</td>
+                        <td class="py-2 text-xl">ORANGE JUICE</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="dashed-line"></div>
+
+            <div class="text-center py-2">
+                <p class="text-[10px] font-bold">--- END OF KITCHEN SLIP ---</p>
+            </div>
+
+            <button
+                onclick="window.print()"
+                class="no-print mt-6 w-full py-2 bg-black text-white rounded font-bold text-xs uppercase"
+            >
+                Print to Kitchen
+            </button>
+        </div>
+    </body>
+</html>

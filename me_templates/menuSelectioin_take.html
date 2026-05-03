@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Menu Selection - Modern POS</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --color-primary: #2a4858;
+                --color-secondary: #007882;
+                --color-accent: #23aa8f;
+                --color-success: #86d780;
+                --color-highlight: #fafa6e;
+            }
+            body {
+                background-color: #f8fafc;
+                font-family:
+                    "Inter",
+                    system-ui,
+                    -apple-system,
+                    sans-serif;
+                height: 100vh;
+                overflow: hidden;
+            }
+            .category-pill {
+                transition: all 0.2s ease;
+            }
+            .category-pill.active {
+                background-color: #f0fdf4; /* Very light green bg */
+                border-color: var(--color-accent);
+                color: var(--color-primary);
+            }
+            .category-pill.active i {
+                color: var(--color-accent);
+            }
+            .menu-card {
+                transition: all 0.2s ease;
+                border-width: 1.5px;
+            }
+            .menu-card:hover {
+                border-color: var(--color-accent);
+                background-color: #fcfdfd;
+            }
+            /* Custom Scrollbar */
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 4px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 10px;
+            }
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+        </style>
+    </head>
+    <body class="flex flex-col lg:flex-row">
+        <!-- Left Side: Menu List (75% width) -->
+        <section
+            class="flex-1 flex flex-col h-screen bg-white border-r border-gray-100"
+        >
+            <!-- Compact Search and Categories Header -->
+            <div class="px-6 py-4 border-b border-gray-100 space-y-3">
+                <div class="flex items-center gap-3">
+                    <button
+                        onclick="window.history.back()"
+                        class="w-9 h-9 flex items-center justify-center hover:bg-gray-100 rounded-xl text-gray-400 transition-all"
+                    >
+                        <i class="fas fa-arrow-left text-sm"></i>
+                    </button>
+                    <div class="relative flex-1">
+                        <i
+                            class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs"
+                        ></i>
+                        <input
+                            type="text"
+                            placeholder="Search products..."
+                            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#007882] outline-none text-sm transition-all"
+                        />
+                    </div>
+                </div>
+
+                <!-- Compact Category Filter -->
+                <div class="flex gap-2 overflow-x-auto no-scrollbar">
+                    <button
+                        class="category-pill active flex flex-col items-center justify-center min-w-[70px] p-2 rounded-xl border border-gray-100"
+                    >
+                        <div
+                            class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center mb-1"
+                        >
+                            <i class="fas fa-th-large text-xs"></i>
+                        </div>
+                        <span class="text-[10px] font-bold uppercase">All</span>
+                    </button>
+                    <button
+                        class="category-pill flex flex-col items-center justify-center min-w-[70px] p-2 rounded-xl border border-gray-100"
+                    >
+                        <div
+                            class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center mb-1 text-orange-400"
+                        >
+                            <i class="fas fa-hamburger text-xs"></i>
+                        </div>
+                        <span
+                            class="text-[10px] font-bold text-gray-400 uppercase"
+                            >Burgers</span
+                        >
+                    </button>
+                    <button
+                        class="category-pill flex flex-col items-center justify-center min-w-[70px] p-2 rounded-xl border border-gray-100"
+                    >
+                        <div
+                            class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center mb-1 text-red-400"
+                        >
+                            <i class="fas fa-pizza-slice text-xs"></i>
+                        </div>
+                        <span
+                            class="text-[10px] font-bold text-gray-400 uppercase"
+                            >Pizza</span
+                        >
+                    </button>
+                    <button
+                        class="category-pill flex flex-col items-center justify-center min-w-[70px] p-2 rounded-xl border border-gray-100"
+                    >
+                        <div
+                            class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center mb-1 text-amber-600"
+                        >
+                            <i class="fas fa-coffee text-xs"></i>
+                        </div>
+                        <span
+                            class="text-[10px] font-bold text-gray-400 uppercase"
+                            >Drinks</span
+                        >
+                    </button>
+                    <button
+                        class="category-pill flex flex-col items-center justify-center min-w-[70px] p-2 rounded-xl border border-gray-100"
+                    >
+                        <div
+                            class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center mb-1 text-pink-400"
+                        >
+                            <i class="fas fa-ice-cream text-xs"></i>
+                        </div>
+                        <span
+                            class="text-[10px] font-bold text-gray-400 uppercase"
+                            >Dessert</span
+                        >
+                    </button>
+                    <button
+                        class="category-pill flex flex-col items-center justify-center min-w-[70px] p-2 rounded-xl border border-gray-100"
+                    >
+                        <div
+                            class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center mb-1 text-green-500"
+                        >
+                            <i class="fas fa-leaf text-xs"></i>
+                        </div>
+                        <span
+                            class="text-[10px] font-bold text-gray-400 uppercase"
+                            >Veg</span
+                        >
+                    </button>
+                </div>
+            </div>
+
+            <!-- Compact Menu Grid -->
+            <div
+                class="flex-1 overflow-y-auto p-4 custom-scrollbar bg-gray-50/30"
+            >
+                <div
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3"
+                >
+                    <!-- Menu Item 1 -->
+                    <div
+                        class="menu-card bg-white p-2.5 rounded-xl border border-gray-100 shadow-sm flex flex-col cursor-pointer"
+                    >
+                        <div
+                            class="relative mb-2 rounded-lg overflow-hidden aspect-[4/3] bg-gray-100"
+                        >
+                            <img
+                                src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=200&q=80"
+                                class="w-full h-full object-cover"
+                            />
+                            <div
+                                class="absolute top-1 left-1 bg-yellow-400 text-[8px] font-black px-1.5 py-0.5 rounded text-white italic"
+                            >
+                                20% OFF
+                            </div>
+                        </div>
+                        <h4
+                            class="font-bold text-[#2A4858] text-xs truncate mb-0.5"
+                        >
+                            Chess Burger
+                        </h4>
+                        <div class="flex items-center justify-between mt-auto">
+                            <span class="font-black text-[#007882] text-xs"
+                                >$12.50</span
+                            >
+                            <div class="flex items-center gap-1">
+                                <i
+                                    class="fas fa-leaf text-[8px] text-green-500"
+                                ></i>
+                                <span
+                                    class="text-[8px] text-gray-400 font-bold uppercase"
+                                    >Veg</span
+                                >
+                            </div>
+                        </div>
+                        <button
+                            class="w-full mt-2 py-1.5 bg-[#86D780]/20 text-[#2A4858] rounded-lg font-bold text-[10px] hover:bg-[#86D780] hover:text-white transition-all"
+                        >
+                            ADD TO DISH
+                        </button>
+                    </div>
+
+                    <!-- Menu Item 2 -->
+                    <div
+                        class="menu-card bg-white p-2.5 rounded-xl border border-[#23AA8F] shadow-sm flex flex-col cursor-pointer bg-[#f0fdfa]"
+                    >
+                        <div
+                            class="relative mb-2 rounded-lg overflow-hidden aspect-[4/3] bg-gray-100"
+                        >
+                            <img
+                                src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=200&q=80"
+                                class="w-full h-full object-cover"
+                            />
+                        </div>
+                        <h4
+                            class="font-bold text-[#2A4858] text-xs truncate mb-0.5"
+                        >
+                            Margarita Special
+                        </h4>
+                        <div class="flex items-center justify-between mt-auto">
+                            <span class="font-black text-[#007882] text-xs"
+                                >$15.00</span
+                            >
+                            <span
+                                class="text-[8px] text-gray-400 font-bold uppercase"
+                                >Non Veg</span
+                            >
+                        </div>
+                        <div
+                            class="flex items-center justify-between mt-2 bg-white rounded-lg border border-gray-100 p-0.5"
+                        >
+                            <button
+                                class="w-5 h-5 flex items-center justify-center text-[#23AA8F]"
+                            >
+                                <i class="fas fa-minus text-[8px]"></i>
+                            </button>
+                            <span class="text-xs font-black text-[#2A4858]"
+                                >1</span
+                            >
+                            <button
+                                class="w-5 h-5 flex items-center justify-center text-[#23AA8F]"
+                            >
+                                <i class="fas fa-plus text-[8px]"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Add more cards dynamically -->
+                    <div id="dynamicGrid" class="contents"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Side: Order Summary / Cart (Fixed Width) -->
+        <aside class="w-full lg:w-[360px] bg-white flex flex-col h-screen">
+            <!-- Compact Header -->
+            <div
+                class="p-4 border-b border-gray-100 flex justify-between items-center bg-white"
+            >
+                <div>
+                    <h2 class="text-lg font-black text-[#2A4858]">Table 4</h2>
+                    <p
+                        class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                    >
+                        Floyd Miles
+                    </p>
+                </div>
+                <button
+                    class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#007882]"
+                >
+                    <i class="fas fa-pen text-[10px]"></i>
+                </button>
+            </div>
+
+            <!-- Order View Toggles (Updated: Cart & History only) -->
+            <div class="p-3">
+                <div
+                    class="flex p-1 bg-gray-50 rounded-xl gap-1 border border-gray-100"
+                >
+                    <button
+                        id="cartTab"
+                        class="flex-1 py-1.5 rounded-lg bg-white shadow-sm text-[#2A4858] text-[10px] font-black uppercase transition-all"
+                    >
+                        <i class="fas fa-shopping-cart mr-1.5 opacity-60"></i>
+                        Cart
+                    </button>
+                    <button
+                        id="historyTab"
+                        class="flex-1 py-1.5 rounded-lg text-gray-400 text-[10px] font-bold uppercase hover:text-[#2A4858] transition-all"
+                    >
+                        <i class="fas fa-history mr-1.5 opacity-60"></i> History
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cart Items - Scrollable -->
+            <div class="flex-1 overflow-y-auto px-4 custom-scrollbar">
+                <div class="space-y-2 py-2">
+                    <!-- Cart Item 1 -->
+                    <div
+                        class="p-2 rounded-xl border border-gray-50 bg-white flex gap-3 shadow-sm"
+                    >
+                        <img
+                            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=100&q=80"
+                            class="w-12 h-12 rounded-lg object-cover"
+                        />
+                        <div class="flex-1 min-w-0">
+                            <h5
+                                class="text-[11px] font-bold text-[#2A4858] truncate"
+                            >
+                                Chess Burger with Chips
+                            </h5>
+                            <div class="flex justify-between items-center mt-1">
+                                <span
+                                    class="text-[10px] font-black text-[#23AA8F]"
+                                    >$12.50
+                                    <span class="text-gray-300 font-normal ml-1"
+                                        >1x</span
+                                    ></span
+                                >
+                                <span
+                                    class="text-[10px] font-black text-[#2A4858]"
+                                    >$12.50</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cart Item 2 -->
+                    <div
+                        class="p-2 rounded-xl border border-gray-50 bg-white flex gap-3 shadow-sm"
+                    >
+                        <img
+                            src="https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?auto=format&fit=crop&w=100&q=80"
+                            class="w-12 h-12 rounded-lg object-cover"
+                        />
+                        <div class="flex-1 min-w-0">
+                            <h5
+                                class="text-[11px] font-bold text-[#2A4858] truncate"
+                            >
+                                Orange Juice with Basil
+                            </h5>
+                            <div class="flex justify-between items-center mt-1">
+                                <span
+                                    class="text-[10px] font-black text-[#23AA8F]"
+                                    >$4.50
+                                    <span class="text-gray-300 font-normal ml-1"
+                                        >2x</span
+                                    ></span
+                                >
+                                <span
+                                    class="text-[10px] font-black text-[#2A4858]"
+                                    >$9.00</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Totals & Actions -->
+            <div class="p-4 bg-gray-50/50 border-t border-gray-100">
+                <div
+                    class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 mb-4 space-y-1.5"
+                >
+                    <div class="flex justify-between text-[10px] font-bold">
+                        <span class="text-gray-400">Sub Total</span>
+                        <span class="text-[#2A4858]">$21.50</span>
+                    </div>
+                    <div class="flex justify-between text-[10px] font-bold">
+                        <span class="text-gray-400">Tax 5%</span>
+                        <span class="text-[#2A4858]">$1.07</span>
+                    </div>
+                    <div
+                        class="pt-1.5 border-t border-dashed flex justify-between items-center"
+                    >
+                        <span class="text-xs font-black text-[#2A4858]"
+                            >Total Amount</span
+                        >
+                        <span class="text-base font-black text-[#007882]"
+                            >$22.57</span
+                        >
+                    </div>
+                </div>
+
+                <!-- Compact Payment Select -->
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                    <button
+                        class="flex flex-col items-center py-2 rounded-xl border border-gray-200 bg-white hover:border-[#23AA8F] transition-all"
+                    >
+                        <i
+                            class="fas fa-money-bill text-[10px] text-gray-400 mb-1"
+                        ></i>
+                        <span class="text-[8px] font-bold uppercase">Cash</span>
+                    </button>
+                    <button
+                        class="flex flex-col items-center py-2 rounded-xl border border-gray-200 bg-white hover:border-[#23AA8F] transition-all"
+                    >
+                        <i
+                            class="fas fa-credit-card text-[10px] text-gray-400 mb-1"
+                        ></i>
+                        <span class="text-[8px] font-bold uppercase">Card</span>
+                    </button>
+                    <button
+                        class="flex flex-col items-center py-2 rounded-xl bg-[#86D780]/20 border border-[#23AA8F]/30"
+                    >
+                        <i
+                            class="fas fa-qrcode text-[10px] text-[#23AA8F] mb-1"
+                        ></i>
+                        <span class="text-[8px] font-bold uppercase"
+                            >QR Code</span
+                        >
+                    </button>
+                </div>
+
+                <button
+                    class="w-full py-3 bg-[#23AA8F] text-white rounded-xl font-black text-xs hover:bg-[#007882] transition-all shadow-lg shadow-[#23AA8F]/20"
+                >
+                    PLACE ORDER
+                </button>
+            </div>
+        </aside>
+
+        <script>
+            // Simple tab switching logic
+            const cartTab = document.getElementById("cartTab");
+            const historyTab = document.getElementById("historyTab");
+
+            function setActiveTab(active, inactive) {
+                active.classList.add(
+                    "bg-white",
+                    "shadow-sm",
+                    "text-[#2A4858]",
+                    "font-black",
+                );
+                active.classList.remove("text-gray-400", "font-bold");
+
+                inactive.classList.remove(
+                    "bg-white",
+                    "shadow-sm",
+                    "text-[#2A4858]",
+                    "font-black",
+                );
+                inactive.classList.add("text-gray-400", "font-bold");
+            }
+
+            cartTab.addEventListener("click", () =>
+                setActiveTab(cartTab, historyTab),
+            );
+            historyTab.addEventListener("click", () =>
+                setActiveTab(historyTab, cartTab),
+            );
+
+            const grid = document.getElementById("dynamicGrid");
+            const sampleImages = [
+                "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=200&q=80",
+                "https://images.unsplash.com/photo-1612459284970-e8f027596582?auto=format&fit=crop&w=200&q=80",
+                "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=200&q=80",
+                "https://images.unsplash.com/photo-1528733918455-5a59687cedf0?auto=format&fit=crop&w=200&q=80",
+                "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=200&q=80",
+            ];
+
+            const names = [
+                "Spicy Tacos",
+                "Carbonara",
+                "Grilled Salmon",
+                "Club Sandwich",
+                "Special Pizza",
+            ];
+
+            for (let i = 0; i < 15; i++) {
+                const div = document.createElement("div");
+                div.className =
+                    "menu-card bg-white p-2.5 rounded-xl border border-gray-100 shadow-sm flex flex-col cursor-pointer";
+                const img = sampleImages[i % sampleImages.length];
+                const name = names[i % names.length];
+                div.innerHTML = `
+                <div class="relative mb-2 rounded-lg overflow-hidden aspect-[4/3] bg-gray-100">
+                    <img src="${img}" class="w-full h-full object-cover">
+                </div>
+                <h4 class="font-bold text-[#2A4858] text-xs truncate mb-0.5">${name}</h4>
+                <div class="flex items-center justify-between mt-auto">
+                    <span class="font-black text-[#007882] text-xs">$${(8 + i).toFixed(2)}</span>
+                    <span class="text-[8px] text-gray-400 font-bold uppercase">Main</span>
+                </div>
+                <button class="w-full mt-2 py-1.5 bg-gray-50 text-gray-400 rounded-lg font-bold text-[10px] hover:bg-[#86D780]/20 hover:text-[#2A4858] transition-all">
+                    ADD TO DISH
+                </button>
+            `;
+                grid.appendChild(div);
+            }
+
+            document.querySelectorAll(".category-pill").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    document
+                        .querySelectorAll(".category-pill")
+                        .forEach((b) => b.classList.remove("active"));
+                    btn.classList.add("active");
+                });
+            });
+        </script>
+    </body>
+</html>

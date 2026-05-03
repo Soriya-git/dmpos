@@ -15,7 +15,8 @@
         "laravel/fortify": "^1.30",
         "laravel/framework": "12.52.*",
         "laravel/tinker": "^2.10.1",
-        "laravel/wayfinder": "dev-next"
+        "laravel/wayfinder": "dev-next",
+        "spatie/laravel-permission": "^7.4"
     },
     "require-dev": {
         "larastan/larastan": "^3.0",

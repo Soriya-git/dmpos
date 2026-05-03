@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -54,5 +55,49 @@ class User extends Authenticatable
     public function notes(): HasMany
     {
         return $this->hasMany(Note::class);
+    }
+
+    public function initials(): string
+    {
+        return Str::of($this->name)
+            ->explode(' ')
+            ->take(2)
+            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->implode('');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
+    public function openedDiningSessions()
+    {
+        return $this->hasMany(DiningSession::class, 'opened_by');
+    }
+
+    public function closedDiningSessions()
+    {
+        return $this->hasMany(DiningSession::class, 'closed_by');
+    }
+
+    public function createdOrders()
+    {
+        return $this->hasMany(Order::class, 'created_by');
+    }
+
+    public function issuedInvoices()
+    {
+        return $this->hasMany(Invoice::class, 'issued_by');
+    }
+
+    public function receivedPayments()
+    {
+        return $this->hasMany(Payment::class, 'received_by');
     }
 }

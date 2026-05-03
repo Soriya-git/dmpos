@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dining Resources - Modern POS</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --color-primary: #2a4858;
+                --color-secondary: #007882;
+                --color-accent: #23aa8f;
+                --color-success: #86d780;
+                --color-highlight: #fafa6e;
+            }
+            body {
+                background-color: #f0f4f5;
+                font-family:
+                    "Inter",
+                    system-ui,
+                    -apple-system,
+                    sans-serif;
+            }
+            .resource-card {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .resource-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 30px -10px rgba(42, 72, 88, 0.2);
+            }
+            .room-image {
+                width: 100%;
+                height: 120px;
+                object-fit: cover;
+                background-color: #e2e8f0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 8px;
+            }
+            .status-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                display: inline-block;
+            }
+            .btn-filter.active {
+                background-color: var(--color-secondary);
+                color: white;
+                border-color: var(--color-secondary);
+            }
+        </style>
+    </head>
+    <body class="min-h-screen bg-gray-50">
+        <!-- Main Content Area -->
+        <main class="container mx-auto p-4 md:p-6 max-w-7xl">
+            <!-- Filter Bar -->
+            <div
+                class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row gap-6 justify-between items-center sticky top-4 z-20"
+            >
+                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                    <span
+                        class="text-xs font-black text-[#2A4858] opacity-40 uppercase tracking-tighter"
+                        >Zones</span
+                    >
+                    <button
+                        class="btn-filter active px-5 py-2 rounded-xl text-sm font-bold border border-gray-200 transition-all"
+                    >
+                        All Areas
+                    </button>
+                    <button
+                        class="btn-filter px-5 py-2 rounded-xl text-sm font-bold border border-gray-200 hover:border-[#007882] transition-all"
+                    >
+                        VIP Room
+                    </button>
+                    <button
+                        class="btn-filter px-5 py-2 rounded-xl text-sm font-bold border border-gray-200 hover:border-[#007882] transition-all"
+                    >
+                        Outdoor
+                    </button>
+                    <button
+                        class="btn-filter px-5 py-2 rounded-xl text-sm font-bold border border-gray-200 hover:border-[#007882] transition-all"
+                    >
+                        Normal
+                    </button>
+                </div>
+                <div
+                    class="flex items-center gap-2 w-full md:w-auto bg-gray-50 p-2 rounded-xl border"
+                >
+                    <button
+                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white shadow-sm text-xs font-bold text-green-600"
+                    >
+                        <span class="status-dot bg-[#86D780]"></span> Available
+                    </button>
+                    <button
+                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold text-red-500"
+                    >
+                        <span class="status-dot bg-red-500"></span> Occupied
+                    </button>
+                    <button
+                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold text-yellow-500"
+                    >
+                        <span class="status-dot bg-[#FAFA6E]"></span> Booked
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resources Grid -->
+            <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            >
+                <!-- Available Table Card -->
+                <div
+                    class="resource-card bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col"
+                >
+                    <div class="p-3">
+                        <div class="room-image">
+                            <!-- Default Icon when no image -->
+                            <i
+                                class="fas fa-door-open text-4xl text-gray-300"
+                            ></i>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-5 flex-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="text-xl font-bold text-[#2A4858]">
+                                    Table V-01
+                                </h3>
+                                <span
+                                    class="text-[10px] font-bold bg-[#86D780]/20 text-[#2A4858] px-2 py-0.5 rounded uppercase"
+                                    >VIP Room</span
+                                >
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-bold text-green-600">
+                                    AVAILABLE
+                                </p>
+                                <p class="text-[10px] text-gray-400">8 Seats</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 space-y-3">
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Customer Phone"
+                                    class="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#007882] outline-none transition-all"
+                                />
+                                <i
+                                    class="fas fa-phone-alt absolute left-3 top-3 text-gray-400 text-xs"
+                                ></i>
+                            </div>
+                            <button
+                                class="w-full py-2.5 bg-[#007882] text-white rounded-xl font-bold text-sm hover:bg-[#2A4858] transition-all shadow-md active:scale-95"
+                            >
+                                OPEN ORDER
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Occupied Table Card -->
+                <div
+                    class="resource-card bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col opacity-90"
+                >
+                    <div class="p-3 relative">
+                        <img
+                            src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80"
+                            alt="Table"
+                            class="room-image"
+                            onerror="
+                                this.style.display = 'none';
+                                this.nextElementSibling.style.display = 'flex';
+                            "
+                        />
+                        <div class="room-image hidden">
+                            <i class="fas fa-image text-4xl text-gray-300"></i>
+                        </div>
+                        <div
+                            class="absolute top-5 right-5 bg-red-600 text-white px-2 py-1 rounded text-[10px] font-bold shadow-lg"
+                        >
+                            <i class="fas fa-clock mr-1"></i> 00:45:12
+                        </div>
+                    </div>
+                    <div class="px-5 pb-5">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-[#2A4858]">
+                                    Table G-04
+                                </h3>
+                                <span
+                                    class="text-[10px] font-bold bg-gray-100 text-gray-500 px-2 py-0.5 rounded uppercase tracking-widest"
+                                    >Outdoor</span
+                                >
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-bold text-red-500">
+                                    OCCUPIED
+                                </p>
+                                <p
+                                    class="text-sm font-black text-[#2A4858] mt-1"
+                                >
+                                    $124.50
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button
+                                class="flex-1 py-2 bg-gray-100 text-[#2A4858] rounded-lg font-bold text-xs hover:bg-gray-200 transition-all"
+                            >
+                                EDIT BILL
+                            </button>
+                            <button
+                                class="flex-1 py-2 bg-[#23AA8F] text-white rounded-lg font-bold text-xs hover:bg-[#007882] transition-all shadow-sm"
+                            >
+                                PAY NOW
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booked Table Card -->
+                <div
+                    class="resource-card bg-white rounded-2xl overflow-hidden border-2 border-[#FAFA6E] shadow-sm flex flex-col"
+                >
+                    <div class="p-3">
+                        <div class="room-image bg-[#FAFA6E]/10">
+                            <i
+                                class="fas fa-calendar-check text-4xl text-[#2A4858]/30"
+                            ></i>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="text-xl font-bold text-[#2A4858]">
+                                    Table N-12
+                                </h3>
+                                <span
+                                    class="text-[10px] font-bold bg-gray-100 text-gray-500 px-2 py-0.5 rounded uppercase"
+                                    >Normal</span
+                                >
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-bold text-yellow-600">
+                                    BOOKED
+                                </p>
+                                <p class="text-[10px] text-gray-400">
+                                    18:30 Today
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-100"
+                        >
+                            <p
+                                class="text-[10px] font-bold text-yellow-800 uppercase tracking-wider mb-1"
+                            >
+                                Customer
+                            </p>
+                            <p class="text-sm font-bold text-[#2A4858]">
+                                Mr. Sopheap (012-xxx-xxx)
+                            </p>
+                        </div>
+                        <button
+                            class="w-full mt-3 py-2 bg-[#2A4858] text-white rounded-xl font-bold text-sm hover:opacity-90 transition-all"
+                        >
+                            CHECK IN
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Example Dynamic Render Container -->
+                <div id="dynamicContainer" class="contents"></div>
+            </div>
+        </main>
+
+        <script>
+            // Generating some additional tables to show the grid
+            const container = document.getElementById("dynamicContainer");
+            for (let i = 5; i <= 14; i++) {
+                const div = document.createElement("div");
+                div.className =
+                    "resource-card bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col";
+                div.innerHTML = `
+                <div class="p-3">
+                    <div class="room-image">
+                        <i class="fas fa-utensils text-4xl text-gray-300"></i>
+                    </div>
+                </div>
+                <div class="px-5 pb-5">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#2A4858]">Table N-${String(i).padStart(2, "0")}</h3>
+                            <span class="text-[10px] font-bold bg-gray-100 text-gray-500 px-2 py-0.5 rounded uppercase">Normal</span>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-green-600">AVAILABLE</p>
+                            <p class="text-[10px] text-gray-400">4 Seats</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 space-y-3">
+                        <div class="relative">
+                            <input type="text" placeholder="Customer Phone" class="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#007882] outline-none transition-all">
+                            <i class="fas fa-phone-alt absolute left-3 top-3 text-gray-400 text-xs"></i>
+                        </div>
+                        <button class="w-full py-2.5 bg-[#007882] text-white rounded-xl font-bold text-sm hover:bg-[#2A4858] transition-all shadow-md active:scale-95">
+                            OPEN ORDER
+                        </button>
+                    </div>
+                </div>
+            `;
+                container.appendChild(div);
+            }
+
+            // Simple button toggle logic for demo
+            document.querySelectorAll(".btn-filter").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    document
+                        .querySelectorAll(".btn-filter")
+                        .forEach((b) => b.classList.remove("active"));
+                    btn.classList.add("active");
+                });
+            });
+        </script>
+    </body>
+</html>

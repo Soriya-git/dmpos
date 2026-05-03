@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Official Tax Receipt - 80mm</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            @media print {
+                body {
+                    width: 80mm;
+                    margin: 0;
+                    padding: 0;
+                    background: white;
+                }
+                .no-print {
+                    display: none;
+                }
+                .slip {
+                    box-shadow: none;
+                    border: none;
+                    width: 100%;
+                    padding: 2mm;
+                }
+            }
+            body {
+                background-color: #f1f5f9;
+                font-family: "Courier New", Courier, monospace;
+                display: flex;
+                justify-content: center;
+                padding: 20px;
+            }
+            .slip {
+                width: 80mm;
+                background: white;
+                padding: 15px;
+                color: #000;
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            }
+            .dashed-line {
+                border-bottom: 1px dashed #000;
+                margin: 8px 0;
+            }
+            .text-bold {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="slip">
+            <div class="text-center mb-2">
+                <h1 class="text-xl font-black uppercase">DM POS RESTAURANT</h1>
+                <p class="text-[10px] uppercase">
+                    Registered Company Name Co., Ltd
+                </p>
+                <p class="text-[11px] font-bold">VAT TIN: K000-000000000</p>
+                <p class="text-[10px]">
+                    #123 St. 456, Sangkat Boeng Keng Kang I,
+                </p>
+                <p class="text-[10px]">Phnom Penh, Cambodia</p>
+                <p class="text-[10px]">Tel: +855 12 345 678</p>
+                <h2 class="text-sm font-black border-y border-black py-1 mt-2">
+                    OFFICIAL TAX RECEIPT
+                </h2>
+            </div>
+
+            <div class="text-[11px] space-y-1">
+                <div class="flex justify-between">
+                    <span>Receipt No:</span>
+                    <span class="text-bold">#RCP-2024-9921</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Date:</span>
+                    <span>02-MAY-2024 14:45</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>POS ID:</span>
+                    <span>POS-01</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Cashier:</span>
+                    <span>Admin</span>
+                </div>
+            </div>
+
+            <div class="dashed-line"></div>
+
+            <!-- Table Header -->
+            <div class="text-[11px] font-bold border-b border-black pb-1 mb-2">
+                <div class="flex justify-between">
+                    <span class="w-full">ITEM DESCRIPTION</span>
+                </div>
+                <div class="flex justify-between text-[10px]">
+                    <span>QTY x PRICE</span>
+                    <span>DISC</span>
+                    <span>TOTAL</span>
+                </div>
+            </div>
+
+            <!-- Item List -->
+            <div class="text-[11px] space-y-3">
+                <div>
+                    <div class="uppercase font-bold">
+                        CHESS BURGER EXTRA CHEESE
+                    </div>
+                    <div class="flex justify-between text-[10px]">
+                        <span>2 x $12.50</span>
+                        <span>0%</span>
+                        <span class="font-bold">$25.00</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="uppercase font-bold">
+                        MARGARITA PIZZA (LARGE)
+                    </div>
+                    <div class="flex justify-between text-[10px]">
+                        <span>1 x $15.00</span>
+                        <span>10%</span>
+                        <span class="font-bold">$13.50</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashed-line"></div>
+
+            <!-- Totals Section -->
+            <div class="text-[12px] space-y-1">
+                <div class="flex justify-between">
+                    <span>Sub Total (Excl. Tax):</span>
+                    <span>$37.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>VAT (10%):</span>
+                    <span>$3.70</span>
+                </div>
+                <div
+                    class="flex justify-between text-lg font-black pt-1 border-t border-black"
+                >
+                    <span>TOTAL USD:</span>
+                    <span>$40.70</span>
+                </div>
+                <div class="flex justify-between text-[11px] pt-1 font-bold">
+                    <span>TOTAL KHR:</span>
+                    <span>≈ 166,800៛</span>
+                </div>
+            </div>
+
+            <div class="dashed-line"></div>
+
+            <div class="text-[11px] mb-2">
+                <p>Payment Method: <span class="text-bold">KHQR / ABA</span></p>
+                <div class="mt-1 border border-black p-1 text-center font-bold">
+                    PAID IN FULL
+                </div>
+            </div>
+
+            <div class="dashed-line"></div>
+
+            <div class="text-center py-2 space-y-1">
+                <p class="text-[10px] font-bold">
+                    THANK YOU FOR YOUR PATRONAGE!
+                </p>
+                <p class="text-[9px] italic italic">
+                    This is a computer-generated tax receipt.
+                </p>
+            </div>
+
+            <button
+                onclick="window.print()"
+                class="no-print mt-6 w-full py-2 bg-black text-white rounded font-bold text-xs uppercase"
+            >
+                Print Receipt
+            </button>
+        </div>
+    </body>
+</html>

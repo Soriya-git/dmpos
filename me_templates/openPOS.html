@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Open Shift - Modern POS</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --color-primary: #2a4858;
+                --color-secondary: #007882;
+                --color-accent: #23aa8f;
+                --color-success: #86d780;
+                --color-highlight: #fafa6e;
+            }
+            body {
+                background-color: #f0f4f5;
+                background-image:
+                    radial-gradient(circle at top right, #e0f2f1, transparent),
+                    radial-gradient(circle at bottom left, #d1d5db, transparent);
+                font-family:
+                    "Inter",
+                    system-ui,
+                    -apple-system,
+                    sans-serif;
+            }
+            .glass-card {
+                background: rgba(255, 255, 255, 0.98);
+                border: 1px solid rgba(42, 72, 88, 0.1);
+            }
+            .bg-custom-dark {
+                background-color: var(--color-primary);
+            }
+            .bg-custom-teal {
+                background-color: var(--color-secondary);
+            }
+            .bg-custom-mint {
+                background-color: var(--color-accent);
+            }
+            .text-custom-dark {
+                color: var(--color-primary);
+            }
+            .border-custom-teal {
+                border-color: var(--color-secondary);
+            }
+        </style>
+    </head>
+    <body class="min-h-screen flex items-center justify-center p-4">
+        <div
+            class="max-w-md w-full glass-card rounded-2xl shadow-2xl overflow-hidden"
+        >
+            <!-- Header -->
+            <div class="bg-custom-dark p-6 text-white text-center relative">
+                <!-- Logout Button Positioned Top Right -->
+                <button
+                    onclick="handleLogout()"
+                    class="absolute right-4 top-4 text-white/70 hover:text-white transition-colors"
+                    title="Logout"
+                >
+                    <i class="fas fa-sign-out-alt text-lg"></i>
+                </button>
+
+                <div
+                    class="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-full mb-4 border border-white/20"
+                >
+                    <i
+                        class="fas fa-cash-register text-2xl"
+                        style="color: var(--color-highlight)"
+                    ></i>
+                </div>
+                <h1 class="text-2xl font-bold tracking-tight">
+                    Open POS Shift
+                </h1>
+                <p class="text-gray-300 text-sm mt-1">
+                    Ready to start your business day
+                </p>
+            </div>
+
+            <!-- Form -->
+            <form id="openShiftForm" class="p-8 space-y-5">
+                <!-- Terminal Selection -->
+                <div>
+                    <label
+                        class="block text-sm font-bold text-custom-dark mb-1.5 uppercase tracking-wider"
+                        >POS Number (Terminal)</label
+                    >
+                    <div class="relative">
+                        <select
+                            id="posNumber"
+                            required
+                            class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-custom-teal transition-all appearance-none"
+                        >
+                            <option value="" disabled selected>
+                                Select Terminal
+                            </option>
+                            <option value="T-01">
+                                Terminal 01 (Main Counter)
+                            </option>
+                            <option value="T-02">
+                                Terminal 02 (Secondary)
+                            </option>
+                            <option value="T-03">Terminal 03 (Mobile)</option>
+                        </select>
+                        <i
+                            class="fas fa-desktop absolute left-3 top-4 text-custom-teal opacity-70"
+                        ></i>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Start Cash KHR -->
+                    <div>
+                        <label
+                            class="block text-sm font-bold text-custom-dark mb-1.5 uppercase tracking-wider"
+                            >Cash (KHR)</label
+                        >
+                        <div class="relative">
+                            <input
+                                type="number"
+                                id="cashKHR"
+                                placeholder="0"
+                                step="100"
+                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 transition-all"
+                            />
+                            <span
+                                class="absolute left-3 top-3.5 font-bold text-custom-teal opacity-70"
+                                >៛</span
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Start Cash USD -->
+                    <div>
+                        <label
+                            class="block text-sm font-bold text-custom-dark mb-1.5 uppercase tracking-wider"
+                            >Cash (USD)</label
+                        >
+                        <div class="relative">
+                            <input
+                                type="number"
+                                id="cashUSD"
+                                placeholder="0.00"
+                                step="0.01"
+                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 transition-all"
+                            />
+                            <i
+                                class="fas fa-dollar-sign absolute left-4 top-4 text-custom-teal opacity-70"
+                            ></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Username (Read Only) -->
+                <div>
+                    <label
+                        class="block text-sm font-bold text-custom-dark mb-1.5 uppercase tracking-wider"
+                        >Username</label
+                    >
+                    <div class="relative">
+                        <input
+                            type="text"
+                            id="userName"
+                            readonly
+                            value="Sok Vichea"
+                            class="w-full pl-10 pr-4 py-3 bg-gray-100 border border-gray-200 rounded-lg text-gray-500 cursor-not-allowed italic"
+                        />
+                        <i
+                            class="fas fa-user-circle absolute left-3 top-4 text-gray-400"
+                        ></i>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div
+                    id="statusMessage"
+                    class="hidden p-3 rounded-lg text-sm text-center font-medium"
+                ></div>
+
+                <!-- Main Actions -->
+                <div class="flex flex-col gap-3 pt-4">
+                    <button
+                        type="submit"
+                        class="w-full py-3.5 px-4 bg-custom-teal text-white rounded-lg font-bold hover:bg-custom-dark shadow-lg transition-all active:scale-[0.98]"
+                    >
+                        <i class="fas fa-play-circle mr-2"></i> OPEN POS
+                    </button>
+
+                    <div class="flex gap-3">
+                        <button
+                            type="button"
+                            onclick="handleCancel()"
+                            class="flex-1 py-2.5 px-4 border border-gray-300 text-gray-600 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            onclick="handleLogout()"
+                            class="flex-1 py-2.5 px-4 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                        >
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            // Simulated User Login Data
+            const loggedInUser = "Sok Vichea";
+            document.getElementById("userName").value = loggedInUser;
+
+            const form = document.getElementById("openShiftForm");
+            const statusMsg = document.getElementById("statusMessage");
+
+            form.onsubmit = (e) => {
+                e.preventDefault();
+
+                const terminal = document.getElementById("posNumber").value;
+                const khr = document.getElementById("cashKHR").value || 0;
+                const usd = document.getElementById("cashUSD").value || 0;
+
+                statusMsg.classList.remove(
+                    "hidden",
+                    "bg-red-100",
+                    "text-red-700",
+                );
+                statusMsg.style.backgroundColor = "#86D780"; // Success color from theme
+                statusMsg.style.color = "#2A4858";
+                statusMsg.innerText = `Success! Shift started on ${terminal}`;
+
+                console.log("Shift Opened:", {
+                    terminal,
+                    startingKHR: khr,
+                    startingUSD: usd,
+                    operator: loggedInUser,
+                    timestamp: new Date().toISOString(),
+                });
+            };
+
+            function handleCancel() {
+                if (confirm("Discard changes and return?")) {
+                    console.log("Operation cancelled");
+                }
+            }
+
+            function handleLogout() {
+                if (
+                    confirm("Are you sure you want to log out of the system?")
+                ) {
+                    console.log("Logging out user...");
+                    // In a real app: window.location.href = '/login';
+                }
+            }
+        </script>
+    </body>
+</html>

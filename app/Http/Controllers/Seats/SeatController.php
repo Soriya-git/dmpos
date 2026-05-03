@@ -1,0 +1,200 @@
+<?php
+
+namespace App\Http\Controllers\Seats;
+
+use App\Http\Controllers\Controller;
+use App\Models\Customer;
+use App\Models\DiningResource;
+use App\Models\DiningResourceType;
+use App\Models\DiningSession;
+use App\Models\PosSession;
+use App\Support\DocumentNumber;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use Inertia\Inertia;
+
+class SeatController extends Controller
+{
+    public function index(Request $request)
+    {
+        $user = $request->user();
+
+        $activePosSession = PosSession::with(['branch', 'posTerminal', 'opener'])
+            ->where('opened_by', $user->id)
+            ->whereNull('closed_at')
+            ->latest()
+            ->first();
+
+        if (! $activePosSession) {
+            return redirect()
+                ->route('pos-sessions.index')
+                ->with('error', 'Please open POS session first before accessing orders.');
+        }
+
+        $status = $request->query('status');
+        $typeId = $request->query('type_id');
+        $search = $request->query('search');
+
+        $resources = DiningResource::query()
+            ->with([
+                'diningResourceType',
+                'activeSession.customer',
+                'activeSession.resourceBooking.customer',
+            ])
+            ->where('branch_id', $activePosSession->branch_id)
+            ->where('is_active', true)
+            ->when($status, fn ($q) => $q->where('status', $status))
+            ->when($typeId, fn ($q) => $q->where('dining_resource_type_id', $typeId))
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($qq) use ($search) {
+                    $qq->where('name', 'like', "%{$search}%")
+                        ->orWhere('code', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('name')
+            ->get()
+            ->map(function ($resource) {
+                $session = $resource->activeSession;
+
+                return [
+                    'id' => $resource->id,
+                    'name' => $resource->name,
+                    'code' => $resource->code,
+                    'capacity' => $resource->capacity,
+                    'status' => $resource->status,
+                    'image' => $resource->image,
+                    'description' => $resource->description,
+                    'type' => [
+                        'id' => $resource->diningResourceType?->id,
+                        'name' => $resource->diningResourceType?->name,
+                    ],
+                    'active_session' => $session ? [
+                        'id' => $session->id,
+                        'session_no' => $session->session_no,
+                        'status' => $session->status,
+                        'guest_count' => $session->guest_count,
+                        'opened_at' => $session->opened_at?->format('Y-m-d H:i'),
+                        'customer_name' => $session->customer?->name
+                            ?? $session->customer?->customer_name
+                            ?? null,
+                        'customer_phone' => $session->customer?->phone_number
+                            ?? $session->customer?->phone
+                            ?? $session->customer?->customer_phone
+                            ?? $session->customer?->mobile
+                            ?? null,
+                    ] : null,
+                ];
+            });
+
+        $types = DiningResourceType::query()
+            ->where('company_id', $activePosSession->company_id)
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get(['id', 'name']);
+
+        $customers = Customer::query()
+            ->where('company_id', $activePosSession->company_id)
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->orderBy('phone_number')
+            ->limit(250)
+            ->get(['id', 'name', 'phone_number']);
+
+        return Inertia::render('Seats/Index', [
+            'posSession' => [
+                'id' => $activePosSession->id,
+                'session_no' => $activePosSession->session_no ?? $activePosSession->session_number ?? ('POS-'.$activePosSession->id),
+                'branch_name' => $activePosSession->branch?->name,
+                'terminal_name' => $activePosSession->posTerminal?->name,
+                'opened_by' => $activePosSession->opener?->name,
+                'opened_at' => $activePosSession->opened_at?->format('Y-m-d H:i'),
+            ],
+            'resources' => $resources,
+            'types' => $types,
+            'customers' => $customers,
+            'filters' => [
+                'status' => $status,
+                'type_id' => $typeId,
+                'search' => $search,
+            ],
+        ]);
+    }
+
+    public function checkIn(Request $request, DiningResource $resource)
+    {
+        $user = $request->user();
+
+        $activePosSession = PosSession::where('opened_by', $user->id)
+            ->whereNull('closed_at')
+            ->latest()
+            ->first();
+
+        if (! $activePosSession) {
+            return redirect()
+                ->route('pos-sessions.index')
+                ->with('error', 'Please open POS session first.');
+        }
+
+        $data = $request->validate([
+            'guest_count' => ['nullable', 'integer', 'min:1'],
+            'customer_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('customers', 'id')->where('company_id', $activePosSession->company_id),
+            ],
+            'customer_phone' => ['nullable', 'string', 'max:50'],
+            'customer_name' => ['nullable', 'string', 'max:255'],
+            'note' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        if ($resource->status === 'occupied') {
+            return back()->with('error', 'This seat is already occupied.');
+        }
+
+        DB::transaction(function () use ($resource, $activePosSession, $data, $user) {
+            $customerId = $data['customer_id'] ?? null;
+            $phoneNumber = trim((string) ($data['customer_phone'] ?? ''));
+
+            if (! $customerId && $phoneNumber !== '') {
+                $customer = Customer::firstOrCreate(
+                    [
+                        'company_id' => $activePosSession->company_id,
+                        'phone_number' => $phoneNumber,
+                    ],
+                    [
+                        'branch_id' => $activePosSession->branch_id,
+                        'name' => $data['customer_name'] ?: null,
+                        'is_active' => true,
+                    ]
+                );
+
+                if (($data['customer_name'] ?? null) && ! $customer->name) {
+                    $customer->update(['name' => $data['customer_name']]);
+                }
+
+                $customerId = $customer->id;
+            }
+
+            DiningSession::create([
+                'company_id' => $activePosSession->company_id,
+                'branch_id' => $activePosSession->branch_id,
+                'pos_terminal_id' => $activePosSession->pos_terminal_id,
+                'customer_id' => $customerId,
+                'dining_resource_id' => $resource->id,
+                'session_no' => DocumentNumber::make(DiningSession::class, 'session_no', 'DS'),
+                'guest_count' => $data['guest_count'] ?? null,
+                'status' => 'open',
+                'opened_at' => now(),
+                'opened_by' => $user->id,
+                'note' => $data['note'] ?? null,
+            ]);
+
+            $resource->update([
+                'status' => 'occupied',
+            ]);
+        });
+
+        return back()->with('success', 'Seat checked in successfully.');
+    }
+}

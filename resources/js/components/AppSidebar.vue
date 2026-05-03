@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
+
 import {
     BookOpen,
     ContactRound,
@@ -14,6 +15,10 @@ import {
     AlertTriangle,
     Wifi,
     Save,
+    // add icons to the menu
+    ShoppingCart,
+    ClipboardList,
+    ReceiptText,
 } from 'lucide-vue-next';
 import NavFooter from '@/components/NavFooter.vue';
 import NavSection from '@/components/NavSection.vue';
@@ -56,6 +61,29 @@ const crmSection: NavSectionType = {
             ],
         },
     ],
+};
+
+const operationsNavItems: NavItem[] = [
+    {
+        title: 'POS',
+        href: '/pos-sessions',
+        icon: ShoppingCart,
+    },
+    {
+        title: 'Order',
+        href: '/orders',
+        icon: ClipboardList,
+    },
+    {
+        title: 'Sales',
+        href: '/sales',
+        icon: ReceiptText,
+    },
+];
+
+const operationsSection: NavSectionType = {
+    label: 'Operations',
+    groups: [],
 };
 
 const featuresSection: NavSectionType = {
@@ -294,6 +322,10 @@ const footerNavItems: NavItem[] = [
 
         <SidebarContent>
             <NavSection :section="crmSection" :items="crmNavItems" />
+            <NavSection
+                :section="operationsSection"
+                :items="operationsNavItems"
+            />
             <NavSection :section="featuresSection" />
         </SidebarContent>
 

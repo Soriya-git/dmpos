@@ -15,16 +15,19 @@ export function updateTheme(value: Appearance): void {
         return;
     }
 
+    document.documentElement.classList.remove('dark', 'oe-theme');
+
     if (value === 'system') {
         const mediaQueryList = window.matchMedia(
             '(prefers-color-scheme: dark)',
         );
         const systemTheme = mediaQueryList.matches ? 'dark' : 'light';
 
-        document.documentElement.classList.toggle(
-            'dark',
-            systemTheme === 'dark',
-        );
+        if (systemTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    } else if (value === 'oe') {
+        document.documentElement.classList.add('oe-theme');
     } else {
         document.documentElement.classList.toggle('dark', value === 'dark');
     }
