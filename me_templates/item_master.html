@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Master Data Management</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --primary-dark: #2a4858;
+                --primary-teal: #007882;
+                --accent-green: #23aa8f;
+                --light-green: #86d780;
+                --accent-yellow: #fafa6e;
+            }
+            body {
+                background-color: transparent;
+                font-family: 'Inter', sans-serif;
+                margin: 0;
+            }
+
+            .table-container {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+                border: 1px solid #e2e8f0;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            thead {
+                background-color: #f8fafc;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
+            th {
+                text-align: left;
+                padding: 12px 16px;
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                font-weight: 800;
+                color: #64748b;
+                border-bottom: 2px solid #e2e8f0;
+            }
+            td {
+                padding: 12px 16px;
+                font-size: 13px;
+                color: #334155;
+                border-bottom: 1px solid #f1f5f9;
+            }
+            tr:hover td {
+                background-color: #f8fafc;
+                cursor: pointer;
+            }
+
+            .tab-btn {
+                border-bottom: 3px solid transparent;
+                transition: all 0.2s ease;
+                color: #64748b;
+            }
+            .tab-btn.active {
+                color: var(--primary-teal);
+                border-bottom-color: var(--accent-green);
+                font-weight: 800;
+            }
+
+            .config-panel {
+                width: 450px;
+                height: 100vh;
+                position: fixed;
+                right: -450px;
+                top: 0;
+                background: white;
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+                transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 50;
+            }
+            .config-panel.open {
+                right: 0;
+            }
+
+            .overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(42, 72, 88, 0.3);
+                backdrop-filter: blur(2px);
+                z-index: 40;
+                display: none;
+            }
+            .overlay.active {
+                display: block;
+            }
+        </style>
+    </head>
+    <body class="text-slate-700">
+        <div class="p-4 lg:p-6">
+            <!-- NAVIGATION & SEARCH -->
+            <div
+                class="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
+            >
+                <div
+                    class="flex gap-4 overflow-x-auto border-b border-slate-200 pb-1 whitespace-nowrap lg:border-none"
+                >
+                    <button
+                        onclick="switchView('items')"
+                        id="btn-items"
+                        class="tab-btn active px-2 py-2 text-xs tracking-wider uppercase hover:text-[#007882]"
+                    >
+                        Item Registry
+                    </button>
+                    <button
+                        onclick="switchView('bom')"
+                        id="btn-bom"
+                        class="tab-btn px-2 py-2 text-xs tracking-wider uppercase hover:text-[#007882]"
+                    >
+                        Recipe Master (BOM)
+                    </button>
+                    <button
+                        onclick="switchView('units')"
+                        id="btn-units"
+                        class="tab-btn px-2 py-2 text-xs tracking-wider uppercase hover:text-[#007882]"
+                    >
+                        Unit & Package
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <div class="relative">
+                        <i
+                            class="fas fa-search absolute top-1/2 left-3 -translate-y-1/2 text-xs text-slate-400"
+                        ></i>
+                        <input
+                            type="text"
+                            placeholder="Search Data..."
+                            class="w-48 rounded-lg border border-slate-200 bg-white py-2 pr-4 pl-9 text-xs transition-all outline-none focus:ring-2 focus:ring-[#007882] lg:w-64"
+                        />
+                    </div>
+                    <!-- Updated New Button to use handleGlobalNew() -->
+                    <button
+                        onclick="handleGlobalNew()"
+                        class="flex items-center gap-2 rounded-lg bg-[#007882] px-4 py-2 text-xs font-bold text-white shadow-sm hover:brightness-110"
+                    >
+                        <i class="fas fa-plus"></i> New
+                    </button>
+                </div>
+            </div>
+
+            <!-- ITEMS TABLE VIEW -->
+            <div id="view-items" class="view-content">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="w-12 text-center">#</th>
+                                <th>SKU / Item Code</th>
+                                <th>Item Description</th>
+                                <th>Category</th>
+                                <th>Primary Unit</th>
+                                <th class="w-16 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr onclick="openPanel('item')">
+                                <td
+                                    class="text-center text-[10px] text-slate-400"
+                                >
+                                    01
+                                </td>
+                                <td
+                                    class="font-mono text-xs font-bold text-[#007882]"
+                                >
+                                    MILK-001
+                                </td>
+                                <td class="font-bold">Fresh Dairy Milk</td>
+                                <td>
+                                    <span
+                                        class="rounded bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-600"
+                                        >Dairy</span
+                                    >
+                                </td>
+                                <td class="text-slate-500">Liter (L)</td>
+                                <td
+                                    class="text-center text-slate-300 hover:text-slate-500"
+                                >
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- BOM TABLE VIEW -->
+            <div id="view-bom" class="view-content hidden">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="w-12 text-center">#</th>
+                                <th>Recipe Code</th>
+                                <th>Target Product</th>
+                                <th>Primary Components</th>
+                                <th>Status</th>
+                                <th class="w-16 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr onclick="openPanel('bom')">
+                                <td
+                                    class="text-center text-[10px] text-slate-400"
+                                >
+                                    01
+                                </td>
+                                <td
+                                    class="font-mono text-xs font-bold text-[#007882]"
+                                >
+                                    REC-001
+                                </td>
+                                <td class="font-bold">Hot Caffe Latte</td>
+                                <td class="text-xs text-slate-500 italic">
+                                    Milk, Espresso (18g)
+                                </td>
+                                <td>
+                                    <span
+                                        class="rounded border border-[#23AA8F]/20 bg-[#23AA8F]/10 px-2 py-0.5 text-[10px] font-bold text-[#23AA8F]"
+                                        >Active</span
+                                    >
+                                </td>
+                                <td
+                                    class="text-center text-slate-300 hover:text-slate-500"
+                                >
+                                    <i class="fas fa-flask"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- UNIT & PACKAGE VIEW -->
+            <div id="view-units" class="view-content hidden">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="w-12 text-center">#</th>
+                                <th>Code</th>
+                                <th>Unit/Package Name</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Ratio (Qty)</th>
+                                <th>Status</th>
+                                <th class="w-16 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr onclick="openPanel('unit')">
+                                <td
+                                    class="text-center text-[10px] text-slate-400"
+                                >
+                                    01
+                                </td>
+                                <td
+                                    class="font-mono text-xs font-bold text-[#007882]"
+                                >
+                                    BTL
+                                </td>
+                                <td class="font-bold">Bottle</td>
+                                <td class="text-xs text-slate-500">Unit</td>
+                                <td>
+                                    <span
+                                        class="rounded border border-slate-200 bg-slate-100 px-2 py-0.5 text-[10px]"
+                                        >Reference Unit</span
+                                    >
+                                </td>
+                                <td class="text-xs font-bold">1.00000</td>
+                                <td>
+                                    <span
+                                        class="text-[10px] font-bold text-[#23AA8F]"
+                                        >Active</span
+                                    >
+                                </td>
+                                <td
+                                    class="text-center text-slate-300 hover:text-slate-500"
+                                >
+                                    <i class="fas fa-cog"></i>
+                                </td>
+                            </tr>
+                            <tr onclick="openPanel('unit')">
+                                <td
+                                    class="text-center text-[10px] text-slate-400"
+                                >
+                                    02
+                                </td>
+                                <td
+                                    class="font-mono text-xs font-bold text-[#007882]"
+                                >
+                                    CS12
+                                </td>
+                                <td class="font-bold">Case (12 bottles)</td>
+                                <td class="text-xs text-slate-500">Unit</td>
+                                <td>
+                                    <span
+                                        class="rounded border border-amber-100 bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-600"
+                                        >Bigger than Ref.</span
+                                    >
+                                </td>
+                                <td class="text-xs font-bold text-amber-700">
+                                    12.00000
+                                </td>
+                                <td>
+                                    <span
+                                        class="text-[10px] font-bold text-[#23AA8F]"
+                                        >Active</span
+                                    >
+                                </td>
+                                <td
+                                    class="text-center text-slate-300 hover:text-slate-500"
+                                >
+                                    <i class="fas fa-cog"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIDE CONFIG PANEL -->
+        <div id="overlay" class="overlay" onclick="closePanel()"></div>
+        <div id="side-panel" class="config-panel flex flex-col">
+            <div class="bg-[#2A4858] p-6 text-white">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 id="panel-title" class="text-lg font-bold">
+                            Configuration
+                        </h2>
+                        <p
+                            id="panel-subtitle"
+                            class="mt-1 text-[10px] tracking-widest text-white/50 uppercase"
+                        >
+                            Master Data Update
+                        </p>
+                    </div>
+                    <button
+                        onclick="closePanel()"
+                        class="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
+                    >
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 space-y-4 overflow-y-auto p-6">
+                <div class="space-y-3 rounded-xl bg-slate-50 p-4">
+                    <label class="block">
+                        <span
+                            class="text-[10px] font-bold text-slate-400 uppercase"
+                            >Code / Identifier</span
+                        >
+                        <input
+                            id="inp-code"
+                            type="text"
+                            class="mt-1 w-full rounded-lg border px-3 py-2 font-mono text-sm outline-none focus:border-[#007882]"
+                            placeholder="Ex: CS-12"
+                        />
+                    </label>
+                    <label class="block">
+                        <span
+                            class="text-[10px] font-bold text-slate-400 uppercase"
+                            >Name / Description</span
+                        >
+                        <input
+                            id="inp-name"
+                            type="text"
+                            class="mt-1 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:border-[#007882]"
+                            placeholder="Enter name"
+                        />
+                    </label>
+
+                    <!-- RATIO QUANTITY SECTION -->
+                    <div
+                        id="uom-specifics"
+                        class="mt-2 hidden space-y-3 border-t border-slate-200 pt-2"
+                    >
+                        <label class="block">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase"
+                                >UoM Category</span
+                            >
+                            <select
+                                class="mt-1 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:border-[#007882]"
+                            >
+                                <option>Unit / Count</option>
+                                <option>Volume</option>
+                                <option>Weight</option>
+                            </select>
+                        </label>
+                        <label class="block">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase"
+                                >Ratio (Quantity Key)</span
+                            >
+                            <div class="relative mt-1">
+                                <input
+                                    type="number"
+                                    step="0.00001"
+                                    class="w-full rounded-lg border px-3 py-2 pr-20 text-sm font-bold text-[#007882] outline-none focus:border-[#007882]"
+                                    placeholder="12.00000"
+                                />
+                                <span
+                                    class="absolute top-1/2 right-3 -translate-y-1/2 text-[10px] font-bold text-slate-400"
+                                    >RATIO</span
+                                >
+                            </div>
+                            <p
+                                class="mt-1 text-[10px] leading-tight text-slate-400 italic"
+                            >
+                                * E.g., for a Pack of 12, enter 12.00000. For
+                                1ml in a Liter, enter 1000.00000.
+                            </p>
+                        </label>
+                    </div>
+
+                    <label class="block">
+                        <span
+                            class="text-[10px] font-bold text-slate-400 uppercase"
+                            >Status</span
+                        >
+                        <select
+                            class="mt-1 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:border-[#007882]"
+                        >
+                            <option>Active</option>
+                            <option>Inactive</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div class="flex gap-3 border-t p-6">
+                <button
+                    onclick="closePanel()"
+                    class="flex-1 rounded-lg border border-slate-200 bg-white py-2 text-xs font-bold text-slate-500"
+                >
+                    Cancel
+                </button>
+                <button
+                    class="flex-1 rounded-lg bg-[#007882] py-2 text-xs font-bold text-white shadow-md"
+                >
+                    Save Changes
+                </button>
+            </div>
+        </div>
+
+        <script>
+            let currentActiveView = 'items';
+
+            function switchView(view) {
+                currentActiveView = view;
+                document
+                    .querySelectorAll('.tab-btn')
+                    .forEach((btn) => btn.classList.remove('active'));
+                document.getElementById(`btn-${view}`).classList.add('active');
+
+                document
+                    .querySelectorAll('.view-content')
+                    .forEach((el) => el.classList.add('hidden'));
+                document
+                    .getElementById(`view-${view}`)
+                    .classList.remove('hidden');
+            }
+
+            // Logic for the Global + New Button
+            function handleGlobalNew() {
+                if (currentActiveView === 'items') {
+                    openPanel('item');
+                } else if (currentActiveView === 'bom') {
+                    openPanel('bom');
+                } else if (currentActiveView === 'units') {
+                    openPanel('unit'); // This triggers the ratio fields
+                }
+            }
+
+            function openPanel(type) {
+                const panel = document.getElementById('side-panel');
+                const overlay = document.getElementById('overlay');
+                const title = document.getElementById('panel-title');
+                const subtitle = document.getElementById('panel-subtitle');
+                const uomExtras = document.getElementById('uom-specifics');
+
+                // Reset inputs
+                document.getElementById('inp-code').value = '';
+                document.getElementById('inp-name').value = '';
+
+                // Hide UOM-specific ratio fields by default
+                uomExtras.classList.add('hidden');
+
+                if (type === 'item') {
+                    title.innerText = 'New Item Registry';
+                    subtitle.innerText = 'Add Product to Master Data';
+                } else if (type === 'bom') {
+                    title.innerText = 'New Recipe (BOM)';
+                    subtitle.innerText = 'Define Production Requirements';
+                } else if (type === 'unit') {
+                    title.innerText = 'New Unit / Package';
+                    subtitle.innerText = 'Ratio & Conversion Management';
+                    uomExtras.classList.remove('hidden'); // Show Ratio Fields
+                }
+
+                panel.classList.add('open');
+                overlay.classList.add('active');
+            }
+
+            function closePanel() {
+                document.getElementById('side-panel').classList.remove('open');
+                document.getElementById('overlay').classList.remove('active');
+            }
+        </script>
+    </body>
+</html>

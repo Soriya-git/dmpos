@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Item extends Model
 {
@@ -14,32 +16,44 @@ class Item extends Model
         'is_active' => 'boolean',
     ];
 
-    public function company()
+    /** @return BelongsTo<Company, $this> */
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function branch()
+    /** @return BelongsTo<Branch, $this> */
+    public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
     }
 
-    public function unit()
+    /** @return BelongsTo<Unit, $this> */
+    public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class);
     }
 
-    public function bomLines()
+    /** @return HasMany<BomLine, $this> */
+    public function bomLines(): HasMany
     {
         return $this->hasMany(BomLine::class);
     }
 
-    public function stockBalances()
+    /** @return HasMany<ItemUnitConversion, $this> */
+    public function unitConversions(): HasMany
+    {
+        return $this->hasMany(ItemUnitConversion::class);
+    }
+
+    /** @return HasMany<StockBalance, $this> */
+    public function stockBalances(): HasMany
     {
         return $this->hasMany(StockBalance::class);
     }
 
-    public function stockMovements()
+    /** @return HasMany<StockMovement, $this> */
+    public function stockMovements(): HasMany
     {
         return $this->hasMany(StockMovement::class);
     }

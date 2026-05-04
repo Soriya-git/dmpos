@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\Crm;
 use App\Http\Controllers\Feature;
+use App\Http\Controllers\GoodsReceipt\GoodsReceiptController;
 use App\Http\Controllers\POS\PosSessionController;
+use App\Http\Controllers\Purchase\PurchaseOrderController;
+use App\Http\Controllers\Putaway\PutawayController;
 use App\Http\Controllers\Sales\SaleInvoiceController;
 use App\Http\Controllers\Seats\SeatController;
 use App\Http\Controllers\Seats\SeatOrderController;
@@ -27,6 +30,46 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sales', [SaleInvoiceController::class, 'index'])->name('sales.index');
     Route::post('/sales/invoices/{invoice}/receive', [SaleInvoiceController::class, 'receive'])
         ->name('sales.invoices.receive');
+
+    // Purchase order routes
+    Route::get('/purchase', [PurchaseOrderController::class, 'index'])->name('purchase.index');
+    Route::post('/purchase', [PurchaseOrderController::class, 'store'])->name('purchase.store');
+    Route::patch('/purchase/{purchaseOrder}/approve', [PurchaseOrderController::class, 'approve'])
+        ->name('purchase.approve');
+    Route::patch('/purchase/{purchaseOrder}/reject', [PurchaseOrderController::class, 'reject'])
+        ->name('purchase.reject');
+    Route::patch('/purchase/{purchaseOrder}/cancel', [PurchaseOrderController::class, 'cancel'])
+        ->name('purchase.cancel');
+
+    // Goods receipt routes
+    Route::get('/goods-receipts', [GoodsReceiptController::class, 'index'])->name('goods-receipts.index');
+    Route::get('/goods-receipts/create', [GoodsReceiptController::class, 'create'])->name('goods-receipts.create');
+    Route::post('/goods-receipts', [GoodsReceiptController::class, 'store'])->name('goods-receipts.store');
+    Route::patch('/goods-receipts/{goodsReceipt}/approve', [GoodsReceiptController::class, 'approve'])
+        ->name('goods-receipts.approve');
+    Route::patch('/goods-receipts/{goodsReceipt}/reject', [GoodsReceiptController::class, 'reject'])
+        ->name('goods-receipts.reject');
+    Route::patch('/goods-receipts/{goodsReceipt}/cancel', [GoodsReceiptController::class, 'cancel'])
+        ->name('goods-receipts.cancel');
+    Route::get('/goods-receipts/approved-purchase-orders', [GoodsReceiptController::class, 'approvedPurchaseOrders'])
+        ->name('goods-receipts.approved-purchase-orders');
+
+    // Putaway routes
+    Route::get('/putaway', [PutawayController::class, 'index'])->name('putaway.index');
+    Route::get('/putaway/create', [PutawayController::class, 'create'])->name('putaway.create');
+    Route::post('/putaway', [PutawayController::class, 'store'])->name('putaway.store');
+    Route::patch('/putaway/{stockTransfer}', [PutawayController::class, 'update'])->name('putaway.update');
+    Route::patch('/putaway/{stockTransfer}/approve', [PutawayController::class, 'approve'])
+        ->name('putaway.approve');
+    Route::patch('/putaway/{stockTransfer}/reject', [PutawayController::class, 'reject'])
+        ->name('putaway.reject');
+    Route::patch('/putaway/{stockTransfer}/cancel', [PutawayController::class, 'cancel'])
+        ->name('putaway.cancel');
+    Route::get('/putaway/completed-goods-receipts', [PutawayController::class, 'receipts'])
+        ->name('putaway.completed-goods-receipts');
+
+    // Master data routes
+    Route::inertia('/master-data/products', 'MasterData/Products')->name('master-data.products');
 
     // Seat; Resource routes
     Route::get('/orders', [SeatController::class, 'index'])->name('seats.index');

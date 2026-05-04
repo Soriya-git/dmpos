@@ -42,6 +42,11 @@ class GoodsReceipt extends Model
         return $this->hasMany(GoodsReceiptLine::class);
     }
 
+    public function putawayTransfers()
+    {
+        return $this->hasMany(StockTransfer::class);
+    }
+
     public function receiver()
     {
         return $this->belongsTo(User::class, 'received_by');

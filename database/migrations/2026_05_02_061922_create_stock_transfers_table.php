@@ -39,6 +39,7 @@ return new class extends Migration
                 'draft',
                 'submitted',
                 'approved',
+                'rejected',
                 'in_transit',
                 'received',
                 'cancelled',

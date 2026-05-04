@@ -19,6 +19,7 @@ return new class extends Migration
 
             $table->foreignId('item_id')->constrained()->restrictOnDelete();
             $table->foreignId('unit_id')->constrained()->restrictOnDelete();
+            $table->foreignId('stock_location_id')->nullable()->constrained()->nullOnDelete();
 
             $table->decimal('quantity_received', 14, 4)->default(0);
             $table->decimal('unit_cost', 14, 4)->default(0);

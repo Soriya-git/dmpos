@@ -33,4 +33,9 @@ class GoodsReceiptLine extends Model
     {
         return $this->belongsTo(Unit::class);
     }
+
+    public function stockLocation()
+    {
+        return $this->belongsTo(StockLocation::class);
+    }
 }

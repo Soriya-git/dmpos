@@ -30,4 +30,9 @@ class StockTransferLine extends Model
     {
         return $this->belongsTo(Unit::class);
     }
+
+    public function toLocation()
+    {
+        return $this->belongsTo(StockLocation::class, 'to_location_id');
+    }
 }

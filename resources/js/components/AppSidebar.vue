@@ -3,22 +3,20 @@ import { Link } from '@inertiajs/vue3';
 
 import {
     BookOpen,
-    ContactRound,
     Building2,
-    FormInput,
     LayoutGrid,
-    Navigation,
-    Database,
-    Zap,
-    Layers,
-    Radio,
-    AlertTriangle,
-    Wifi,
-    Save,
+
     // add icons to the menu
     ShoppingCart,
-    ClipboardList,
     ReceiptText,
+    ArrowLeftRight,
+    MonitorCog,
+    PackageCheck,
+    Armchair,
+    Warehouse,
+    PackageSearch,
+    Utensils,
+    Landmark,
 } from 'lucide-vue-next';
 import NavFooter from '@/components/NavFooter.vue';
 import NavSection from '@/components/NavSection.vue';
@@ -36,43 +34,29 @@ import { type NavItem, type NavSection as NavSectionType } from '@/types';
 import { dashboard } from '@/wayfinder/routes';
 import AppLogo from './AppLogo.vue';
 
-const crmNavItems: NavItem[] = [
+const dashboardNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
     },
-    {
-        title: 'Organizations',
-        href: '/organizations',
-        icon: Building2,
-    },
 ];
 
-const crmSection: NavSectionType = {
-    label: 'CRM demo',
-    groups: [
-        {
-            title: 'Contacts',
-            icon: ContactRound,
-            items: [
-                { title: 'All Contacts', href: '/contacts' },
-                { title: 'Create Contact', href: '/contacts/create' },
-            ],
-        },
-    ],
+const dashboardSection: NavSectionType = {
+    label: '',
+    groups: [],
 };
 
 const operationsNavItems: NavItem[] = [
     {
         title: 'POS',
         href: '/pos-sessions',
-        icon: ShoppingCart,
+        icon: MonitorCog,
     },
     {
         title: 'Order',
         href: '/orders',
-        icon: ClipboardList,
+        icon: Armchair,
     },
     {
         title: 'Sales',
@@ -82,216 +66,79 @@ const operationsNavItems: NavItem[] = [
 ];
 
 const operationsSection: NavSectionType = {
-    label: 'Operations',
+    label: 'Sale Operations',
     groups: [],
 };
 
-const featuresSection: NavSectionType = {
-    label: 'Kitchen Sink',
+const stockNavItems: NavItem[] = [
+    {
+        title: 'Purchase',
+        href: '/purchase',
+        icon: ShoppingCart,
+    },
+    {
+        title: 'Goods Receipt',
+        href: '/goods-receipts',
+        icon: PackageCheck,
+    },
+    {
+        title: 'Putaway',
+        href: '/putaway',
+        icon: Warehouse,
+    },
+];
+
+const stockSection: NavSectionType = {
+    label: 'Stock Operations',
     groups: [
         {
-            title: 'Forms',
-            icon: FormInput,
+            title: 'Stock Movements',
+            icon: ArrowLeftRight,
             items: [
-                { title: 'useForm', href: '/features/forms/use-form' },
-                {
-                    title: 'Form Component',
-                    href: '/features/forms/form-component',
-                },
-                { title: 'File Uploads', href: '/features/forms/file-uploads' },
-                { title: 'Validation', href: '/features/forms/validation' },
-                { title: 'Precognition', href: '/features/forms/precognition' },
-                {
-                    title: 'Optimistic Updates',
-                    href: '/features/forms/optimistic-updates',
-                    badge: 'v3',
-                },
-                {
-                    title: 'useFormContext',
-                    href: '/features/forms/use-form-context',
-                },
-                { title: 'Dotted Keys', href: '/features/forms/dotted-keys' },
-                { title: 'Wayfinder', href: '/features/forms/wayfinder' },
+                { title: 'Sale Settlements', href: '#' },
+                { title: 'Stock Adjustments', href: '#' },
+                { title: 'Internal Transfer', href: '#' },
+                { title: 'Stock Write-off', href: '#' },
+            ],
+        },
+    ],
+};
+
+const masterDataSection: NavSectionType = {
+    label: 'Master Data',
+    groups: [
+        {
+            title: 'Organizations',
+            icon: Building2,
+            items: [
+                { title: 'Our Company', href: '#' },
+                { title: 'Customers', href: '#' },
+                { title: 'Suppliers', href: '#' },
             ],
         },
         {
-            title: 'Navigation',
-            icon: Navigation,
+            title: 'Stock Master',
+            icon: PackageSearch,
             items: [
-                {
-                    title: 'Links & Methods',
-                    href: '/features/navigation/links',
-                },
-                {
-                    title: 'Preserve State',
-                    href: '/features/navigation/preserve-state',
-                },
-                {
-                    title: 'Preserve Scroll',
-                    href: '/features/navigation/preserve-scroll',
-                },
-                {
-                    title: 'View Transitions',
-                    href: '/features/navigation/view-transitions',
-                },
-                {
-                    title: 'History Management',
-                    href: '/features/navigation/history-management',
-                },
-                {
-                    title: 'Async Requests',
-                    href: '/features/navigation/async-requests',
-                },
-                {
-                    title: 'Client-Side Visits',
-                    href: '/features/navigation/manual-visits',
-                },
-                {
-                    title: 'Redirects',
-                    href: '/features/navigation/redirects',
-                },
-                {
-                    title: 'Scroll Management',
-                    href: '/features/navigation/scroll-management',
-                },
-                {
-                    title: 'Instant Visits',
-                    href: '/features/navigation/instant-visits',
-                    badge: 'v3',
-                },
-                {
-                    title: 'URL Fragments',
-                    href: '/features/navigation/url-fragments',
-                    badge: 'v3',
-                },
+                { title: 'Items & BOM', href: '/master-data/products' },
+                { title: 'Menu', href: '#' },
+                { title: 'Warehouse & Location', href: '#' },
             ],
         },
         {
-            title: 'Data Loading',
-            icon: Database,
+            title: 'Dinning Resource',
+            icon: Utensils,
             items: [
-                {
-                    title: 'Deferred Props',
-                    href: '/features/data-loading/deferred-props',
-                },
-                {
-                    title: 'Partial Reloads',
-                    href: '/features/data-loading/partial-reloads',
-                },
-                {
-                    title: 'Infinite Scroll',
-                    href: '/features/data-loading/infinite-scroll',
-                },
-                {
-                    title: 'When Visible',
-                    href: '/features/data-loading/when-visible',
-                },
-                { title: 'Polling', href: '/features/data-loading/polling' },
-                {
-                    title: 'Prop Merging',
-                    href: '/features/data-loading/prop-merging',
-                },
-                {
-                    title: 'Once Props',
-                    href: '/features/data-loading/once-props',
-                },
-                {
-                    title: 'Optional Props',
-                    href: '/features/data-loading/optional-props',
-                },
+                { title: 'POS', href: '#' },
+                { title: 'Seats', href: '#' },
             ],
         },
         {
-            title: 'Prefetching',
-            icon: Zap,
+            title: 'Finance',
+            icon: Landmark,
             items: [
-                {
-                    title: 'Link Prefetch',
-                    href: '/features/prefetching/link-prefetch',
-                },
-                {
-                    title: 'Stale While Revalidate',
-                    href: '/features/prefetching/stale-while-revalidate',
-                },
-                {
-                    title: 'Manual Prefetch',
-                    href: '/features/prefetching/manual-prefetch',
-                },
-                {
-                    title: 'Cache Management',
-                    href: '/features/prefetching/cache-management',
-                },
-            ],
-        },
-        {
-            title: 'State Management',
-            icon: Save,
-            items: [
-                { title: 'Remember', href: '/features/state/remember' },
-                { title: 'Flash Data', href: '/features/state/flash-data' },
-                { title: 'Shared Props', href: '/features/state/shared-props' },
-            ],
-        },
-        {
-            title: 'Layouts & Head',
-            icon: Layers,
-            items: [
-                {
-                    title: 'Persistent Layouts',
-                    href: '/features/layouts/persistent-layouts',
-                },
-                {
-                    title: 'Nested Layouts',
-                    href: '/features/layouts/nested-layouts',
-                },
-                { title: 'Head Component', href: '/features/layouts/head' },
-                {
-                    title: 'Layout Props',
-                    href: '/features/layouts/layout-props',
-                    badge: 'v3',
-                },
-            ],
-        },
-        {
-            title: 'Events & Lifecycle',
-            icon: Radio,
-            items: [
-                {
-                    title: 'Global Events',
-                    href: '/features/events/global-events',
-                },
-                {
-                    title: 'Visit Callbacks',
-                    href: '/features/events/visit-callbacks',
-                },
-                { title: 'Progress Bar', href: '/features/events/progress' },
-            ],
-        },
-        {
-            title: 'Error Handling',
-            icon: AlertTriangle,
-            items: [
-                {
-                    title: 'HTTP Exceptions',
-                    href: '/features/errors/http-exceptions',
-                    badge: 'v3',
-                },
-                {
-                    title: 'Network Errors',
-                    href: '/features/errors/network-errors',
-                    badge: 'v3',
-                },
-            ],
-        },
-        {
-            title: 'HTTP',
-            icon: Wifi,
-            items: [
-                {
-                    title: 'useHttp',
-                    href: '/features/http/use-http',
-                    badge: 'v3',
-                },
+                { title: 'Exchange Rate', href: '#' },
+                { title: 'Taxes', href: '#' },
             ],
         },
     ],
@@ -321,12 +168,16 @@ const footerNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavSection :section="crmSection" :items="crmNavItems" />
+            <NavSection
+                :section="dashboardSection"
+                :items="dashboardNavItems"
+            />
             <NavSection
                 :section="operationsSection"
                 :items="operationsNavItems"
             />
-            <NavSection :section="featuresSection" />
+            <NavSection :section="stockSection" :items="stockNavItems" />
+            <NavSection :section="masterDataSection" />
         </SidebarContent>
 
         <SidebarFooter>

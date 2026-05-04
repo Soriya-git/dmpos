@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>WMS - Putaway Operations</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --primary-dark: #2a4858;
+                --primary-teal: #007882;
+                --accent-green: #23aa8f;
+                --light-green: #86d780;
+                --accent-yellow: #fafa6e;
+            }
+            body {
+                background-color: #f1f5f9;
+                font-family: 'Inter', sans-serif;
+            }
+            .bg-primary-dark {
+                background-color: var(--primary-dark);
+            }
+            .bg-primary-teal {
+                background-color: var(--primary-teal);
+            }
+            .text-primary-teal {
+                color: var(--primary-teal);
+            }
+            .border-primary-teal {
+                border-color: var(--primary-teal);
+            }
+            .bg-accent-green {
+                background-color: var(--accent-green);
+            }
+
+            .view-container {
+                transition: all 0.3s ease;
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .hidden-view {
+                display: none;
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            .status-badge {
+                font-size: 0.65rem;
+                font-weight: 800;
+                padding: 0.25rem 0.6rem;
+                border-radius: 4px;
+                text-transform: uppercase;
+            }
+            .table-row-hover:hover {
+                background-color: #f8fafc;
+                cursor: pointer;
+            }
+
+            input:focus,
+            select:focus,
+            textarea:focus {
+                outline: none;
+                border-color: var(--primary-teal);
+                box-shadow: 0 0 0 3px rgba(0, 120, 130, 0.1);
+            }
+
+            .stat-card-clickable:hover {
+                border-color: var(--primary-teal);
+                background-color: #f0fdfa;
+                cursor: pointer;
+                transform: translateY(-2px);
+            }
+            .stat-card-clickable {
+                transition: all 0.2s ease;
+            }
+        </style>
+    </head>
+    <body class="text-slate-800">
+        <!-- DASHBOARD VIEW: LIST OF PUTAWAY DOCUMENTS -->
+        <main
+            id="view-putaway-list"
+            class="view-container mx-auto max-w-[1400px] p-6"
+        >
+            <header
+                class="mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center"
+            >
+                <div>
+                    <h1
+                        class="text-primary-dark text-2xl font-black tracking-tight"
+                    >
+                        Putaway Movements
+                    </h1>
+                    <p class="text-sm font-medium text-slate-500">
+                        Inbound staging area to storage location management
+                    </p>
+                </div>
+                <button
+                    onclick="navigateTo('view-create-task')"
+                    class="bg-primary-teal flex items-center rounded-lg px-6 py-2.5 font-bold text-white shadow-lg transition hover:brightness-110"
+                >
+                    <i class="fas fa-plus mr-2 text-xs"></i> New Putaway Task
+                </button>
+            </header>
+
+            <!-- Stats Bar -->
+            <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
+                <!-- CLICKABLE STAT CARD -->
+                <div
+                    onclick="navigateTo('view-select-gr')"
+                    class="stat-card-clickable group rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                >
+                    <div class="flex items-start justify-between">
+                        <span
+                            class="group-hover:text-primary-teal text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                            >Pending In Staging</span
+                        >
+                        <i
+                            class="fas fa-external-link-alt group-hover:text-primary-teal text-[10px] text-slate-300"
+                        ></i>
+                    </div>
+                    <div class="text-primary-dark mt-1 text-2xl font-black">
+                        12
+                        <span class="text-sm font-medium text-slate-400"
+                            >GRs</span
+                        >
+                    </div>
+                </div>
+                <div
+                    class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                >
+                    <span
+                        class="text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                        >Active Tasks</span
+                    >
+                    <div class="text-primary-teal mt-1 text-2xl font-black">
+                        08
+                    </div>
+                </div>
+                <div
+                    class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                >
+                    <span
+                        class="text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                        >Today's Goal</span
+                    >
+                    <div class="text-accent-green mt-1 text-2xl font-black">
+                        85%
+                    </div>
+                </div>
+                <div
+                    class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                >
+                    <span
+                        class="text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                        >Avg. Time / Task</span
+                    >
+                    <div class="mt-1 text-2xl font-black text-slate-500">
+                        14m
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+            >
+                <div
+                    class="flex items-center justify-between border-b border-slate-100 bg-slate-50/30 p-4"
+                >
+                    <div class="relative w-72">
+                        <i
+                            class="fas fa-search absolute top-1/2 left-3 -translate-y-1/2 text-xs text-slate-400"
+                        ></i>
+                        <input
+                            type="text"
+                            placeholder="Search Putaway ID or GR..."
+                            class="w-full rounded-lg border bg-white py-2 pr-4 pl-9 text-sm"
+                        />
+                    </div>
+                    <div class="flex gap-2">
+                        <button
+                            class="rounded-lg border bg-white px-3 py-2 text-xs font-bold text-slate-600"
+                        >
+                            <i class="fas fa-filter mr-1"></i> Filter
+                        </button>
+                        <button
+                            class="rounded-lg border bg-white px-3 py-2 text-xs font-bold text-slate-600"
+                        >
+                            <i class="fas fa-download mr-1"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead
+                            class="border-b border-slate-100 bg-slate-50 text-[10px] font-black tracking-widest text-slate-500 uppercase"
+                        >
+                            <tr>
+                                <th class="px-6 py-4">Document ID</th>
+                                <th class="px-6 py-4">Created Date</th>
+                                <th class="px-6 py-4">Source GR</th>
+                                <th class="px-6 py-4">Assigned Staff</th>
+                                <th class="px-6 py-4">Items</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm">
+                            <tr class="table-row-hover transition">
+                                <td
+                                    class="text-primary-teal px-6 py-4 font-bold"
+                                >
+                                    PTW-2024-8801
+                                </td>
+                                <td
+                                    class="px-6 py-4 font-medium text-slate-500"
+                                >
+                                    May 24, 2024 10:30
+                                </td>
+                                <td class="px-6 py-4 font-bold">GR-2024-501</td>
+                                <td
+                                    class="px-6 py-4 font-medium text-slate-600"
+                                >
+                                    Johnathan Wick
+                                </td>
+                                <td class="px-6 py-4 font-bold">08 items</td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="status-badge bg-blue-100 text-blue-700"
+                                        >In Progress</span
+                                    >
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button
+                                        class="hover:text-primary-teal text-slate-400 transition"
+                                    >
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr
+                                class="table-row-hover text-slate-400 italic transition"
+                            >
+                                <td class="px-6 py-4 font-bold">
+                                    PTW-2024-8802
+                                </td>
+                                <td class="px-6 py-4 font-medium">
+                                    May 24, 2024 11:15
+                                </td>
+                                <td class="px-6 py-4 font-bold">GR-2024-501</td>
+                                <td class="px-6 py-4">Unassigned</td>
+                                <td class="px-6 py-4 font-bold">03 items</td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="status-badge bg-slate-100 text-slate-500"
+                                        >Draft</span
+                                    >
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button
+                                        onclick="navigateTo('view-create-task')"
+                                        class="text-primary-teal border-primary-teal hover:bg-primary-teal rounded border px-3 py-1 text-xs font-bold transition hover:text-white"
+                                    >
+                                        Continue
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- STEP 1: SELECT GOODS RECEIPT (Table Layout) -->
+        <section
+            id="view-select-gr"
+            class="view-container hidden-view mx-auto max-w-[1200px] p-6"
+        >
+            <header class="mb-6 flex items-center gap-4">
+                <button
+                    onclick="navigateTo('view-putaway-list')"
+                    class="hover:text-primary-teal flex h-10 w-10 items-center justify-center rounded-full border bg-white text-slate-400 transition"
+                >
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div>
+                    <h2 class="text-primary-dark text-2xl font-black">
+                        Select Pending Goods Receipt
+                    </h2>
+                    <p class="text-sm font-medium text-slate-500">
+                        Approved receipts awaiting stock movement to bins
+                    </p>
+                </div>
+            </header>
+
+            <div
+                class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+            >
+                <div
+                    class="flex items-center justify-between border-b bg-slate-50/50 p-4"
+                >
+                    <h3
+                        class="text-xs font-black tracking-widest text-slate-500 uppercase"
+                    >
+                        Available for Putaway
+                    </h3>
+                    <div class="relative w-64">
+                        <i
+                            class="fas fa-search absolute top-1/2 left-3 -translate-y-1/2 text-xs text-slate-400"
+                        ></i>
+                        <input
+                            type="text"
+                            placeholder="Search GR#, Vendor or PO..."
+                            class="w-full rounded-lg border bg-white py-2 pr-4 pl-9 text-sm"
+                        />
+                    </div>
+                </div>
+                <table class="w-full text-left">
+                    <thead
+                        class="border-b bg-slate-50 text-[10px] font-black text-slate-500 uppercase"
+                    >
+                        <tr>
+                            <th class="px-6 py-4">GR Document #</th>
+                            <th class="px-6 py-4">Receipt Date</th>
+                            <th class="px-6 py-4">Source PO</th>
+                            <th class="px-6 py-4">Total Items</th>
+                            <th class="px-6 py-4">Staging Area</th>
+                            <th class="px-6 py-4 text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        <tr
+                            class="table-row-hover"
+                            onclick="navigateTo('view-create-task')"
+                        >
+                            <td class="text-primary-teal px-6 py-4 font-black">
+                                GR-2024-501
+                            </td>
+                            <td class="px-6 py-4 font-medium text-slate-600">
+                                May 24, 2024
+                            </td>
+                            <td class="px-6 py-4 font-bold">PO-8820-A</td>
+                            <td class="px-6 py-4">
+                                <span class="font-bold">120 units</span>
+                                <div
+                                    class="text-[10px] font-medium text-slate-400"
+                                >
+                                    12 line items
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="rounded bg-amber-50 px-2 py-1 font-bold text-amber-600"
+                                    >ZONE-A1</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <button
+                                    class="bg-primary-dark rounded px-4 py-1.5 text-xs font-bold text-white shadow-sm"
+                                >
+                                    Select Receipt
+                                </button>
+                            </td>
+                        </tr>
+                        <tr
+                            class="table-row-hover"
+                            onclick="navigateTo('view-create-task')"
+                        >
+                            <td class="text-primary-teal px-6 py-4 font-black">
+                                GR-2024-505
+                            </td>
+                            <td class="px-6 py-4 font-medium text-slate-600">
+                                May 23, 2024
+                            </td>
+                            <td class="px-6 py-4 font-bold">PO-8901-B</td>
+                            <td class="px-6 py-4">
+                                <span class="font-bold">45 units</span>
+                                <div
+                                    class="text-[10px] font-medium text-slate-400"
+                                >
+                                    3 line items
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="rounded bg-amber-50 px-2 py-1 font-bold text-amber-600"
+                                    >ZONE-B4</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <button
+                                    class="bg-primary-dark rounded px-4 py-1.5 text-xs font-bold text-white shadow-sm"
+                                >
+                                    Select Receipt
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- STEP 2: CREATE PUTAWAY TASK (Side-by-Side Consistency) -->
+        <section
+            id="view-create-task"
+            class="view-container hidden-view mx-auto max-w-[1400px] p-6"
+        >
+            <header class="mb-6 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button
+                        onclick="navigateTo('view-putaway-list')"
+                        class="hover:text-primary-teal flex h-10 w-10 items-center justify-center rounded-full border bg-white text-slate-400 transition"
+                    >
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h2
+                            class="text-primary-dark text-2xl leading-tight font-black"
+                        >
+                            Create Putaway Movement
+                        </h2>
+                        <p class="text-sm font-medium text-slate-500">
+                            New stock movement assignment
+                        </p>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button
+                        onclick="navigateTo('view-putaway-list')"
+                        class="px-6 py-2.5 font-bold text-slate-500 transition hover:text-slate-800"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        class="bg-primary-teal rounded-lg px-8 py-2.5 font-black text-white shadow-lg transition hover:brightness-110"
+                    >
+                        Save & Confirm Task
+                    </button>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+                <!-- LEFT: Item Selection Table -->
+                <div class="lg:col-span-8">
+                    <div
+                        class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+                    >
+                        <div
+                            class="flex items-center justify-between border-b bg-slate-50 p-4"
+                        >
+                            <div class="flex items-center gap-3">
+                                <h3
+                                    class="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                >
+                                    Inventory to Allocate
+                                </h3>
+                            </div>
+                            <div
+                                class="text-primary-teal flex items-center rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-[10px] font-bold"
+                            >
+                                <i class="fas fa-info-circle mr-1.5"></i> Items
+                                loaded from selected GR
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead
+                                    class="border-b bg-slate-50/50 text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                                >
+                                    <tr>
+                                        <th class="w-10 px-6 py-4">
+                                            <input
+                                                type="checkbox"
+                                                class="rounded border-slate-300"
+                                                checked
+                                            />
+                                        </th>
+                                        <th class="px-6 py-4">
+                                            Product Details
+                                        </th>
+                                        <th class="px-6 py-4 text-center">
+                                            Remaining
+                                        </th>
+                                        <th class="px-6 py-4 text-center">
+                                            Quantity to Move
+                                        </th>
+                                        <th class="px-6 py-4">
+                                            Destination Bin
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <tr class="transition hover:bg-slate-50/30">
+                                        <td class="px-6 py-4">
+                                            <input
+                                                type="checkbox"
+                                                class="text-primary-teal rounded border-slate-300"
+                                                checked
+                                            />
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div
+                                                class="font-bold text-slate-800"
+                                            >
+                                                Fresh Whole Milk 1L
+                                            </div>
+                                            <div
+                                                class="text-[10px] font-bold text-slate-400 uppercase"
+                                            >
+                                                SKU: MK-WH-001 •
+                                                <span class="text-primary-teal"
+                                                    >RACK-ABLE</span
+                                                >
+                                            </div>
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 text-center font-bold text-slate-400 italic"
+                                        >
+                                            40 Units
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
+                                            <input
+                                                type="number"
+                                                value="40"
+                                                class="text-primary-teal focus:border-primary-teal w-20 rounded-lg border border-slate-200 px-3 py-1.5 text-center font-black"
+                                            />
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <select
+                                                class="w-full rounded-lg border border-slate-200 bg-slate-50 p-2 text-xs font-bold text-slate-600"
+                                            >
+                                                <option>COOL-A-01-01</option>
+                                                <option>COOL-A-01-02</option>
+                                                <option>MAIN-B-05-12</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr class="transition hover:bg-slate-50/30">
+                                        <td class="px-6 py-4">
+                                            <input
+                                                type="checkbox"
+                                                class="text-primary-teal rounded border-slate-300"
+                                                checked
+                                            />
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div
+                                                class="font-bold text-slate-800"
+                                            >
+                                                Organic Arabica Coffee 500g
+                                            </div>
+                                            <div
+                                                class="text-[10px] font-bold text-slate-400 uppercase"
+                                            >
+                                                SKU: CF-AR-500 •
+                                                <span class="text-primary-teal"
+                                                    >DRY-ZONE</span
+                                                >
+                                            </div>
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 text-center font-bold text-slate-400 italic"
+                                        >
+                                            80 Units
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
+                                            <input
+                                                type="number"
+                                                value="80"
+                                                class="text-primary-teal focus:border-primary-teal w-20 rounded-lg border border-slate-200 px-3 py-1.5 text-center font-black"
+                                            />
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <select
+                                                class="w-full rounded-lg border border-slate-200 bg-slate-50 p-2 text-xs font-bold text-slate-600"
+                                            >
+                                                <option>MAIN-B-05-12</option>
+                                                <option>MAIN-B-05-13</option>
+                                                <option>BULK-C-01</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Task Config Panel -->
+                <div class="space-y-6 lg:col-span-4">
+                    <!-- PANNEL TO THE RIGHT -->
+                    <div
+                        class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+                    >
+                        <h3
+                            class="mb-5 text-xs font-black tracking-widest text-slate-400 uppercase"
+                        >
+                            Task Configuration
+                        </h3>
+
+                        <div class="space-y-5">
+                            <!-- CHOOSE GR NUMBER -->
+                            <div>
+                                <label
+                                    class="mb-1.5 block text-[10px] font-black tracking-wider text-slate-500 uppercase"
+                                    >Select GR Number</label
+                                >
+                                <div class="relative">
+                                    <i
+                                        class="fas fa-file-invoice absolute top-1/2 left-3 -translate-y-1/2 text-xs text-slate-400"
+                                    ></i>
+                                    <select
+                                        class="text-primary-teal focus:border-primary-teal w-full appearance-none rounded-lg border border-slate-200 bg-white py-2.5 pr-4 pl-9 text-sm font-bold"
+                                    >
+                                        <option value="GR-2024-501">
+                                            GR-2024-501 (Pending)
+                                        </option>
+                                        <option value="GR-2024-505">
+                                            GR-2024-505 (Pending)
+                                        </option>
+                                        <option value="GR-2024-510">
+                                            GR-2024-510 (Partial)
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fas fa-chevron-down absolute top-1/2 right-3 -translate-y-1/2 text-[10px] text-slate-300"
+                                    ></i>
+                                </div>
+                            </div>
+
+                            <!-- CHOOSE WAREHOUSE STAFF -->
+                            <div>
+                                <label
+                                    class="mb-1.5 block text-[10px] font-black tracking-wider text-slate-500 uppercase"
+                                    >Assign Putaway Staff</label
+                                >
+                                <div class="relative">
+                                    <i
+                                        class="fas fa-user-tag absolute top-1/2 left-3 -translate-y-1/2 text-xs text-slate-400"
+                                    ></i>
+                                    <select
+                                        class="focus:border-primary-teal w-full appearance-none rounded-lg border border-slate-200 bg-white py-2.5 pr-4 pl-9 text-sm font-medium"
+                                    >
+                                        <option>
+                                            Select Warehouse Operator...
+                                        </option>
+                                        <option selected>
+                                            Sokhom Rathana (Floor A)
+                                        </option>
+                                        <option>
+                                            Chan Vichea (Cold Storage)
+                                        </option>
+                                        <option>
+                                            Vannak San (Main Warehouse)
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fas fa-chevron-down absolute top-1/2 right-3 -translate-y-1/2 text-[10px] text-slate-300"
+                                    ></i>
+                                </div>
+                            </div>
+
+                            <!-- PRIORITY -->
+                            <div>
+                                <label
+                                    class="mb-2 block text-[10px] font-black tracking-wider text-slate-500 uppercase"
+                                    >Task Priority</label
+                                >
+                                <div class="flex gap-2">
+                                    <button
+                                        class="flex-1 rounded-lg border border-slate-100 py-2 text-[10px] font-black transition hover:border-slate-200"
+                                    >
+                                        LOW
+                                    </button>
+                                    <button
+                                        class="border-primary-teal bg-primary-teal flex-1 rounded-lg border-2 py-2 text-[10px] font-black text-white shadow-sm"
+                                    >
+                                        NORMAL
+                                    </button>
+                                    <button
+                                        class="flex-1 rounded-lg border border-slate-100 py-2 text-[10px] font-black transition hover:border-slate-200"
+                                    >
+                                        URGENT
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- NOTES -->
+                            <div>
+                                <label
+                                    class="mb-1.5 block text-[10px] font-black tracking-wider text-slate-500 uppercase"
+                                    >Instruction / Note</label
+                                >
+                                <textarea
+                                    rows="3"
+                                    placeholder="Handling instructions..."
+                                    class="focus:border-primary-teal w-full resize-none rounded-lg border border-slate-200 bg-slate-50/50 p-3 text-sm"
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Card -->
+                    <div
+                        class="bg-primary-dark group relative overflow-hidden rounded-xl p-6 text-white shadow-xl"
+                    >
+                        <div class="absolute -right-4 -bottom-4 opacity-5">
+                            <i class="fas fa-truck-loading text-8xl"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <h3
+                                class="mb-5 text-[10px] font-black tracking-widest uppercase opacity-60"
+                            >
+                                Movement Summary
+                            </h3>
+                            <div class="mb-8 space-y-4">
+                                <div
+                                    class="flex items-center justify-between border-b border-white/10 pb-3"
+                                >
+                                    <span class="text-xs font-medium opacity-80"
+                                        >Selected GR:</span
+                                    >
+                                    <span class="text-sm font-black"
+                                        >GR-2024-501</span
+                                    >
+                                </div>
+                                <div
+                                    class="flex items-center justify-between border-b border-white/10 pb-3"
+                                >
+                                    <span class="text-xs font-medium opacity-80"
+                                        >Staff Assigned:</span
+                                    >
+                                    <span class="text-sm font-black"
+                                        >S. Rathana</span
+                                    >
+                                </div>
+                                <div
+                                    class="flex items-center justify-between border-b border-white/10 pb-3"
+                                >
+                                    <span class="text-xs font-medium opacity-80"
+                                        >Total Items:</span
+                                    >
+                                    <span class="text-sm font-black"
+                                        >120 Units</span
+                                    >
+                                </div>
+                            </div>
+                            <button
+                                class="bg-accent-green w-full rounded-lg py-3.5 text-sm font-black shadow-2xl transition hover:brightness-110 active:scale-95"
+                            >
+                                <i class="fas fa-check-circle mr-2"></i>
+                                AUTHORIZE MOVEMENT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            function navigateTo(viewId) {
+                // Hide all views with animation
+                const views = document.querySelectorAll('.view-container');
+                views.forEach((view) => {
+                    view.classList.add('hidden-view');
+                });
+
+                // Show target view
+                const targetView = document.getElementById(viewId);
+                if (targetView) {
+                    targetView.classList.remove('hidden-view');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        </script>
+    </body>
+</html>

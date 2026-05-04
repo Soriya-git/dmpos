@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Inbound Staging - Goods Receipt</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --primary-dark: #2a4858;
+                --primary-teal: #007882;
+                --accent-green: #23aa8f;
+                --light-green: #86d780;
+                --accent-yellow: #fafa6e;
+            }
+            body {
+                background-color: #f1f5f9;
+                font-family: 'Inter', sans-serif;
+            }
+            .bg-primary-dark {
+                background-color: var(--primary-dark);
+            }
+            .bg-primary-teal {
+                background-color: var(--primary-teal);
+            }
+            .text-primary-teal {
+                color: var(--primary-teal);
+            }
+            .bg-accent-green {
+                background-color: var(--accent-green);
+            }
+
+            .view-container {
+                transition: all 0.3s ease;
+            }
+            .hidden-view {
+                display: none;
+            }
+
+            .status-badge {
+                font-size: 0.7rem;
+                font-weight: 800;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+                text-transform: uppercase;
+            }
+
+            .stat-card:hover {
+                transform: translateY(-2px);
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body class="text-slate-800">
+        <!-- GOODS RECEIPT LIST VIEW (MAIN DASHBOARD) -->
+        <main
+            id="view-gr-list"
+            class="view-container mx-auto max-w-7xl p-4 md:p-8"
+        >
+            <header
+                class="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center"
+            >
+                <div>
+                    <h1
+                        class="text-primary-dark flex items-center text-2xl font-bold"
+                    >
+                        <i class="fas fa-dolly text-primary-teal mr-3"></i>
+                        Goods Receipt Management
+                    </h1>
+                    <p class="text-slate-500">
+                        Manage inbound deliveries and staging area arrivals
+                    </p>
+                </div>
+                <button
+                    onclick="navigateTo('view-new-gr')"
+                    class="bg-primary-teal hover:bg-opacity-90 flex items-center rounded-lg px-6 py-3 font-bold text-white shadow-lg transition"
+                >
+                    <i class="fas fa-plus-circle mr-2"></i> Create Goods Receipt
+                </button>
+            </header>
+
+            <!-- Stats Bar -->
+            <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+                <!-- CLICKABLE STAT CARD -->
+                <div
+                    onclick="navigateTo('view-pending-pos')"
+                    class="stat-card border-primary-teal rounded-xl border-t-4 bg-white p-6 shadow-sm transition-all"
+                >
+                    <p
+                        class="text-xs font-bold tracking-wider text-slate-400 uppercase"
+                    >
+                        Pending POs
+                    </p>
+                    <div class="mt-2 flex items-end justify-between">
+                        <span class="text-3xl font-black">12</span>
+                        <span class="text-primary-teal text-sm font-bold"
+                            >View Waiting POs
+                            <i class="fas fa-arrow-right ml-1"></i
+                        ></span>
+                    </div>
+                </div>
+                <div
+                    class="rounded-xl border-t-4 border-amber-400 bg-white p-6 shadow-sm"
+                >
+                    <p
+                        class="text-xs font-bold tracking-wider text-slate-400 uppercase"
+                    >
+                        Awaiting Staging
+                    </p>
+                    <div class="mt-2 flex items-end justify-between">
+                        <span class="text-3xl font-black">5</span>
+                        <span class="text-sm text-slate-400"
+                            >Trucks arriving</span
+                        >
+                    </div>
+                </div>
+                <div
+                    class="border-accent-green rounded-xl border-t-4 bg-white p-6 shadow-sm"
+                >
+                    <p
+                        class="text-xs font-bold tracking-wider text-slate-400 uppercase"
+                    >
+                        Ready for Putaway
+                    </p>
+                    <div class="mt-2 flex items-end justify-between">
+                        <span class="text-3xl font-black">8</span>
+                        <span class="text-accent-green text-sm font-bold"
+                            >Staging Zone 01</span
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+            >
+                <div
+                    class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4"
+                >
+                    <h2
+                        class="text-sm font-bold tracking-tight text-slate-700 uppercase"
+                    >
+                        Recent Receipts
+                    </h2>
+                    <div class="flex space-x-2">
+                        <div class="relative">
+                            <i
+                                class="fas fa-search absolute top-2.5 left-3 text-xs text-slate-400"
+                            ></i>
+                            <input
+                                type="text"
+                                placeholder="Search GR #..."
+                                class="focus:ring-primary-teal/20 rounded-lg border py-2 pr-4 pl-9 text-xs outline-none focus:ring-2"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <table class="w-full text-left">
+                    <thead
+                        class="bg-slate-50 text-xs font-bold tracking-widest text-slate-500 uppercase"
+                    >
+                        <tr>
+                            <th class="px-6 py-4">GR Number</th>
+                            <th class="px-6 py-4">Source PO</th>
+                            <th class="px-6 py-4">Staging Area</th>
+                            <th class="px-6 py-4">Receive Date</th>
+                            <th class="px-6 py-4">Items</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody
+                        class="divide-y divide-slate-100 text-sm font-medium"
+                    >
+                        <tr class="transition hover:bg-slate-50">
+                            <td class="text-primary-teal px-6 py-4 font-bold">
+                                GR-2024-501
+                            </td>
+                            <td class="px-6 py-4">PO-2024-001</td>
+                            <td class="px-6 py-4">
+                                <span class="rounded bg-slate-100 px-2 py-1"
+                                    >ZONE-A1</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-slate-500">
+                                24 Oct, 10:30 AM
+                            </td>
+                            <td class="px-6 py-4">4 Skus</td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="status-badge bg-blue-100 text-blue-700"
+                                    >Received</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button
+                                    class="hover:text-primary-teal p-2 text-slate-400"
+                                >
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <!-- PENDING POs LIST VIEW (NAVIGATION TARGET) -->
+        <section
+            id="view-pending-pos"
+            class="view-container hidden-view mx-auto max-w-7xl p-4 md:p-8"
+        >
+            <header class="mb-8 flex items-center space-x-4">
+                <button
+                    onclick="navigateTo('view-gr-list')"
+                    class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-400 transition hover:bg-white"
+                >
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div>
+                    <h2 class="text-primary-dark text-2xl font-bold">
+                        Approved POs for Receipt
+                    </h2>
+                    <p class="text-slate-500">
+                        Select an approved Purchase Order to start receiving
+                        goods
+                    </p>
+                </div>
+            </header>
+
+            <div
+                class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+            >
+                <table class="w-full text-left">
+                    <thead
+                        class="bg-slate-50 text-xs font-bold tracking-widest text-slate-500 uppercase"
+                    >
+                        <tr>
+                            <th class="px-6 py-4">PO Number</th>
+                            <th class="px-6 py-4">Supplier</th>
+                            <th class="px-6 py-4">Order Date</th>
+                            <th class="px-6 py-4">Expected Delivery</th>
+                            <th class="px-6 py-4">Progress</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody
+                        class="divide-y divide-slate-100 text-sm font-medium"
+                    >
+                        <tr class="transition hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-700">
+                                PO-2024-001
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-bold">Global Foods Co.</div>
+                                <div class="text-[10px] text-slate-400">
+                                    ID: SUP-992
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-xs text-slate-500">
+                                20 Oct 2024
+                            </td>
+                            <td
+                                class="px-6 py-4 text-xs font-bold text-slate-500"
+                            >
+                                24 Oct 2024
+                            </td>
+                            <td class="px-6 py-4">
+                                <div
+                                    class="h-1.5 w-24 overflow-hidden rounded-full bg-slate-100"
+                                >
+                                    <div
+                                        class="bg-primary-teal h-full"
+                                        style="width: 20%"
+                                    ></div>
+                                </div>
+                                <span
+                                    class="text-[10px] font-bold text-slate-400"
+                                    >20% Received</span
+                                >
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="status-badge bg-green-100 text-green-700"
+                                    >Approved</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button
+                                    onclick="navigateTo('view-new-gr')"
+                                    class="bg-primary-teal hover:bg-opacity-90 rounded-md px-4 py-1.5 text-xs font-bold text-white transition"
+                                >
+                                    Start Receipt
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="transition hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-700">
+                                PO-2024-005
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-bold">Fresh Agri Hub</div>
+                                <div class="text-[10px] text-slate-400">
+                                    ID: SUP-104
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-xs text-slate-500">
+                                22 Oct 2024
+                            </td>
+                            <td
+                                class="px-6 py-4 text-xs font-bold text-slate-500 italic"
+                            >
+                                Today
+                            </td>
+                            <td class="px-6 py-4">
+                                <div
+                                    class="h-1.5 w-24 overflow-hidden rounded-full bg-slate-100"
+                                >
+                                    <div
+                                        class="bg-primary-teal h-full"
+                                        style="width: 0%"
+                                    ></div>
+                                </div>
+                                <span
+                                    class="text-[10px] font-bold text-slate-400"
+                                    >0% Received</span
+                                >
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="status-badge bg-green-100 text-green-700"
+                                    >Approved</span
+                                >
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button
+                                    onclick="navigateTo('view-new-gr')"
+                                    class="bg-primary-teal hover:bg-opacity-90 rounded-md px-4 py-1.5 text-xs font-bold text-white transition"
+                                >
+                                    Start Receipt
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- NEW GOODS RECEIPT FORM VIEW -->
+        <section
+            id="view-new-gr"
+            class="view-container hidden-view mx-auto max-w-6xl p-4 md:p-8"
+        >
+            <div class="mb-8 flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button
+                        onclick="navigateTo('view-pending-pos')"
+                        class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-400 transition hover:bg-white"
+                    >
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h2 class="text-primary-dark text-2xl font-bold">
+                            New Goods Receipt
+                        </h2>
+                        <p class="text-slate-500">
+                            Inbound Staging Area Entry for PO-2024-001
+                        </p>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <button
+                        onclick="navigateTo('view-gr-list')"
+                        class="px-6 py-2 font-bold text-slate-500"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        class="bg-accent-green rounded-lg px-8 py-2 font-bold text-white shadow-md hover:opacity-90"
+                    >
+                        Post Receipt
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-4">
+                <!-- Sidebar: Source Reference -->
+                <div class="space-y-6 lg:col-span-1">
+                    <div
+                        class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+                    >
+                        <h3
+                            class="mb-4 text-xs font-black tracking-widest text-slate-400 uppercase"
+                        >
+                            Source PO Reference
+                        </h3>
+                        <div
+                            class="bg-primary-teal/5 border-primary-teal/10 rounded-lg border p-3"
+                        >
+                            <p class="text-primary-teal text-xs font-bold">
+                                PO Info
+                            </p>
+                            <p class="mt-1 text-sm font-bold text-slate-700">
+                                Global Foods Co.
+                            </p>
+                            <p class="text-xs text-slate-500">PO-2024-001</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+                    >
+                        <h3
+                            class="mb-4 text-xs font-black tracking-widest text-slate-400 uppercase"
+                        >
+                            Staging Details
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label
+                                    class="mb-1 block text-xs font-bold text-slate-500"
+                                    >STAGING ZONE</label
+                                >
+                                <select
+                                    class="w-full rounded-lg border border-slate-200 bg-slate-50 p-2 text-sm"
+                                >
+                                    <option>INBOUND-STAGING-01</option>
+                                    <option>INBOUND-STAGING-02</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main: Item Verification -->
+                <div class="space-y-6 lg:col-span-3">
+                    <div
+                        class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+                    >
+                        <div
+                            class="flex items-center justify-between border-b bg-slate-50 p-4"
+                        >
+                            <h3
+                                class="text-xs font-black tracking-widest text-slate-500 uppercase"
+                            >
+                                Verify Inbound Items
+                            </h3>
+                        </div>
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr
+                                    class="border-b border-slate-100 text-slate-400"
+                                >
+                                    <th
+                                        class="px-6 py-3 text-left text-[10px] font-bold uppercase"
+                                    >
+                                        Product / SKU
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-center text-[10px] font-bold uppercase"
+                                    >
+                                        Ordered
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-center text-[10px] font-bold uppercase"
+                                    >
+                                        Prev. Received
+                                    </th>
+                                    <th
+                                        class="text-primary-teal px-6 py-3 text-center text-[10px] font-bold uppercase"
+                                    >
+                                        Received Today
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-50">
+                                <tr>
+                                    <td class="px-6 py-4">
+                                        <div class="font-bold text-slate-800">
+                                            Organic Coffee Beans
+                                        </div>
+                                        <div
+                                            class="font-mono text-[10px] text-slate-400"
+                                        >
+                                            SKU: CF-ORG-001
+                                        </div>
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 text-center font-bold text-slate-500"
+                                    >
+                                        100
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 text-center font-bold text-slate-400"
+                                    >
+                                        20
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <input
+                                            type="number"
+                                            value="80"
+                                            class="border-primary-teal text-primary-teal w-20 rounded-lg border-2 py-1 text-center font-bold"
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            function navigateTo(viewId) {
+                const views = document.querySelectorAll('.view-container');
+                views.forEach((view) => view.classList.add('hidden-view'));
+                const targetView = document.getElementById(viewId);
+                if (targetView) {
+                    targetView.classList.remove('hidden-view');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        </script>
+    </body>
+</html>

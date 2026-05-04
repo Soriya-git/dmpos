@@ -23,9 +23,9 @@ class PurchaseSeeder extends Seeder
         $company = Company::first();
         $branch = Branch::first();
         $warehouse = Warehouse::first();
-        $putawayLocation = StockLocation::where('location_type', 'putaway')->first();
+        $stagingLocation = StockLocation::where('location_type', 'inbound_staging')->first();
 
-        if (! $company || ! $branch || ! $warehouse || ! $putawayLocation) {
+        if (! $company || ! $branch || ! $warehouse || ! $stagingLocation) {
             return;
         }
 
@@ -94,7 +94,7 @@ class PurchaseSeeder extends Seeder
             'branch_id' => $branch->id,
             'purchase_order_id' => $po->id,
             'warehouse_id' => $warehouse->id,
-            'stock_location_id' => $putawayLocation->id,
+            'stock_location_id' => $stagingLocation->id,
             'receipt_no' => DocumentNumber::make(GoodsReceipt::class, 'receipt_no', 'GR'),
             'status' => 'received',
             'received_at' => now(),
@@ -117,7 +117,7 @@ class PurchaseSeeder extends Seeder
                     'company_id' => $company->id,
                     'branch_id' => $branch->id,
                     'warehouse_id' => $warehouse->id,
-                    'stock_location_id' => $putawayLocation->id,
+                    'stock_location_id' => $stagingLocation->id,
                     'item_id' => $line->item_id,
                 ],
                 [
@@ -140,7 +140,7 @@ class PurchaseSeeder extends Seeder
                 'branch_id' => $branch->id,
                 'warehouse_id' => $warehouse->id,
                 'from_location_id' => null,
-                'to_location_id' => $putawayLocation->id,
+                'to_location_id' => $stagingLocation->id,
                 'item_id' => $line->item_id,
                 'unit_id' => $line->unit_id,
                 'movement_type' => 'purchase_receipt',

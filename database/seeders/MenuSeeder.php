@@ -5,11 +5,13 @@ namespace Database\Seeders;
 use App\Models\Branch;
 use App\Models\Company;
 use App\Models\Item;
+use App\Models\ItemUnitConversion;
 use App\Models\Menu;
 use App\Models\MenuCategory;
 use App\Models\MenuPrice;
 use App\Models\Unit;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 
 class MenuSeeder extends Seeder
 {
@@ -19,31 +21,27 @@ class MenuSeeder extends Seeder
             return;
         }
 
-        $plate = Unit::firstOrCreate(
-            ['code' => 'PLT'],
-            ['name' => 'Plate']
-        );
+        $units = Unit::whereIn('code', [
+            'BTL',
+            'CASE12',
+            'G',
+            'KG',
+            'L',
+            'ML',
+            'PCS',
+            'BOX',
+            'TRAY',
+        ])->get()->keyBy('code');
 
-        $bottle = Unit::firstOrCreate(
-            ['code' => 'BTL'],
-            ['name' => 'Bottle']
-        );
+        if ($units->count() < 9) {
+            return;
+        }
 
-        $kg = Unit::firstOrCreate(
-            ['code' => 'KG'],
-            ['name' => 'Kilogram']
-        );
-
-        $pcs = Unit::firstOrCreate(
-            ['code' => 'PCS'],
-            ['name' => 'Piece']
-        );
-
-        Branch::with('company')->orderBy('id')->get()->each(function (Branch $branch) use ($bottle, $kg, $pcs) {
+        Branch::with('company')->orderBy('id')->get()->each(function (Branch $branch) use ($units) {
             $company = $branch->company;
             $isFirstBranch = $branch->is(Branch::orderBy('id')->first());
 
-            $this->seedStockItems($company, $branch, $kg, $pcs, $bottle, $isFirstBranch);
+            $this->seedStockItems($company, $branch, $units, $isFirstBranch);
 
             $menuCategories = [
                 'Appetizers' => [
@@ -121,39 +119,118 @@ class MenuSeeder extends Seeder
         });
     }
 
-    private function seedStockItems(Company $company, Branch $branch, Unit $kg, Unit $pcs, Unit $bottle, bool $useLegacyCodes): void
+    /**
+     * @param  Collection<string, Unit>  $units
+     */
+    private function seedStockItems(Company $company, Branch $branch, $units, bool $useLegacyCodes): void
     {
         $suffix = $useLegacyCodes ? '' : '-'.$branch->code;
 
-        Item::create([
+        $rice = Item::create([
             'company_id' => $company->id,
             'branch_id' => $branch->id,
-            'unit_id' => $kg->id,
+            'unit_id' => $units['KG']->id,
             'name' => 'Rice',
             'code' => 'RM-RICE'.$suffix,
             'item_type' => 'raw_material',
             'cost' => 0.80,
         ]);
 
-        Item::create([
+        $egg = Item::create([
             'company_id' => $company->id,
             'branch_id' => $branch->id,
-            'unit_id' => $pcs->id,
+            'unit_id' => $units['PCS']->id,
             'name' => 'Egg',
             'code' => 'RM-EGG'.$suffix,
             'item_type' => 'ingredient',
             'cost' => 0.15,
         ]);
 
-        Item::create([
+        $cola = Item::create([
             'company_id' => $company->id,
             'branch_id' => $branch->id,
-            'unit_id' => $bottle->id,
+            'unit_id' => $units['BTL']->id,
             'name' => 'Coca Cola Bottle',
             'code' => 'DRK-COKE'.$suffix,
             'item_type' => 'drink',
             'cost' => 0.45,
         ]);
+
+        $coffee = Item::create([
+            'company_id' => $company->id,
+            'branch_id' => $branch->id,
+            'unit_id' => $units['KG']->id,
+            'name' => 'Coffee Beans',
+            'code' => 'RM-COFFEE-BEAN'.$suffix,
+            'item_type' => 'ingredient',
+            'cost' => 9.50,
+        ]);
+
+        $milk = Item::create([
+            'company_id' => $company->id,
+            'branch_id' => $branch->id,
+            'unit_id' => $units['L']->id,
+            'name' => 'Fresh Milk',
+            'code' => 'RM-MILK'.$suffix,
+            'item_type' => 'ingredient',
+            'cost' => 1.20,
+        ]);
+
+        $sugar = Item::create([
+            'company_id' => $company->id,
+            'branch_id' => $branch->id,
+            'unit_id' => $units['KG']->id,
+            'name' => 'Sugar',
+            'code' => 'RM-SUGAR'.$suffix,
+            'item_type' => 'ingredient',
+            'cost' => 0.95,
+        ]);
+
+        $paperCup = Item::create([
+            'company_id' => $company->id,
+            'branch_id' => $branch->id,
+            'unit_id' => $units['PCS']->id,
+            'name' => 'Paper Cup',
+            'code' => 'PKG-PAPER-CUP'.$suffix,
+            'item_type' => 'packaging',
+            'cost' => 0.04,
+        ]);
+
+        $this->seedItemUnitConversions($company, $branch, $units, [
+            [$egg, 'TRAY', 'PCS', 30, true, false],
+            [$cola, 'CASE12', 'BTL', 12, true, true],
+            [$coffee, 'KG', 'G', 1000, false, false],
+            [$coffee, 'G', 'KG', 0.001, false, false],
+            [$milk, 'L', 'ML', 1000, false, false],
+            [$milk, 'ML', 'L', 0.001, false, false],
+            [$sugar, 'KG', 'G', 1000, false, false],
+            [$sugar, 'G', 'KG', 0.001, false, false],
+            [$paperCup, 'BOX', 'PCS', 50, true, false],
+            [$rice, 'KG', 'G', 1000, false, false],
+            [$rice, 'G', 'KG', 0.001, false, false],
+        ]);
+    }
+
+    /**
+     * @param  Collection<string, Unit>  $units
+     * @param  array<int, array{0: Item, 1: string, 2: string, 3: float|int, 4: bool, 5: bool}>  $conversions
+     */
+    private function seedItemUnitConversions(Company $company, Branch $branch, $units, array $conversions): void
+    {
+        foreach ($conversions as [$item, $fromCode, $toCode, $factor, $purchaseDefault, $salesDefault]) {
+            ItemUnitConversion::create([
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
+                'item_id' => $item->id,
+                'from_unit_id' => $units[$fromCode]->id,
+                'to_unit_id' => $units[$toCode]->id,
+                'factor' => $factor,
+                'is_purchase_default' => $purchaseDefault,
+                'is_sales_default' => $salesDefault,
+                'is_inventory_default' => $fromCode === $item->unit->code,
+                'description' => "1 {$fromCode} = {$factor} {$toCode} for {$item->name}.",
+            ]);
+        }
     }
 
     private function menuCode(Branch $branch, string $menuName, string $categoryName, int $menuIndex, bool $useLegacyCodes): string

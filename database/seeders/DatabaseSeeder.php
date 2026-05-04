@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             TaxSeeder::class,
             ExchangeRateSeeder::class,
             PaymentMethodSeeder::class,
+            UnitSeeder::class,
             MenuSeeder::class,
             BomSeeder::class,
             WarehouseSeeder::class,
