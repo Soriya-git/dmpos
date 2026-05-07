@@ -16,6 +16,7 @@ import {
 import { computed, ref } from 'vue';
 import InputError from '@/components/InputError.vue';
 import SearchDropdown from '@/components/SearchDropdown.vue';
+import TablePagination from '@/components/TablePagination.vue';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -25,6 +26,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
 
 type PurchaseStatus =
@@ -104,6 +106,18 @@ const view = ref<'dashboard' | 'new'>('dashboard');
 const search = ref(props.filters.search ?? '');
 const status = ref(props.filters.status ?? '');
 const detailOrder = ref<PurchaseOrder | null>(null);
+
+const {
+    currentPage: ordersPage,
+    totalRows: ordersTotalRows,
+    totalPages: ordersTotalPages,
+    pageStart: ordersPageStart,
+    pageEnd: ordersPageEnd,
+    paginatedRows: paginatedOrders,
+    goToPage: goToOrdersPage,
+    pageSize: ordersPageSize,
+    setRowsPerPage: setOrdersRowsPerPage,
+} = usePagination(() => props.orders, 10);
 
 const today = () => {
     const date = new Date();
@@ -519,7 +533,7 @@ function updateOrderStatus(
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-sm">
                                 <tr
-                                    v-for="order in orders"
+                                    v-for="order in paginatedOrders"
                                     :key="order.id"
                                     class="transition hover:bg-slate-50/50"
                                 >
@@ -626,6 +640,17 @@ function updateOrderStatus(
                             </tbody>
                         </table>
                     </div>
+                    <TablePagination
+                        v-if="orders.length > 0"
+                        :current-page="ordersPage"
+                        :total-pages="ordersTotalPages"
+                        :total-rows="ordersTotalRows"
+                        :page-start="ordersPageStart"
+                        :page-end="ordersPageEnd"
+                        :rows-per-page="ordersPageSize"
+                        @go-to-page="goToOrdersPage"
+                        @update-rows-per-page="setOrdersRowsPerPage"
+                    />
 
                     <div v-else class="p-16 text-center">
                         <div

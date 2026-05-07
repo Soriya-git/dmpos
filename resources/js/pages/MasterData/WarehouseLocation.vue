@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { Building2, Plus, Save, Search, Users, X } from 'lucide-vue-next';
+import {
+    Boxes,
+    MapPinned,
+    PackageCheck,
+    Plus,
+    Save,
+    Search,
+    Warehouse,
+    X,
+} from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import ApprovalActionMenu from '@/components/master-data/ApprovalActionMenu.vue';
 import MasterDataTable from '@/components/master-data/MasterDataTable.vue';
@@ -23,74 +32,106 @@ type ApprovalStatus =
     | 'rejected'
     | 'cancelled';
 
-type CustomerView = 'customers' | 'groups';
+type WarehouseView = 'warehouses' | 'locations';
 
-type CustomerRecord = {
+type LocationType =
+    | 'inbound_staging'
+    | 'putaway'
+    | 'outbound_staging'
+    | 'scrap'
+    | 'damage'
+    | 'obsolete'
+    | 'general';
+
+type WarehouseRecord = {
     id: number;
     code: string;
     name: string;
-    phone: string;
-    email: string | null;
+    branch: string;
     address: string | null;
-    group: string;
+    locationsCount: number;
+    quantityOnHand: string;
+    quantityAvailable: string;
+    isDefault: boolean;
+    description: string | null;
     status: ApprovalStatus;
 };
 
-type CustomerGroupRecord = {
+type LocationRecord = {
     id: number;
     code: string;
     name: string;
+    warehouse: string;
+    branch: string;
+    locationType: LocationType;
+    isSaleable: boolean;
+    quantityOnHand: string;
+    quantityAvailable: string;
     description: string | null;
-    members: number;
     status: ApprovalStatus;
 };
 
-type CustomerPanelRecord = CustomerRecord | CustomerGroupRecord;
+type PanelRecord = WarehouseRecord | LocationRecord;
 
 const props = defineProps<{
-    customers: CustomerRecord[];
-    groups: CustomerGroupRecord[];
+    warehouses: WarehouseRecord[];
+    locations: LocationRecord[];
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Master Data' },
-    { title: 'Customers', href: '/master-data/customers' },
+    {
+        title: 'Warehouse & Location',
+        href: '/master-data/warehouse-locations',
+    },
 ];
 
-const activeView = ref<CustomerView>('customers');
+const activeView = ref<WarehouseView>('warehouses');
 const search = ref('');
 const panelOpen = ref(false);
-const panelKind = ref<CustomerView>('customers');
-const selectedRecord = ref<CustomerPanelRecord | null>(null);
-
-const customers = ref<CustomerRecord[]>([...props.customers]);
-const groups = ref<CustomerGroupRecord[]>([...props.groups]);
+const panelKind = ref<WarehouseView>('warehouses');
+const selectedRecord = ref<PanelRecord | null>(null);
+const warehouses = ref<WarehouseRecord[]>([...props.warehouses]);
+const locations = ref<LocationRecord[]>([...props.locations]);
 
 const tabs: {
-    key: CustomerView;
+    key: WarehouseView;
     label: string;
-    icon: typeof Users;
+    icon: typeof Warehouse;
 }[] = [
-    { key: 'customers', label: 'Customer Registry', icon: Users },
-    { key: 'groups', label: 'Customer Groups', icon: Building2 },
+    { key: 'warehouses', label: 'Warehouses', icon: Warehouse },
+    { key: 'locations', label: 'Locations', icon: MapPinned },
 ];
 
 const normalizedSearch = computed(() => search.value.trim().toLowerCase());
+const totalWarehouses = computed(() => warehouses.value.length);
+const totalLocations = computed(() => locations.value.length);
+const saleableLocations = computed(
+    () => locations.value.filter((location) => location.isSaleable).length,
+);
+const totalOnHand = computed(() =>
+    locations.value
+        .reduce(
+            (total, location) =>
+                total + Number(location.quantityOnHand.replace(/,/g, '')),
+            0,
+        )
+        .toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }),
+);
 
-const filteredCustomers = computed(() => filterRows(customers.value));
-const filteredGroups = computed(() => filterRows(groups.value));
+const filteredWarehouses = computed(() => filterRows(warehouses.value));
+const filteredLocations = computed(() => filterRows(locations.value));
 
 const panelTitle = computed(() =>
-    selectedRecord.value
-        ? `Edit ${panelKind.value === 'customers' ? 'Customer' : 'Group'}`
-        : `New ${panelKind.value === 'customers' ? 'Customer' : 'Group'}`,
+    selectedRecord.value ? `Edit ${panelLabel()}` : `New ${panelLabel()}`,
 );
 
-const panelSubtitle = computed(() =>
-    panelKind.value === 'customers'
-        ? 'Customer profile and billing master data'
-        : 'Customer segmentation and payment rules',
-);
+function panelLabel() {
+    return panelKind.value === 'warehouses' ? 'Warehouse' : 'Location';
+}
 
 function filterRows<T extends Record<string, unknown>>(rows: T[]) {
     if (!normalizedSearch.value) {
@@ -104,14 +145,14 @@ function filterRows<T extends Record<string, unknown>>(rows: T[]) {
     );
 }
 
-function switchView(view: CustomerView) {
+function switchView(view: WarehouseView) {
     activeView.value = view;
     panelKind.value = view;
 }
 
 function openPanel(
-    kind: CustomerView = activeView.value,
-    record: CustomerPanelRecord | null = null,
+    kind: WarehouseView = activeView.value,
+    record: PanelRecord | null = null,
 ) {
     panelKind.value = kind;
     selectedRecord.value = record;
@@ -125,7 +166,7 @@ function closePanel() {
 
 function statusLabel(status: ApprovalStatus) {
     return status === 'cancelled'
-        ? 'Cancel'
+        ? 'Inactive'
         : status.charAt(0).toUpperCase() + status.slice(1);
 }
 
@@ -141,17 +182,35 @@ function statusClass(status: ApprovalStatus) {
     return classes[status];
 }
 
-function setCustomerStatus(record: CustomerRecord, status: ApprovalStatus) {
+function locationTypeLabel(type: LocationType) {
+    return type.replace(/_/g, ' ');
+}
+
+function locationTypeClass(type: LocationType) {
+    const classes: Record<LocationType, string> = {
+        inbound_staging: 'border-blue-200 bg-blue-50 text-blue-700',
+        putaway: 'border-[#23AA8F]/20 bg-[#23AA8F]/10 text-[#16836f]',
+        outbound_staging: 'border-indigo-200 bg-indigo-50 text-indigo-700',
+        scrap: 'border-slate-300 bg-slate-100 text-slate-500',
+        damage: 'border-rose-200 bg-rose-50 text-rose-700',
+        obsolete: 'border-orange-200 bg-orange-50 text-orange-700',
+        general: 'border-slate-200 bg-slate-50 text-slate-600',
+    };
+
+    return classes[type];
+}
+
+function setWarehouseStatus(record: WarehouseRecord, status: ApprovalStatus) {
     record.status = status;
 }
 
-function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
+function setLocationStatus(record: LocationRecord, status: ApprovalStatus) {
     record.status = status;
 }
 </script>
 
 <template>
-    <Head title="Customers" />
+    <Head title="Warehouse & Location" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
@@ -162,11 +221,11 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <h1
                         class="text-2xl font-semibold tracking-tight text-[#2A4858]"
                     >
-                        Customers
+                        Warehouse & Location
                     </h1>
                     <p class="mt-1 text-sm text-slate-500">
-                        Customer accounts, groups, contact details, and active
-                        status.
+                        Branch warehouses, storage bins, saleable zones, and
+                        stock quantities.
                     </p>
                 </div>
 
@@ -177,7 +236,7 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         />
                         <Input
                             v-model="search"
-                            placeholder="Search customers..."
+                            placeholder="Search warehouse data..."
                             class="h-9 w-52 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] lg:w-64"
                         />
                     </div>
@@ -188,6 +247,49 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         <Plus class="size-4" />
                         New
                     </Button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+                <div
+                    class="rounded-lg border-l-4 border-[#007882] bg-white p-4 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Warehouses
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold">
+                        {{ totalWarehouses }}
+                    </h3>
+                </div>
+                <div
+                    class="rounded-lg border-l-4 border-blue-400 bg-white p-4 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Locations
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold text-blue-600">
+                        {{ totalLocations }}
+                    </h3>
+                </div>
+                <div
+                    class="rounded-lg border-l-4 border-[#23AA8F] bg-white p-4 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Saleable Zones
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold text-[#16836f]">
+                        {{ saleableLocations }}
+                    </h3>
+                </div>
+                <div
+                    class="rounded-lg border-l-4 border-amber-400 bg-white p-4 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        On Hand Qty
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold text-amber-600">
+                        {{ totalOnHand }}
+                    </h3>
                 </div>
             </div>
 
@@ -211,9 +313,9 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
             </div>
 
             <MasterDataTable
-                v-if="activeView === 'customers'"
-                :rows="filteredCustomers"
-                empty-text="No customer registry data found."
+                v-if="activeView === 'warehouses'"
+                :rows="filteredWarehouses"
+                empty-text="No warehouse data found."
             >
                 <template #head>
                     <th
@@ -224,27 +326,32 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Customer Code
+                        Warehouse Code
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Customer Name
+                        Warehouse Name
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Phone
+                        Branch
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Email
+                        Locations
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group
+                        Stock
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Default
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
@@ -271,17 +378,36 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-sm font-bold text-slate-700">
                         {{ row.name }}
                     </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.phone }}
-                    </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.email ?? '-' }}
-                    </td>
                     <td class="px-4 py-3">
                         <span
                             class="rounded bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-600"
                         >
-                            {{ row.group }}
+                            {{ row.branch }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-xs font-bold text-amber-700">
+                        {{ row.locationsCount }}
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex flex-col gap-1 text-xs">
+                            <span class="font-bold text-slate-700">
+                                {{ row.quantityOnHand }} on hand
+                            </span>
+                            <span class="text-[10px] text-[#16836f]">
+                                {{ row.quantityAvailable }} available
+                            </span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span
+                            class="rounded border px-2 py-0.5 text-[10px] font-bold"
+                            :class="
+                                row.isDefault
+                                    ? 'border-[#23AA8F]/20 bg-[#23AA8F]/10 text-[#16836f]'
+                                    : 'border-slate-200 bg-slate-50 text-slate-500'
+                            "
+                        >
+                            {{ row.isDefault ? 'Default' : 'Secondary' }}
                         </span>
                     </td>
                     <td class="px-4 py-3">
@@ -295,19 +421,19 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-center">
                         <ApprovalActionMenu
                             :status="row.status"
-                            @view="openPanel('customers', row)"
-                            @approve="setCustomerStatus(row, 'approved')"
-                            @reject="setCustomerStatus(row, 'rejected')"
-                            @cancel="setCustomerStatus(row, 'cancelled')"
+                            @view="openPanel('warehouses', row)"
+                            @approve="setWarehouseStatus(row, 'approved')"
+                            @reject="setWarehouseStatus(row, 'rejected')"
+                            @cancel="setWarehouseStatus(row, 'cancelled')"
                         />
                     </td>
                 </template>
             </MasterDataTable>
 
             <MasterDataTable
-                v-if="activeView === 'groups'"
-                :rows="filteredGroups"
-                empty-text="No customer group data found."
+                v-if="activeView === 'locations'"
+                :rows="filteredLocations"
+                empty-text="No stock location data found."
             >
                 <template #head>
                     <th
@@ -318,22 +444,32 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group Code
+                        Location Code
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group Name
+                        Location Name
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Description
+                        Warehouse
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Members
+                        Type
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Stock
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Saleable
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
@@ -361,10 +497,37 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         {{ row.name }}
                     </td>
                     <td class="px-4 py-3 text-xs text-slate-500">
-                        {{ row.description ?? '-' }}
+                        {{ row.warehouse }}
                     </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.members }}
+                    <td class="px-4 py-3">
+                        <span
+                            class="rounded border px-2 py-0.5 text-[10px] font-bold capitalize"
+                            :class="locationTypeClass(row.locationType)"
+                        >
+                            {{ locationTypeLabel(row.locationType) }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex flex-col gap-1 text-xs">
+                            <span class="font-bold text-slate-700">
+                                {{ row.quantityOnHand }} on hand
+                            </span>
+                            <span class="text-[10px] text-[#16836f]">
+                                {{ row.quantityAvailable }} available
+                            </span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span
+                            class="rounded border px-2 py-0.5 text-[10px] font-bold"
+                            :class="
+                                row.isSaleable
+                                    ? 'border-[#23AA8F]/20 bg-[#23AA8F]/10 text-[#16836f]'
+                                    : 'border-slate-300 bg-slate-100 text-slate-500'
+                            "
+                        >
+                            {{ row.isSaleable ? 'Saleable' : 'Non-saleable' }}
+                        </span>
                     </td>
                     <td class="px-4 py-3">
                         <span
@@ -377,10 +540,10 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-center">
                         <ApprovalActionMenu
                             :status="row.status"
-                            @view="openPanel('groups', row)"
-                            @approve="setGroupStatus(row, 'approved')"
-                            @reject="setGroupStatus(row, 'rejected')"
-                            @cancel="setGroupStatus(row, 'cancelled')"
+                            @view="openPanel('locations', row)"
+                            @approve="setLocationStatus(row, 'approved')"
+                            @reject="setLocationStatus(row, 'rejected')"
+                            @cancel="setLocationStatus(row, 'cancelled')"
                         />
                     </td>
                 </template>
@@ -398,7 +561,7 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                             <p
                                 class="mt-1 text-[10px] tracking-widest text-white/50 uppercase"
                             >
-                                {{ panelSubtitle }}
+                                Warehouse and stock location master data
                             </p>
                         </div>
                         <Button
@@ -424,7 +587,7 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                             <Input
                                 :model-value="selectedRecord?.code ?? ''"
                                 class="mt-1 font-mono text-sm focus-visible:ring-[#007882]"
-                                placeholder="Ex: CUS-0001"
+                                placeholder="WH-001"
                             />
                         </label>
 
@@ -442,63 +605,86 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         </label>
 
                         <div
-                            v-if="panelKind === 'customers'"
                             class="mt-2 space-y-3 border-t border-slate-200 pt-2"
                         >
-                            <label class="block">
+                            <label
+                                v-if="panelKind === 'locations'"
+                                class="block"
+                            >
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
                                 >
-                                    Phone
-                                </span>
-                                <Input
-                                    :model-value="
-                                        selectedRecord &&
-                                        'phone' in selectedRecord
-                                            ? selectedRecord.phone
-                                            : ''
-                                    "
-                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="+66 ..."
-                                />
-                            </label>
-                            <label class="block">
-                                <span
-                                    class="text-[10px] font-bold text-slate-400 uppercase"
-                                >
-                                    Email
-                                </span>
-                                <Input
-                                    :model-value="
-                                        selectedRecord &&
-                                        'email' in selectedRecord
-                                            ? (selectedRecord.email ?? '')
-                                            : ''
-                                    "
-                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="customer@example.com"
-                                />
-                            </label>
-                            <label class="block">
-                                <span
-                                    class="text-[10px] font-bold text-slate-400 uppercase"
-                                >
-                                    Customer Group
+                                    Warehouse
                                 </span>
                                 <select
                                     class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                                 >
-                                    <option>Retail</option>
-                                    <option>VIP</option>
-                                    <option>Corporate</option>
+                                    <option
+                                        v-for="warehouse in warehouses"
+                                        :key="warehouse.id"
+                                    >
+                                        {{ warehouse.name }}
+                                    </option>
                                 </select>
                             </label>
-                        </div>
-
-                        <div
-                            v-else
-                            class="mt-2 space-y-3 border-t border-slate-200 pt-2"
-                        >
+                            <label class="block">
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Branch
+                                </span>
+                                <Input
+                                    :model-value="
+                                        selectedRecord &&
+                                        'branch' in selectedRecord
+                                            ? selectedRecord.branch
+                                            : ''
+                                    "
+                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                    placeholder="Branch"
+                                />
+                            </label>
+                            <label
+                                v-if="panelKind === 'locations'"
+                                class="block"
+                            >
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Location Type
+                                </span>
+                                <select
+                                    class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                                >
+                                    <option>Inbound Staging</option>
+                                    <option>Putaway</option>
+                                    <option>Outbound Staging</option>
+                                    <option>Damage</option>
+                                    <option>Obsolete</option>
+                                    <option>Scrap</option>
+                                    <option>General</option>
+                                </select>
+                            </label>
+                            <label
+                                v-if="panelKind === 'warehouses'"
+                                class="block"
+                            >
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Address
+                                </span>
+                                <Input
+                                    :model-value="
+                                        selectedRecord &&
+                                        'address' in selectedRecord
+                                            ? (selectedRecord.address ?? '')
+                                            : ''
+                                    "
+                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                    placeholder="Warehouse address"
+                                />
+                            </label>
                             <label class="block">
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
@@ -507,13 +693,10 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                                 </span>
                                 <Input
                                     :model-value="
-                                        selectedRecord &&
-                                        'description' in selectedRecord
-                                            ? (selectedRecord.description ?? '')
-                                            : ''
+                                        selectedRecord?.description ?? ''
                                     "
                                     class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="Group description"
+                                    placeholder="Description"
                                 />
                             </label>
                         </div>

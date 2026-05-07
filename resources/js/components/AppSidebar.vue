@@ -111,9 +111,9 @@ const masterDataSection: NavSectionType = {
             title: 'Organizations',
             icon: Building2,
             items: [
-                { title: 'Our Company', href: '#' },
-                { title: 'Customers', href: '#' },
-                { title: 'Suppliers', href: '#' },
+                { title: 'Our Company', href: '/master-data/company-branches' },
+                { title: 'Customers', href: '/master-data/customers' },
+                { title: 'Suppliers', href: '/master-data/suppliers' },
             ],
         },
         {
@@ -121,24 +121,27 @@ const masterDataSection: NavSectionType = {
             icon: PackageSearch,
             items: [
                 { title: 'Items & BOM', href: '/master-data/products' },
-                { title: 'Menu', href: '#' },
-                { title: 'Warehouse & Location', href: '#' },
+                { title: 'Menu', href: '/master-data/menu' },
+                {
+                    title: 'Warehouse & Location',
+                    href: '/master-data/warehouse-locations',
+                },
             ],
         },
         {
             title: 'Dinning Resource',
             icon: Utensils,
             items: [
-                { title: 'POS', href: '#' },
-                { title: 'Seats', href: '#' },
+                { title: 'POS', href: '/master-data/pos-terminals' },
+                { title: 'Seats', href: '/master-data/seats' },
             ],
         },
         {
             title: 'Finance',
             icon: Landmark,
             items: [
-                { title: 'Exchange Rate', href: '#' },
-                { title: 'Taxes', href: '#' },
+                { title: 'Exchange Rate', href: '/master-data/exchange-rates' },
+                { title: 'Taxes', href: '/master-data/taxes' },
             ],
         },
     ],

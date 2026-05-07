@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { Building2, Plus, Save, Search, Users, X } from 'lucide-vue-next';
+import { MonitorCog, Plus, Save, Search, Timer, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import ApprovalActionMenu from '@/components/master-data/ApprovalActionMenu.vue';
 import MasterDataTable from '@/components/master-data/MasterDataTable.vue';
@@ -23,73 +23,84 @@ type ApprovalStatus =
     | 'rejected'
     | 'cancelled';
 
-type CustomerView = 'customers' | 'groups';
+type PosView = 'terminals' | 'sessions';
 
-type CustomerRecord = {
+type TerminalRecord = {
     id: number;
     code: string;
     name: string;
-    phone: string;
-    email: string | null;
-    address: string | null;
-    group: string;
+    branch: string;
+    deviceType: string;
+    sessionStatus: 'open' | 'available';
+    currentSessionNo: string | null;
+    openedBy: string | null;
+    openedAt: string | null;
     status: ApprovalStatus;
 };
 
-type CustomerGroupRecord = {
+type SessionRecord = {
     id: number;
     code: string;
-    name: string;
-    description: string | null;
-    members: number;
+    terminal: string;
+    branch: string;
+    openedBy: string;
+    openedAt: string | null;
+    openingCashUsd: string;
+    openingCashKhr: string;
+    totalSalesUsd: string;
     status: ApprovalStatus;
 };
 
-type CustomerPanelRecord = CustomerRecord | CustomerGroupRecord;
+type PanelRecord = TerminalRecord | SessionRecord;
 
 const props = defineProps<{
-    customers: CustomerRecord[];
-    groups: CustomerGroupRecord[];
+    terminals: TerminalRecord[];
+    sessions: SessionRecord[];
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Master Data' },
-    { title: 'Customers', href: '/master-data/customers' },
+    { title: 'POS Terminals', href: '/master-data/pos-terminals' },
 ];
 
-const activeView = ref<CustomerView>('customers');
+const activeView = ref<PosView>('terminals');
 const search = ref('');
 const panelOpen = ref(false);
-const panelKind = ref<CustomerView>('customers');
-const selectedRecord = ref<CustomerPanelRecord | null>(null);
-
-const customers = ref<CustomerRecord[]>([...props.customers]);
-const groups = ref<CustomerGroupRecord[]>([...props.groups]);
+const panelKind = ref<PosView>('terminals');
+const selectedRecord = ref<PanelRecord | null>(null);
+const terminals = ref<TerminalRecord[]>([...props.terminals]);
+const sessions = ref<SessionRecord[]>([...props.sessions]);
 
 const tabs: {
-    key: CustomerView;
+    key: PosView;
     label: string;
-    icon: typeof Users;
+    icon: typeof MonitorCog;
 }[] = [
-    { key: 'customers', label: 'Customer Registry', icon: Users },
-    { key: 'groups', label: 'Customer Groups', icon: Building2 },
+    { key: 'terminals', label: 'POS Terminals', icon: MonitorCog },
+    { key: 'sessions', label: 'Current POS Sessions', icon: Timer },
 ];
 
 const normalizedSearch = computed(() => search.value.trim().toLowerCase());
+const totalTerminals = computed(() => terminals.value.length);
+const openTerminalCount = computed(
+    () =>
+        terminals.value.filter((terminal) => terminal.sessionStatus === 'open')
+            .length,
+);
+const availableTerminalCount = computed(
+    () =>
+        terminals.value.filter(
+            (terminal) => terminal.sessionStatus === 'available',
+        ).length,
+);
 
-const filteredCustomers = computed(() => filterRows(customers.value));
-const filteredGroups = computed(() => filterRows(groups.value));
+const filteredTerminals = computed(() => filterRows(terminals.value));
+const filteredSessions = computed(() => filterRows(sessions.value));
 
 const panelTitle = computed(() =>
     selectedRecord.value
-        ? `Edit ${panelKind.value === 'customers' ? 'Customer' : 'Group'}`
-        : `New ${panelKind.value === 'customers' ? 'Customer' : 'Group'}`,
-);
-
-const panelSubtitle = computed(() =>
-    panelKind.value === 'customers'
-        ? 'Customer profile and billing master data'
-        : 'Customer segmentation and payment rules',
+        ? `View ${panelKind.value === 'terminals' ? 'POS Terminal' : 'POS Session'}`
+        : `New ${panelKind.value === 'terminals' ? 'POS Terminal' : 'POS Session'}`,
 );
 
 function filterRows<T extends Record<string, unknown>>(rows: T[]) {
@@ -104,14 +115,14 @@ function filterRows<T extends Record<string, unknown>>(rows: T[]) {
     );
 }
 
-function switchView(view: CustomerView) {
+function switchView(view: PosView) {
     activeView.value = view;
     panelKind.value = view;
 }
 
 function openPanel(
-    kind: CustomerView = activeView.value,
-    record: CustomerPanelRecord | null = null,
+    kind: PosView = activeView.value,
+    record: PanelRecord | null = null,
 ) {
     panelKind.value = kind;
     selectedRecord.value = record;
@@ -125,7 +136,7 @@ function closePanel() {
 
 function statusLabel(status: ApprovalStatus) {
     return status === 'cancelled'
-        ? 'Cancel'
+        ? 'Inactive'
         : status.charAt(0).toUpperCase() + status.slice(1);
 }
 
@@ -141,17 +152,23 @@ function statusClass(status: ApprovalStatus) {
     return classes[status];
 }
 
-function setCustomerStatus(record: CustomerRecord, status: ApprovalStatus) {
+function terminalSessionClass(status: TerminalRecord['sessionStatus']) {
+    return status === 'open'
+        ? 'border-amber-200 bg-amber-50 text-amber-700'
+        : 'border-[#23AA8F]/20 bg-[#23AA8F]/10 text-[#16836f]';
+}
+
+function setTerminalStatus(record: TerminalRecord, status: ApprovalStatus) {
     record.status = status;
 }
 
-function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
+function setSessionStatus(record: SessionRecord, status: ApprovalStatus) {
     record.status = status;
 }
 </script>
 
 <template>
-    <Head title="Customers" />
+    <Head title="POS Terminals" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
@@ -162,11 +179,11 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <h1
                         class="text-2xl font-semibold tracking-tight text-[#2A4858]"
                     >
-                        Customers
+                        POS Terminals
                     </h1>
                     <p class="mt-1 text-sm text-slate-500">
-                        Customer accounts, groups, contact details, and active
-                        status.
+                        Terminal count, branch assignment, and current POS
+                        sessions.
                     </p>
                 </div>
 
@@ -177,7 +194,7 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         />
                         <Input
                             v-model="search"
-                            placeholder="Search customers..."
+                            placeholder="Search POS data..."
                             class="h-9 w-52 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] lg:w-64"
                         />
                     </div>
@@ -188,6 +205,39 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         <Plus class="size-4" />
                         New
                     </Button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div
+                    class="rounded-lg border-l-4 border-[#007882] bg-white p-4 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        POS Terminals
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold">
+                        {{ totalTerminals }}
+                    </h3>
+                </div>
+                <div
+                    class="rounded-lg border-l-4 border-amber-400 bg-white p-4 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Open Sessions
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold text-amber-600">
+                        {{ openTerminalCount }}
+                    </h3>
+                </div>
+                <div
+                    class="rounded-lg border-l-4 border-[#23AA8F] bg-white p-4 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Available Terminals
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold text-[#16836f]">
+                        {{ availableTerminalCount }}
+                    </h3>
                 </div>
             </div>
 
@@ -211,9 +261,9 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
             </div>
 
             <MasterDataTable
-                v-if="activeView === 'customers'"
-                :rows="filteredCustomers"
-                empty-text="No customer registry data found."
+                v-if="activeView === 'terminals'"
+                :rows="filteredTerminals"
+                empty-text="No POS terminal data found."
             >
                 <template #head>
                     <th
@@ -224,27 +274,27 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Customer Code
+                        POS Code
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Customer Name
+                        Terminal Name
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Phone
+                        Branch
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Email
+                        Device
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group
+                        Current Session
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
@@ -271,17 +321,22 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-sm font-bold text-slate-700">
                         {{ row.name }}
                     </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.phone }}
-                    </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.email ?? '-' }}
-                    </td>
                     <td class="px-4 py-3">
                         <span
                             class="rounded bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-600"
                         >
-                            {{ row.group }}
+                            {{ row.branch }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-xs text-slate-500">
+                        {{ row.deviceType }}
+                    </td>
+                    <td class="px-4 py-3">
+                        <span
+                            class="rounded border px-2 py-0.5 text-[10px] font-bold"
+                            :class="terminalSessionClass(row.sessionStatus)"
+                        >
+                            {{ row.currentSessionNo ?? 'Available' }}
                         </span>
                     </td>
                     <td class="px-4 py-3">
@@ -295,19 +350,19 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-center">
                         <ApprovalActionMenu
                             :status="row.status"
-                            @view="openPanel('customers', row)"
-                            @approve="setCustomerStatus(row, 'approved')"
-                            @reject="setCustomerStatus(row, 'rejected')"
-                            @cancel="setCustomerStatus(row, 'cancelled')"
+                            @view="openPanel('terminals', row)"
+                            @approve="setTerminalStatus(row, 'approved')"
+                            @reject="setTerminalStatus(row, 'rejected')"
+                            @cancel="setTerminalStatus(row, 'cancelled')"
                         />
                     </td>
                 </template>
             </MasterDataTable>
 
             <MasterDataTable
-                v-if="activeView === 'groups'"
-                :rows="filteredGroups"
-                empty-text="No customer group data found."
+                v-if="activeView === 'sessions'"
+                :rows="filteredSessions"
+                empty-text="No current POS sessions found."
             >
                 <template #head>
                     <th
@@ -318,27 +373,32 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group Code
+                        Session No
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group Name
+                        Terminal
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Description
+                        Branch
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Members
+                        Opened By
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Status
+                        Opening Cash
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Total Sales
                     </th>
                     <th
                         class="w-16 px-4 py-3 text-center text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
@@ -358,29 +418,27 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         {{ row.code }}
                     </td>
                     <td class="px-4 py-3 text-sm font-bold text-slate-700">
-                        {{ row.name }}
+                        {{ row.terminal }}
                     </td>
                     <td class="px-4 py-3 text-xs text-slate-500">
-                        {{ row.description ?? '-' }}
+                        {{ row.branch }}
                     </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.members }}
+                    <td class="px-4 py-3 text-xs text-slate-500">
+                        {{ row.openedBy }}
                     </td>
-                    <td class="px-4 py-3">
-                        <span
-                            class="rounded border px-2 py-0.5 text-[10px] font-bold"
-                            :class="statusClass(row.status)"
-                        >
-                            {{ statusLabel(row.status) }}
-                        </span>
+                    <td class="px-4 py-3 text-xs font-bold text-amber-700">
+                        ${{ row.openingCashUsd }} / {{ row.openingCashKhr }} KHR
+                    </td>
+                    <td class="px-4 py-3 text-xs font-bold text-[#16836f]">
+                        ${{ row.totalSalesUsd }}
                     </td>
                     <td class="px-4 py-3 text-center">
                         <ApprovalActionMenu
                             :status="row.status"
-                            @view="openPanel('groups', row)"
-                            @approve="setGroupStatus(row, 'approved')"
-                            @reject="setGroupStatus(row, 'rejected')"
-                            @cancel="setGroupStatus(row, 'cancelled')"
+                            @view="openPanel('sessions', row)"
+                            @approve="setSessionStatus(row, 'approved')"
+                            @reject="setSessionStatus(row, 'rejected')"
+                            @cancel="setSessionStatus(row, 'cancelled')"
                         />
                     </td>
                 </template>
@@ -398,7 +456,7 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                             <p
                                 class="mt-1 text-[10px] tracking-widest text-white/50 uppercase"
                             >
-                                {{ panelSubtitle }}
+                                POS terminal and current session master data
                             </p>
                         </div>
                         <Button
@@ -424,7 +482,7 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                             <Input
                                 :model-value="selectedRecord?.code ?? ''"
                                 class="mt-1 font-mono text-sm focus-visible:ring-[#007882]"
-                                placeholder="Ex: CUS-0001"
+                                placeholder="POS-01"
                             />
                         </label>
 
@@ -435,85 +493,73 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                                 Name / Description
                             </span>
                             <Input
-                                :model-value="selectedRecord?.name ?? ''"
+                                :model-value="
+                                    selectedRecord && 'name' in selectedRecord
+                                        ? selectedRecord.name
+                                        : selectedRecord &&
+                                            'terminal' in selectedRecord
+                                          ? selectedRecord.terminal
+                                          : ''
+                                "
                                 class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                placeholder="Enter name"
+                                placeholder="POS terminal"
                             />
                         </label>
 
                         <div
-                            v-if="panelKind === 'customers'"
                             class="mt-2 space-y-3 border-t border-slate-200 pt-2"
                         >
                             <label class="block">
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
                                 >
-                                    Phone
+                                    Branch
                                 </span>
                                 <Input
                                     :model-value="
                                         selectedRecord &&
-                                        'phone' in selectedRecord
-                                            ? selectedRecord.phone
+                                        'branch' in selectedRecord
+                                            ? selectedRecord.branch
                                             : ''
                                     "
                                     class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="+66 ..."
+                                    placeholder="Branch"
                                 />
                             </label>
-                            <label class="block">
+                            <label
+                                v-if="panelKind === 'terminals'"
+                                class="block"
+                            >
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
                                 >
-                                    Email
-                                </span>
-                                <Input
-                                    :model-value="
-                                        selectedRecord &&
-                                        'email' in selectedRecord
-                                            ? (selectedRecord.email ?? '')
-                                            : ''
-                                    "
-                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="customer@example.com"
-                                />
-                            </label>
-                            <label class="block">
-                                <span
-                                    class="text-[10px] font-bold text-slate-400 uppercase"
-                                >
-                                    Customer Group
+                                    Device Type
                                 </span>
                                 <select
                                     class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                                 >
-                                    <option>Retail</option>
-                                    <option>VIP</option>
-                                    <option>Corporate</option>
+                                    <option>desktop</option>
+                                    <option>tablet</option>
                                 </select>
                             </label>
-                        </div>
-
-                        <div
-                            v-else
-                            class="mt-2 space-y-3 border-t border-slate-200 pt-2"
-                        >
-                            <label class="block">
+                            <label
+                                v-if="panelKind === 'sessions'"
+                                class="block"
+                            >
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
                                 >
-                                    Description
+                                    Opened By
                                 </span>
                                 <Input
                                     :model-value="
                                         selectedRecord &&
-                                        'description' in selectedRecord
-                                            ? (selectedRecord.description ?? '')
+                                        'openedBy' in selectedRecord
+                                            ? (selectedRecord.openedBy ?? '')
                                             : ''
                                     "
                                     class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="Group description"
+                                    placeholder="Cashier"
                                 />
                             </label>
                         </div>

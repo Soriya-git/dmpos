@@ -32,6 +32,12 @@ class PosTerminal extends Model
         return $this->hasMany(DiningSession::class);
     }
 
+    /** @return HasMany<PosSession, $this> */
+    public function posSessions(): HasMany
+    {
+        return $this->hasMany(PosSession::class);
+    }
+
     /** @return HasMany<Invoice, $this> */
     public function invoices(): HasMany
     {

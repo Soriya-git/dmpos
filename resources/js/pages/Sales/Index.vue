@@ -13,8 +13,10 @@ import {
     AArrowUp,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import TablePagination from '@/components/TablePagination.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { usePagination } from '@/composables/usePagination';
 import { usePosFormatting } from '@/composables/usePosFormatting';
 import AppLayout from '@/layouts/AppLayout.vue';
 import Payment from '@/pages/Seats/Payment.vue';
@@ -90,12 +92,28 @@ const selectedInvoice = ref<SaleInvoice | null>(null);
 const detailInvoice = ref<SaleInvoice | null>(null);
 const { money } = usePosFormatting();
 
+const {
+    currentPage: invoicesPage,
+    totalRows: invoicesTotalRows,
+    totalPages: invoicesTotalPages,
+    pageStart: invoicesPageStart,
+    pageEnd: invoicesPageEnd,
+    paginatedRows: paginatedInvoices,
+    goToPage: goToInvoicesPage,
+    pageSize: invoicesPageSize,
+    setRowsPerPage: setInvoicesRowsPerPage,
+} = usePagination(() => props.invoices, 10);
+
 const unpaidInvoices = computed(() => {
-    return props.invoices.filter((invoice) => invoice.status !== 'paid');
+    return paginatedInvoices.value.filter(
+        (invoice) => invoice.status !== 'paid',
+    );
 });
 
 const settledInvoices = computed(() => {
-    return props.invoices.filter((invoice) => invoice.status === 'paid');
+    return paginatedInvoices.value.filter(
+        (invoice) => invoice.status === 'paid',
+    );
 });
 
 const groupedInvoices = computed(() => [
@@ -588,6 +606,17 @@ function statusLabel(status: InvoiceStatus) {
                             </template>
                         </table>
                     </div>
+                    <TablePagination
+                        v-if="hasInvoices"
+                        :current-page="invoicesPage"
+                        :total-pages="invoicesTotalPages"
+                        :total-rows="invoicesTotalRows"
+                        :page-start="invoicesPageStart"
+                        :page-end="invoicesPageEnd"
+                        :rows-per-page="invoicesPageSize"
+                        @go-to-page="goToInvoicesPage"
+                        @update-rows-per-page="setInvoicesRowsPerPage"
+                    />
 
                     <div v-else class="p-20 text-center">
                         <div

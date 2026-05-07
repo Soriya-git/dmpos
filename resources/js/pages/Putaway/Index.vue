@@ -11,6 +11,7 @@ import {
     X,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import TablePagination from '@/components/TablePagination.vue';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -19,6 +20,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
 
 type Putaway = {
@@ -73,6 +75,18 @@ const filteredPutaways = computed(() => {
             .some((value) => String(value).toLowerCase().includes(term)),
     );
 });
+
+const {
+    currentPage: putawaysPage,
+    totalRows: putawaysTotalRows,
+    totalPages: putawaysTotalPages,
+    pageStart: putawaysPageStart,
+    pageEnd: putawaysPageEnd,
+    paginatedRows: paginatedPutaways,
+    goToPage: goToPutawaysPage,
+    pageSize: putawaysPageSize,
+    setRowsPerPage: setPutawaysRowsPerPage,
+} = usePagination(filteredPutaways, 10);
 
 function statusLabel(status: string) {
     return status
@@ -266,7 +280,7 @@ function updatePutawayStatus(
                         </thead>
                         <tbody class="divide-y divide-slate-100 text-sm">
                             <tr
-                                v-for="putaway in filteredPutaways"
+                                v-for="putaway in paginatedPutaways"
                                 :key="putaway.id"
                                 class="transition hover:bg-slate-50"
                             >
@@ -368,6 +382,16 @@ function updatePutawayStatus(
                         </tbody>
                     </table>
                 </div>
+                <TablePagination
+                    :current-page="putawaysPage"
+                    :total-pages="putawaysTotalPages"
+                    :total-rows="putawaysTotalRows"
+                    :page-start="putawaysPageStart"
+                    :page-end="putawaysPageEnd"
+                    :rows-per-page="putawaysPageSize"
+                    @go-to-page="goToPutawaysPage"
+                    @update-rows-per-page="setPutawaysRowsPerPage"
+                />
             </div>
 
             <div

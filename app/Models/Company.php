@@ -33,6 +33,12 @@ class Company extends Model
         return $this->hasMany(Customer::class);
     }
 
+    /** @return HasMany<Supplier, $this> */
+    public function suppliers(): HasMany
+    {
+        return $this->hasMany(Supplier::class);
+    }
+
     /** @return HasMany<DiningResource, $this> */
     public function diningResources(): HasMany
     {

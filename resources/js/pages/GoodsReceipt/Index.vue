@@ -12,6 +12,7 @@ import {
     X,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import TablePagination from '@/components/TablePagination.vue';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -20,6 +21,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
 
 type GoodsReceipt = {
@@ -67,6 +69,18 @@ const filteredReceipts = computed(() => {
             .some((value) => String(value).toLowerCase().includes(term));
     });
 });
+
+const {
+    currentPage: receiptsPage,
+    totalRows: receiptsTotalRows,
+    totalPages: receiptsTotalPages,
+    pageStart: receiptsPageStart,
+    pageEnd: receiptsPageEnd,
+    paginatedRows: paginatedReceipts,
+    goToPage: goToReceiptsPage,
+    pageSize: receiptsPageSize,
+    setRowsPerPage: setReceiptsRowsPerPage,
+} = usePagination(filteredReceipts, 10);
 
 function statusClass(status: string) {
     const classes: Record<string, string> = {
@@ -251,7 +265,7 @@ function updateReceiptStatus(
                             class="divide-y divide-slate-100 text-sm font-medium"
                         >
                             <tr
-                                v-for="receipt in filteredReceipts"
+                                v-for="receipt in paginatedReceipts"
                                 :key="receipt.id"
                                 class="transition hover:bg-slate-50"
                             >
@@ -360,6 +374,16 @@ function updateReceiptStatus(
                         </tbody>
                     </table>
                 </div>
+                <TablePagination
+                    :current-page="receiptsPage"
+                    :total-pages="receiptsTotalPages"
+                    :total-rows="receiptsTotalRows"
+                    :page-start="receiptsPageStart"
+                    :page-end="receiptsPageEnd"
+                    :rows-per-page="receiptsPageSize"
+                    @go-to-page="goToReceiptsPage"
+                    @update-rows-per-page="setReceiptsRowsPerPage"
+                />
             </div>
 
             <div

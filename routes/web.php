@@ -3,6 +3,15 @@
 use App\Http\Controllers\Crm;
 use App\Http\Controllers\Feature;
 use App\Http\Controllers\GoodsReceipt\GoodsReceiptController;
+use App\Http\Controllers\MasterData\CompanyBranchController;
+use App\Http\Controllers\MasterData\CustomerController;
+use App\Http\Controllers\MasterData\DiningResourceController;
+use App\Http\Controllers\MasterData\ExchangeRateController;
+use App\Http\Controllers\MasterData\MenuController;
+use App\Http\Controllers\MasterData\PosTerminalController;
+use App\Http\Controllers\MasterData\SupplierController;
+use App\Http\Controllers\MasterData\TaxController;
+use App\Http\Controllers\MasterData\WarehouseLocationController;
 use App\Http\Controllers\POS\PosSessionController;
 use App\Http\Controllers\Purchase\PurchaseOrderController;
 use App\Http\Controllers\Putaway\PutawayController;
@@ -70,6 +79,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Master data routes
     Route::inertia('/master-data/products', 'MasterData/Products')->name('master-data.products');
+    Route::get('/master-data/company-branches', [CompanyBranchController::class, 'index'])->name('master-data.company-branches');
+    Route::get('/master-data/customers', [CustomerController::class, 'index'])->name('master-data.customers');
+    Route::get('/master-data/exchange-rates', [ExchangeRateController::class, 'index'])->name('master-data.exchange-rates');
+    Route::get('/master-data/menu', [MenuController::class, 'index'])->name('master-data.menu');
+    Route::get('/master-data/pos-terminals', [PosTerminalController::class, 'index'])->name('master-data.pos-terminals');
+    Route::get('/master-data/seats', [DiningResourceController::class, 'index'])->name('master-data.seats');
+    Route::get('/master-data/suppliers', [SupplierController::class, 'index'])->name('master-data.suppliers');
+    Route::get('/master-data/taxes', [TaxController::class, 'index'])->name('master-data.taxes');
+    Route::get('/master-data/warehouse-locations', [WarehouseLocationController::class, 'index'])->name('master-data.warehouse-locations');
 
     // Seat; Resource routes
     Route::get('/orders', [SeatController::class, 'index'])->name('seats.index');

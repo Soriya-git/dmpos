@@ -2,7 +2,7 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import '../css/app.css';
 import { initializeTheme } from './composables/useAppearance';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Inertia Kitchen Sink';
+const appName = import.meta.env.VITE_APP_NAME || 'Diamond Restaurant';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),

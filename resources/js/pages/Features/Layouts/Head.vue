@@ -112,7 +112,7 @@ const metaDescription = ref('Document head management with Inertia.js');
                         <p class="text-xs text-muted-foreground">
                             This app uses the template above. So
                             <code>&lt;Head title="Home" /&gt;</code> becomes
-                            <code>"Home - Inertia Kitchen Sink"</code> in the
+                            <code>"Home - Diamond Restaurant"</code> in the
                             browser tab.
                         </p>
                     </div>

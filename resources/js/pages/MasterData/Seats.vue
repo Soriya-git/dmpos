@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { Building2, Plus, Save, Search, Users, X } from 'lucide-vue-next';
+import {
+    Armchair,
+    Layers3,
+    Plus,
+    Save,
+    Search,
+    Users,
+    X,
+} from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import ApprovalActionMenu from '@/components/master-data/ApprovalActionMenu.vue';
 import MasterDataTable from '@/components/master-data/MasterDataTable.vue';
@@ -23,74 +31,102 @@ type ApprovalStatus =
     | 'rejected'
     | 'cancelled';
 
-type CustomerView = 'customers' | 'groups';
+type SeatView = 'resources' | 'types';
 
-type CustomerRecord = {
+type SeatStatus =
+    | 'available'
+    | 'booked'
+    | 'occupied'
+    | 'maintenance'
+    | 'disabled';
+
+type SeatRecord = {
     id: number;
     code: string;
     name: string;
-    phone: string;
-    email: string | null;
-    address: string | null;
-    group: string;
+    branch: string;
+    type: string;
+    capacity: number;
+    seatStatus: SeatStatus;
+    currentSessionNo: string | null;
+    sessionStatus: string | null;
+    guestCount: number | null;
+    openedBy: string | null;
+    openedAt: string | null;
+    description: string | null;
     status: ApprovalStatus;
 };
 
-type CustomerGroupRecord = {
+type SeatTypeRecord = {
     id: number;
     code: string;
     name: string;
     description: string | null;
-    members: number;
+    resourcesCount: number;
     status: ApprovalStatus;
 };
 
-type CustomerPanelRecord = CustomerRecord | CustomerGroupRecord;
+type PanelRecord = SeatRecord | SeatTypeRecord;
 
 const props = defineProps<{
-    customers: CustomerRecord[];
-    groups: CustomerGroupRecord[];
+    resources: SeatRecord[];
+    types: SeatTypeRecord[];
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Master Data' },
-    { title: 'Customers', href: '/master-data/customers' },
+    { title: 'Seats', href: '/master-data/seats' },
 ];
 
-const activeView = ref<CustomerView>('customers');
+const activeView = ref<SeatView>('resources');
 const search = ref('');
 const panelOpen = ref(false);
-const panelKind = ref<CustomerView>('customers');
-const selectedRecord = ref<CustomerPanelRecord | null>(null);
-
-const customers = ref<CustomerRecord[]>([...props.customers]);
-const groups = ref<CustomerGroupRecord[]>([...props.groups]);
+const panelKind = ref<SeatView>('resources');
+const selectedRecord = ref<PanelRecord | null>(null);
+const resources = ref<SeatRecord[]>([...props.resources]);
+const types = ref<SeatTypeRecord[]>([...props.types]);
 
 const tabs: {
-    key: CustomerView;
+    key: SeatView;
     label: string;
-    icon: typeof Users;
+    icon: typeof Armchair;
 }[] = [
-    { key: 'customers', label: 'Customer Registry', icon: Users },
-    { key: 'groups', label: 'Customer Groups', icon: Building2 },
+    { key: 'resources', label: 'Seats', icon: Armchair },
+    { key: 'types', label: 'Seat Types', icon: Layers3 },
 ];
 
 const normalizedSearch = computed(() => search.value.trim().toLowerCase());
+const totalSeats = computed(() => resources.value.length);
+const occupiedSeats = computed(
+    () =>
+        resources.value.filter(
+            (resource) =>
+                resource.seatStatus === 'occupied' ||
+                Boolean(resource.currentSessionNo),
+        ).length,
+);
+const availableSeats = computed(
+    () =>
+        resources.value.filter(
+            (resource) =>
+                resource.seatStatus === 'available' &&
+                !resource.currentSessionNo,
+        ).length,
+);
+const totalCapacity = computed(() =>
+    resources.value.reduce((total, resource) => total + resource.capacity, 0),
+);
 
-const filteredCustomers = computed(() => filterRows(customers.value));
-const filteredGroups = computed(() => filterRows(groups.value));
+const filteredResources = computed(() => filterRows(resources.value));
+const filteredTypes = computed(() => filterRows(types.value));
 
 const panelTitle = computed(() =>
-    selectedRecord.value
-        ? `Edit ${panelKind.value === 'customers' ? 'Customer' : 'Group'}`
-        : `New ${panelKind.value === 'customers' ? 'Customer' : 'Group'}`,
+    selectedRecord.value ? `Edit ${panelLabel()}` : `New ${panelLabel()}`,
 );
 
-const panelSubtitle = computed(() =>
-    panelKind.value === 'customers'
-        ? 'Customer profile and billing master data'
-        : 'Customer segmentation and payment rules',
-);
+function panelLabel() {
+    return panelKind.value === 'resources' ? 'Seat' : 'Seat Type';
+}
 
 function filterRows<T extends Record<string, unknown>>(rows: T[]) {
     if (!normalizedSearch.value) {
@@ -104,14 +140,14 @@ function filterRows<T extends Record<string, unknown>>(rows: T[]) {
     );
 }
 
-function switchView(view: CustomerView) {
+function switchView(view: SeatView) {
     activeView.value = view;
     panelKind.value = view;
 }
 
 function openPanel(
-    kind: CustomerView = activeView.value,
-    record: CustomerPanelRecord | null = null,
+    kind: SeatView = activeView.value,
+    record: PanelRecord | null = null,
 ) {
     panelKind.value = kind;
     selectedRecord.value = record;
@@ -125,7 +161,7 @@ function closePanel() {
 
 function statusLabel(status: ApprovalStatus) {
     return status === 'cancelled'
-        ? 'Cancel'
+        ? 'Inactive'
         : status.charAt(0).toUpperCase() + status.slice(1);
 }
 
@@ -141,17 +177,33 @@ function statusClass(status: ApprovalStatus) {
     return classes[status];
 }
 
-function setCustomerStatus(record: CustomerRecord, status: ApprovalStatus) {
+function seatStatusLabel(status: SeatStatus) {
+    return status.replace('_', ' ');
+}
+
+function seatStatusClass(status: SeatStatus) {
+    const classes: Record<SeatStatus, string> = {
+        available: 'border-[#23AA8F]/20 bg-[#23AA8F]/10 text-[#16836f]',
+        booked: 'border-blue-200 bg-blue-50 text-blue-700',
+        occupied: 'border-amber-200 bg-amber-50 text-amber-700',
+        maintenance: 'border-orange-200 bg-orange-50 text-orange-700',
+        disabled: 'border-slate-300 bg-slate-100 text-slate-500',
+    };
+
+    return classes[status];
+}
+
+function setSeatStatus(record: SeatRecord, status: ApprovalStatus) {
     record.status = status;
 }
 
-function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
+function setSeatTypeStatus(record: SeatTypeRecord, status: ApprovalStatus) {
     record.status = status;
 }
 </script>
 
 <template>
-    <Head title="Customers" />
+    <Head title="Seats" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
@@ -162,11 +214,11 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <h1
                         class="text-2xl font-semibold tracking-tight text-[#2A4858]"
                     >
-                        Customers
+                        Seats
                     </h1>
                     <p class="mt-1 text-sm text-slate-500">
-                        Customer accounts, groups, contact details, and active
-                        status.
+                        Dining tables, rooms, seat capacity, and current dining
+                        sessions.
                     </p>
                 </div>
 
@@ -177,7 +229,7 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         />
                         <Input
                             v-model="search"
-                            placeholder="Search customers..."
+                            placeholder="Search seat data..."
                             class="h-9 w-52 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] lg:w-64"
                         />
                     </div>
@@ -188,6 +240,49 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         <Plus class="size-4" />
                         New
                     </Button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+                <div
+                    class="rounded-lg border-l-4 border-[#007882] bg-white p-4 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Total Seats
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold">
+                        {{ totalSeats }}
+                    </h3>
+                </div>
+                <div
+                    class="rounded-lg border-l-4 border-[#23AA8F] bg-white p-4 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Available
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold text-[#16836f]">
+                        {{ availableSeats }}
+                    </h3>
+                </div>
+                <div
+                    class="rounded-lg border-l-4 border-amber-400 bg-white p-4 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        In Session
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold text-amber-600">
+                        {{ occupiedSeats }}
+                    </h3>
+                </div>
+                <div
+                    class="rounded-lg border-l-4 border-blue-400 bg-white p-4 shadow-sm"
+                >
+                    <p class="text-xs font-bold text-slate-500 uppercase">
+                        Capacity
+                    </p>
+                    <h3 class="mt-1 text-2xl font-bold text-blue-600">
+                        {{ totalCapacity }}
+                    </h3>
                 </div>
             </div>
 
@@ -211,9 +306,9 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
             </div>
 
             <MasterDataTable
-                v-if="activeView === 'customers'"
-                :rows="filteredCustomers"
-                empty-text="No customer registry data found."
+                v-if="activeView === 'resources'"
+                :rows="filteredResources"
+                empty-text="No seat data found."
             >
                 <template #head>
                     <th
@@ -224,27 +319,37 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Customer Code
+                        Seat Code
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Customer Name
+                        Seat Name
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Phone
+                        Branch
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Email
+                        Type
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group
+                        Capacity
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Current Session
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Seat Status
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
@@ -271,17 +376,50 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-sm font-bold text-slate-700">
                         {{ row.name }}
                     </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.phone }}
-                    </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.email ?? '-' }}
-                    </td>
                     <td class="px-4 py-3">
                         <span
                             class="rounded bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-600"
                         >
-                            {{ row.group }}
+                            {{ row.branch }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-xs text-slate-500">
+                        {{ row.type }}
+                    </td>
+                    <td class="px-4 py-3">
+                        <span
+                            class="inline-flex items-center gap-1 rounded border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-bold text-slate-600"
+                        >
+                            <Users class="size-3" />
+                            {{ row.capacity }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex flex-col gap-1">
+                            <span
+                                class="text-xs font-bold"
+                                :class="
+                                    row.currentSessionNo
+                                        ? 'text-amber-700'
+                                        : 'text-[#16836f]'
+                                "
+                            >
+                                {{ row.currentSessionNo ?? 'Available' }}
+                            </span>
+                            <span
+                                v-if="row.openedBy"
+                                class="text-[10px] text-slate-400"
+                            >
+                                {{ row.openedBy }}
+                            </span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span
+                            class="rounded border px-2 py-0.5 text-[10px] font-bold capitalize"
+                            :class="seatStatusClass(row.seatStatus)"
+                        >
+                            {{ seatStatusLabel(row.seatStatus) }}
                         </span>
                     </td>
                     <td class="px-4 py-3">
@@ -295,19 +433,19 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-center">
                         <ApprovalActionMenu
                             :status="row.status"
-                            @view="openPanel('customers', row)"
-                            @approve="setCustomerStatus(row, 'approved')"
-                            @reject="setCustomerStatus(row, 'rejected')"
-                            @cancel="setCustomerStatus(row, 'cancelled')"
+                            @view="openPanel('resources', row)"
+                            @approve="setSeatStatus(row, 'approved')"
+                            @reject="setSeatStatus(row, 'rejected')"
+                            @cancel="setSeatStatus(row, 'cancelled')"
                         />
                     </td>
                 </template>
             </MasterDataTable>
 
             <MasterDataTable
-                v-if="activeView === 'groups'"
-                :rows="filteredGroups"
-                empty-text="No customer group data found."
+                v-if="activeView === 'types'"
+                :rows="filteredTypes"
+                empty-text="No seat type data found."
             >
                 <template #head>
                     <th
@@ -318,12 +456,17 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group Code
+                        Type Code
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group Name
+                        Type Name
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Seats
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
@@ -333,11 +476,6 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Members
-                    </th>
-                    <th
-                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
-                    >
                         Status
                     </th>
                     <th
@@ -360,11 +498,11 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-sm font-bold text-slate-700">
                         {{ row.name }}
                     </td>
-                    <td class="px-4 py-3 text-xs text-slate-500">
-                        {{ row.description ?? '-' }}
+                    <td class="px-4 py-3 text-xs font-bold text-amber-700">
+                        {{ row.resourcesCount }}
                     </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.members }}
+                    <td class="max-w-md px-4 py-3 text-xs text-slate-500">
+                        {{ row.description ?? 'No description' }}
                     </td>
                     <td class="px-4 py-3">
                         <span
@@ -377,10 +515,10 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-center">
                         <ApprovalActionMenu
                             :status="row.status"
-                            @view="openPanel('groups', row)"
-                            @approve="setGroupStatus(row, 'approved')"
-                            @reject="setGroupStatus(row, 'rejected')"
-                            @cancel="setGroupStatus(row, 'cancelled')"
+                            @view="openPanel('types', row)"
+                            @approve="setSeatTypeStatus(row, 'approved')"
+                            @reject="setSeatTypeStatus(row, 'rejected')"
+                            @cancel="setSeatTypeStatus(row, 'cancelled')"
                         />
                     </td>
                 </template>
@@ -398,7 +536,7 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                             <p
                                 class="mt-1 text-[10px] tracking-widest text-white/50 uppercase"
                             >
-                                {{ panelSubtitle }}
+                                Dining resource and seat type master data
                             </p>
                         </div>
                         <Button
@@ -424,7 +562,7 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                             <Input
                                 :model-value="selectedRecord?.code ?? ''"
                                 class="mt-1 font-mono text-sm focus-visible:ring-[#007882]"
-                                placeholder="Ex: CUS-0001"
+                                placeholder="SEAT-01"
                             />
                         </label>
 
@@ -442,63 +580,68 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         </label>
 
                         <div
-                            v-if="panelKind === 'customers'"
                             class="mt-2 space-y-3 border-t border-slate-200 pt-2"
                         >
-                            <label class="block">
+                            <label
+                                v-if="panelKind === 'resources'"
+                                class="block"
+                            >
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
                                 >
-                                    Phone
+                                    Branch
                                 </span>
                                 <Input
                                     :model-value="
                                         selectedRecord &&
-                                        'phone' in selectedRecord
-                                            ? selectedRecord.phone
+                                        'branch' in selectedRecord
+                                            ? selectedRecord.branch
                                             : ''
                                     "
                                     class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="+66 ..."
+                                    placeholder="Branch"
                                 />
                             </label>
-                            <label class="block">
+                            <label
+                                v-if="panelKind === 'resources'"
+                                class="block"
+                            >
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
                                 >
-                                    Email
-                                </span>
-                                <Input
-                                    :model-value="
-                                        selectedRecord &&
-                                        'email' in selectedRecord
-                                            ? (selectedRecord.email ?? '')
-                                            : ''
-                                    "
-                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="customer@example.com"
-                                />
-                            </label>
-                            <label class="block">
-                                <span
-                                    class="text-[10px] font-bold text-slate-400 uppercase"
-                                >
-                                    Customer Group
+                                    Seat Type
                                 </span>
                                 <select
                                     class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                                 >
-                                    <option>Retail</option>
-                                    <option>VIP</option>
-                                    <option>Corporate</option>
+                                    <option
+                                        v-for="type in types"
+                                        :key="type.id"
+                                    >
+                                        {{ type.name }}
+                                    </option>
                                 </select>
                             </label>
-                        </div>
-
-                        <div
-                            v-else
-                            class="mt-2 space-y-3 border-t border-slate-200 pt-2"
-                        >
+                            <label
+                                v-if="panelKind === 'resources'"
+                                class="block"
+                            >
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Capacity
+                                </span>
+                                <Input
+                                    :model-value="
+                                        selectedRecord &&
+                                        'capacity' in selectedRecord
+                                            ? String(selectedRecord.capacity)
+                                            : ''
+                                    "
+                                    class="mt-1 font-bold text-[#007882] focus-visible:ring-[#007882]"
+                                    placeholder="4"
+                                />
+                            </label>
                             <label class="block">
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
@@ -507,13 +650,10 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                                 </span>
                                 <Input
                                     :model-value="
-                                        selectedRecord &&
-                                        'description' in selectedRecord
-                                            ? (selectedRecord.description ?? '')
-                                            : ''
+                                        selectedRecord?.description ?? ''
                                     "
                                     class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="Group description"
+                                    placeholder="Description"
                                 />
                             </label>
                         </div>

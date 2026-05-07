@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { Building2, Plus, Save, Search, Users, X } from 'lucide-vue-next';
+import {
+    Layers3,
+    Plus,
+    Save,
+    Search,
+    Tags,
+    Utensils,
+    X,
+} from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import ApprovalActionMenu from '@/components/master-data/ApprovalActionMenu.vue';
 import MasterDataTable from '@/components/master-data/MasterDataTable.vue';
@@ -23,74 +31,105 @@ type ApprovalStatus =
     | 'rejected'
     | 'cancelled';
 
-type CustomerView = 'customers' | 'groups';
+type MenuView = 'menus' | 'categories' | 'prices';
 
-type CustomerRecord = {
+type MenuRecord = {
     id: number;
     code: string;
     name: string;
-    phone: string;
-    email: string | null;
-    address: string | null;
-    group: string;
-    status: ApprovalStatus;
-};
-
-type CustomerGroupRecord = {
-    id: number;
-    code: string;
-    name: string;
+    category: string;
+    branch: string;
+    type: 'product' | 'service';
+    basePrice: string;
+    defaultPrice: string;
     description: string | null;
-    members: number;
+    available: boolean;
     status: ApprovalStatus;
 };
 
-type CustomerPanelRecord = CustomerRecord | CustomerGroupRecord;
+type CategoryRecord = {
+    id: number;
+    code: string;
+    name: string;
+    branch: string;
+    description: string | null;
+    menusCount: number;
+    status: ApprovalStatus;
+};
+
+type PriceRecord = {
+    id: number;
+    code: string;
+    name: string;
+    menu: string;
+    branch: string;
+    price: string;
+    effectiveFrom: string | null;
+    effectiveTo: string | null;
+    isDefault: boolean;
+    status: ApprovalStatus;
+};
+
+type PanelRecord = MenuRecord | CategoryRecord | PriceRecord;
 
 const props = defineProps<{
-    customers: CustomerRecord[];
-    groups: CustomerGroupRecord[];
+    menus: MenuRecord[];
+    categories: CategoryRecord[];
+    prices: PriceRecord[];
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Master Data' },
-    { title: 'Customers', href: '/master-data/customers' },
+    { title: 'Menu', href: '/master-data/menu' },
 ];
 
-const activeView = ref<CustomerView>('customers');
+const activeView = ref<MenuView>('menus');
 const search = ref('');
 const panelOpen = ref(false);
-const panelKind = ref<CustomerView>('customers');
-const selectedRecord = ref<CustomerPanelRecord | null>(null);
-
-const customers = ref<CustomerRecord[]>([...props.customers]);
-const groups = ref<CustomerGroupRecord[]>([...props.groups]);
+const panelKind = ref<MenuView>('menus');
+const selectedRecord = ref<PanelRecord | null>(null);
+const menus = ref<MenuRecord[]>([...props.menus]);
+const categories = ref<CategoryRecord[]>([...props.categories]);
+const prices = ref<PriceRecord[]>([...props.prices]);
 
 const tabs: {
-    key: CustomerView;
+    key: MenuView;
     label: string;
-    icon: typeof Users;
+    icon: typeof Utensils;
 }[] = [
-    { key: 'customers', label: 'Customer Registry', icon: Users },
-    { key: 'groups', label: 'Customer Groups', icon: Building2 },
+    { key: 'menus', label: 'Menu Registry', icon: Utensils },
+    { key: 'categories', label: 'Categories', icon: Tags },
+    { key: 'prices', label: 'Price List', icon: Layers3 },
 ];
 
 const normalizedSearch = computed(() => search.value.trim().toLowerCase());
-
-const filteredCustomers = computed(() => filterRows(customers.value));
-const filteredGroups = computed(() => filterRows(groups.value));
+const filteredMenus = computed(() => filterRows(menus.value));
+const filteredCategories = computed(() => filterRows(categories.value));
+const filteredPrices = computed(() => filterRows(prices.value));
 
 const panelTitle = computed(() =>
-    selectedRecord.value
-        ? `Edit ${panelKind.value === 'customers' ? 'Customer' : 'Group'}`
-        : `New ${panelKind.value === 'customers' ? 'Customer' : 'Group'}`,
+    selectedRecord.value ? `Edit ${panelLabel()}` : `New ${panelLabel()}`,
 );
 
-const panelSubtitle = computed(() =>
-    panelKind.value === 'customers'
-        ? 'Customer profile and billing master data'
-        : 'Customer segmentation and payment rules',
-);
+const panelSubtitle = computed(() => {
+    const subtitles: Record<MenuView, string> = {
+        menus: 'Menu item and service master data',
+        categories: 'Menu category and grouping master data',
+        prices: 'Branch menu price master data',
+    };
+
+    return subtitles[panelKind.value];
+});
+
+function panelLabel() {
+    const labels: Record<MenuView, string> = {
+        menus: 'Menu',
+        categories: 'Category',
+        prices: 'Price',
+    };
+
+    return labels[panelKind.value];
+}
 
 function filterRows<T extends Record<string, unknown>>(rows: T[]) {
     if (!normalizedSearch.value) {
@@ -104,14 +143,14 @@ function filterRows<T extends Record<string, unknown>>(rows: T[]) {
     );
 }
 
-function switchView(view: CustomerView) {
+function switchView(view: MenuView) {
     activeView.value = view;
     panelKind.value = view;
 }
 
 function openPanel(
-    kind: CustomerView = activeView.value,
-    record: CustomerPanelRecord | null = null,
+    kind: MenuView = activeView.value,
+    record: PanelRecord | null = null,
 ) {
     panelKind.value = kind;
     selectedRecord.value = record;
@@ -125,7 +164,7 @@ function closePanel() {
 
 function statusLabel(status: ApprovalStatus) {
     return status === 'cancelled'
-        ? 'Cancel'
+        ? 'Inactive'
         : status.charAt(0).toUpperCase() + status.slice(1);
 }
 
@@ -141,17 +180,21 @@ function statusClass(status: ApprovalStatus) {
     return classes[status];
 }
 
-function setCustomerStatus(record: CustomerRecord, status: ApprovalStatus) {
+function setMenuStatus(record: MenuRecord, status: ApprovalStatus) {
     record.status = status;
 }
 
-function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
+function setCategoryStatus(record: CategoryRecord, status: ApprovalStatus) {
+    record.status = status;
+}
+
+function setPriceStatus(record: PriceRecord, status: ApprovalStatus) {
     record.status = status;
 }
 </script>
 
 <template>
-    <Head title="Customers" />
+    <Head title="Menu" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
@@ -162,11 +205,11 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <h1
                         class="text-2xl font-semibold tracking-tight text-[#2A4858]"
                     >
-                        Customers
+                        Menu
                     </h1>
                     <p class="mt-1 text-sm text-slate-500">
-                        Customer accounts, groups, contact details, and active
-                        status.
+                        Menu items, categories, default prices, and
+                        availability.
                     </p>
                 </div>
 
@@ -177,7 +220,7 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         />
                         <Input
                             v-model="search"
-                            placeholder="Search customers..."
+                            placeholder="Search menu data..."
                             class="h-9 w-52 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] lg:w-64"
                         />
                     </div>
@@ -211,9 +254,9 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
             </div>
 
             <MasterDataTable
-                v-if="activeView === 'customers'"
-                :rows="filteredCustomers"
-                empty-text="No customer registry data found."
+                v-if="activeView === 'menus'"
+                :rows="filteredMenus"
+                empty-text="No menu data found."
             >
                 <template #head>
                     <th
@@ -224,27 +267,32 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Customer Code
+                        Menu Code
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Customer Name
+                        Menu Name
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Phone
+                        Category
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Email
+                        Branch
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group
+                        Type
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Price
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
@@ -271,18 +319,25 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-sm font-bold text-slate-700">
                         {{ row.name }}
                     </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.phone }}
-                    </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.email ?? '-' }}
-                    </td>
                     <td class="px-4 py-3">
                         <span
                             class="rounded bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-600"
                         >
-                            {{ row.group }}
+                            {{ row.category }}
                         </span>
+                    </td>
+                    <td class="px-4 py-3 text-xs text-slate-500">
+                        {{ row.branch }}
+                    </td>
+                    <td class="px-4 py-3">
+                        <span
+                            class="rounded border border-slate-200 bg-slate-100 px-2 py-0.5 text-[10px] text-slate-600"
+                        >
+                            {{ row.type }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-xs font-bold text-amber-700">
+                        {{ row.defaultPrice }}
                     </td>
                     <td class="px-4 py-3">
                         <span
@@ -295,19 +350,19 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-center">
                         <ApprovalActionMenu
                             :status="row.status"
-                            @view="openPanel('customers', row)"
-                            @approve="setCustomerStatus(row, 'approved')"
-                            @reject="setCustomerStatus(row, 'rejected')"
-                            @cancel="setCustomerStatus(row, 'cancelled')"
+                            @view="openPanel('menus', row)"
+                            @approve="setMenuStatus(row, 'approved')"
+                            @reject="setMenuStatus(row, 'rejected')"
+                            @cancel="setMenuStatus(row, 'cancelled')"
                         />
                     </td>
                 </template>
             </MasterDataTable>
 
             <MasterDataTable
-                v-if="activeView === 'groups'"
-                :rows="filteredGroups"
-                empty-text="No customer group data found."
+                v-if="activeView === 'categories'"
+                :rows="filteredCategories"
+                empty-text="No menu category data found."
             >
                 <template #head>
                     <th
@@ -318,22 +373,22 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group Code
+                        Category Code
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Group Name
+                        Category Name
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Description
+                        Branch
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Members
+                        Menus
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
@@ -361,10 +416,10 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         {{ row.name }}
                     </td>
                     <td class="px-4 py-3 text-xs text-slate-500">
-                        {{ row.description ?? '-' }}
+                        {{ row.branch }}
                     </td>
-                    <td class="px-4 py-3 text-sm text-slate-500">
-                        {{ row.members }}
+                    <td class="px-4 py-3 text-xs font-bold text-amber-700">
+                        {{ row.menusCount }}
                     </td>
                     <td class="px-4 py-3">
                         <span
@@ -377,10 +432,112 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     <td class="px-4 py-3 text-center">
                         <ApprovalActionMenu
                             :status="row.status"
-                            @view="openPanel('groups', row)"
-                            @approve="setGroupStatus(row, 'approved')"
-                            @reject="setGroupStatus(row, 'rejected')"
-                            @cancel="setGroupStatus(row, 'cancelled')"
+                            @view="openPanel('categories', row)"
+                            @approve="setCategoryStatus(row, 'approved')"
+                            @reject="setCategoryStatus(row, 'rejected')"
+                            @cancel="setCategoryStatus(row, 'cancelled')"
+                        />
+                    </td>
+                </template>
+            </MasterDataTable>
+
+            <MasterDataTable
+                v-if="activeView === 'prices'"
+                :rows="filteredPrices"
+                empty-text="No menu price data found."
+            >
+                <template #head>
+                    <th
+                        class="w-12 px-4 py-3 text-center text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        #
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Price Code
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Price Name
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Menu
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Branch
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Price
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Default
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Status
+                    </th>
+                    <th
+                        class="w-16 px-4 py-3 text-center text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Action
+                    </th>
+                </template>
+                <template #row="{ row, index }">
+                    <td
+                        class="px-4 py-3 text-center text-[10px] text-slate-400"
+                    >
+                        {{ String(index + 1).padStart(2, '0') }}
+                    </td>
+                    <td
+                        class="px-4 py-3 font-mono text-xs font-bold text-[#007882]"
+                    >
+                        {{ row.code }}
+                    </td>
+                    <td class="px-4 py-3 text-sm font-bold text-slate-700">
+                        {{ row.name }}
+                    </td>
+                    <td class="px-4 py-3 text-xs text-slate-500">
+                        {{ row.menu }}
+                    </td>
+                    <td class="px-4 py-3 text-xs text-slate-500">
+                        {{ row.branch }}
+                    </td>
+                    <td class="px-4 py-3 text-xs font-bold text-amber-700">
+                        {{ row.price }}
+                    </td>
+                    <td class="px-4 py-3">
+                        <span
+                            class="rounded bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-600"
+                        >
+                            {{ row.isDefault ? 'Default' : 'Custom' }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span
+                            class="rounded border px-2 py-0.5 text-[10px] font-bold"
+                            :class="statusClass(row.status)"
+                        >
+                            {{ statusLabel(row.status) }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-center">
+                        <ApprovalActionMenu
+                            :status="row.status"
+                            @view="openPanel('prices', row)"
+                            @approve="setPriceStatus(row, 'approved')"
+                            @reject="setPriceStatus(row, 'rejected')"
+                            @cancel="setPriceStatus(row, 'cancelled')"
                         />
                     </td>
                 </template>
@@ -424,7 +581,7 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                             <Input
                                 :model-value="selectedRecord?.code ?? ''"
                                 class="mt-1 font-mono text-sm focus-visible:ring-[#007882]"
-                                placeholder="Ex: CUS-0001"
+                                placeholder="Ex: M-FRIED-RICE"
                             />
                         </label>
 
@@ -442,78 +599,93 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         </label>
 
                         <div
-                            v-if="panelKind === 'customers'"
                             class="mt-2 space-y-3 border-t border-slate-200 pt-2"
                         >
-                            <label class="block">
+                            <label v-if="panelKind === 'menus'" class="block">
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
                                 >
-                                    Phone
-                                </span>
-                                <Input
-                                    :model-value="
-                                        selectedRecord &&
-                                        'phone' in selectedRecord
-                                            ? selectedRecord.phone
-                                            : ''
-                                    "
-                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="+66 ..."
-                                />
-                            </label>
-                            <label class="block">
-                                <span
-                                    class="text-[10px] font-bold text-slate-400 uppercase"
-                                >
-                                    Email
-                                </span>
-                                <Input
-                                    :model-value="
-                                        selectedRecord &&
-                                        'email' in selectedRecord
-                                            ? (selectedRecord.email ?? '')
-                                            : ''
-                                    "
-                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="customer@example.com"
-                                />
-                            </label>
-                            <label class="block">
-                                <span
-                                    class="text-[10px] font-bold text-slate-400 uppercase"
-                                >
-                                    Customer Group
+                                    Menu Type
                                 </span>
                                 <select
                                     class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                                 >
-                                    <option>Retail</option>
-                                    <option>VIP</option>
-                                    <option>Corporate</option>
+                                    <option>Product</option>
+                                    <option>Service</option>
                                 </select>
                             </label>
-                        </div>
-
-                        <div
-                            v-else
-                            class="mt-2 space-y-3 border-t border-slate-200 pt-2"
-                        >
-                            <label class="block">
+                            <label v-if="panelKind === 'menus'" class="block">
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
                                 >
-                                    Description
+                                    Category
+                                </span>
+                                <select
+                                    class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                                >
+                                    <option
+                                        v-for="category in categories"
+                                        :key="category.id"
+                                    >
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                            </label>
+                            <label v-if="panelKind === 'prices'" class="block">
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Menu
+                                </span>
+                                <select
+                                    class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                                >
+                                    <option
+                                        v-for="menu in menus"
+                                        :key="menu.id"
+                                    >
+                                        {{ menu.name }}
+                                    </option>
+                                </select>
+                            </label>
+                            <label
+                                v-if="panelKind !== 'categories'"
+                                class="block"
+                            >
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Price
                                 </span>
                                 <Input
                                     :model-value="
                                         selectedRecord &&
-                                        'description' in selectedRecord
-                                            ? (selectedRecord.description ?? '')
+                                        'price' in selectedRecord
+                                            ? selectedRecord.price
+                                            : selectedRecord &&
+                                                'defaultPrice' in selectedRecord
+                                              ? selectedRecord.defaultPrice
+                                              : ''
+                                    "
+                                    class="mt-1 font-bold text-[#007882] focus-visible:ring-[#007882]"
+                                    placeholder="0.00"
+                                />
+                            </label>
+                            <label class="block">
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Branch
+                                </span>
+                                <Input
+                                    :model-value="
+                                        selectedRecord &&
+                                        'branch' in selectedRecord
+                                            ? selectedRecord.branch
                                             : ''
                                     "
                                     class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="Group description"
+                                    placeholder="Branch"
                                 />
                             </label>
                         </div>
