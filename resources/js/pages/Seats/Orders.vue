@@ -83,6 +83,14 @@ type InvoiceData = {
     }[];
 };
 
+type PaymentMethodOption = {
+    id: number;
+    code?: string | null;
+    label: string;
+    type: 'cash' | 'bank';
+    currency: 'USD' | 'KHR';
+};
+
 const props = defineProps<{
     posSession: {
         id: number;
@@ -103,6 +111,8 @@ const props = defineProps<{
     menus: MenuItem[];
     categories: Category[];
     cart: OrderData;
+    exchangeRate: number;
+    paymentMethods: PaymentMethodOption[];
     historyOrders: OrderData[];
     invoices: InvoiceData[];
     filters: {
@@ -124,28 +134,45 @@ const editCustomerOpen = ref(false);
 const { imageUrl, money } = usePosFormatting();
 
 type PaymentPayload = {
+    changeKhrAmount: number;
+    changeUsdAmount: number;
     method: string;
+    paymentMethodId?: number | null;
     currency: 'USD' | 'KHR';
     receivedAmount: number;
     operationStatus: 'invoice' | 'invoice_receipt_done';
 };
-
-const addForm = useForm({
-    menu_id: null as number | null,
-    qty: 1,
-    note: null as string | null,
-});
-
-const updateForm = useForm({
-    qty: 1,
-});
 
 const customerForm = useForm({
     customer_phone: props.diningSession.customer_phone ?? '',
     customer_name: props.diningSession.customer_name ?? '',
 });
 
-const cartLineCount = computed(() => props.cart.lines.length);
+const localLineId = ref(-1);
+const draftLines = ref<CartLine[]>(cloneCartLines(props.cart.lines));
+const sendKitchenProcessing = ref(false);
+
+const cart = computed<OrderData>(() => {
+    const subtotal = draftLines.value.reduce((sum, line) => {
+        return sum + Number(line.subtotal ?? 0);
+    }, 0);
+    const taxAmount = draftLines.value.reduce((sum, line) => {
+        return sum + Number(line.tax_amount ?? 0);
+    }, 0);
+    const totalAmount = draftLines.value.reduce((sum, line) => {
+        return sum + Number(line.total_amount ?? 0);
+    }, 0);
+
+    return {
+        ...props.cart,
+        lines: draftLines.value,
+        subtotal,
+        tax_amount: taxAmount,
+        total_amount: totalAmount,
+    };
+});
+
+const cartLineCount = computed(() => cart.value.lines.length);
 const hasInvoice = computed(() => Boolean(props.diningSession.invoice_no));
 const billableOrders = computed(() => {
     return props.historyOrders.filter((order) => {
@@ -170,7 +197,7 @@ const invoiceHeaderStatus = computed(() => {
 });
 
 const cartLinesByMenuId = computed(() => {
-    return new Map(props.cart.lines.map((line) => [line.menu_id, line]));
+    return new Map(cart.value.lines.map((line) => [line.menu_id, line]));
 });
 
 const menusById = computed(() => {
@@ -260,14 +287,60 @@ function clearFilters() {
     );
 }
 
-function addToDish(menu: MenuItem) {
-    addForm.menu_id = menu.id;
-    addForm.qty = 1;
-    addForm.note = instructionNotes.value[menu.id] || null;
+function cloneCartLines(lines: CartLine[]) {
+    return lines.map((line) => ({ ...line }));
+}
 
-    addForm.post(`/orders/${props.diningSession.id}/items`, {
-        preserveScroll: true,
+function calculateDraftLine(line: CartLine) {
+    line.subtotal = Number(line.qty) * Number(line.unit_price);
+    line.tax_amount = line.subtotal * 0.1;
+    line.total_amount = line.subtotal + line.tax_amount;
+
+    return line;
+}
+
+function makeDraftLine(menu: MenuItem, note: string | null): CartLine {
+    return calculateDraftLine({
+        id: localLineId.value--,
+        menu_id: menu.id,
+        menu_name: menu.name,
+        note,
+        qty: 1,
+        status: 'ordered',
+        subtotal: 0,
+        tax_amount: 0,
+        total_amount: 0,
+        unit_price: Number(menu.unit_price ?? 0),
     });
+}
+
+function replaceDraftLine(line: CartLine, changes: Partial<CartLine>) {
+    draftLines.value = draftLines.value.map((draftLine) => {
+        if (draftLine.id !== line.id) {
+            return draftLine;
+        }
+
+        return calculateDraftLine({
+            ...draftLine,
+            ...changes,
+        });
+    });
+}
+
+function addToDish(menu: MenuItem) {
+    const note = (instructionNotes.value[menu.id] || '').trim() || null;
+    const line = cartLineForMenu(menu);
+
+    if (line) {
+        replaceDraftLine(line, {
+            note: note ?? line.note,
+            qty: line.qty + 1,
+        });
+
+        return;
+    }
+
+    draftLines.value = [...draftLines.value, makeDraftLine(menu, note)];
 }
 
 function increaseQty(line: CartLine) {
@@ -280,33 +353,46 @@ function decreaseQty(line: CartLine) {
 }
 
 function updateQty(line: CartLine, qty: number) {
-    updateForm.qty = qty;
-
-    updateForm.patch(`/orders/${props.diningSession.id}/items/${line.id}`, {
-        preserveScroll: true,
+    replaceDraftLine(line, {
+        qty: Math.max(1, Number(qty || 1)),
     });
 }
 
 function removeLine(line: CartLine) {
-    router.delete(`/orders/${props.diningSession.id}/items/${line.id}`, {
-        preserveScroll: true,
-    });
+    draftLines.value = draftLines.value.filter(
+        (draftLine) => draftLine.id !== line.id,
+    );
 }
 
 function clearCart() {
-    if (props.cart.lines.length === 0) return;
+    if (cart.value.lines.length === 0) return;
 
-    router.delete(`/orders/${props.diningSession.id}/items`, {
-        preserveScroll: true,
-    });
+    draftLines.value = [];
 }
 
 function sendToKitchen() {
+    if (cart.value.lines.length === 0 || sendKitchenProcessing.value) return;
+
+    sendKitchenProcessing.value = true;
+
     router.post(
         `/orders/${props.diningSession.id}/send-kitchen`,
-        {},
+        {
+            lines: cart.value.lines.map((line) => ({
+                menu_id: line.menu_id,
+                note: line.note || null,
+                qty: line.qty,
+            })),
+        },
         {
             preserveScroll: true,
+            onSuccess: () => {
+                draftLines.value = [];
+                instructionNotes.value = {};
+            },
+            onFinish: () => {
+                sendKitchenProcessing.value = false;
+            },
         },
     );
 }
@@ -322,10 +408,13 @@ function confirmPayment(payload: PaymentPayload) {
         `/orders/${props.diningSession.id}/settle`,
         {
             method: payload.method,
+            payment_method_id: payload.paymentMethodId,
             currency: payload.currency,
             received_amount: payload.receivedAmount,
             operation_status: payload.operationStatus,
             discount_amount: discountAmount.value,
+            change_usd_amount: payload.changeUsdAmount,
+            change_khr_amount: payload.changeKhrAmount,
         },
         {
             preserveScroll: true,
@@ -439,16 +528,9 @@ function commitInstructionNote(menu: MenuItem) {
 
     if (!line) return;
 
-    router.patch(
-        `/orders/${props.diningSession.id}/items/${line.id}`,
-        {
-            note: cleanNote || null,
-            qty: line.qty,
-        },
-        {
-            preserveScroll: true,
-        },
-    );
+    replaceDraftLine(line, {
+        note: cleanNote || null,
+    });
 }
 
 function editLineInstruction(line: CartLine) {
@@ -462,16 +544,9 @@ function editLineInstruction(line: CartLine) {
         [line.menu_id]: cleanNote,
     };
 
-    router.patch(
-        `/orders/${props.diningSession.id}/items/${line.id}`,
-        {
-            note: cleanNote || null,
-            qty: line.qty,
-        },
-        {
-            preserveScroll: true,
-        },
-    );
+    replaceDraftLine(line, {
+        note: cleanNote || null,
+    });
 }
 
 onMounted(() => {
@@ -574,9 +649,7 @@ onBeforeUnmount(() => {
                             :price="money(menu.unit_price)"
                             :quantity="cartLineForMenu(menu)?.qty ?? 0"
                             :note="instructionForMenu(menu)"
-                            :processing="
-                                addForm.processing || updateForm.processing
-                            "
+                            :processing="sendKitchenProcessing"
                             @add="addToDish"
                             @commit-note="commitInstructionNote"
                             @update-note="updateInstructionNote(menu, $event)"
@@ -870,6 +943,7 @@ onBeforeUnmount(() => {
                         :subtotal="money(cart.subtotal)"
                         action-label="SEND TO KITCHEN"
                         :show-action="cart.lines.length > 0"
+                        :processing="sendKitchenProcessing"
                         variant="cart"
                         @action="sendToKitchen"
                     />
@@ -1023,6 +1097,8 @@ onBeforeUnmount(() => {
                 :discount-amount="discountAmount"
                 :tax-amount="allOrdersTax"
                 :final-amount="allOrdersFinalAmount"
+                :exchange-rate="exchangeRate"
+                :payment-methods="paymentMethods"
                 @close="paymentOpen = false"
                 @confirm="confirmPayment"
             />

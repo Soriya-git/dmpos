@@ -11,7 +11,6 @@ use App\Models\StockAdjustmentLine;
 use App\Models\StockBalance;
 use App\Models\StockLog;
 use App\Models\StockMovement;
-use App\Models\StockLocation;
 use App\Models\Warehouse;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
@@ -24,6 +23,16 @@ use Inertia\Response;
 class StockWriteOffController extends Controller
 {
     public function index(Request $request): Response
+    {
+        return Inertia::render('StockWriteOff/Index', $this->pageProps($request));
+    }
+
+    public function create(Request $request): Response
+    {
+        return Inertia::render('StockWriteOff/Create', $this->pageProps($request));
+    }
+
+    private function pageProps(Request $request): array
     {
         [$companyId, $branchId] = $this->scope($request);
 
@@ -132,11 +141,13 @@ class StockWriteOffController extends Controller
             ->when($filters['status'] ?? null, function ($query, string $status) {
                 if ($status === 'approved') {
                     $query->where('status', 'confirmed');
+
                     return;
                 }
 
                 if ($status === 'rejected') {
                     $query->where('status', 'cancelled')->where('cancel_reason', 'like', 'Rejected%');
+
                     return;
                 }
 
@@ -145,6 +156,7 @@ class StockWriteOffController extends Controller
                         $inner->whereNull('cancel_reason')
                             ->orWhere('cancel_reason', 'not like', 'Rejected%');
                     });
+
                     return;
                 }
 
@@ -164,7 +176,7 @@ class StockWriteOffController extends Controller
             ->get()
             ->map(fn (StockAdjustment $adjustment): array => $this->formatWriteOff($adjustment));
 
-        return Inertia::render('StockMovements/StockWriteOff', [
+        return [
             'inventory' => $inventory,
             'locations' => $locations,
             'warehouses' => $warehouses,
@@ -176,7 +188,7 @@ class StockWriteOffController extends Controller
                 'status' => $filters['status'] ?? null,
                 'location_id' => $filters['location_id'] ?? null,
             ],
-        ]);
+        ];
     }
 
     public function store(Request $request)

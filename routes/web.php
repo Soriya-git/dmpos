@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\BalanceOnHand\BalanceOnHandController;
 use App\Http\Controllers\Crm;
 use App\Http\Controllers\Feature;
-use App\Http\Controllers\BalanceOnHand\BalanceOnHandController;
 use App\Http\Controllers\GoodsReceipt\GoodsReceiptController;
 use App\Http\Controllers\MasterData\CompanyBranchController;
 use App\Http\Controllers\MasterData\CustomerController;
@@ -14,12 +14,14 @@ use App\Http\Controllers\MasterData\SupplierController;
 use App\Http\Controllers\MasterData\TaxController;
 use App\Http\Controllers\MasterData\WarehouseLocationController;
 use App\Http\Controllers\POS\PosSessionController;
+use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\Purchase\PurchaseOrderController;
 use App\Http\Controllers\Putaway\PutawayController;
 use App\Http\Controllers\Sales\SaleInvoiceController;
 use App\Http\Controllers\Seats\SeatController;
 use App\Http\Controllers\Seats\SeatOrderController;
 use App\Http\Controllers\StockMovements\InternalTransferController;
+use App\Http\Controllers\StockMovements\StockAdjustmentController;
 use App\Http\Controllers\StockMovements\StockWriteOffController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +29,9 @@ Route::redirect('/', '/login')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', Crm\DashboardController::class)->name('dashboard');
+
+    Route::post('/profile/picture', [ProfilePictureController::class, 'update'])
+        ->name('profile.picture.update');
 
     // POS session routes
     Route::get('/pos-sessions', [PosSessionController::class, 'index'])
@@ -89,6 +94,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Stock movement routes
     Route::get('/stock-movements/internal-transfer', [InternalTransferController::class, 'index'])
         ->name('stock-movements.internal-transfer');
+    Route::get('/stock-movements/internal-transfer/create', [InternalTransferController::class, 'create'])
+        ->name('stock-movements.internal-transfer.create');
     Route::post('/stock-movements/internal-transfer', [InternalTransferController::class, 'store'])
         ->name('stock-movements.internal-transfer.store');
     Route::patch('/stock-movements/internal-transfer/{stockTransfer}/approve', [InternalTransferController::class, 'approve'])
@@ -97,8 +104,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('stock-movements.internal-transfer.reject');
     Route::patch('/stock-movements/internal-transfer/{stockTransfer}/cancel', [InternalTransferController::class, 'cancel'])
         ->name('stock-movements.internal-transfer.cancel');
+    Route::get('/stock-movements/stock-adjustments', [StockAdjustmentController::class, 'index'])
+        ->name('stock-movements.stock-adjustments');
+    Route::get('/stock-movements/stock-adjustments/create', [StockAdjustmentController::class, 'create'])
+        ->name('stock-movements.stock-adjustments.create');
+    Route::post('/stock-movements/stock-adjustments', [StockAdjustmentController::class, 'store'])
+        ->name('stock-movements.stock-adjustments.store');
+    Route::patch('/stock-movements/stock-adjustments/{stockAdjustment}/approve', [StockAdjustmentController::class, 'approve'])
+        ->name('stock-movements.stock-adjustments.approve');
+    Route::patch('/stock-movements/stock-adjustments/{stockAdjustment}/reject', [StockAdjustmentController::class, 'reject'])
+        ->name('stock-movements.stock-adjustments.reject');
+    Route::patch('/stock-movements/stock-adjustments/{stockAdjustment}/cancel', [StockAdjustmentController::class, 'cancel'])
+        ->name('stock-movements.stock-adjustments.cancel');
     Route::get('/stock-movements/write-off', [StockWriteOffController::class, 'index'])
         ->name('stock-movements.write-off');
+    Route::get('/stock-movements/write-off/create', [StockWriteOffController::class, 'create'])
+        ->name('stock-movements.write-off.create');
     Route::post('/stock-movements/write-off', [StockWriteOffController::class, 'store'])
         ->name('stock-movements.write-off.store');
     Route::patch('/stock-movements/write-off/{stockAdjustment}/approve', [StockWriteOffController::class, 'approve'])

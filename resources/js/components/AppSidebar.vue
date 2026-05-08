@@ -97,7 +97,10 @@ const stockSection: NavSectionType = {
             items: [
                 { title: 'Balance On Hand', href: '/balance-on-hand' },
                 { title: 'Sale Settlements', href: '#' },
-                { title: 'Stock Adjustments', href: '#' },
+                {
+                    title: 'Stock Adjustments',
+                    href: '/stock-movements/stock-adjustments',
+                },
                 {
                     title: 'Internal Transfer',
                     href: '/stock-movements/internal-transfer',

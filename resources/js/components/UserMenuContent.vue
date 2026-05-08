@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Link, router } from '@inertiajs/vue3';
-import { LogOut, Monitor, Moon, Palette, Sun } from 'lucide-vue-next';
+import { Camera, LogOut, Monitor, Moon, Palette, Sun } from 'lucide-vue-next';
+import { ref } from 'vue';
 import {
     DropdownMenuGroup,
     DropdownMenuItem,
@@ -17,9 +18,33 @@ type Props = {
 };
 
 const { appearance, updateAppearance } = useAppearance();
+const imageInput = ref<HTMLInputElement | null>(null);
 
 const handleLogout = () => {
     router.cancelAll();
+};
+
+const openImagePicker = () => {
+    imageInput.value?.click();
+};
+
+const updatePicture = (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) return;
+
+    router.post(
+        '/profile/picture',
+        { image: file },
+        {
+            forceFormData: true,
+            preserveScroll: true,
+            onFinish: () => {
+                input.value = '';
+            },
+        },
+    );
 };
 
 defineProps<Props>();
@@ -33,6 +58,17 @@ defineProps<Props>();
     </DropdownMenuLabel>
     <DropdownMenuSeparator />
     <DropdownMenuGroup>
+        <DropdownMenuItem @click="openImagePicker">
+            <Camera class="mr-2 h-4 w-4" />
+            Update picture
+        </DropdownMenuItem>
+        <input
+            ref="imageInput"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            class="hidden"
+            @change="updatePicture"
+        />
         <DropdownMenuItem @click="updateAppearance('light')">
             <Sun class="mr-2 h-4 w-4" />
             Light

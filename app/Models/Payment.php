@@ -10,6 +10,9 @@ class Payment extends Model
 
     protected $casts = [
         'amount_paid' => 'decimal:2',
+        'received_amount' => 'decimal:2',
+        'change_usd_amount' => 'decimal:2',
+        'change_khr_amount' => 'decimal:2',
         'exchange_rate_snapshot' => 'decimal:4',
         'amount_usd_equivalent' => 'decimal:2',
         'amount_khr_equivalent' => 'decimal:2',

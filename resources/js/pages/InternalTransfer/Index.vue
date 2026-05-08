@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, router, useForm, usePage } from '@inertiajs/vue3';
+import { Head, router, usePage } from '@inertiajs/vue3';
 import {
     ArrowLeft,
     ArrowRightLeft,
@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { type BreadcrumbItem } from '@/types';
 
 type InventoryBalance = {
     id: number;
@@ -103,16 +104,6 @@ type TransferRecord = {
     lines: TransferLine[];
 };
 
-type FormLine = {
-    item_id: number | '';
-    from_warehouse_id: number | '';
-    stock_balance_id: number | '';
-    quantity: number;
-    to_warehouse_id: number | '';
-    to_location_id: number | '';
-    note: string;
-};
-
 const props = defineProps<{
     transfers: TransferRecord[];
     inventory: InventoryBalance[];
@@ -127,7 +118,15 @@ const props = defineProps<{
     };
 }>();
 
-const view = ref<'dashboard' | 'new'>('dashboard');
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Stock Operations' },
+    { title: 'Stock Movements' },
+    {
+        title: 'Internal Transfer',
+        href: '/stock-movements/internal-transfer',
+    },
+];
+
 const search = ref(props.filters.search ?? '');
 const warehouseId = ref<number | string | ''>(props.filters.warehouse_id ?? '');
 const locationId = ref<number | string | ''>(props.filters.location_id ?? '');
@@ -153,31 +152,6 @@ const allowedTypeLabels: Record<string, string> = {
     scrap: 'Scrap',
 };
 
-const today = () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
-};
-
-const makeLine = (): FormLine => ({
-    item_id: '',
-    from_warehouse_id: props.warehouses[0]?.id ?? '',
-    stock_balance_id: '',
-    quantity: 1,
-    to_warehouse_id: props.warehouses[0]?.id ?? '',
-    to_location_id: '',
-    note: '',
-});
-
-const form = useForm({
-    transfer_date: today(),
-    note: '',
-    lines: [makeLine()],
-});
-
 const totalTransfers = computed(() => props.transfers.length);
 const totalQuantity = computed(() =>
     props.transfers.reduce(
@@ -196,47 +170,6 @@ const crossWarehouseTransfers = computed(
         props.transfers.filter(
             (transfer) => transfer.fromWarehouse !== transfer.toWarehouse,
         ).length,
-);
-
-const itemOptions = computed(() =>
-    props.items.map((item) => ({
-        value: item.id,
-        label: item.name,
-        description: item.code,
-        meta: item.hasStock ? item.unitCode : 'No stock',
-        disabled: !item.hasStock,
-    })),
-);
-
-const warehouseOptions = computed(() =>
-    props.warehouses.map((warehouse) => ({
-        value: warehouse.id,
-        label: warehouse.name,
-        description: warehouse.branch,
-    })),
-);
-
-const canSubmit = computed(
-    () =>
-        Boolean(form.transfer_date) &&
-        form.lines.length > 0 &&
-        form.lines.every(
-            (line) =>
-                line.item_id &&
-                line.from_warehouse_id &&
-                line.stock_balance_id &&
-                line.quantity > 0 &&
-                line.to_warehouse_id &&
-                line.to_location_id,
-        ),
-);
-
-const draftTotal = computed(() =>
-    form.lines.reduce((total, line) => total + lineTotal(line), 0),
-);
-
-const validationErrors = computed(() =>
-    Object.values(form.errors as Record<string, string>).filter(Boolean),
 );
 
 const pageErrors = computed(() =>
@@ -345,223 +278,7 @@ function resetFilters() {
 }
 
 function showCreate() {
-    form.clearErrors();
-    view.value = 'new';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function showDashboard() {
-    view.value = 'dashboard';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function addLine() {
-    form.lines.push(makeLine());
-}
-
-function removeLine(index: number) {
-    if (form.lines.length === 1) {
-        form.lines = [makeLine()];
-        return;
-    }
-
-    form.lines.splice(index, 1);
-}
-
-function selectedBalance(balanceId: number | '') {
-    return props.inventory.find((balance) => balance.id === Number(balanceId));
-}
-
-function itemHasStock(line: FormLine) {
-    return props.inventory.some(
-        (balance) =>
-            Number(balance.itemId) === Number(line.item_id) &&
-            (!line.from_warehouse_id ||
-                Number(balance.warehouseId) === Number(line.from_warehouse_id)),
-    );
-}
-
-function sourceLocationOptionsFor(line: FormLine) {
-    if (!line.item_id || !line.from_warehouse_id) {
-        return [];
-    }
-
-    return props.inventory
-        .filter(
-            (balance) =>
-                Number(balance.itemId) === Number(line.item_id) &&
-                Number(balance.warehouseId) === Number(line.from_warehouse_id),
-        )
-        .map((balance) => ({
-            value: balance.id,
-            label: `${balance.locationCode} - ${balance.location}`,
-            description: `${balance.quantityAvailable} ${balance.unit}`,
-            meta: locationTypeLabel(balance.locationType),
-        }));
-}
-
-function destinationLocationOptionsFor(line: FormLine) {
-    if (!line.to_warehouse_id) {
-        return [];
-    }
-
-    return props.locations
-        .filter(
-            (location) =>
-                Number(location.warehouseId) === Number(line.to_warehouse_id) &&
-                Number(location.id) !==
-                    Number(
-                        selectedBalance(line.stock_balance_id)?.stockLocationId,
-                    ),
-        )
-        .map((location) => ({
-            value: location.id,
-            label: `${location.code} - ${location.name}`,
-            description: location.warehouse,
-            meta: locationTypeLabel(location.type),
-        }));
-}
-
-function selectItem(line: FormLine) {
-    line.stock_balance_id = '';
-    line.quantity = 1;
-}
-
-function selectSourceWarehouse(line: FormLine) {
-    line.stock_balance_id = '';
-    line.quantity = 1;
-}
-
-function selectSourceLocation(line: FormLine) {
-    const balance = selectedBalance(line.stock_balance_id);
-
-    if (!balance) return;
-
-    line.item_id = balance.itemId;
-    line.from_warehouse_id = balance.warehouseId;
-    line.quantity = Math.min(1, decimalValue(balance.quantityAvailable));
-
-    if (Number(line.to_location_id) === Number(balance.stockLocationId)) {
-        line.to_location_id = '';
-    }
-}
-
-function selectDestinationWarehouse(line: FormLine) {
-    line.to_location_id = '';
-}
-
-function lineTotal(line: FormLine) {
-    const balance = selectedBalance(line.stock_balance_id);
-
-    return Number(line.quantity || 0) * decimalValue(balance?.averageCost);
-}
-
-function availableFor(line: FormLine) {
-    return decimalValue(
-        selectedBalance(line.stock_balance_id)?.quantityAvailable,
-    );
-}
-
-function quantityUsedFor(line: FormLine) {
-    if (!line.stock_balance_id) {
-        return Number(line.quantity || 0);
-    }
-
-    return form.lines
-        .filter(
-            (otherLine) => otherLine.stock_balance_id === line.stock_balance_id,
-        )
-        .reduce(
-            (total, otherLine) => total + Number(otherLine.quantity || 0),
-            0,
-        );
-}
-
-function overLimitLine() {
-    return form.lines.find((line) => {
-        if (!line.stock_balance_id) {
-            return false;
-        }
-
-        return quantityUsedFor(line) > availableFor(line);
-    });
-}
-
-function sameLocationLine() {
-    return form.lines.find((line) => {
-        const balance = selectedBalance(line.stock_balance_id);
-
-        return (
-            balance &&
-            line.to_location_id &&
-            Number(balance.stockLocationId) === Number(line.to_location_id)
-        );
-    });
-}
-
-function submitTransfer() {
-    form.clearErrors();
-
-    if (!canSubmit.value) {
-        if (!form.transfer_date) {
-            form.setError('transfer_date', 'Transfer date is required.');
-        }
-
-        if (!form.lines.some((line) => line.item_id)) {
-            form.setError('lines', 'Add at least one stocked item.');
-        }
-
-        if (
-            form.lines.some(
-                (line) =>
-                    line.item_id &&
-                    (!line.from_warehouse_id ||
-                        !line.stock_balance_id ||
-                        !line.to_warehouse_id ||
-                        !line.to_location_id),
-            )
-        ) {
-            form.setError(
-                'lines',
-                'Select source warehouse, source location, destination warehouse, and destination location for every item.',
-            );
-        }
-
-        return;
-    }
-
-    const invalidLine = overLimitLine();
-
-    if (invalidLine) {
-        const balance = selectedBalance(invalidLine.stock_balance_id);
-        const itemName = balance?.itemName ?? 'Selected item';
-        const available = numberValue(availableFor(invalidLine));
-        const requested = numberValue(quantityUsedFor(invalidLine));
-
-        form.setError(
-            'lines',
-            `${itemName} transfer quantity is ${requested}, but only ${available} ${balance?.unit ?? ''} is available.`,
-        );
-        return;
-    }
-
-    if (sameLocationLine()) {
-        form.setError(
-            'lines',
-            'Source and destination location must be different for each row.',
-        );
-        return;
-    }
-
-    form.post('/stock-movements/internal-transfer', {
-        preserveScroll: true,
-        onSuccess: () => {
-            form.reset();
-            form.transfer_date = today();
-            form.lines = [makeLine()];
-            showDashboard();
-        },
-    });
+    router.visit('/stock-movements/internal-transfer/create');
 }
 
 function openDetail(transfer: TransferRecord) {
@@ -590,11 +307,11 @@ function updateTransferStatus(
 <template>
     <Head title="Internal Transfer" />
 
-    <AppLayout>
+    <AppLayout :breadcrumbs="breadcrumbs">
         <main
             class="h-[calc(100dvh-4rem)] w-full overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 [scrollbar-gutter:stable] md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
-            <section v-if="view === 'dashboard'" class="w-full">
+            <section class="w-full">
                 <div
                     v-if="($page.props.flash as any)?.success"
                     class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-[#2a4858]"
@@ -854,327 +571,6 @@ function updateTransferStatus(
                     @go-to-page="goToPage"
                     @update-rows-per-page="setRowsPerPage"
                 />
-            </section>
-
-            <section v-else class="w-full">
-                <div class="mb-6 flex items-center justify-between gap-4">
-                    <div>
-                        <button
-                            type="button"
-                            class="mb-3 inline-flex items-center gap-2 text-sm font-bold text-[#007882]"
-                            @click="showDashboard"
-                        >
-                            <ArrowLeft class="size-4" />
-                            Back to transfers
-                        </button>
-                        <p
-                            class="text-xs font-bold tracking-widest text-slate-400 uppercase"
-                        >
-                            {{ nextTransferNo }}
-                        </p>
-                        <h1 class="mt-1 text-2xl font-bold text-[#2a4858]">
-                            New Internal Transfer
-                        </h1>
-                    </div>
-                    <div
-                        class="hidden items-center gap-3 rounded-lg bg-white px-4 py-3 text-sm font-bold text-[#2a4858] shadow-sm md:flex"
-                    >
-                        <CalendarDays class="size-4 text-[#007882]" />
-                        {{ form.transfer_date }}
-                    </div>
-                </div>
-
-                <div class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_22rem]">
-                    <div class="space-y-5">
-                        <div
-                            class="rounded-lg border border-slate-100 bg-white shadow-sm"
-                        >
-                            <div class="border-b border-slate-100 px-5 py-4">
-                                <h2 class="font-bold text-[#2a4858]">
-                                    Transfer Lines
-                                </h2>
-                                <p class="mt-1 text-sm text-slate-500">
-                                    Choose the source item, warehouse, and
-                                    location on each row, then choose where it
-                                    should move.
-                                </p>
-                            </div>
-
-                            <div class="overflow-x-auto">
-                                <table class="w-full min-w-[1180px] text-left">
-                                    <thead
-                                        class="bg-slate-50 text-xs font-bold text-slate-500 uppercase"
-                                    >
-                                        <tr>
-                                            <th class="px-4 py-3">Item</th>
-                                            <th class="px-4 py-3">
-                                                From Warehouse
-                                            </th>
-                                            <th class="px-4 py-3">
-                                                From Location
-                                            </th>
-                                            <th class="px-4 py-3 text-right">
-                                                Available
-                                            </th>
-                                            <th class="px-4 py-3 text-center">
-                                                Qty
-                                            </th>
-                                            <th class="px-4 py-3">
-                                                To Warehouse
-                                            </th>
-                                            <th class="px-4 py-3">
-                                                To Location
-                                            </th>
-                                            <th class="px-4 py-3 text-right">
-                                                Value
-                                            </th>
-                                            <th class="w-12 px-4 py-3"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr
-                                            v-for="(line, index) in form.lines"
-                                            :key="index"
-                                            class="border-b border-slate-50 last:border-0"
-                                        >
-                                            <td class="px-4 py-4">
-                                                <SearchDropdown
-                                                    v-model="line.item_id"
-                                                    :options="itemOptions"
-                                                    placeholder="Select item"
-                                                    search-placeholder="Search item..."
-                                                    empty-text="No stocked item found."
-                                                    input-class="border-transparent font-medium"
-                                                    @select="selectItem(line)"
-                                                />
-                                            </td>
-                                            <td class="px-4 py-4">
-                                                <SearchDropdown
-                                                    v-model="
-                                                        line.from_warehouse_id
-                                                    "
-                                                    :options="warehouseOptions"
-                                                    placeholder="Source warehouse"
-                                                    search-placeholder="Search warehouse..."
-                                                    empty-text="No warehouse found."
-                                                    input-class="border-transparent font-medium"
-                                                    @select="
-                                                        selectSourceWarehouse(
-                                                            line,
-                                                        )
-                                                    "
-                                                />
-                                            </td>
-                                            <td class="px-4 py-4">
-                                                <SearchDropdown
-                                                    v-model="
-                                                        line.stock_balance_id
-                                                    "
-                                                    :options="
-                                                        sourceLocationOptionsFor(
-                                                            line,
-                                                        )
-                                                    "
-                                                    :disabled="
-                                                        !line.item_id ||
-                                                        !line.from_warehouse_id ||
-                                                        !itemHasStock(line)
-                                                    "
-                                                    placeholder="Source location"
-                                                    search-placeholder="Search location..."
-                                                    empty-text="No source stock found."
-                                                    input-class="border-transparent font-medium"
-                                                    @select="
-                                                        selectSourceLocation(
-                                                            line,
-                                                        )
-                                                    "
-                                                />
-                                            </td>
-                                            <td
-                                                class="px-4 py-4 text-right font-bold text-[#2a4858]"
-                                            >
-                                                {{
-                                                    numberValue(
-                                                        availableFor(line),
-                                                    )
-                                                }}
-                                                {{
-                                                    selectedBalance(
-                                                        line.stock_balance_id,
-                                                    )?.unit ?? ''
-                                                }}
-                                            </td>
-                                            <td class="px-4 py-4">
-                                                <Input
-                                                    v-model.number="
-                                                        line.quantity
-                                                    "
-                                                    type="number"
-                                                    min="0.0001"
-                                                    step="0.0001"
-                                                    :max="availableFor(line)"
-                                                    class="h-9 w-28 rounded border-slate-200 text-center"
-                                                />
-                                            </td>
-                                            <td class="px-4 py-4">
-                                                <SearchDropdown
-                                                    v-model="
-                                                        line.to_warehouse_id
-                                                    "
-                                                    :options="warehouseOptions"
-                                                    placeholder="Target warehouse"
-                                                    search-placeholder="Search warehouse..."
-                                                    empty-text="No warehouse found."
-                                                    input-class="border-transparent font-medium"
-                                                    @select="
-                                                        selectDestinationWarehouse(
-                                                            line,
-                                                        )
-                                                    "
-                                                />
-                                            </td>
-                                            <td class="px-4 py-4">
-                                                <SearchDropdown
-                                                    v-model="
-                                                        line.to_location_id
-                                                    "
-                                                    :options="
-                                                        destinationLocationOptionsFor(
-                                                            line,
-                                                        )
-                                                    "
-                                                    :disabled="
-                                                        !line.to_warehouse_id
-                                                    "
-                                                    placeholder="Target location"
-                                                    search-placeholder="Search location..."
-                                                    empty-text="No target location found."
-                                                    input-class="border-transparent font-medium"
-                                                />
-                                            </td>
-                                            <td
-                                                class="px-4 py-4 text-right font-mono font-bold text-[#007882]"
-                                            >
-                                                {{ money(lineTotal(line)) }}
-                                            </td>
-                                            <td class="px-4 py-4 text-center">
-                                                <Button
-                                                    type="button"
-                                                    variant="ghost"
-                                                    class="h-8 w-8 rounded-lg p-0 text-slate-300 hover:bg-red-50 hover:text-red-500"
-                                                    title="Remove item"
-                                                    @click="removeLine(index)"
-                                                >
-                                                    <Trash2 class="size-4" />
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div
-                                class="flex flex-col gap-3 border-t border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
-                            >
-                                <InputError :message="firstLineError" />
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    class="h-10 rounded-lg border-[#007882]/20 bg-white font-bold text-[#007882]"
-                                    @click="addLine"
-                                >
-                                    <Plus class="size-4" />
-                                    Add Line
-                                </Button>
-                            </div>
-                        </div>
-
-                        <AlertError
-                            v-if="validationErrors.length"
-                            title="Internal transfer cannot be saved."
-                            :errors="validationErrors"
-                        />
-                    </div>
-
-                    <aside class="space-y-5">
-                        <div
-                            class="rounded-lg border border-slate-100 bg-white p-5 shadow-sm"
-                        >
-                            <h2 class="font-bold text-[#2a4858]">
-                                Transfer Header
-                            </h2>
-                            <div class="mt-4 space-y-4">
-                                <label class="block">
-                                    <span
-                                        class="text-xs font-bold text-slate-500 uppercase"
-                                    >
-                                        Transfer Date
-                                    </span>
-                                    <Input
-                                        v-model="form.transfer_date"
-                                        type="date"
-                                        class="mt-1 h-10 rounded-lg border-slate-200"
-                                    />
-                                    <InputError
-                                        class="mt-1"
-                                        :message="form.errors.transfer_date"
-                                    />
-                                </label>
-                                <label class="block">
-                                    <span
-                                        class="text-xs font-bold text-slate-500 uppercase"
-                                    >
-                                        Note
-                                    </span>
-                                    <textarea
-                                        v-model="form.note"
-                                        rows="4"
-                                        class="mt-1 w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-[#007882] focus:ring-2 focus:ring-[#007882]/20"
-                                        placeholder="Optional transfer note"
-                                    ></textarea>
-                                    <InputError
-                                        class="mt-1"
-                                        :message="form.errors.note"
-                                    />
-                                </label>
-                            </div>
-                        </div>
-
-                        <div
-                            class="rounded-lg bg-[#2a4858] p-6 text-white shadow-lg"
-                        >
-                            <div class="flex items-center gap-3">
-                                <div
-                                    class="flex size-11 items-center justify-center rounded-lg bg-white/10"
-                                >
-                                    <Boxes class="size-5 text-[#fafa6e]" />
-                                </div>
-                                <div>
-                                    <p class="text-sm text-white/60">
-                                        Transfer Value
-                                    </p>
-                                    <p
-                                        class="text-2xl font-bold text-[#fafa6e]"
-                                    >
-                                        {{ money(draftTotal) }}
-                                    </p>
-                                </div>
-                            </div>
-                            <p class="mt-4 text-sm text-white/60">
-                                Stock will be moved immediately after saving.
-                            </p>
-                            <Button
-                                type="button"
-                                class="mt-5 h-11 w-full rounded-lg bg-[#23aa8f] font-bold text-white hover:bg-[#1e917a]"
-                                :disabled="form.processing"
-                                @click="submitTransfer"
-                            >
-                                <ArrowRightLeft class="size-4" />
-                                Save Transfer
-                            </Button>
-                        </div>
-                    </aside>
-                </div>
             </section>
 
             <div

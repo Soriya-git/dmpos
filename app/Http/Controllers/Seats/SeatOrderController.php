@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Seats;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\DiningSession;
+use App\Models\ExchangeRate;
 use App\Models\Invoice;
 use App\Models\InvoiceLine;
 use App\Models\Menu;
@@ -133,6 +134,8 @@ class SeatOrderController extends Controller
             'menus' => $menus,
             'categories' => $categories,
             'cart' => $this->formatOrder($cartOrder),
+            'exchangeRate' => $this->latestExchangeRate($activePosSession),
+            'paymentMethods' => $this->paymentMethodsFor($activePosSession),
             'historyOrders' => $diningSession->orders()
                 ->with(['orderLines.menu'])
                 ->where('id', '!=', $cartOrder->id)
@@ -249,19 +252,35 @@ class SeatOrderController extends Controller
         return back();
     }
 
-    public function sendToKitchen(DiningSession $diningSession)
+    public function sendToKitchen(Request $request, DiningSession $diningSession)
     {
-        $order = $this->getCartOrder($diningSession);
-        $order->load('orderLines');
-
-        if ($order->orderLines->isEmpty()) {
-            return back()->with('error', 'Please add menu items before sending to kitchen.');
-        }
-
-        $order->update([
-            'status' => 'sent_to_kitchen',
-            'sent_to_kitchen_at' => now(),
+        $data = $request->validate([
+            'lines' => ['nullable', 'array'],
+            'lines.*.menu_id' => ['required_with:lines', 'exists:menus,id'],
+            'lines.*.qty' => ['required_with:lines', 'numeric', 'min:1'],
+            'lines.*.note' => ['nullable', 'string', 'max:1000'],
         ]);
+
+        DB::transaction(function () use ($diningSession, $data) {
+            $order = $this->getCartOrder($diningSession);
+
+            if (isset($data['lines']) && is_array($data['lines'])) {
+                $this->replaceDraftOrderLines($order, $data['lines']);
+            }
+
+            $order->load('orderLines');
+
+            abort_if(
+                $order->orderLines->isEmpty(),
+                422,
+                'Please add menu items before sending to kitchen.'
+            );
+
+            $order->update([
+                'status' => 'sent_to_kitchen',
+                'sent_to_kitchen_at' => now(),
+            ]);
+        });
 
         return back()->with('success', 'Order sent to kitchen.');
     }
@@ -270,10 +289,13 @@ class SeatOrderController extends Controller
     {
         $data = $request->validate([
             'method' => ['required', 'string', 'max:50'],
+            'payment_method_id' => ['nullable', 'exists:payment_methods,id'],
             'currency' => ['required', 'in:USD,KHR'],
             'received_amount' => ['nullable', 'numeric', 'min:0'],
             'operation_status' => ['required', 'in:invoice,invoice_receipt_done'],
             'discount_amount' => ['nullable', 'numeric', 'min:0'],
+            'change_usd_amount' => ['nullable', 'numeric', 'min:0'],
+            'change_khr_amount' => ['nullable', 'numeric', 'min:0'],
         ]);
 
         $activePosSession = $this->activePosSession($request);
@@ -304,6 +326,7 @@ class SeatOrderController extends Controller
             $isPayLater = $data['operation_status'] === 'invoice';
             $invoiceStatus = $isPayLater ? 'pay_later' : 'paid';
             $paidAmount = $isPayLater ? 0 : $grandTotal;
+            $exchangeRate = $this->latestExchangeRate($activePosSession);
 
             $invoice = new Invoice([
                 'company_id' => $diningSession->company_id,
@@ -313,7 +336,7 @@ class SeatOrderController extends Controller
                 'customer_id' => $diningSession->customer_id,
                 'invoice_no' => DocumentNumber::make(Invoice::class, 'invoice_no', 'IN'),
                 'currency' => 'USD',
-                'exchange_rate_snapshot' => 4100,
+                'exchange_rate_snapshot' => $exchangeRate,
                 'issued_at' => now(),
                 'issued_by' => $request->user()->id,
             ]);
@@ -352,8 +375,40 @@ class SeatOrderController extends Controller
             }
 
             if (! $isPayLater) {
-                $method = $this->paymentMethodFor($data['method'], $data['currency'], $activePosSession);
-                $amountPaid = $data['currency'] === 'KHR' ? $grandTotal * 4100 : $grandTotal;
+                $method = $this->paymentMethodFor(
+                    $data['method'],
+                    $data['currency'],
+                    $activePosSession,
+                    $data['payment_method_id'] ?? null,
+                );
+
+                abort_if(! $method, 422, 'Please select a valid payment method.');
+
+                $isCash = str_starts_with($data['method'], 'cash-');
+                $amountPaid = $data['currency'] === 'KHR' ? $grandTotal * $exchangeRate : $grandTotal;
+                $receivedAmount = $isCash ? (float) ($data['received_amount'] ?? $amountPaid) : $amountPaid;
+                $changeUsdAmount = $isCash ? (float) ($data['change_usd_amount'] ?? 0) : 0;
+                $changeKhrAmount = $isCash ? $this->roundKhrChange((float) ($data['change_khr_amount'] ?? 0)) : 0;
+
+                if ($isCash) {
+                    abort_if(
+                        $receivedAmount < $amountPaid,
+                        422,
+                        'Received cash must be enough to cover the invoice total.'
+                    );
+
+                    $overpaidUsd = $data['currency'] === 'USD'
+                        ? $receivedAmount - $amountPaid
+                        : ($receivedAmount - $amountPaid) / $exchangeRate;
+                    $changeUsdEquivalent = $changeUsdAmount + ($changeKhrAmount / $exchangeRate);
+                    $roundingToleranceUsd = 99 / $exchangeRate;
+
+                    abort_if(
+                        $changeUsdEquivalent > $overpaidUsd + $roundingToleranceUsd + 0.01,
+                        422,
+                        'Change amount cannot be greater than the overpaid amount.'
+                    );
+                }
 
                 Payment::create([
                     'company_id' => $diningSession->company_id,
@@ -364,12 +419,30 @@ class SeatOrderController extends Controller
                     'status' => 'paid',
                     'currency' => $data['currency'],
                     'amount_paid' => $amountPaid,
-                    'exchange_rate_snapshot' => 4100,
+                    'received_amount' => $receivedAmount,
+                    'change_usd_amount' => $changeUsdAmount,
+                    'change_khr_amount' => $changeKhrAmount,
+                    'exchange_rate_snapshot' => $exchangeRate,
                     'amount_usd_equivalent' => $grandTotal,
-                    'amount_khr_equivalent' => $grandTotal * 4100,
+                    'amount_khr_equivalent' => $grandTotal * $exchangeRate,
                     'paid_at' => now(),
                     'received_by' => $request->user()->id,
                 ]);
+
+                $this->recordPosSessionPaymentTotals(
+                    $activePosSession,
+                    $data['method'],
+                    $data['currency'],
+                    $grandTotal,
+                    $amountPaid,
+                    $receivedAmount,
+                    $changeUsdAmount,
+                    $changeKhrAmount,
+                    $exchangeRate,
+                );
+            } else {
+                $activePosSession->increment('total_pay_later_usd', $grandTotal);
+                $activePosSession->increment('total_pay_later_khr', $grandTotal * $exchangeRate);
             }
 
             $diningSession->update([
@@ -403,7 +476,7 @@ class SeatOrderController extends Controller
             $customerId = null;
 
             if ($phoneNumber !== '') {
-                $customer = Customer::firstOrCreate(
+                $customer = Customer::updateOrCreate(
                     [
                         'company_id' => $activePosSession->company_id,
                         'phone_number' => $phoneNumber,
@@ -414,10 +487,6 @@ class SeatOrderController extends Controller
                         'is_active' => true,
                     ]
                 );
-
-                if ($customerName !== '' && $customer->name !== $customerName) {
-                    $customer->update(['name' => $customerName]);
-                }
 
                 $customerId = $customer->id;
             }
@@ -517,6 +586,65 @@ class SeatOrderController extends Controller
         $line->line_total = $subtotal + $taxAmount;
     }
 
+    /**
+     * @param  array<int, array{menu_id: int, qty: numeric-string|int|float, note?: string|null}>  $lines
+     */
+    private function replaceDraftOrderLines(Order $order, array $lines): void
+    {
+        $order->orderLines()->delete();
+
+        $menuIds = collect($lines)
+            ->pluck('menu_id')
+            ->unique()
+            ->values();
+
+        $menus = Menu::query()
+            ->with('defaultPrice')
+            ->whereIn('id', $menuIds)
+            ->get()
+            ->keyBy('id');
+
+        collect($lines)
+            ->groupBy('menu_id')
+            ->each(function ($menuLines, $menuId) use ($order, $menus) {
+                $menu = $menus->get((int) $menuId);
+
+                if (! $menu) {
+                    return;
+                }
+
+                $qty = (float) $menuLines->sum(fn ($line) => $line['qty']);
+                $note = $menuLines
+                    ->pluck('note')
+                    ->map(fn ($note) => trim((string) $note))
+                    ->filter()
+                    ->last();
+                $defaultPrice = $this->defaultMenuPriceFor($menu);
+                $unitPrice = (float) ($menu->base_price ?? 0);
+
+                if ($defaultPrice) {
+                    $unitPrice = (float) $defaultPrice->price;
+                }
+
+                $line = new OrderLine([
+                    'order_id' => $order->id,
+                    'menu_id' => $menu->id,
+                    'menu_name_snapshot' => $menu->name,
+                    'menu_type_snapshot' => $menu->menu_type,
+                    'quantity' => $qty,
+                    'unit_price' => $unitPrice,
+                    'discount_amount' => 0,
+                    'tax_id' => $menu->tax_id,
+                    'tax_rate_snapshot' => 10,
+                    'note' => $note ?: null,
+                    'status' => 'ordered',
+                ]);
+
+                $this->calculateLine($line);
+                $line->save();
+            });
+    }
+
     private function ensureLineBelongsToSession(DiningSession $diningSession, OrderLine $orderLine): void
     {
         $orderLine->loadMissing('order');
@@ -528,8 +656,25 @@ class SeatOrderController extends Controller
         );
     }
 
-    private function paymentMethodFor(string $method, string $currency, PosSession $posSession): ?PaymentMethod
+    private function paymentMethodFor(string $method, string $currency, PosSession $posSession, ?int $paymentMethodId = null): ?PaymentMethod
     {
+        if ($paymentMethodId) {
+            $paymentMethod = PaymentMethod::query()
+                ->where('id', $paymentMethodId)
+                ->where('company_id', $posSession->company_id)
+                ->where('currency', $currency)
+                ->where('is_active', true)
+                ->where(function ($query) use ($posSession) {
+                    $query->whereNull('branch_id')
+                        ->orWhere('branch_id', $posSession->branch_id);
+                })
+                ->first();
+
+            if ($paymentMethod) {
+                return $paymentMethod;
+            }
+        }
+
         $code = match ($method) {
             'cash-usd' => 'CASH_USD',
             'cash-khr' => 'CASH_KHR',
@@ -547,7 +692,110 @@ class SeatOrderController extends Controller
                 $query->whereNull('branch_id')
                     ->orWhere('branch_id', $posSession->branch_id);
             })
-            ->first();
+            ->orderByRaw('case when branch_id = ? then 0 when branch_id is null then 1 else 2 end', [$posSession->branch_id])
+            ->first()
+            ?? PaymentMethod::query()
+                ->where('company_id', $posSession->company_id)
+                ->where('currency', $currency)
+                ->where('is_active', true)
+                ->when($code, fn ($query) => $query->where('code', $code))
+                ->first();
+    }
+
+    private function latestExchangeRate(PosSession $posSession): float
+    {
+        return (float) (ExchangeRate::query()
+            ->where('company_id', $posSession->company_id)
+            ->where('from_currency', 'USD')
+            ->where('to_currency', 'KHR')
+            ->where('is_active', true)
+            ->where('effective_date', '<=', now()->toDateString())
+            ->latest('effective_date')
+            ->value('rate') ?: 4100);
+    }
+
+    private function roundKhrChange(float $amount): float
+    {
+        if ($amount <= 0) {
+            return 0;
+        }
+
+        return ceil($amount / 100) * 100;
+    }
+
+    private function paymentMethodsFor(PosSession $posSession): array
+    {
+        $query = PaymentMethod::query()
+            ->where('company_id', $posSession->company_id)
+            ->where('is_active', true)
+            ->whereIn('currency', ['USD', 'KHR'])
+            ->whereIn('method_type', ['cash', 'bank'])
+            ->where(function ($query) use ($posSession) {
+                $query->whereNull('branch_id')
+                    ->orWhere('branch_id', $posSession->branch_id);
+            });
+
+        $paymentMethods = (clone $query)
+            ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 else 2 end")
+            ->orderBy('currency')
+            ->get();
+
+        if ($paymentMethods->isEmpty()) {
+            $paymentMethods = PaymentMethod::query()
+                ->where('company_id', $posSession->company_id)
+                ->where('is_active', true)
+                ->whereIn('currency', ['USD', 'KHR'])
+                ->whereIn('method_type', ['cash', 'bank'])
+                ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 else 2 end")
+                ->orderBy('currency')
+                ->get();
+        }
+
+        return $paymentMethods
+            ->map(fn (PaymentMethod $paymentMethod) => [
+                'id' => $paymentMethod->id,
+                'code' => $paymentMethod->code,
+                'label' => $paymentMethod->name,
+                'type' => $paymentMethod->method_type,
+                'currency' => $paymentMethod->currency,
+            ])
+            ->values()
+            ->all();
+    }
+
+    private function recordPosSessionPaymentTotals(
+        PosSession $posSession,
+        string $method,
+        string $currency,
+        float $grandTotal,
+        float $amountPaid,
+        float $receivedAmount,
+        float $changeUsdAmount,
+        float $changeKhrAmount,
+        float $exchangeRate
+    ): void {
+        $posSession->increment('total_sales_usd', $grandTotal);
+        $posSession->increment('total_sales_khr', $grandTotal * $exchangeRate);
+
+        if (str_starts_with($method, 'cash-')) {
+            $cashUsdChange = $currency === 'USD' ? $receivedAmount : 0;
+            $cashKhrChange = $currency === 'KHR' ? $receivedAmount : 0;
+
+            $posSession->increment('total_cash_usd', $cashUsdChange - $changeUsdAmount);
+            $posSession->increment('total_cash_khr', $cashKhrChange - $changeKhrAmount);
+
+            return;
+        }
+
+        if (str_starts_with($method, 'ebanking-')) {
+            if ($currency === 'USD') {
+                $posSession->increment('total_ebanking_usd', $amountPaid);
+
+                return;
+            }
+
+            $posSession->increment('total_ebanking_khr', $amountPaid);
+        }
     }
 
     private function hasUnbilledConfirmedOrders(DiningSession $diningSession): bool

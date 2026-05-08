@@ -34,6 +34,9 @@ return new class extends Migration
 
             // Amount in payment currency
             $table->decimal('amount_paid', 12, 2)->default(0);
+            $table->decimal('received_amount', 14, 2)->default(0);
+            $table->decimal('change_usd_amount', 12, 2)->default(0);
+            $table->decimal('change_khr_amount', 14, 2)->default(0);
 
             // Snapshot conversion
             $table->decimal('exchange_rate_snapshot', 12, 4)->default(4100);

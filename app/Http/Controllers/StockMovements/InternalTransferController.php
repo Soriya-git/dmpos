@@ -27,6 +27,16 @@ class InternalTransferController extends Controller
 
     public function index(Request $request): Response
     {
+        return Inertia::render('InternalTransfer/Index', $this->pageProps($request));
+    }
+
+    public function create(Request $request): Response
+    {
+        return Inertia::render('InternalTransfer/Create', $this->pageProps($request));
+    }
+
+    private function pageProps(Request $request): array
+    {
         [$companyId, $branchId] = $this->scope($request);
 
         $filters = $request->validate([
@@ -145,7 +155,7 @@ class InternalTransferController extends Controller
             ->get()
             ->map(fn (StockTransfer $transfer): array => $this->formatTransfer($transfer));
 
-        return Inertia::render('StockMovements/InternalTransfer', [
+        return [
             'transfers' => $transfers,
             'inventory' => $inventory,
             'locations' => $locations,
@@ -157,7 +167,7 @@ class InternalTransferController extends Controller
                 'location_id' => $filters['location_id'] ?? null,
                 'warehouse_id' => $filters['warehouse_id'] ?? null,
             ],
-        ]);
+        ];
     }
 
     public function store(Request $request)

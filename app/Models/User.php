@@ -27,8 +27,13 @@ class User extends Authenticatable
         'branch_id',
         'name',
         'email',
+        'image',
         'email_verified_at',
         'password',
+    ];
+
+    protected $appends = [
+        'image_url',
     ];
 
     /**
@@ -69,6 +74,15 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (! $this->image) {
+            return null;
+        }
+
+        return '/storage/'.ltrim($this->image, '/');
     }
 
     public function company()

@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             DiningResourceSeeder::class,
             TaxSeeder::class,
             ExchangeRateSeeder::class,
+            BanknoteSeeder::class,
             PaymentMethodSeeder::class,
             UnitSeeder::class,
             MenuSeeder::class,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\POS;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banknote;
 use App\Models\PosSession;
 use App\Models\PosTerminal;
 use App\Support\DocumentNumber;
@@ -32,6 +33,12 @@ class PosSessionController extends Controller
                 ->get(),
 
             'currentSession' => $currentSession,
+            'banknotes' => Banknote::query()
+                ->where('is_active', true)
+                ->orderBy('currency_type')
+                ->orderBy('sort_order')
+                ->orderBy('denomination')
+                ->get(['id', 'currency_type', 'denomination']),
         ]);
     }
 
@@ -39,8 +46,8 @@ class PosSessionController extends Controller
     {
         $data = $request->validate([
             'pos_terminal_id' => ['required', 'exists:pos_terminals,id'],
-            'opening_cash_usd' => ['required', 'numeric', 'min:0'],
-            'opening_cash_khr' => ['required', 'numeric', 'min:0'],
+            'opening_banknotes' => ['required', 'array'],
+            'opening_banknotes.*' => ['nullable', 'integer', 'min:0'],
             'opening_note' => ['nullable', 'string', 'max:1000'],
         ]);
 
@@ -87,14 +94,16 @@ class PosSessionController extends Controller
                 ]);
             }
 
+            $openingCash = $this->cashFromBanknotes($data['opening_banknotes']);
+
             PosSession::create([
                 'company_id' => $terminal->company_id,
                 'branch_id' => $terminal->branch_id,
                 'pos_terminal_id' => $terminal->id,
                 'session_no' => DocumentNumber::make(PosSession::class, 'session_no', 'PS'),
                 'status' => 'open',
-                'opening_cash_usd' => $data['opening_cash_usd'] ?? 0,
-                'opening_cash_khr' => $data['opening_cash_khr'] ?? 0,
+                'opening_cash_usd' => $openingCash['USD'] ?? 0,
+                'opening_cash_khr' => $openingCash['KHR'] ?? 0,
                 'opened_at' => now(),
                 'opened_by' => $user->id,
                 'opening_note' => $data['opening_note'] ?? null,
@@ -109,8 +118,8 @@ class PosSessionController extends Controller
     public function close(Request $request, PosSession $posSession)
     {
         $data = $request->validate([
-            'actual_cash_usd' => ['nullable', 'numeric', 'min:0'],
-            'actual_cash_khr' => ['nullable', 'numeric', 'min:0'],
+            'actual_banknotes' => ['required', 'array'],
+            'actual_banknotes.*' => ['nullable', 'integer', 'min:0'],
             'closing_note' => ['nullable', 'string', 'max:1000'],
         ]);
 
@@ -128,8 +137,9 @@ class PosSessionController extends Controller
 
         $expectedUsd = $posSession->opening_cash_usd + $posSession->total_cash_usd;
         $expectedKhr = $posSession->opening_cash_khr + $posSession->total_cash_khr;
-        $actualUsd = $data['actual_cash_usd'] ?? $expectedUsd;
-        $actualKhr = $data['actual_cash_khr'] ?? $expectedKhr;
+        $actualCash = $this->cashFromBanknotes($data['actual_banknotes']);
+        $actualUsd = $actualCash['USD'] ?? 0;
+        $actualKhr = $actualCash['KHR'] ?? 0;
 
         $posSession->update([
             'status' => 'closed',
@@ -167,5 +177,32 @@ class PosSessionController extends Controller
             ->filter()
             ->unique()
             ->values();
+    }
+
+    /**
+     * @param  array<int|string, int|string|null>  $counts
+     * @return array<string, float>
+     */
+    private function cashFromBanknotes(array $counts): array
+    {
+        $banknotes = Banknote::query()
+            ->where('is_active', true)
+            ->whereIn('id', array_keys($counts))
+            ->get(['id', 'currency_type', 'denomination']);
+
+        $totals = [];
+
+        foreach ($banknotes as $banknote) {
+            $quantity = (int) ($counts[$banknote->id] ?? 0);
+
+            if ($quantity <= 0) {
+                continue;
+            }
+
+            $currency = strtoupper($banknote->currency_type);
+            $totals[$currency] = ($totals[$currency] ?? 0) + ((float) $banknote->denomination * $quantity);
+        }
+
+        return $totals;
     }
 }
