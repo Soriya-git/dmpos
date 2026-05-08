@@ -3,9 +3,7 @@ import { Head, router, useForm } from '@inertiajs/vue3';
 import {
     ArrowLeft,
     CalendarDays,
-    Eye,
     Filter,
-    MoreVertical,
     PackagePlus,
     Plus,
     RotateCcw,
@@ -15,16 +13,10 @@ import {
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import InputError from '@/components/InputError.vue';
+import ApprovalActionMenu from '@/components/master-data/ApprovalActionMenu.vue';
 import SearchDropdown from '@/components/SearchDropdown.vue';
 import TablePagination from '@/components/TablePagination.vue';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -574,67 +566,30 @@ function updateOrderStatus(
                                         </span>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <DropdownMenu :modal="false">
-                                            <DropdownMenuTrigger as-child>
-                                                <Button
-                                                    type="button"
-                                                    variant="ghost"
-                                                    class="mx-auto flex h-8 w-8 rounded-lg p-0 text-slate-400 hover:bg-slate-100 hover:text-[#007882]"
-                                                    title="Actions"
-                                                >
-                                                    <MoreVertical
-                                                        class="size-4"
-                                                    />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent
-                                                align="end"
-                                                class="z-[80] w-36"
-                                            >
-                                                <DropdownMenuItem
-                                                    @click="openDetail(order)"
-                                                >
-                                                    <Eye class="size-4" />
-                                                    View
-                                                </DropdownMenuItem>
-                                                <template
-                                                    v-if="isPending(order)"
-                                                >
-                                                    <DropdownMenuSeparator />
-                                                    <DropdownMenuItem
-                                                        @click="
-                                                            updateOrderStatus(
-                                                                order,
-                                                                'approve',
-                                                            )
-                                                        "
-                                                    >
-                                                        Approve
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem
-                                                        @click="
-                                                            updateOrderStatus(
-                                                                order,
-                                                                'reject',
-                                                            )
-                                                        "
-                                                    >
-                                                        Reject
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem
-                                                        variant="destructive"
-                                                        @click="
-                                                            updateOrderStatus(
-                                                                order,
-                                                                'cancel',
-                                                            )
-                                                        "
-                                                    >
-                                                        Cancel
-                                                    </DropdownMenuItem>
-                                                </template>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
+                                        <ApprovalActionMenu
+                                            :status="order.status"
+                                            view-label="View"
+                                            :actionable-statuses="['created']"
+                                            @view="openDetail(order)"
+                                            @approve="
+                                                updateOrderStatus(
+                                                    order,
+                                                    'approve',
+                                                )
+                                            "
+                                            @reject="
+                                                updateOrderStatus(
+                                                    order,
+                                                    'reject',
+                                                )
+                                            "
+                                            @cancel="
+                                                updateOrderStatus(
+                                                    order,
+                                                    'cancel',
+                                                )
+                                            "
+                                        />
                                     </td>
                                 </tr>
                             </tbody>

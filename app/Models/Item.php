@@ -12,6 +12,7 @@ class Item extends Model
 
     protected $casts = [
         'cost' => 'decimal:4',
+        'minimum_stock_qty' => 'decimal:4',
         'is_stockable' => 'boolean',
         'is_active' => 'boolean',
     ];

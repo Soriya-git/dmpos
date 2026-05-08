@@ -1,25 +1,10 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
-import {
-    ArrowRight,
-    Download,
-    Eye,
-    Filter,
-    MoreVertical,
-    Plus,
-    Search,
-    X,
-} from 'lucide-vue-next';
+import { ArrowRight, Download, Filter, Plus, Search, X } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import ApprovalActionMenu from '@/components/master-data/ApprovalActionMenu.vue';
 import TablePagination from '@/components/TablePagination.vue';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
 
@@ -312,63 +297,30 @@ function updatePutawayStatus(
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <DropdownMenu :modal="false">
-                                        <DropdownMenuTrigger as-child>
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                class="ml-auto flex h-8 w-8 rounded-lg p-0 text-slate-400 hover:bg-slate-100 hover:text-[#007882]"
-                                                title="Actions"
-                                            >
-                                                <MoreVertical class="size-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent
-                                            align="end"
-                                            class="z-[80] w-36"
-                                        >
-                                            <DropdownMenuItem
-                                                @click="viewPutaway(putaway)"
-                                            >
-                                                <Eye class="size-4" />
-                                                View
-                                            </DropdownMenuItem>
-                                            <template v-if="isDraft(putaway)">
-                                                <DropdownMenuSeparator />
-                                                <DropdownMenuItem
-                                                    @click="
-                                                        updatePutawayStatus(
-                                                            putaway,
-                                                            'approve',
-                                                        )
-                                                    "
-                                                >
-                                                    Approve
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    @click="
-                                                        updatePutawayStatus(
-                                                            putaway,
-                                                            'reject',
-                                                        )
-                                                    "
-                                                >
-                                                    Reject
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    variant="destructive"
-                                                    @click="
-                                                        updatePutawayStatus(
-                                                            putaway,
-                                                            'cancel',
-                                                        )
-                                                    "
-                                                >
-                                                    Cancel
-                                                </DropdownMenuItem>
-                                            </template>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                    <ApprovalActionMenu
+                                        :status="putaway.status"
+                                        view-label="View"
+                                        :actionable-statuses="['draft']"
+                                        @view="viewPutaway(putaway)"
+                                        @approve="
+                                            updatePutawayStatus(
+                                                putaway,
+                                                'approve',
+                                            )
+                                        "
+                                        @reject="
+                                            updatePutawayStatus(
+                                                putaway,
+                                                'reject',
+                                            )
+                                        "
+                                        @cancel="
+                                            updatePutawayStatus(
+                                                putaway,
+                                                'cancel',
+                                            )
+                                        "
+                                    />
                                 </td>
                             </tr>
                             <tr v-if="filteredPutaways.length === 0">

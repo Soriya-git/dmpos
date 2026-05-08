@@ -162,6 +162,15 @@ class WarehouseSeeder extends Seeder
                     default => 10,
                 };
 
+                $item->update([
+                    'minimum_stock_qty' => match ($item->code) {
+                        'RM-RICE' => 25,
+                        'RM-EGG' => 80,
+                        'DRK-COKE' => 40,
+                        default => 12,
+                    },
+                ]);
+
                 StockBalance::updateOrCreate(
                     [
                         'branch_id' => $branch->id,

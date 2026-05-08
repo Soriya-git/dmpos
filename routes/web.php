@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Crm;
 use App\Http\Controllers\Feature;
+use App\Http\Controllers\BalanceOnHand\BalanceOnHandController;
 use App\Http\Controllers\GoodsReceipt\GoodsReceiptController;
 use App\Http\Controllers\MasterData\CompanyBranchController;
 use App\Http\Controllers\MasterData\CustomerController;
@@ -18,6 +19,8 @@ use App\Http\Controllers\Putaway\PutawayController;
 use App\Http\Controllers\Sales\SaleInvoiceController;
 use App\Http\Controllers\Seats\SeatController;
 use App\Http\Controllers\Seats\SeatOrderController;
+use App\Http\Controllers\StockMovements\InternalTransferController;
+use App\Http\Controllers\StockMovements\StockWriteOffController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login')->name('home');
@@ -76,6 +79,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('putaway.cancel');
     Route::get('/putaway/completed-goods-receipts', [PutawayController::class, 'receipts'])
         ->name('putaway.completed-goods-receipts');
+
+    // Inventory balance routes
+    Route::get('/balance-on-hand', [BalanceOnHandController::class, 'index'])
+        ->name('balance-on-hand.index');
+    Route::get('/balance-on-hand/{item}', [BalanceOnHandController::class, 'show'])
+        ->name('balance-on-hand.show');
+
+    // Stock movement routes
+    Route::get('/stock-movements/internal-transfer', [InternalTransferController::class, 'index'])
+        ->name('stock-movements.internal-transfer');
+    Route::post('/stock-movements/internal-transfer', [InternalTransferController::class, 'store'])
+        ->name('stock-movements.internal-transfer.store');
+    Route::patch('/stock-movements/internal-transfer/{stockTransfer}/approve', [InternalTransferController::class, 'approve'])
+        ->name('stock-movements.internal-transfer.approve');
+    Route::patch('/stock-movements/internal-transfer/{stockTransfer}/reject', [InternalTransferController::class, 'reject'])
+        ->name('stock-movements.internal-transfer.reject');
+    Route::patch('/stock-movements/internal-transfer/{stockTransfer}/cancel', [InternalTransferController::class, 'cancel'])
+        ->name('stock-movements.internal-transfer.cancel');
+    Route::get('/stock-movements/write-off', [StockWriteOffController::class, 'index'])
+        ->name('stock-movements.write-off');
+    Route::post('/stock-movements/write-off', [StockWriteOffController::class, 'store'])
+        ->name('stock-movements.write-off.store');
+    Route::patch('/stock-movements/write-off/{stockAdjustment}/approve', [StockWriteOffController::class, 'approve'])
+        ->name('stock-movements.write-off.approve');
+    Route::patch('/stock-movements/write-off/{stockAdjustment}/reject', [StockWriteOffController::class, 'reject'])
+        ->name('stock-movements.write-off.reject');
+    Route::patch('/stock-movements/write-off/{stockAdjustment}/cancel', [StockWriteOffController::class, 'cancel'])
+        ->name('stock-movements.write-off.cancel');
 
     // Master data routes
     Route::inertia('/master-data/products', 'MasterData/Products')->name('master-data.products');

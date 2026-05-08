@@ -20,13 +20,25 @@ import {
 type ApprovalStatus =
     | 'draft'
     | 'pending'
+    | 'created'
+    | 'submitted'
     | 'approved'
+    | 'received'
+    | 'closed'
     | 'rejected'
     | 'cancelled';
 
-const props = defineProps<{
-    status: ApprovalStatus;
-}>();
+const props = withDefaults(
+    defineProps<{
+        status: ApprovalStatus | string;
+        viewLabel?: string;
+        actionableStatuses?: string[];
+    }>(),
+    {
+        viewLabel: undefined,
+        actionableStatuses: () => ['draft', 'pending', 'created', 'submitted'],
+    },
+);
 
 const emit = defineEmits<{
     view: [];
@@ -35,40 +47,46 @@ const emit = defineEmits<{
     cancel: [];
 }>();
 
-const isFinal = computed(() =>
-    ['approved', 'rejected', 'cancelled'].includes(props.status),
+const canAct = computed(() =>
+    props.actionableStatuses.includes(String(props.status)),
+);
+
+const viewText = computed(
+    () => props.viewLabel ?? (canAct.value ? 'Edit' : 'View'),
 );
 </script>
 
 <template>
-    <DropdownMenu>
+    <DropdownMenu :modal="false">
         <DropdownMenuTrigger as-child>
             <Button
+                type="button"
                 variant="ghost"
                 size="icon"
-                class="size-8 text-slate-500 hover:text-[#007882]"
+                class="mx-auto flex size-8 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-[#007882]"
+                title="Actions"
             >
                 <MoreVertical class="size-4" />
                 <span class="sr-only">Open actions</span>
             </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" class="w-40">
+        <DropdownMenuContent align="end" class="z-[80] w-40">
             <DropdownMenuItem @select="emit('view')">
-                <Eye v-if="isFinal" class="size-4" />
-                <Pencil v-else class="size-4" />
-                {{ isFinal ? 'View' : 'Edit' }}
+                <Eye v-if="viewText === 'View'" class="size-4 text-[#007882]" />
+                <Pencil v-else class="size-4 text-[#007882]" />
+                {{ viewText }}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem :disabled="isFinal" @select="emit('approve')">
+            <DropdownMenuItem :disabled="!canAct" @select="emit('approve')">
                 <CheckCircle2 class="size-4 text-emerald-600" />
                 Approve
             </DropdownMenuItem>
-            <DropdownMenuItem :disabled="isFinal" @select="emit('reject')">
+            <DropdownMenuItem :disabled="!canAct" @select="emit('reject')">
                 <XCircle class="size-4 text-rose-600" />
                 Reject
             </DropdownMenuItem>
             <DropdownMenuItem
-                :disabled="isFinal"
+                :disabled="!canAct"
                 variant="destructive"
                 @select="emit('cancel')"
             >

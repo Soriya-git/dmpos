@@ -81,7 +81,8 @@ class GoodsReceiptController extends Controller
                 'required',
                 Rule::exists('stock_locations', 'id')
                     ->where('company_id', $companyId)
-                    ->where('branch_id', $branchId),
+                    ->where('branch_id', $branchId)
+                    ->where('location_type', 'inbound_staging'),
             ],
             'lines.*.quantity_received' => ['required', 'numeric', 'min:0'],
         ]);
@@ -102,6 +103,7 @@ class GoodsReceiptController extends Controller
             $location = StockLocation::query()
                 ->where('company_id', $companyId)
                 ->where('branch_id', $branchId)
+                ->where('location_type', 'inbound_staging')
                 ->findOrFail($firstLocationId);
 
             $lineQuantities = $lineInput
@@ -327,8 +329,7 @@ class GoodsReceiptController extends Controller
             ->where('company_id', $companyId)
             ->when($branchId, fn ($query) => $query->where('branch_id', $branchId))
             ->where('is_active', true)
-            ->whereIn('location_type', ['inbound_staging', 'putaway', 'general'])
-            ->orderByRaw("case when location_type = 'inbound_staging' then 0 when location_type = 'putaway' then 1 else 2 end")
+            ->where('location_type', 'inbound_staging')
             ->orderBy('name')
             ->get()
             ->map(fn (StockLocation $location) => [

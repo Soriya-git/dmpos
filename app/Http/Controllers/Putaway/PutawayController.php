@@ -117,7 +117,7 @@ class PutawayController extends Controller
             }
 
             $firstDestinationId = (int) $selectedLines->first()['to_location_id'];
-            $firstDestination = StockLocation::findOrFail($firstDestinationId);
+            $firstDestination = $this->putawayLocation($companyId, $branchId, $firstDestinationId);
 
             $transfer = StockTransfer::create([
                 'company_id' => $companyId,
@@ -139,7 +139,7 @@ class PutawayController extends Controller
             foreach ($selectedLines as $line) {
                 $quantity = (float) $line['quantity'];
                 $receiptLine = $receiptLines->get((int) $line['item_id'])->first();
-                $destination = StockLocation::findOrFail((int) $line['to_location_id']);
+                $destination = $this->putawayLocation($companyId, $branchId, (int) $line['to_location_id']);
                 $totalCost = $quantity * (float) $receiptLine->unit_cost;
 
                 StockTransferLine::create([
@@ -191,7 +191,7 @@ class PutawayController extends Controller
                 abort_if($requested > $remaining, 422, 'Putaway quantity is greater than the remaining staging quantity.');
             }
 
-            $firstDestination = StockLocation::findOrFail((int) $selectedLines->first()['to_location_id']);
+            $firstDestination = $this->putawayLocation($companyId, $branchId, (int) $selectedLines->first()['to_location_id']);
 
             $stockTransfer->update([
                 'goods_receipt_id' => $receipt->id,
@@ -295,10 +295,19 @@ class PutawayController extends Controller
             'lines' => ['required', 'array', 'min:1'],
             'lines.*.item_id' => ['required', 'integer'],
             'lines.*.unit_id' => ['required', 'integer'],
-            'lines.*.to_location_id' => ['required', Rule::exists('stock_locations', 'id')->where('company_id', $companyId)],
+            'lines.*.to_location_id' => ['required', Rule::exists('stock_locations', 'id')->where('company_id', $companyId)->where('location_type', 'putaway')],
             'lines.*.quantity' => ['required', 'numeric', 'min:0'],
             'lines.*.selected' => ['boolean'],
         ]);
+    }
+
+    private function putawayLocation(int $companyId, int $branchId, int $locationId): StockLocation
+    {
+        return StockLocation::query()
+            ->where('company_id', $companyId)
+            ->where('branch_id', $branchId)
+            ->where('location_type', 'putaway')
+            ->findOrFail($locationId);
     }
 
     private function putawayNote(array $data): string

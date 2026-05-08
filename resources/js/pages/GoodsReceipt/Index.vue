@@ -3,8 +3,6 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import {
     ArrowRight,
     ClipboardCheck,
-    Eye,
-    MoreVertical,
     PackageCheck,
     PlusCircle,
     Search,
@@ -12,15 +10,9 @@ import {
     X,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import ApprovalActionMenu from '@/components/master-data/ApprovalActionMenu.vue';
 import TablePagination from '@/components/TablePagination.vue';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
 
@@ -301,63 +293,30 @@ function updateReceiptStatus(
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <DropdownMenu :modal="false">
-                                        <DropdownMenuTrigger as-child>
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                class="mx-auto flex h-8 w-8 rounded-lg p-0 text-slate-400 hover:bg-slate-100 hover:text-[#007882]"
-                                                title="Actions"
-                                            >
-                                                <MoreVertical class="size-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent
-                                            align="end"
-                                            class="z-[80] w-36"
-                                        >
-                                            <DropdownMenuItem
-                                                @click="openDetail(receipt)"
-                                            >
-                                                <Eye class="size-4" />
-                                                View
-                                            </DropdownMenuItem>
-                                            <template v-if="isDraft(receipt)">
-                                                <DropdownMenuSeparator />
-                                                <DropdownMenuItem
-                                                    @click="
-                                                        updateReceiptStatus(
-                                                            receipt,
-                                                            'approve',
-                                                        )
-                                                    "
-                                                >
-                                                    Approve
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    @click="
-                                                        updateReceiptStatus(
-                                                            receipt,
-                                                            'reject',
-                                                        )
-                                                    "
-                                                >
-                                                    Reject
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    variant="destructive"
-                                                    @click="
-                                                        updateReceiptStatus(
-                                                            receipt,
-                                                            'cancel',
-                                                        )
-                                                    "
-                                                >
-                                                    Cancel
-                                                </DropdownMenuItem>
-                                            </template>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                    <ApprovalActionMenu
+                                        :status="receipt.status"
+                                        view-label="View"
+                                        :actionable-statuses="['draft']"
+                                        @view="openDetail(receipt)"
+                                        @approve="
+                                            updateReceiptStatus(
+                                                receipt,
+                                                'approve',
+                                            )
+                                        "
+                                        @reject="
+                                            updateReceiptStatus(
+                                                receipt,
+                                                'reject',
+                                            )
+                                        "
+                                        @cancel="
+                                            updateReceiptStatus(
+                                                receipt,
+                                                'cancel',
+                                            )
+                                        "
+                                    />
                                 </td>
                             </tr>
                             <tr v-if="filteredReceipts.length === 0">

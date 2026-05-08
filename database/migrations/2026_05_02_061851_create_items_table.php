@@ -32,6 +32,7 @@ return new class extends Migration
             ])->default('raw_material');
 
             $table->decimal('cost', 12, 4)->default(0);
+            $table->decimal('minimum_stock_qty', 14, 4)->default(0);
             $table->boolean('is_stockable')->default(true);
             $table->boolean('is_active')->default(true);
 
