@@ -25,9 +25,12 @@ class Invoice extends Model
         'grand_total' => 'decimal:2',
         'paid_amount' => 'decimal:2',
         'balance_amount' => 'decimal:2',
+        'stock_settled_quantity' => 'decimal:4',
         'issued_at' => 'datetime',
         'paid_at' => 'datetime',
         'cancelled_at' => 'datetime',
+        'stock_settled_at' => 'datetime',
+        'stock_rejected_at' => 'datetime',
     ];
 
     /** @return BelongsTo<Company, $this> */

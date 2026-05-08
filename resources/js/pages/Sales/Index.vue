@@ -10,7 +10,6 @@ import {
     RotateCcw,
     Search,
     X,
-    AArrowUp,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import TablePagination from '@/components/TablePagination.vue';
@@ -67,12 +66,28 @@ type PaymentPayload = {
     operationStatus: 'invoice' | 'invoice_receipt_done';
 };
 
+type PaymentSummary = {
+    sales_usd: number;
+    sales_khr: number;
+    cash_usd: number;
+    cash_khr: number;
+    ebanking_usd: number;
+    ebanking_khr: number;
+    pay_later_usd: number;
+    pay_later_khr: number;
+    expected_cash_usd: number;
+    expected_cash_khr: number;
+};
+
 const props = defineProps<{
     posSession?: {
         id: number;
         session_no: string;
+        opening_cash_usd: number;
+        opening_cash_khr: number;
     };
     invoices: SaleInvoice[];
+    paymentSummary: PaymentSummary;
     filters: {
         start_date?: string | null;
         end_date?: string | null;
@@ -289,9 +304,9 @@ function statusLabel(status: InvoiceStatus) {
                 </header>
 
                 <section
-                    class="mb-6 space-y-4 rounded-3xl border border-gray-100 bg-white p-4 shadow-sm"
+                    class="mb-4 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm"
                 >
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
                         <div>
                             <label
                                 class="mb-1 ml-1 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
@@ -305,7 +320,7 @@ function statusLabel(status: InvoiceStatus) {
                                 <Input
                                     v-model="startDate"
                                     type="date"
-                                    class="h-12 rounded-2xl border-none bg-gray-50 pr-4 pl-12 text-sm font-semibold text-[#2A4858] focus-visible:ring-[#23AA8F]/40"
+                                    class="h-10 rounded-xl border-none bg-gray-50 pr-4 pl-11 text-sm font-semibold text-[#2A4858] focus-visible:ring-[#23AA8F]/40"
                                     @change="applyFilters"
                                 />
                             </div>
@@ -324,7 +339,7 @@ function statusLabel(status: InvoiceStatus) {
                                 <Input
                                     v-model="endDate"
                                     type="date"
-                                    class="h-12 rounded-2xl border-none bg-gray-50 pr-4 pl-12 text-sm font-semibold text-[#2A4858] focus-visible:ring-[#23AA8F]/40"
+                                    class="h-10 rounded-xl border-none bg-gray-50 pr-4 pl-11 text-sm font-semibold text-[#2A4858] focus-visible:ring-[#23AA8F]/40"
                                     @change="applyFilters"
                                 />
                             </div>
@@ -344,9 +359,153 @@ function statusLabel(status: InvoiceStatus) {
                                     v-model="search"
                                     type="text"
                                     placeholder="Search #INV, phone, seat..."
-                                    class="h-12 rounded-2xl border-none bg-gray-50 pr-4 pl-12 text-sm focus-visible:ring-[#23AA8F]/40"
+                                    class="h-10 rounded-xl border-none bg-gray-50 pr-4 pl-11 text-sm focus-visible:ring-[#23AA8F]/40"
                                     @keyup.enter="applyFilters"
                                 />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-6 grid gap-4 lg:grid-cols-[1.35fr_1fr]">
+                    <div
+                        class="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"
+                    >
+                        <div class="mb-3 flex items-center justify-between">
+                            <h2
+                                class="text-xs font-black tracking-wide text-[#2A4858] uppercase"
+                            >
+                                Amount by Payment Term
+                            </h2>
+                            <span class="text-xs font-semibold text-gray-400">
+                                Sales {{ money(paymentSummary.sales_usd) }}
+                            </span>
+                        </div>
+
+                        <div class="grid gap-3 md:grid-cols-3">
+                            <div class="rounded-xl bg-gray-50 p-3">
+                                <p
+                                    class="text-[10px] font-black text-gray-400 uppercase"
+                                >
+                                    Cash
+                                </p>
+                                <p
+                                    class="mt-1 text-sm font-black text-[#2A4858]"
+                                >
+                                    {{ money(paymentSummary.cash_usd) }}
+                                </p>
+                                <p class="text-xs font-bold text-gray-500">
+                                    ៛{{
+                                        money(paymentSummary.cash_khr).replace(
+                                            '$',
+                                            '',
+                                        )
+                                    }}
+                                </p>
+                            </div>
+
+                            <div class="rounded-xl bg-gray-50 p-3">
+                                <p
+                                    class="text-[10px] font-black text-gray-400 uppercase"
+                                >
+                                    E-Banking
+                                </p>
+                                <p
+                                    class="mt-1 text-sm font-black text-[#2A4858]"
+                                >
+                                    {{ money(paymentSummary.ebanking_usd) }}
+                                </p>
+                                <p class="text-xs font-bold text-gray-500">
+                                    ៛{{
+                                        money(
+                                            paymentSummary.ebanking_khr,
+                                        ).replace('$', '')
+                                    }}
+                                </p>
+                            </div>
+
+                            <div class="rounded-xl bg-gray-50 p-3">
+                                <p
+                                    class="text-[10px] font-black text-gray-400 uppercase"
+                                >
+                                    Pay Later
+                                </p>
+                                <p
+                                    class="mt-1 text-sm font-black text-[#2A4858]"
+                                >
+                                    {{ money(paymentSummary.pay_later_usd) }}
+                                </p>
+                                <p class="text-xs font-bold text-gray-500">
+                                    ៛{{
+                                        money(
+                                            paymentSummary.pay_later_khr,
+                                        ).replace('$', '')
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-4 shadow-sm"
+                    >
+                        <h2
+                            class="mb-3 text-xs font-black tracking-wide text-[#2A4858] uppercase"
+                        >
+                            Expected Cash in Drawer
+                        </h2>
+
+                        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                            <div class="rounded-xl bg-white p-3">
+                                <p
+                                    class="text-[10px] font-black text-gray-400 uppercase"
+                                >
+                                    USD Drawer
+                                </p>
+                                <p
+                                    class="mt-1 text-lg font-black text-[#007882]"
+                                >
+                                    {{
+                                        money(paymentSummary.expected_cash_usd)
+                                    }}
+                                </p>
+                                <p class="text-[11px] text-gray-500">
+                                    Opening
+                                    {{
+                                        money(posSession?.opening_cash_usd ?? 0)
+                                    }}
+                                    + cash {{ money(paymentSummary.cash_usd) }}
+                                </p>
+                            </div>
+
+                            <div class="rounded-xl bg-white p-3">
+                                <p
+                                    class="text-[10px] font-black text-gray-400 uppercase"
+                                >
+                                    KHR Drawer
+                                </p>
+                                <p
+                                    class="mt-1 text-lg font-black text-[#007882]"
+                                >
+                                    ៛{{
+                                        money(
+                                            paymentSummary.expected_cash_khr,
+                                        ).replace('$', '')
+                                    }}
+                                </p>
+                                <p class="text-[11px] text-gray-500">
+                                    Opening ៛{{
+                                        money(
+                                            posSession?.opening_cash_khr ?? 0,
+                                        ).replace('$', '')
+                                    }}
+                                    + cash ៛{{
+                                        money(paymentSummary.cash_khr).replace(
+                                            '$',
+                                            '',
+                                        )
+                                    }}
+                                </p>
                             </div>
                         </div>
                     </div>

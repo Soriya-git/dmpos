@@ -96,7 +96,10 @@ const stockSection: NavSectionType = {
             icon: ArrowLeftRight,
             items: [
                 { title: 'Balance On Hand', href: '/balance-on-hand' },
-                { title: 'Sale Settlements', href: '#' },
+                {
+                    title: 'Sale Settlements',
+                    href: '/stock-movements/stock-settlements',
+                },
                 {
                     title: 'Stock Adjustments',
                     href: '/stock-movements/stock-adjustments',

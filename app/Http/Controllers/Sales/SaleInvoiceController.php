@@ -36,10 +36,11 @@ class SaleInvoiceController extends Controller
             ? ltrim(trim((string) $filters['search']), '#')
             : null;
 
-        $invoices = Invoice::query()
+        $invoiceModels = Invoice::query()
             ->with([
                 'customer',
                 'lines',
+                'payments.paymentMethod',
                 'posTerminal',
                 'diningSession.diningResource',
             ])
@@ -59,15 +60,19 @@ class SaleInvoiceController extends Controller
                 });
             })
             ->latest()
-            ->get()
-            ->map(fn (Invoice $invoice) => $this->formatInvoice($invoice));
+            ->get();
+
+        $invoices = $invoiceModels->map(fn (Invoice $invoice) => $this->formatInvoice($invoice));
 
         return Inertia::render('Sales/Index', [
             'posSession' => [
                 'id' => $activePosSession->id,
                 'session_no' => $activePosSession->session_no ?? $activePosSession->session_number ?? ('POS-'.$activePosSession->id),
+                'opening_cash_usd' => (float) $activePosSession->opening_cash_usd,
+                'opening_cash_khr' => (float) $activePosSession->opening_cash_khr,
             ],
             'invoices' => $invoices,
+            'paymentSummary' => $this->paymentSummary($invoiceModels, $activePosSession),
             'filters' => [
                 'start_date' => $filters['start_date'] ?? null,
                 'end_date' => $filters['end_date'] ?? null,
@@ -211,6 +216,64 @@ class SaleInvoiceController extends Controller
                 'line_total' => (float) $line->line_total,
                 'note' => $line->note,
             ]),
+        ];
+    }
+
+    private function paymentSummary($invoices, PosSession $posSession): array
+    {
+        $summary = [
+            'sales_usd' => 0,
+            'sales_khr' => 0,
+            'cash_usd' => 0,
+            'cash_khr' => 0,
+            'ebanking_usd' => 0,
+            'ebanking_khr' => 0,
+            'pay_later_usd' => 0,
+            'pay_later_khr' => 0,
+        ];
+
+        foreach ($invoices as $invoice) {
+            $exchangeRate = (float) ($invoice->exchange_rate_snapshot ?: 4100);
+            $summary['sales_usd'] += (float) $invoice->grand_total;
+            $summary['sales_khr'] += (float) $invoice->grand_total * $exchangeRate;
+
+            if ($invoice->status === 'pay_later' || (float) $invoice->balance_amount > 0) {
+                $summary['pay_later_usd'] += (float) $invoice->balance_amount;
+                $summary['pay_later_khr'] += (float) $invoice->balance_amount * $exchangeRate;
+            }
+
+            foreach ($invoice->payments as $payment) {
+                $methodType = $payment->paymentMethod?->method_type;
+                $methodCode = strtoupper((string) $payment->paymentMethod?->code);
+                $currency = strtoupper((string) $payment->currency);
+
+                if ($methodType === 'cash' || str_contains($methodCode, 'CASH')) {
+                    if ($currency === 'KHR') {
+                        $summary['cash_khr'] += (float) ($payment->received_amount ?? $payment->amount_paid);
+                    } else {
+                        $summary['cash_usd'] += (float) ($payment->received_amount ?? $payment->amount_paid);
+                    }
+
+                    $summary['cash_usd'] -= (float) ($payment->change_usd_amount ?? 0);
+                    $summary['cash_khr'] -= (float) ($payment->change_khr_amount ?? 0);
+
+                    continue;
+                }
+
+                if ($methodType === 'bank' || str_contains($methodCode, 'EBANK')) {
+                    if ($currency === 'KHR') {
+                        $summary['ebanking_khr'] += (float) $payment->amount_paid;
+                    } else {
+                        $summary['ebanking_usd'] += (float) $payment->amount_paid;
+                    }
+                }
+            }
+        }
+
+        return [
+            ...$summary,
+            'expected_cash_usd' => (float) $posSession->opening_cash_usd + $summary['cash_usd'],
+            'expected_cash_khr' => (float) $posSession->opening_cash_khr + $summary['cash_khr'],
         ];
     }
 

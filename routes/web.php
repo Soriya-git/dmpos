@@ -22,6 +22,7 @@ use App\Http\Controllers\Seats\SeatController;
 use App\Http\Controllers\Seats\SeatOrderController;
 use App\Http\Controllers\StockMovements\InternalTransferController;
 use App\Http\Controllers\StockMovements\StockAdjustmentController;
+use App\Http\Controllers\StockMovements\StockSettlementController;
 use App\Http\Controllers\StockMovements\StockWriteOffController;
 use Illuminate\Support\Facades\Route;
 
@@ -116,6 +117,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('stock-movements.stock-adjustments.reject');
     Route::patch('/stock-movements/stock-adjustments/{stockAdjustment}/cancel', [StockAdjustmentController::class, 'cancel'])
         ->name('stock-movements.stock-adjustments.cancel');
+    Route::get('/stock-movements/stock-settlements', [StockSettlementController::class, 'index'])
+        ->name('stock-movements.stock-settlements');
+    Route::post('/stock-movements/stock-settlements/approve', [StockSettlementController::class, 'approve'])
+        ->name('stock-movements.stock-settlements.approve');
+    Route::post('/stock-movements/stock-settlements/reject', [StockSettlementController::class, 'reject'])
+        ->name('stock-movements.stock-settlements.reject');
+    Route::get('/stock-movements/stock-settlements/{invoice}', [StockSettlementController::class, 'show'])
+        ->name('stock-movements.stock-settlements.show');
     Route::get('/stock-movements/write-off', [StockWriteOffController::class, 'index'])
         ->name('stock-movements.write-off');
     Route::get('/stock-movements/write-off/create', [StockWriteOffController::class, 'create'])
