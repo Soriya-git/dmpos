@@ -9,6 +9,7 @@ import {
     Pencil,
     Printer,
     ReceiptText,
+    RotateCcw,
     Search,
     ShoppingCart,
     Trash2,
@@ -84,6 +85,7 @@ type InvoiceData = {
         qty: number;
         total_amount: number;
         note?: string | null;
+        status: string;
     }[];
 };
 
@@ -94,6 +96,7 @@ type PrintLine = {
     note?: string | null;
     status: string;
     canCancel: boolean;
+    canReturn: boolean;
 };
 
 type PrintPrinterGroup = {
@@ -167,9 +170,11 @@ const discountValue = ref(0);
 const paymentOpen = ref(false);
 const selectedBillGroup = ref<string | null>(null);
 const editCustomerOpen = ref(false);
+const collapsedPrintOrders = ref<Record<number, boolean>>({});
 const collapsedPrintGroups = ref<Record<string, boolean>>({});
 const reprintProcessingId = ref<number | null>(null);
 const cancelPrintLineProcessingId = ref<number | null>(null);
+const returnPrintLineProcessingId = ref<number | null>(null);
 const { imageUrl, money } = usePosFormatting();
 
 type PaymentPayload = {
@@ -216,7 +221,9 @@ const hasInvoice = computed(() => Boolean(props.diningSession.invoice_no));
 const billableOrders = computed(() => {
     return props.historyOrders.filter((order) => {
         return (
-            !order.invoice_no && !['draft', 'cancelled'].includes(order.status)
+            !order.invoice_no &&
+            order.status !== 'draft' &&
+            order.lines.some((line) => !line.has_invoice)
         );
     });
 });
@@ -236,7 +243,7 @@ const billableBillGroups = computed(() => {
 
     billableOrders.value.forEach((order) => {
         order.lines
-            .filter((line) => line.status !== 'cancelled' && !line.has_invoice)
+            .filter((line) => !line.has_invoice)
             .forEach((line) => {
                 const name = line.bill_group || 'Bill A';
 
@@ -591,6 +598,17 @@ function closeOrder() {
     );
 }
 
+function isPrintOrderCollapsed(order: PrintOrderData) {
+    return collapsedPrintOrders.value[order.orderId] ?? false;
+}
+
+function togglePrintOrder(order: PrintOrderData) {
+    collapsedPrintOrders.value = {
+        ...collapsedPrintOrders.value,
+        [order.orderId]: !isPrintOrderCollapsed(order),
+    };
+}
+
 function printGroupKey(order: PrintOrderData, printer: PrintPrinterGroup) {
     return `${order.orderId}-${printer.jobId}`;
 }
@@ -652,10 +670,55 @@ function cancelPrintedLine(line: PrintLine) {
     );
 }
 
+function returnPrintedLine(line: PrintLine) {
+    if (
+        returnPrintLineProcessingId.value ||
+        !line.canReturn ||
+        hasInvoice.value
+    ) {
+        return;
+    }
+
+    const rawQuantity = window.prompt(
+        `Return quantity for ${line.name}`,
+        String(line.quantity),
+    );
+
+    if (rawQuantity === null) {
+        return;
+    }
+
+    const quantity = Math.min(line.quantity, Number(rawQuantity || line.quantity));
+
+    if (!Number.isFinite(quantity) || quantity <= 0) {
+        return;
+    }
+
+    returnPrintLineProcessingId.value = line.id;
+
+    router.patch(
+        `/orders/${props.diningSession.id}/print-lines/${line.id}/return`,
+        { quantity },
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                returnPrintLineProcessingId.value = null;
+            },
+        },
+    );
+}
+
 function printLineStatusLabel(status: string) {
-    return status === 'cancelled'
-        ? 'Cancelled'
-        : status.replaceAll('_', ' ').toUpperCase();
+    const labels: Record<string, string> = {
+        cancelled: 'Cancelled',
+        returned: 'Returned',
+    };
+
+    return labels[status] ?? status.replaceAll('_', ' ').toUpperCase();
+}
+
+function isNoChargeStatus(status: string) {
+    return ['cancelled', 'returned'].includes(status);
 }
 
 async function toggleFullscreen() {
@@ -1038,7 +1101,20 @@ onBeforeUnmount(() => {
                             class="rounded-xl border border-gray-100 bg-white p-3 shadow-sm"
                         >
                             <div class="flex items-start justify-between gap-3">
-                                <div class="min-w-0">
+                                <button
+                                    type="button"
+                                    class="flex min-w-0 flex-1 items-start gap-2 text-left"
+                                    @click="togglePrintOrder(order)"
+                                >
+                                    <ChevronDown
+                                        class="mt-0.5 h-3.5 w-3.5 shrink-0 text-gray-400 transition"
+                                        :class="
+                                            isPrintOrderCollapsed(order)
+                                                ? '-rotate-90'
+                                                : ''
+                                        "
+                                    />
+                                    <div class="min-w-0">
                                     <h3
                                         class="truncate text-xs font-black text-[#2A4858]"
                                     >
@@ -1047,7 +1123,8 @@ onBeforeUnmount(() => {
                                     <p class="mt-0.5 text-[10px] text-gray-400">
                                         {{ order.printedAt }}
                                     </p>
-                                </div>
+                                    </div>
+                                </button>
 
                                 <span
                                     class="rounded-full bg-[#23AA8F]/10 px-2 py-1 text-[9px] font-bold text-[#007882] uppercase"
@@ -1056,7 +1133,10 @@ onBeforeUnmount(() => {
                                 </span>
                             </div>
 
-                            <div class="mt-3 space-y-2">
+                            <div
+                                v-if="!isPrintOrderCollapsed(order)"
+                                class="mt-3 space-y-2"
+                            >
                                 <section
                                     v-for="printer in order.printers"
                                     :key="printer.jobId"
@@ -1160,8 +1240,9 @@ onBeforeUnmount(() => {
                                                 <span
                                                     class="min-w-0 truncate text-gray-500"
                                                     :class="
-                                                        line.status ===
-                                                        'cancelled'
+                                                        isNoChargeStatus(
+                                                            line.status,
+                                                        )
                                                             ? 'text-gray-400 line-through decoration-red-400 decoration-2'
                                                             : ''
                                                     "
@@ -1175,10 +1256,17 @@ onBeforeUnmount(() => {
                                                 >
                                                     <span
                                                         v-if="
-                                                            line.status ===
-                                                            'cancelled'
+                                                            isNoChargeStatus(
+                                                                line.status,
+                                                            )
                                                         "
-                                                        class="rounded-full bg-red-50 px-1.5 py-0.5 text-[8px] font-black text-red-500 uppercase"
+                                                        class="rounded-full px-1.5 py-0.5 text-[8px] font-black uppercase"
+                                                        :class="
+                                                            line.status ===
+                                                            'returned'
+                                                                ? 'bg-orange-50 text-orange-500'
+                                                                : 'bg-red-50 text-red-500'
+                                                        "
                                                     >
                                                         {{
                                                             printLineStatusLabel(
@@ -1206,14 +1294,35 @@ onBeforeUnmount(() => {
                                                             class="h-3.5 w-3.5"
                                                         />
                                                     </button>
+                                                    <button
+                                                        type="button"
+                                                        class="flex h-6 w-6 items-center justify-center rounded-md text-orange-400 transition hover:bg-orange-50 hover:text-orange-600 disabled:cursor-not-allowed disabled:opacity-30"
+                                                        title="Return printed item"
+                                                        :disabled="
+                                                            !line.canReturn ||
+                                                            hasInvoice ||
+                                                            returnPrintLineProcessingId ===
+                                                                line.id
+                                                        "
+                                                        @click="
+                                                            returnPrintedLine(
+                                                                line,
+                                                            )
+                                                        "
+                                                    >
+                                                        <RotateCcw
+                                                            class="h-3.5 w-3.5"
+                                                        />
+                                                    </button>
                                                 </div>
                                             </div>
                                             <p
                                                 v-if="line.note"
                                                 class="truncate pl-2 text-[10px] font-medium text-[#007882]"
                                                 :class="
-                                                    line.status ===
-                                                    'cancelled'
+                                                    isNoChargeStatus(
+                                                        line.status,
+                                                    )
                                                         ? 'text-gray-400 line-through decoration-red-400'
                                                         : ''
                                                 "
@@ -1277,9 +1386,35 @@ onBeforeUnmount(() => {
                                         >
                                             <span
                                                 class="min-w-0 truncate text-gray-500"
+                                                :class="
+                                                    isNoChargeStatus(
+                                                        line.status,
+                                                    )
+                                                        ? 'text-gray-400 line-through decoration-red-400'
+                                                        : ''
+                                                "
                                             >
                                                 {{ line.menu_name }} x
                                                 {{ line.qty }}
+                                            </span>
+                                            <span
+                                                v-if="
+                                                    isNoChargeStatus(
+                                                        line.status,
+                                                    )
+                                                "
+                                                class="rounded-full px-1.5 py-0.5 text-[8px] font-black uppercase"
+                                                :class="
+                                                    line.status === 'returned'
+                                                        ? 'bg-orange-50 text-orange-500'
+                                                        : 'bg-red-50 text-red-500'
+                                                "
+                                            >
+                                                {{
+                                                    printLineStatusLabel(
+                                                        line.status,
+                                                    )
+                                                }}
                                             </span>
                                         </div>
                                         <span
@@ -1291,6 +1426,11 @@ onBeforeUnmount(() => {
                                     <p
                                         v-if="line.note"
                                         class="truncate pl-2 text-[10px] font-medium text-[#007882]"
+                                        :class="
+                                            isNoChargeStatus(line.status)
+                                                ? 'text-gray-400 line-through decoration-red-400'
+                                                : ''
+                                        "
                                     >
                                         {{ line.note }}
                                     </p>
@@ -1403,9 +1543,29 @@ onBeforeUnmount(() => {
                                     >
                                         <span
                                             class="min-w-0 truncate text-gray-500"
+                                            :class="
+                                                isNoChargeStatus(line.status)
+                                                    ? 'text-gray-400 line-through decoration-red-400'
+                                                    : ''
+                                            "
                                         >
                                             {{ line.menu_name }} x
                                             {{ line.qty }}
+                                        </span>
+                                        <span
+                                            v-if="isNoChargeStatus(line.status)"
+                                            class="shrink-0 rounded-full px-1.5 py-0.5 text-[8px] font-black uppercase"
+                                            :class="
+                                                line.status === 'returned'
+                                                    ? 'bg-orange-50 text-orange-500'
+                                                    : 'bg-red-50 text-red-500'
+                                            "
+                                        >
+                                            {{
+                                                printLineStatusLabel(
+                                                    line.status,
+                                                )
+                                            }}
                                         </span>
                                         <span class="font-bold text-[#2A4858]">
                                             {{ money(line.total_amount) }}
@@ -1414,6 +1574,11 @@ onBeforeUnmount(() => {
                                     <p
                                         v-if="line.note"
                                         class="truncate pl-2 text-[10px] font-medium text-[#007882]"
+                                        :class="
+                                            isNoChargeStatus(line.status)
+                                                ? 'text-gray-400 line-through decoration-red-400'
+                                                : ''
+                                        "
                                     >
                                         {{ line.note }}
                                     </p>

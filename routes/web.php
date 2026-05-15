@@ -190,6 +190,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('seats.orders.print-jobs.preview');
     Route::patch('/orders/{diningSession}/print-lines/{orderLine}/cancel', [SeatOrderController::class, 'cancelPrintedLine'])
         ->name('seats.orders.print-lines.cancel');
+    Route::patch('/orders/{diningSession}/print-lines/{orderLine}/return', [SeatOrderController::class, 'returnPrintedLine'])
+        ->name('seats.orders.print-lines.return');
     Route::get('/orders/{diningSession}/print/current-invoice', [SeatOrderController::class, 'previewCurrentInvoice'])
         ->name('seats.orders.current-invoice.preview');
     Route::get('/orders/{diningSession}/invoices/{invoice}/print/{documentType}', [SeatOrderController::class, 'previewInvoiceDocument'])

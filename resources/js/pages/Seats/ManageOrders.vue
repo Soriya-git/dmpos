@@ -130,7 +130,9 @@ const groupedBills = computed(() => {
 });
 
 function resourceFor(resourceId: number) {
-    return props.resources.find((resource) => resource.id === resourceId) ?? null;
+    return (
+        props.resources.find((resource) => resource.id === resourceId) ?? null
+    );
 }
 
 function toggleLine(lineId: number) {
@@ -278,7 +280,9 @@ function backToOrder() {
                 </div>
             </header>
 
-            <main class="grid min-h-0 flex-1 gap-4 p-4 xl:grid-cols-[1fr_420px]">
+            <main
+                class="grid min-h-0 flex-1 gap-4 p-4 xl:grid-cols-[1fr_420px]"
+            >
                 <section class="min-h-0 rounded-2xl bg-white shadow-sm">
                     <div
                         class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 p-4"
@@ -326,7 +330,9 @@ function backToOrder() {
                                     >
                                         {{ line.menuName }}
                                     </p>
-                                    <p class="text-[11px] font-semibold text-gray-400">
+                                    <p
+                                        class="text-[11px] font-semibold text-gray-400"
+                                    >
                                         {{ line.orderNo }} | Qty
                                         {{ line.quantity }}
                                     </p>
@@ -373,7 +379,9 @@ function backToOrder() {
                             <div
                                 class="mt-3 flex items-center justify-between border-t border-dashed pt-2"
                             >
-                                <span class="text-[11px] font-bold text-gray-400">
+                                <span
+                                    class="text-[11px] font-bold text-gray-400"
+                                >
                                     Line Total
                                 </span>
                                 <span class="text-sm font-black text-[#007882]">
@@ -400,7 +408,9 @@ function backToOrder() {
 
                         <div class="space-y-3">
                             <label class="block">
-                                <span class="text-[11px] font-black text-gray-400">
+                                <span
+                                    class="text-[11px] font-black text-gray-400"
+                                >
                                     Bill
                                 </span>
                                 <select
@@ -434,7 +444,9 @@ function backToOrder() {
                             </div>
 
                             <label class="block">
-                                <span class="text-[11px] font-black text-gray-400">
+                                <span
+                                    class="text-[11px] font-black text-gray-400"
+                                >
                                     Table
                                 </span>
                                 <select
@@ -476,14 +488,15 @@ function backToOrder() {
                                 class="flex w-full items-center justify-between gap-2 rounded-xl border border-gray-100 px-3 py-2 text-left text-xs font-black transition hover:border-[#23AA8F]"
                                 @click="moveAllToResource(resource.id)"
                             >
-                                <span class="truncate">{{ resource.name }}</span>
+                                <span class="truncate">{{
+                                    resource.name
+                                }}</span>
                                 <span class="text-[10px] text-gray-400">
                                     {{ resource.status || 'active' }}
                                 </span>
                             </button>
                         </div>
                     </section>
-
                     <section class="rounded-2xl bg-white p-4 shadow-sm">
                         <h2 class="mb-3 text-sm font-black">Bill Preview</h2>
                         <div class="space-y-3">
@@ -502,10 +515,15 @@ function backToOrder() {
                                         <p
                                             class="truncate text-[11px] font-semibold text-gray-400"
                                         >
-                                            {{ group.resource?.name || 'No table' }}
+                                            {{
+                                                group.resource?.name ||
+                                                'No table'
+                                            }}
                                         </p>
                                     </div>
-                                    <p class="text-sm font-black text-[#007882]">
+                                    <p
+                                        class="text-sm font-black text-[#007882]"
+                                    >
                                         {{ money(group.total) }}
                                     </p>
                                 </div>

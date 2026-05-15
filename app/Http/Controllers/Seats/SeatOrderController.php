@@ -471,7 +471,7 @@ class SeatOrderController extends Controller
         $title = match ($jobType) {
             'stock_ticket' => 'Stock Slip',
             'bar_ticket' => 'Bar Slip',
-            'cancel_slip' => 'Cancel Slip',
+            'cancel_slip' => data_get($payload, 'is_return_slip') ? 'Return Slip' : 'Cancel Slip',
             default => 'Kitchen Slip',
         };
 
@@ -489,12 +489,15 @@ class SeatOrderController extends Controller
                 'date' => $printJob->created_at?->format('Y-m-d H:i'),
                 'staff' => data_get($payload, 'order.created_by') ?? data_get($payload, 'cancelled_by'),
                 'isReprint' => (bool) data_get($payload, 'is_reprint', false),
-                'isCancel' => (bool) data_get($payload, 'is_cancel_slip', false) || $jobType === 'cancel_slip',
+                'isCancel' => (bool) data_get($payload, 'is_cancel_slip', false)
+                    || (bool) data_get($payload, 'is_return_slip', false)
+                    || $jobType === 'cancel_slip',
                 'lines' => collect(data_get($payload, 'lines', []))
                     ->map(fn (array $line): array => [
                         'name' => (string) ($line['name'] ?? 'Menu item'),
                         'quantity' => (float) ($line['quantity'] ?? 0),
                         'note' => $line['note'] ?? null,
+                        'status' => $line['status'] ?? null,
                     ])
                     ->values()
                     ->all(),
@@ -508,17 +511,17 @@ class SeatOrderController extends Controller
         $billGroup = trim((string) $request->query('bill_group', ''));
         $orders = $diningSession->orders()
             ->with(['orderLines' => fn ($query) => $query
-                ->where('status', '!=', 'cancelled')
                 ->whereDoesntHave('invoiceLines')
-                ->when($billGroup !== '', fn ($lineQuery) => $lineQuery->where('bill_group', $billGroup))])
-            ->whereNotIn('status', ['draft', 'cancelled'])
+                ->when($billGroup !== '', fn ($lineQuery) => $this->applyBillGroupFilter($lineQuery, $billGroup))])
+            ->where('status', '!=', 'draft')
             ->get();
         $lines = $orders->flatMap->orderLines;
 
         abort_if($lines->isEmpty(), 422, 'Please confirm at least one order before printing invoice.');
 
-        $subtotal = (float) $lines->sum('line_subtotal');
-        $taxAmount = (float) $lines->sum('tax_amount');
+        $payableLines = $lines->reject(fn (OrderLine $line) => in_array($line->status, ['cancelled', 'returned'], true));
+        $subtotal = (float) $payableLines->sum('line_subtotal');
+        $taxAmount = (float) $payableLines->sum('tax_amount');
         $discountAmount = min($subtotal, (float) $request->query('discount_amount', 0));
         $grandTotal = max(0, $subtotal - $discountAmount) + $taxAmount;
 
@@ -545,13 +548,18 @@ class SeatOrderController extends Controller
                 'paidAmount' => 0,
                 'balanceAmount' => $grandTotal,
                 'lines' => $lines
-                    ->map(fn (OrderLine $line): array => [
-                        'name' => $line->menu_name_snapshot,
-                        'quantity' => (float) $line->quantity,
-                        'unitPrice' => (float) $line->unit_price,
-                        'total' => (float) $line->line_total,
-                        'note' => $line->note,
-                    ])
+                    ->map(function (OrderLine $line): array {
+                        $isNoCharge = in_array($line->status, ['cancelled', 'returned'], true);
+
+                        return [
+                            'name' => $line->menu_name_snapshot,
+                            'quantity' => (float) $line->quantity,
+                            'unitPrice' => $isNoCharge ? 0 : (float) $line->unit_price,
+                            'total' => $isNoCharge ? 0 : (float) $line->line_total,
+                            'note' => $line->note,
+                            'status' => $line->status,
+                        ];
+                    })
                     ->values()
                     ->all(),
             ],
@@ -594,13 +602,18 @@ class SeatOrderController extends Controller
                 'changeKhrAmount' => $latestPayment ? (float) $latestPayment->change_khr_amount : null,
                 'paidAt' => $latestPayment?->paid_at?->format('Y-m-d H:i') ?? $invoice->paid_at?->format('Y-m-d H:i'),
                 'lines' => $invoice->lines
-                    ->map(fn ($line): array => [
-                        'name' => $line->menu_name_snapshot,
-                        'quantity' => (float) $line->quantity,
-                        'unitPrice' => (float) $line->unit_price,
-                        'total' => (float) $line->line_total,
-                        'note' => $line->note,
-                    ])
+                    ->map(function ($line): array {
+                        $isNoCharge = in_array($line->status, ['cancelled', 'returned'], true);
+
+                        return [
+                            'name' => $line->menu_name_snapshot,
+                            'quantity' => (float) $line->quantity,
+                            'unitPrice' => $isNoCharge ? 0 : (float) $line->unit_price,
+                            'total' => $isNoCharge ? 0 : (float) $line->line_total,
+                            'note' => $line->note,
+                            'status' => $line->status,
+                        ];
+                    })
                     ->values()
                     ->all(),
             ],
@@ -654,6 +667,81 @@ class SeatOrderController extends Controller
         return back()->with('success', 'Cancel slip has been queued.');
     }
 
+    public function returnPrintedLine(Request $request, DiningSession $diningSession, OrderLine $orderLine)
+    {
+        $this->ensureLineBelongsToSession($diningSession, $orderLine);
+
+        $data = $request->validate([
+            'quantity' => ['nullable', 'numeric', 'min:0.0001'],
+        ]);
+
+        $orderLine->loadMissing(['order.diningSession.diningResource', 'menu.printer', 'invoiceLines']);
+
+        abort_if(
+            $orderLine->order?->status === 'draft',
+            422,
+            'Only printed order lines can be returned here.'
+        );
+
+        abort_if(
+            in_array($orderLine->status, ['cancelled', 'returned'], true),
+            422,
+            'This menu line has already been cancelled or returned.'
+        );
+
+        abort_if(
+            $orderLine->invoiceLines->isNotEmpty(),
+            422,
+            'This menu line cannot be returned after check bill.'
+        );
+
+        abort_if(
+            $diningSession->invoices()->where('status', '!=', 'cancelled')->exists(),
+            422,
+            'Printed menu lines cannot be returned after check bill.'
+        );
+
+        $availableQty = (float) $orderLine->quantity;
+        $returnQty = min($availableQty, (float) ($data['quantity'] ?? $availableQty));
+
+        abort_if($returnQty <= 0 || $returnQty > $availableQty, 422, 'Return quantity is not valid.');
+
+        DB::transaction(function () use ($request, $orderLine, $returnQty, $availableQty) {
+            $returnedLine = $orderLine;
+
+            if ($returnQty < $availableQty) {
+                $orderLine->quantity = $availableQty - $returnQty;
+                $this->calculateLine($orderLine);
+                $orderLine->save();
+
+                $returnedLine = $orderLine->replicate();
+                $returnedLine->quantity = $returnQty;
+                $returnedLine->discount_amount = 0;
+                $returnedLine->tax_amount = 0;
+                $returnedLine->line_subtotal = 0;
+                $returnedLine->line_total = 0;
+                $returnedLine->status = 'returned';
+                $returnedLine->created_at = now();
+                $returnedLine->updated_at = now();
+                $returnedLine->save();
+                $returnedLine->setRelation('order', $orderLine->order);
+                $returnedLine->setRelation('menu', $orderLine->menu);
+            } else {
+                $orderLine->update([
+                    'status' => 'returned',
+                    'discount_amount' => 0,
+                    'tax_amount' => 0,
+                    'line_subtotal' => 0,
+                    'line_total' => 0,
+                ]);
+            }
+
+            $this->createReturnSlipPrintJob($returnedLine, $request);
+        });
+
+        return back()->with('success', 'Return slip has been queued.');
+    }
+
     public function settle(Request $request, DiningSession $diningSession)
     {
         $data = $request->validate([
@@ -680,14 +768,12 @@ class SeatOrderController extends Controller
             $billGroup = trim((string) ($data['bill_group'] ?? ''));
             $orders = $diningSession->orders()
                 ->with(['orderLines' => fn ($query) => $query
-                    ->where('status', '!=', 'cancelled')
                     ->whereDoesntHave('invoiceLines')
-                    ->when($billGroup !== '', fn ($lineQuery) => $lineQuery->where('bill_group', $billGroup))])
-                ->whereNotIn('status', ['draft', 'cancelled'])
+                    ->when($billGroup !== '', fn ($lineQuery) => $this->applyBillGroupFilter($lineQuery, $billGroup))])
+                ->where('status', '!=', 'draft')
                 ->whereHas('orderLines', fn ($query) => $query
-                    ->where('status', '!=', 'cancelled')
                     ->whereDoesntHave('invoiceLines')
-                    ->when($billGroup !== '', fn ($lineQuery) => $lineQuery->where('bill_group', $billGroup)))
+                    ->when($billGroup !== '', fn ($lineQuery) => $this->applyBillGroupFilter($lineQuery, $billGroup)))
                 ->get();
 
             $orderLines = $orders->flatMap->orderLines;
@@ -696,8 +782,9 @@ class SeatOrderController extends Controller
                 abort(422, 'Please confirm at least one order before checking bill.');
             }
 
-            $subtotal = (float) $orderLines->sum('line_subtotal');
-            $taxAmount = (float) $orderLines->sum('tax_amount');
+            $payableLines = $orderLines->reject(fn (OrderLine $line) => in_array($line->status, ['cancelled', 'returned'], true));
+            $subtotal = (float) $payableLines->sum('line_subtotal');
+            $taxAmount = (float) $payableLines->sum('tax_amount');
             $discountAmount = min($subtotal, (float) ($data['discount_amount'] ?? 0));
             $grandTotal = max(0, $subtotal - $discountAmount) + $taxAmount;
             $isPayLater = $data['operation_status'] === 'invoice';
@@ -746,6 +833,7 @@ class SeatOrderController extends Controller
                         'tax_amount' => $line->tax_amount,
                         'line_subtotal' => $line->line_subtotal,
                         'line_total' => $line->line_total,
+                        'status' => $line->status,
                         'note' => $line->note,
                     ]);
                 }
@@ -887,14 +975,18 @@ class SeatOrderController extends Controller
 
     public function closeOrder(Request $request, DiningSession $diningSession)
     {
+        $hasSelectedItems = $diningSession->orders()
+            ->whereHas('orderLines')
+            ->exists();
+
         abort_if(
-            ! in_array($diningSession->status, ['invoiced', 'paid', 'pay_later'], true),
+            $hasSelectedItems && ! in_array($diningSession->status, ['invoiced', 'paid', 'pay_later'], true),
             422,
             'Please create an invoice or receive payment before closing this order.'
         );
 
         abort_if(
-            $this->hasUnbilledConfirmedOrders($diningSession),
+            $hasSelectedItems && $this->hasUnbilledConfirmedOrders($diningSession),
             422,
             'Please check bill for confirmed orders before closing this order.'
         );
@@ -1056,6 +1148,20 @@ class SeatOrderController extends Controller
         $line->line_total = $subtotal + $taxAmount;
     }
 
+    private function applyBillGroupFilter($query, string $billGroup)
+    {
+        if (strcasecmp($billGroup, 'Bill A') === 0) {
+            return $query->where(function ($groupQuery) use ($billGroup) {
+                $groupQuery
+                    ->where('bill_group', $billGroup)
+                    ->orWhereNull('bill_group')
+                    ->orWhere('bill_group', '');
+            });
+        }
+
+        return $query->where('bill_group', $billGroup);
+    }
+
     /**
      * @param  array<int, array{menu_id: int, qty: numeric-string|int|float, note?: string|null}>  $lines
      */
@@ -1106,6 +1212,7 @@ class SeatOrderController extends Controller
                     'discount_amount' => 0,
                     'tax_id' => $menu->tax_id,
                     'tax_rate_snapshot' => 10,
+                    'bill_group' => 'Bill A',
                     'note' => $note ?: null,
                     'status' => 'ordered',
                 ]);
@@ -1276,6 +1383,91 @@ class SeatOrderController extends Controller
                     'quantity' => (float) $orderLine->quantity,
                     'note' => $orderLine->note,
                     'status' => 'cancelled',
+                ]],
+            ],
+        ]);
+    }
+
+    private function createReturnSlipPrintJob(OrderLine $orderLine, Request $request): void
+    {
+        $order = $orderLine->order;
+        $menu = $orderLine->menu;
+        $route = $menu?->print_route ?: 'kitchen';
+
+        if ($route === 'none') {
+            return;
+        }
+
+        $defaultPrinter = Printer::query()
+            ->where('company_id', $order->company_id)
+            ->where('branch_id', $order->branch_id)
+            ->where('printer_role', $route)
+            ->where('is_active', true)
+            ->orderByDesc('is_default')
+            ->orderBy('name')
+            ->first();
+        $printer = $menu?->printer ?: $defaultPrinter;
+
+        $template = PrintTemplate::query()
+            ->where('company_id', $order->company_id)
+            ->where(function ($query) use ($order) {
+                $query->whereNull('branch_id')
+                    ->orWhere('branch_id', $order->branch_id);
+            })
+            ->where('is_active', true)
+            ->where('is_default', true)
+            ->where('template_type', 'cancel_slip')
+            ->first()
+            ?? PrintTemplate::query()
+                ->where('company_id', $order->company_id)
+                ->where(function ($query) use ($order) {
+                    $query->whereNull('branch_id')
+                        ->orWhere('branch_id', $order->branch_id);
+                })
+                ->where('is_active', true)
+                ->where('is_default', true)
+                ->whereIn('template_type', ['kitchen_ticket', 'stock_ticket', 'bar_ticket'])
+                ->first();
+
+        PrintJob::create([
+            'company_id' => $order->company_id,
+            'branch_id' => $order->branch_id,
+            'printer_id' => $printer?->id,
+            'print_template_id' => $template?->id,
+            'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ'),
+            'job_type' => 'cancel_slip',
+            'status' => 'pending',
+            'reference_type' => 'order',
+            'reference_id' => $order->id,
+            'reference_no' => $order->order_no,
+            'payload' => [
+                'route' => $route,
+                'is_return_slip' => true,
+                'returned_at' => now()->toDateTimeString(),
+                'returned_by' => $request->user()?->name,
+                'printer' => $printer ? [
+                    'name' => $printer->name,
+                    'code' => $printer->code,
+                    'connection_type' => $printer->connection_type,
+                    'network_protocol' => $printer->network_protocol,
+                    'ip_address' => $printer->ip_address,
+                    'port' => $printer->port,
+                    'paper_size' => $printer->paper_size,
+                ] : null,
+                'order' => [
+                    'id' => $order->id,
+                    'order_no' => $order->order_no,
+                    'seat' => $order->diningSession?->diningResource?->name,
+                    'sent_at' => now()->toDateTimeString(),
+                    'created_by' => $request->user()?->name,
+                ],
+                'lines' => [[
+                    'order_line_id' => $orderLine->id,
+                    'menu_id' => $orderLine->menu_id,
+                    'name' => $orderLine->menu_name_snapshot,
+                    'quantity' => (float) $orderLine->quantity,
+                    'note' => $orderLine->note,
+                    'status' => 'returned',
                 ]],
             ],
         ]);
@@ -1529,11 +1721,16 @@ class SeatOrderController extends Controller
                                         return [
                                             'id' => $lineId,
                                             'name' => (string) ($line['name'] ?? 'Menu item'),
-                                            'quantity' => (float) ($line['quantity'] ?? 0),
+                                            'quantity' => (float) ($orderLine?->quantity ?? $line['quantity'] ?? 0),
                                             'note' => $line['note'] ?? null,
                                             'status' => $status,
                                             'canCancel' => $lineId > 0
-                                                && $status !== 'cancelled'
+                                                && ! in_array($status, ['cancelled', 'returned'], true)
+                                                && ! $hasInvoice
+                                                && $orderLine
+                                                && $orderLine->invoiceLines->isEmpty(),
+                                            'canReturn' => $lineId > 0
+                                                && ! in_array($status, ['cancelled', 'returned'], true)
                                                 && ! $hasInvoice
                                                 && $orderLine
                                                 && $orderLine->invoiceLines->isEmpty(),
@@ -1554,10 +1751,10 @@ class SeatOrderController extends Controller
     private function formatOrder(Order $order): array
     {
         $lines = $order->orderLines;
-        $activeLines = $lines->where('status', '!=', 'cancelled');
-        $billableLines = $activeLines->filter(fn (OrderLine $line) => $line->invoiceLines->isEmpty());
-        $hasInvoicedLines = $activeLines->contains(fn (OrderLine $line) => $line->invoiceLines->isNotEmpty());
-        $hasBillableLines = $billableLines->isNotEmpty();
+        $uninvoicedLines = $lines->filter(fn (OrderLine $line) => $line->invoiceLines->isEmpty());
+        $billableLines = $uninvoicedLines->reject(fn (OrderLine $line) => in_array($line->status, ['cancelled', 'returned'], true));
+        $hasInvoicedLines = $lines->contains(fn (OrderLine $line) => $line->invoiceLines->isNotEmpty());
+        $hasBillableLines = $uninvoicedLines->isNotEmpty();
         $invoice = ! $hasBillableLines && $hasInvoicedLines
             ? Invoice::query()
                 ->whereHas('lines', fn ($query) => $query->where('order_id', $order->id))
@@ -1577,17 +1774,17 @@ class SeatOrderController extends Controller
             'total_amount' => (float) $billableLines->sum('line_total'),
             'created_at' => $order->created_at?->format('Y-m-d H:i'),
             'lines' => $lines->map(function ($line): array {
-                $isCancelled = $line->status === 'cancelled';
+                $isNoCharge = in_array($line->status, ['cancelled', 'returned'], true);
 
                 return [
                     'id' => $line->id,
                     'menu_id' => $line->menu_id,
                     'menu_name' => $line->menu_name_snapshot,
                     'qty' => (float) $line->quantity,
-                    'unit_price' => $isCancelled ? 0 : (float) $line->unit_price,
-                    'subtotal' => $isCancelled ? 0 : (float) $line->line_subtotal,
-                    'tax_amount' => $isCancelled ? 0 : (float) $line->tax_amount,
-                    'total_amount' => $isCancelled ? 0 : (float) $line->line_total,
+                    'unit_price' => $isNoCharge ? 0 : (float) $line->unit_price,
+                    'subtotal' => $isNoCharge ? 0 : (float) $line->line_subtotal,
+                    'tax_amount' => $isNoCharge ? 0 : (float) $line->tax_amount,
+                    'total_amount' => $isNoCharge ? 0 : (float) $line->line_total,
                     'note' => $line->note,
                     'status' => $line->status,
                     'bill_group' => $line->bill_group ?: 'Bill A',
@@ -1614,8 +1811,9 @@ class SeatOrderController extends Controller
                 'id' => $line->id,
                 'menu_name' => $line->menu_name_snapshot,
                 'qty' => (float) $line->quantity,
-                'total_amount' => (float) $line->line_total,
+                'total_amount' => in_array($line->status, ['cancelled', 'returned'], true) ? 0 : (float) $line->line_total,
                 'note' => $line->note,
+                'status' => $line->status,
             ]),
         ];
     }

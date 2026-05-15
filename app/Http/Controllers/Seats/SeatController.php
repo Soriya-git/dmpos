@@ -40,6 +40,8 @@ class SeatController extends Controller
             ->with([
                 'diningResourceType',
                 'activeSession.customer',
+                'activeSession.invoices',
+                'activeSession.orders.orderLines.invoiceLines',
                 'activeSession.resourceBooking.customer',
             ])
             ->where('branch_id', $activePosSession->branch_id)
@@ -88,6 +90,7 @@ class SeatController extends Controller
                         'opened_at' => $session->opened_at?->format('Y-m-d H:i'),
                         'customer_name' => $customerName,
                         'customer_phone' => $customerPhone,
+                        'can_close_order' => $this->canCloseOrder($session),
                     ] : null,
                 ];
             });
@@ -210,5 +213,28 @@ class SeatController extends Controller
         }
 
         return Customer::query()->find($customerId);
+    }
+
+    private function canCloseOrder(DiningSession $session): bool
+    {
+        $hasSelectedItems = $session->orders->contains(function ($order): bool {
+            return $order->orderLines->isNotEmpty();
+        });
+
+        if (! $hasSelectedItems) {
+            return true;
+        }
+
+        if (! in_array($session->status, ['invoiced', 'paid', 'pay_later'], true)) {
+            return false;
+        }
+
+        return ! $session->orders
+            ->whereNotIn('status', ['draft', 'cancelled'])
+            ->contains(function ($order): bool {
+                return $order->orderLines->contains(function ($line): bool {
+                    return $line->invoiceLines->isEmpty();
+                });
+            });
     }
 }

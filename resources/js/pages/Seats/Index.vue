@@ -39,6 +39,7 @@ const status = ref(props.filters.status ?? '');
 const typeId = ref(props.filters.type_id ?? '');
 const pageRoot = ref<HTMLElement | null>(null);
 const isFullscreen = ref(false);
+const closeProcessingSessionId = ref<number | null>(null);
 
 const checkInForm = useForm({
     guest_count: null as number | null,
@@ -125,16 +126,21 @@ function openOrder(resource: DiningResourceCardItem) {
     router.visit(`/orders/${resource.active_session.id}/menu`);
 }
 
-function editBill(resource: DiningResourceCardItem) {
+function closeOrder(resource: DiningResourceCardItem) {
     if (!resource.active_session) return;
 
-    router.visit(`/orders/${resource.active_session.id}/bill`);
-}
+    closeProcessingSessionId.value = resource.active_session.id;
 
-function payNow(resource: DiningResourceCardItem) {
-    if (!resource.active_session) return;
-
-    router.visit(`/orders/${resource.active_session.id}/payment`);
+    router.post(
+        `/orders/${resource.active_session.id}/close`,
+        {},
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                closeProcessingSessionId.value = null;
+            },
+        },
+    );
 }
 
 async function toggleFullscreen() {
@@ -334,10 +340,13 @@ onBeforeUnmount(() => {
                         :resource="resource"
                         :customers="customers"
                         :processing="checkInForm.processing"
+                        :close-processing="
+                            closeProcessingSessionId ===
+                            resource.active_session?.id
+                        "
                         @check-in="checkIn"
                         @open-order="openOrder"
-                        @edit-bill="editBill"
-                        @pay-now="payNow"
+                        @close-order="closeOrder"
                     />
                 </section>
 

@@ -197,7 +197,12 @@
             @foreach(($document['lines'] ?? []) as $line)
                 <div class="item">
                     <div class="item-main">
-                        <span>{{ $line['name'] ?? 'Menu item' }}</span>
+                        <span>
+                            {{ $line['name'] ?? 'Menu item' }}
+                            @if(!empty($line['status']) && in_array($line['status'], ['cancelled', 'returned'], true))
+                                ({{ strtoupper($line['status']) }})
+                            @endif
+                        </span>
                         <span class="qty">
                             x{{ number_format((float) ($line['quantity'] ?? 0), 2) }}
                             @unless($isSlip)

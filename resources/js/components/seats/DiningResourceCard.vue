@@ -2,11 +2,9 @@
 import {
     CalendarCheck,
     Clock,
-    CreditCard,
     DoorOpen,
     ImageIcon,
     LogIn,
-    ReceiptText,
     Utensils,
     Users,
 } from 'lucide-vue-next';
@@ -22,6 +20,7 @@ type ActiveSession = {
     opened_at?: string | null;
     customer_name?: string | null;
     customer_phone?: string | null;
+    can_close_order?: boolean;
 };
 
 export type DiningResourceCardItem = {
@@ -49,6 +48,7 @@ const props = defineProps<{
     resource: DiningResourceCardItem;
     customers: DiningCustomerOption[];
     processing?: boolean;
+    closeProcessing?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -62,8 +62,7 @@ const emit = defineEmits<{
         },
     ];
     openOrder: [resource: DiningResourceCardItem];
-    editBill: [resource: DiningResourceCardItem];
-    payNow: [resource: DiningResourceCardItem];
+    closeOrder: [resource: DiningResourceCardItem];
 }>();
 
 const guestCount = ref<number | null>(props.resource.capacity || null);
@@ -262,34 +261,27 @@ function checkIn() {
                     </p>
                 </div>
 
-                <div class="mt-3 flex gap-2">
+                <div class="mt-3 grid grid-cols-2 gap-2">
                     <Button
                         type="button"
-                        variant="secondary"
-                        class="h-8 flex-1 rounded-lg bg-gray-100 px-2 text-[11px] font-bold text-[#2A4858] hover:bg-gray-200"
-                        @click="emit('editBill', resource)"
+                        class="h-8 rounded-lg bg-[#23AA8F] px-2 text-[11px] font-bold text-white shadow-sm hover:bg-[#007882] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-white"
+                        :disabled="
+                            !resource.active_session?.can_close_order ||
+                            closeProcessing
+                        "
+                        @click="emit('closeOrder', resource)"
                     >
-                        <ReceiptText class="h-4 w-4" />
-                        EDIT BILL
+                        CLOSE ORDER
                     </Button>
                     <Button
                         type="button"
-                        class="h-8 flex-1 rounded-lg bg-[#23AA8F] px-2 text-[11px] font-bold text-white shadow-sm hover:bg-[#007882]"
-                        @click="emit('payNow', resource)"
+                        variant="outline"
+                        class="h-8 rounded-lg border-gray-200 text-[11px] font-bold text-[#2A4858] hover:bg-gray-50"
+                        @click="emit('openOrder', resource)"
                     >
-                        <CreditCard class="h-4 w-4" />
-                        PAY NOW
+                        VIEW
                     </Button>
                 </div>
-
-                <Button
-                    type="button"
-                    variant="outline"
-                    class="mt-2 h-8 w-full rounded-lg border-gray-200 text-[11px] font-bold text-[#2A4858] hover:bg-gray-50"
-                    @click="emit('openOrder', resource)"
-                >
-                    VIEW
-                </Button>
             </template>
 
             <template v-else-if="isBooked">
