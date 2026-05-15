@@ -35,10 +35,28 @@ class Item extends Model
         return $this->belongsTo(Unit::class);
     }
 
+    /** @return BelongsTo<Printer, $this> */
+    public function printer(): BelongsTo
+    {
+        return $this->belongsTo(Printer::class);
+    }
+
     /** @return HasMany<BomLine, $this> */
     public function bomLines(): HasMany
     {
-        return $this->hasMany(BomLine::class);
+        return $this->hasMany(BomLine::class, 'component_item_id');
+    }
+
+    /** @return HasMany<Menu, $this> */
+    public function menus(): HasMany
+    {
+        return $this->hasMany(Menu::class);
+    }
+
+    /** @return HasMany<BomHeader, $this> */
+    public function outputBomHeaders(): HasMany
+    {
+        return $this->hasMany(BomHeader::class, 'output_item_id');
     }
 
     /** @return HasMany<ItemUnitConversion, $this> */

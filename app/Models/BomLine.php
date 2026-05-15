@@ -19,9 +19,14 @@ class BomLine extends Model
         return $this->belongsTo(BomHeader::class);
     }
 
+    public function componentItem()
+    {
+        return $this->belongsTo(Item::class, 'component_item_id');
+    }
+
     public function item()
     {
-        return $this->belongsTo(Item::class);
+        return $this->componentItem();
     }
 
     public function unit()

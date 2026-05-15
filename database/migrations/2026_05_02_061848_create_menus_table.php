@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('menu_category_id')->nullable()->constrained()->nullOnDelete();
+            $table->unsignedBigInteger('item_id')->nullable();
+            $table->unsignedBigInteger('bom_header_id')->nullable();
 
             $table->string('name');
             $table->string('code')->nullable();
@@ -42,6 +44,8 @@ return new class extends Migration
             $table->index(['company_id', 'branch_id'], 'menus_company_branch_idx');
             $table->index(['menu_type'], 'menus_type_idx');
             $table->index(['is_available'], 'menus_available_idx');
+            $table->index(['item_id'], 'menus_item_idx');
+            $table->index(['bom_header_id'], 'menus_bom_header_idx');
         });
     }
 

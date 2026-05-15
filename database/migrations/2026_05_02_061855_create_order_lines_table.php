@@ -30,6 +30,8 @@ return new class extends Migration
 
             $table->decimal('line_subtotal', 12, 2)->default(0);
             $table->decimal('line_total', 12, 2)->default(0);
+            $table->string('bill_group')->nullable();
+            $table->foreignId('assigned_dining_resource_id')->nullable()->constrained('dining_resources')->nullOnDelete();
 
             $table->enum('status', [
                 'ordered',
@@ -45,6 +47,7 @@ return new class extends Migration
 
             $table->index(['order_id', 'status'], 'order_lines_order_status_idx');
             $table->index(['menu_id'], 'order_lines_menu_idx');
+            $table->index(['bill_group'], 'order_lines_bill_group_idx');
         });
     }
 

@@ -43,19 +43,38 @@ class BomSeeder extends Seeder
             return;
         }
 
+        $friedRiceOutput = Item::firstOrCreate(
+            [
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
+                'code' => 'FP-FRIED-RICE',
+            ],
+            [
+                'unit_id' => $pcs->id,
+                'name' => 'Fried Rice',
+                'item_type' => 'finished_product',
+                'cost' => 0.35,
+            ],
+        );
+
         $bom = BomHeader::create([
             'company_id' => $company->id,
             'branch_id' => $branch->id,
-            'menu_id' => $friedRice->id,
+            'output_item_id' => $friedRiceOutput->id,
             'bom_no' => DocumentNumber::make(BomHeader::class, 'bom_no', 'BM'),
             'name' => 'Fried Rice Standard BOM',
             'output_quantity' => 1,
             'status' => 'active',
         ]);
 
+        $friedRice->update([
+            'item_id' => $friedRiceOutput->id,
+            'bom_header_id' => $bom->id,
+        ]);
+
         BomLine::create([
             'bom_header_id' => $bom->id,
-            'item_id' => $rice->id,
+            'component_item_id' => $rice->id,
             'unit_id' => $kg->id,
             'quantity' => 0.25,
             'wastage_percent' => 2,
@@ -64,7 +83,7 @@ class BomSeeder extends Seeder
 
         BomLine::create([
             'bom_header_id' => $bom->id,
-            'item_id' => $egg->id,
+            'component_item_id' => $egg->id,
             'unit_id' => $pcs->id,
             'quantity' => 1,
             'wastage_percent' => 0,
@@ -75,14 +94,33 @@ class BomSeeder extends Seeder
             return;
         }
 
+        $coffeeOutput = Item::firstOrCreate(
+            [
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
+                'code' => 'FP-HOT-COFFEE',
+            ],
+            [
+                'unit_id' => $pcs->id,
+                'name' => 'Hot Coffee',
+                'item_type' => 'finished_product',
+                'cost' => 0.32,
+            ],
+        );
+
         $coffeeBom = BomHeader::create([
             'company_id' => $company->id,
             'branch_id' => $branch->id,
-            'menu_id' => $hotCoffee->id,
+            'output_item_id' => $coffeeOutput->id,
             'bom_no' => DocumentNumber::make(BomHeader::class, 'bom_no', 'BM'),
             'name' => 'Hot Coffee Standard BOM',
             'output_quantity' => 1,
             'status' => 'active',
+        ]);
+
+        $hotCoffee->update([
+            'item_id' => $coffeeOutput->id,
+            'bom_header_id' => $coffeeBom->id,
         ]);
 
         foreach ([
@@ -93,7 +131,7 @@ class BomSeeder extends Seeder
         ] as [$item, $unit, $quantity, $wastage, $cost, $note]) {
             BomLine::create([
                 'bom_header_id' => $coffeeBom->id,
-                'item_id' => $item->id,
+                'component_item_id' => $item->id,
                 'unit_id' => $unit->id,
                 'quantity' => $quantity,
                 'wastage_percent' => $wastage,

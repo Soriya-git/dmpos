@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('menu_id')->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('output_item_id')->nullable();
 
             $table->string('bom_no')->unique();
             $table->string('name');
@@ -35,7 +35,7 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->timestamps();
 
-            $table->index(['menu_id', 'status'], 'bom_menu_status_idx');
+            $table->index(['output_item_id', 'status'], 'bom_output_item_status_idx');
         });
     }
 

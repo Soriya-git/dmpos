@@ -61,6 +61,7 @@ class CompanySeeder extends Seeder
                     'name' => $branchData['name'],
                     'code' => $branchData['code'],
                     'phone' => '011000'.str_pad((string) ($company->id * 10 + $branchIndex + 1), 4, '0', STR_PAD_LEFT),
+                    'vat_number' => 'VAT'.str_pad((string) ($company->id * 100 + $branchIndex + 1), 7, '0', STR_PAD_LEFT),
                     'address' => $branchData['name'].' Address',
                 ]);
 

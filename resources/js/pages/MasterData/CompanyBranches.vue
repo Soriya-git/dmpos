@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import { Building2, GitBranch, Plus, Save, Search, X } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import ApprovalActionMenu from '@/components/master-data/ApprovalActionMenu.vue';
 import MasterDataTable from '@/components/master-data/MasterDataTable.vue';
 import { Button } from '@/components/ui/button';
@@ -41,8 +41,14 @@ type BranchRecord = {
     code: string;
     name: string;
     company: string;
+    companyId: number;
     phone: string | null;
+    vatNumber: string | null;
     address: string | null;
+    logo: string | null;
+    logoUrl: string | null;
+    paymentQrcode: string | null;
+    paymentQrcodeUrl: string | null;
     status: ApprovalStatus;
 };
 
@@ -66,6 +72,21 @@ const selectedRecord = ref<PanelRecord | null>(null);
 const companies = ref<CompanyRecord[]>([...props.companies]);
 const branches = ref<BranchRecord[]>([...props.branches]);
 
+const branchForm = useForm({
+    name: '',
+    code: '',
+    company_id: '',
+    phone: '',
+    vat_number: '',
+    address: '',
+    is_active: true,
+    logo: null as File | null,
+    payment_qrcode: null as File | null,
+});
+
+const logoPreview = ref<string | null>(null);
+const paymentQrcodePreview = ref<string | null>(null);
+
 const tabs: {
     key: OrganizationView;
     label: string;
@@ -78,6 +99,20 @@ const tabs: {
 const normalizedSearch = computed(() => search.value.trim().toLowerCase());
 const filteredCompanies = computed(() => filterRows(companies.value));
 const filteredBranches = computed(() => filterRows(branches.value));
+
+watch(
+    () => props.companies,
+    (nextCompanies) => {
+        companies.value = [...nextCompanies];
+    },
+);
+
+watch(
+    () => props.branches,
+    (nextBranches) => {
+        branches.value = [...nextBranches];
+    },
+);
 
 const panelTitle = computed(() =>
     selectedRecord.value
@@ -114,6 +149,7 @@ function openPanel(
 ) {
     panelKind.value = kind;
     selectedRecord.value = record;
+    resetForms(record);
     panelOpen.value = true;
 }
 
@@ -146,6 +182,83 @@ function setCompanyStatus(record: CompanyRecord, status: ApprovalStatus) {
 
 function setBranchStatus(record: BranchRecord, status: ApprovalStatus) {
     record.status = status;
+}
+
+function resetForms(record: PanelRecord | null) {
+    branchForm.reset();
+    branchForm.clearErrors();
+    logoPreview.value = null;
+    paymentQrcodePreview.value = null;
+
+    if (panelKind.value !== 'branches' || !record || !('companyId' in record)) {
+        return;
+    }
+
+    branchForm.name = record.name;
+    branchForm.code = record.code;
+    branchForm.company_id = String(record.companyId);
+    branchForm.phone = record.phone ?? '';
+    branchForm.vat_number = record.vatNumber ?? '';
+    branchForm.address = record.address ?? '';
+    branchForm.is_active = record.status !== 'cancelled';
+    logoPreview.value = record.logoUrl;
+    paymentQrcodePreview.value = record.paymentQrcodeUrl;
+}
+
+function selectBranchImage(
+    event: Event,
+    field: 'logo' | 'payment_qrcode',
+) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+
+    branchForm[field] = file;
+
+    if (!file) {
+        if (field === 'logo') {
+            logoPreview.value =
+                selectedRecord.value && 'logoUrl' in selectedRecord.value
+                    ? selectedRecord.value.logoUrl
+                    : null;
+        } else {
+            paymentQrcodePreview.value =
+                selectedRecord.value &&
+                'paymentQrcodeUrl' in selectedRecord.value
+                    ? selectedRecord.value.paymentQrcodeUrl
+                    : null;
+        }
+
+        return;
+    }
+
+    const preview = URL.createObjectURL(file);
+
+    if (field === 'logo') {
+        logoPreview.value = preview;
+    } else {
+        paymentQrcodePreview.value = preview;
+    }
+}
+
+function savePanel() {
+    if (
+        panelKind.value !== 'branches' ||
+        !selectedRecord.value ||
+        !('companyId' in selectedRecord.value)
+    ) {
+        closePanel();
+
+        return;
+    }
+
+    branchForm.post(
+        `/master-data/company-branches/branches/${selectedRecord.value.id}`,
+        {
+            forceFormData: true,
+            preserveScroll: true,
+            onSuccess: closePanel,
+        },
+    );
 }
 </script>
 
@@ -429,6 +542,13 @@ function setBranchStatus(record: BranchRecord, status: ApprovalStatus) {
                                 Code / Identifier
                             </span>
                             <Input
+                                v-if="panelKind === 'branches'"
+                                v-model="branchForm.code"
+                                class="mt-1 font-mono text-sm focus-visible:ring-[#007882]"
+                                placeholder="Ex: DRG"
+                            />
+                            <Input
+                                v-else
                                 :model-value="selectedRecord?.code ?? ''"
                                 class="mt-1 font-mono text-sm focus-visible:ring-[#007882]"
                                 placeholder="Ex: DRG"
@@ -442,6 +562,13 @@ function setBranchStatus(record: BranchRecord, status: ApprovalStatus) {
                                 Name / Description
                             </span>
                             <Input
+                                v-if="panelKind === 'branches'"
+                                v-model="branchForm.name"
+                                class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                placeholder="Enter name"
+                            />
+                            <Input
+                                v-else
                                 :model-value="selectedRecord?.name ?? ''"
                                 class="mt-1 text-sm focus-visible:ring-[#007882]"
                                 placeholder="Enter name"
@@ -461,11 +588,13 @@ function setBranchStatus(record: BranchRecord, status: ApprovalStatus) {
                                     Company
                                 </span>
                                 <select
+                                    v-model="branchForm.company_id"
                                     class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                                 >
                                     <option
                                         v-for="company in companies"
                                         :key="company.id"
+                                        :value="company.id"
                                     >
                                         {{ company.name }}
                                     </option>
@@ -498,9 +627,31 @@ function setBranchStatus(record: BranchRecord, status: ApprovalStatus) {
                                     Phone
                                 </span>
                                 <Input
+                                    v-if="panelKind === 'branches'"
+                                    v-model="branchForm.phone"
+                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                    placeholder="+66 ..."
+                                />
+                                <Input
+                                    v-else
                                     :model-value="selectedRecord?.phone ?? ''"
                                     class="mt-1 text-sm focus-visible:ring-[#007882]"
                                     placeholder="+66 ..."
+                                />
+                            </label>
+                            <label
+                                v-if="panelKind === 'branches'"
+                                class="block"
+                            >
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    VAT Number
+                                </span>
+                                <Input
+                                    v-model="branchForm.vat_number"
+                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                    placeholder="VAT number"
                                 />
                             </label>
                             <label class="block">
@@ -510,10 +661,99 @@ function setBranchStatus(record: BranchRecord, status: ApprovalStatus) {
                                     Address
                                 </span>
                                 <Input
+                                    v-if="panelKind === 'branches'"
+                                    v-model="branchForm.address"
+                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                    placeholder="Address"
+                                />
+                                <Input
+                                    v-else
                                     :model-value="selectedRecord?.address ?? ''"
                                     class="mt-1 text-sm focus-visible:ring-[#007882]"
                                     placeholder="Address"
                                 />
+                            </label>
+                        </div>
+
+                        <div
+                            v-if="panelKind === 'branches'"
+                            class="grid gap-3 border-t border-slate-200 pt-3 sm:grid-cols-2"
+                        >
+                            <label class="block">
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Slip Logo
+                                </span>
+                                <div
+                                    class="mt-1 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-lg border border-dashed border-slate-200 bg-white"
+                                >
+                                    <img
+                                        v-if="logoPreview"
+                                        :src="logoPreview"
+                                        alt="Branch logo preview"
+                                        class="h-full w-full object-contain p-2"
+                                    />
+                                    <span
+                                        v-else
+                                        class="px-3 text-center text-[10px] font-bold text-slate-400 uppercase"
+                                    >
+                                        No logo
+                                    </span>
+                                </div>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    class="mt-2 block w-full text-[11px] text-slate-500 file:mr-2 file:rounded-md file:border-0 file:bg-[#007882] file:px-3 file:py-1.5 file:text-[10px] file:font-bold file:text-white"
+                                    @change="selectBranchImage($event, 'logo')"
+                                />
+                                <p
+                                    v-if="branchForm.errors.logo"
+                                    class="mt-1 text-[10px] font-bold text-red-500"
+                                >
+                                    {{ branchForm.errors.logo }}
+                                </p>
+                            </label>
+
+                            <label class="block">
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Payment QR Code
+                                </span>
+                                <div
+                                    class="mt-1 flex aspect-square items-center justify-center overflow-hidden rounded-lg border border-dashed border-slate-200 bg-white"
+                                >
+                                    <img
+                                        v-if="paymentQrcodePreview"
+                                        :src="paymentQrcodePreview"
+                                        alt="Payment QR code preview"
+                                        class="h-full w-full object-contain p-2"
+                                    />
+                                    <span
+                                        v-else
+                                        class="px-3 text-center text-[10px] font-bold text-slate-400 uppercase"
+                                    >
+                                        No QR code
+                                    </span>
+                                </div>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    class="mt-2 block w-full text-[11px] text-slate-500 file:mr-2 file:rounded-md file:border-0 file:bg-[#007882] file:px-3 file:py-1.5 file:text-[10px] file:font-bold file:text-white"
+                                    @change="
+                                        selectBranchImage(
+                                            $event,
+                                            'payment_qrcode',
+                                        )
+                                    "
+                                />
+                                <p
+                                    v-if="branchForm.errors.payment_qrcode"
+                                    class="mt-1 text-[10px] font-bold text-red-500"
+                                >
+                                    {{ branchForm.errors.payment_qrcode }}
+                                </p>
                             </label>
                         </div>
 
@@ -524,6 +764,15 @@ function setBranchStatus(record: BranchRecord, status: ApprovalStatus) {
                                 Status
                             </span>
                             <select
+                                v-if="panelKind === 'branches'"
+                                v-model="branchForm.is_active"
+                                class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                            >
+                                <option :value="true">Active</option>
+                                <option :value="false">Inactive</option>
+                            </select>
+                            <select
+                                v-else
                                 class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                             >
                                 <option>Active</option>
@@ -543,7 +792,8 @@ function setBranchStatus(record: BranchRecord, status: ApprovalStatus) {
                     </Button>
                     <Button
                         class="flex-1 rounded-lg bg-[#007882] text-xs font-bold text-white hover:bg-[#006871]"
-                        @click="closePanel"
+                        :disabled="branchForm.processing"
+                        @click="savePanel"
                     >
                         <Save class="size-4" />
                         Save Changes

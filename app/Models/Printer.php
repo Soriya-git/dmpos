@@ -28,4 +28,14 @@ class Printer extends Model
     {
         return $this->hasMany(PrintJob::class);
     }
+
+    public function menus()
+    {
+        return $this->hasMany(Menu::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
 }

@@ -37,57 +37,11 @@ export type UnitRecord = {
 
 export type PanelKind = MasterDataView;
 
-const initialItems: ItemRecord[] = [
-    {
-        id: 1,
-        code: 'MILK-001',
-        name: 'Fresh Dairy Milk',
-        category: 'Dairy',
-        primaryUnit: 'Liter (L)',
-        status: 'pending',
-    },
-    {
-        id: 2,
-        code: 'BEAN-ESP',
-        name: 'Espresso Blend Beans',
-        category: 'Coffee',
-        primaryUnit: 'Kilogram (KG)',
-        status: 'approved',
-    },
-];
-
-const initialBom: BomRecord[] = [
-    {
-        id: 1,
-        code: 'REC-001',
-        targetProduct: 'Hot Caffe Latte',
-        components: 'Milk, Espresso (18g)',
-        status: 'pending',
-    },
-];
-
-const initialUnits: UnitRecord[] = [
-    {
-        id: 1,
-        code: 'BTL',
-        name: 'Bottle',
-        category: 'Unit',
-        type: 'Reference Unit',
-        ratio: '1.00000',
-        status: 'approved',
-    },
-    {
-        id: 2,
-        code: 'CS12',
-        name: 'Case (12 bottles)',
-        category: 'Unit',
-        type: 'Bigger than Ref.',
-        ratio: '12.00000',
-        status: 'pending',
-    },
-];
-
-export function useItemsBomMaster() {
+export function useItemsBomMaster(
+    initialItems: ItemRecord[] = [],
+    initialBom: BomRecord[] = [],
+    initialUnits: UnitRecord[] = [],
+) {
     const activeView = ref<MasterDataView>('items');
     const search = ref('');
     const panelOpen = ref(false);

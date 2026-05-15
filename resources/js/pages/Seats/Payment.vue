@@ -37,6 +37,7 @@ const props = defineProps<{
     discountAmount: number;
     taxAmount: number;
     finalAmount: number;
+    billName?: string | null;
     exchangeRate?: number;
     allowPayLater?: boolean;
     paymentMethods?: PaymentMethodOption[];
@@ -44,6 +45,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     close: [];
+    printInvoice: [];
     confirm: [
         payload: {
             changeKhrAmount: number;
@@ -197,32 +199,43 @@ const finalChangeUsd = computed(() => {
     if (selectedMethod.value.type !== 'cash') return 0;
 
     if (!hasManualChangeSplit.value) {
-        return selectedMethod.value.currency === 'USD' ? changeDueUsd.value : 0;
+        return selectedMethod.value.currency === 'USD'
+            ? Math.floor(changeDueUsd.value)
+            : 0;
     }
 
     if (activeChangeCurrency.value === 'KHR') {
-        const roundedKhrChange = roundKhrChange(changeKhrNumeric.value);
+        const roundedKhrChange = roundDownKhrChange(changeKhrNumeric.value);
 
-        return Math.max(
-            0,
-            changeDueUsd.value - roundedKhrChange / exchangeRate.value,
+        return Math.floor(
+            Math.max(
+                0,
+                changeDueUsd.value - roundedKhrChange / exchangeRate.value,
+            ),
         );
     }
 
-    return Math.min(changeDueUsd.value, Math.max(0, changeUsdNumeric.value));
+    return Math.min(
+        Math.floor(changeDueUsd.value),
+        Math.max(0, Math.floor(changeUsdNumeric.value)),
+    );
 });
 
 const finalChangeKhr = computed(() => {
     if (selectedMethod.value.type !== 'cash') return 0;
 
     if (!hasManualChangeSplit.value) {
-        return selectedMethod.value.currency === 'KHR'
-            ? roundKhrChange(changeDueKhr.value)
-            : 0;
+        const residualKhr =
+            selectedMethod.value.currency === 'USD'
+                ? (changeDueUsd.value - finalChangeUsd.value) *
+                  exchangeRate.value
+                : changeDueKhr.value;
+
+        return roundDownKhrChange(residualKhr);
     }
 
     if (activeChangeCurrency.value === 'USD') {
-        return roundKhrChange(
+        return roundDownKhrChange(
             Math.max(
                 0,
                 changeDueKhr.value -
@@ -231,7 +244,7 @@ const finalChangeKhr = computed(() => {
         );
     }
 
-    return roundKhrChange(
+    return roundDownKhrChange(
         Math.min(changeDueKhr.value, Math.max(0, changeKhrNumeric.value)),
     );
 });
@@ -241,12 +254,12 @@ const displayedChangeUsd = computed(() => {
         !hasManualChangeSplit.value &&
         selectedMethod.value.currency === 'USD'
     ) {
-        return finalChangeUsd.value > 0 ? finalChangeUsd.value.toFixed(2) : '';
+        return finalChangeUsd.value > 0 ? String(finalChangeUsd.value) : '';
     }
 
     if (activeChangeCurrency.value === 'USD') return changeUsdAmount.value;
 
-    return finalChangeUsd.value > 0 ? finalChangeUsd.value.toFixed(2) : '';
+    return finalChangeUsd.value > 0 ? String(finalChangeUsd.value) : '';
 });
 
 const displayedChangeKhr = computed(() => {
@@ -311,12 +324,12 @@ function displayCurrencyAmount(value: number) {
         : Math.round(Number(value)).toLocaleString();
 }
 
-function roundKhrChange(value: number) {
+function roundDownKhrChange(value: number) {
     const amount = Number(value || 0);
 
     if (amount <= 0) return 0;
 
-    return Math.ceil(amount / 100) * 100;
+    return Math.floor(amount / 100) * 100;
 }
 
 function selectMethod(method: PaymentMethod) {
@@ -343,12 +356,12 @@ function clearChangeAmounts() {
 
 function updateChangeUsd(value: string) {
     activeChangeCurrency.value = 'USD';
-    changeUsdAmount.value = value;
+    changeUsdAmount.value = String(Math.max(0, Math.floor(Number(value || 0))));
 }
 
 function updateChangeKhr(value: string) {
     activeChangeCurrency.value = 'KHR';
-    changeKhrAmount.value = value;
+    changeKhrAmount.value = String(roundDownKhrChange(Number(value || 0)));
 }
 
 function confirmPayment() {
@@ -357,8 +370,8 @@ function confirmPayment() {
     processing.value = true;
 
     emit('confirm', {
-        changeKhrAmount: Math.round(finalChangeKhr.value),
-        changeUsdAmount: Number(finalChangeUsd.value.toFixed(2)),
+        changeKhrAmount: Math.floor(finalChangeKhr.value),
+        changeUsdAmount: Math.floor(finalChangeUsd.value),
         method: selectedMethod.value.id,
         paymentMethodId: selectedMethod.value.paymentMethodId ?? null,
         currency: selectedMethod.value.currency,
@@ -388,6 +401,9 @@ function confirmPayment() {
                         </h2>
                         <p class="mt-0.5 text-xs font-medium text-gray-400">
                             Please select a payment method to continue
+                            <template v-if="billName">
+                                for {{ billName }}
+                            </template>
                         </p>
                     </div>
 
@@ -573,9 +589,9 @@ function confirmPayment() {
                                 <input
                                     :value="displayedChangeUsd"
                                     type="number"
-                                    inputmode="decimal"
+                                    inputmode="numeric"
                                     min="0"
-                                    step="0.01"
+                                    step="1"
                                     class="h-9 w-full rounded-lg border border-gray-100 bg-gray-50 px-2 text-right text-sm font-black text-[#2A4858] outline-none focus:border-[#23AA8F]/60"
                                     @input="
                                         updateChangeUsd(
@@ -686,6 +702,14 @@ function confirmPayment() {
                 </div>
 
                 <div class="mt-auto space-y-3">
+                    <button
+                        type="button"
+                        class="w-full rounded-xl border-2 border-[#23AA8F]/30 bg-white py-3 text-xs font-black tracking-widest text-[#007882] uppercase transition-all hover:bg-[#23AA8F]/10"
+                        @click="emit('printInvoice')"
+                    >
+                        Print Invoice
+                    </button>
+
                     <button
                         type="button"
                         class="w-full rounded-xl py-3 text-xs font-black tracking-widest text-white uppercase shadow-lg transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"

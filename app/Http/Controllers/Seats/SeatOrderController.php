@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Seats;
 
 use App\Http\Controllers\Controller;
+use App\Models\Branch;
 use App\Models\Customer;
+use App\Models\DiningResource;
 use App\Models\DiningSession;
 use App\Models\ExchangeRate;
 use App\Models\Invoice;
@@ -16,9 +18,13 @@ use App\Models\OrderLine;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Models\PosSession;
+use App\Models\Printer;
+use App\Models\PrintJob;
+use App\Models\PrintTemplate;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class SeatOrderController extends Controller
@@ -96,7 +102,7 @@ class SeatOrderController extends Controller
             ->get(['id', 'name']);
 
         $cartOrder = $this->getCartOrder($diningSession);
-        $cartOrder->load(['orderLines.menu']);
+        $cartOrder->load(['orderLines.menu', 'orderLines.invoiceLines']);
         $customer = $this->customerFor($diningSession->customer_id);
         $customerName = 'Walk-in / General Customer';
         $customerPhone = null;
@@ -137,11 +143,12 @@ class SeatOrderController extends Controller
             'exchangeRate' => $this->latestExchangeRate($activePosSession),
             'paymentMethods' => $this->paymentMethodsFor($activePosSession),
             'historyOrders' => $diningSession->orders()
-                ->with(['orderLines.menu'])
+                ->with(['orderLines.menu', 'orderLines.invoiceLines'])
                 ->where('id', '!=', $cartOrder->id)
                 ->latest()
                 ->get()
                 ->map(fn ($order) => $this->formatOrder($order)),
+            'printOrders' => $this->printOrdersFor($diningSession),
             'invoices' => $diningSession->invoices()
                 ->with(['lines'])
                 ->where('status', '!=', 'cancelled')
@@ -202,6 +209,8 @@ class SeatOrderController extends Controller
                 'discount_amount' => 0,
                 'tax_id' => $menu->tax_id,
                 'tax_rate_snapshot' => $taxRate,
+                'bill_group' => 'Bill A',
+                'assigned_dining_resource_id' => $diningSession->dining_resource_id,
                 'note' => $data['note'] ?? null,
                 'status' => 'ordered',
             ]);
@@ -211,6 +220,131 @@ class SeatOrderController extends Controller
         });
 
         return back();
+    }
+
+    public function manage(Request $request, DiningSession $diningSession)
+    {
+        $activePosSession = $this->activePosSession($request);
+
+        if (! $activePosSession) {
+            return redirect()
+                ->route('pos-sessions.index')
+                ->with('error', 'Please open POS session first.');
+        }
+
+        $diningSession->load(['diningResource', 'orders.orderLines']);
+
+        $lines = $diningSession->orders()
+            ->with(['orderLines' => fn ($query) => $query
+                ->where('status', '!=', 'cancelled')
+                ->whereDoesntHave('invoiceLines')
+                ->orderBy('id')])
+            ->whereNotIn('status', ['draft', 'cancelled'])
+            ->latest()
+            ->get()
+            ->flatMap(fn (Order $order) => $order->orderLines->map(fn (OrderLine $line): array => [
+                'id' => $line->id,
+                'orderId' => $order->id,
+                'orderNo' => $order->order_no,
+                'menuName' => $line->menu_name_snapshot,
+                'quantity' => (float) $line->quantity,
+                'unitPrice' => (float) $line->unit_price,
+                'totalAmount' => (float) $line->line_total,
+                'note' => $line->note,
+                'status' => $line->status,
+                'billGroup' => $line->bill_group ?: 'Bill A',
+                'diningResourceId' => $line->assigned_dining_resource_id ?: $diningSession->dining_resource_id,
+            ]))
+            ->values();
+
+        $resources = DiningResource::query()
+            ->where('branch_id', $activePosSession->branch_id)
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get(['id', 'name', 'code', 'status'])
+            ->map(fn (DiningResource $resource): array => [
+                'id' => $resource->id,
+                'name' => $resource->name,
+                'code' => $resource->code,
+                'status' => $resource->status,
+            ]);
+
+        return Inertia::render('Seats/ManageOrders', [
+            'diningSession' => [
+                'id' => $diningSession->id,
+                'sessionNo' => $diningSession->session_no,
+                'seatName' => $diningSession->diningResource?->name,
+                'diningResourceId' => $diningSession->dining_resource_id,
+            ],
+            'lines' => $lines,
+            'resources' => $resources,
+        ]);
+    }
+
+    public function saveManage(Request $request, DiningSession $diningSession)
+    {
+        $activePosSession = $this->activePosSession($request);
+
+        abort_if(! $activePosSession, 422, 'Please open POS session first.');
+        abort_if($diningSession->invoices()->where('status', '!=', 'cancelled')->exists(), 422, 'Orders cannot be managed after check bill.');
+
+        $data = $request->validate([
+            'assignments' => ['required', 'array', 'min:1'],
+            'assignments.*.line_id' => ['required', 'integer', 'exists:order_lines,id'],
+            'assignments.*.bill_group' => ['required', 'string', 'max:50'],
+            'assignments.*.dining_resource_id' => ['required', 'integer', 'exists:dining_resources,id'],
+        ]);
+
+        $sourceSessionClosed = DB::transaction(function () use ($data, $diningSession, $activePosSession, $request): bool {
+            $resources = DiningResource::query()
+                ->where('branch_id', $activePosSession->branch_id)
+                ->whereIn('id', collect($data['assignments'])->pluck('dining_resource_id')->unique())
+                ->get()
+                ->keyBy('id');
+
+            foreach ($data['assignments'] as $assignment) {
+                $line = OrderLine::query()
+                    ->with(['order', 'invoiceLines'])
+                    ->lockForUpdate()
+                    ->findOrFail($assignment['line_id']);
+
+                abort_if(
+                    ! $line->order || (int) $line->order->dining_session_id !== (int) $diningSession->id,
+                    403,
+                    'This order line does not belong to this dining session.'
+                );
+                abort_if($line->invoiceLines->isNotEmpty(), 422, 'Checked bill lines cannot be moved.');
+                abort_if($line->status === 'cancelled', 422, 'Cancelled lines cannot be moved.');
+
+                $targetResourceId = (int) $assignment['dining_resource_id'];
+                $targetResource = $resources->get($targetResourceId);
+
+                abort_if(! $targetResource, 422, 'Selected table is not available for this branch.');
+
+                $targetSession = $targetResourceId === (int) $diningSession->dining_resource_id
+                    ? $diningSession
+                    : $this->openSessionForResource($targetResource, $diningSession, $activePosSession, $request);
+                $targetOrder = $this->openManagedOrderForSession($targetSession, $line->order);
+
+                $line->update([
+                    'order_id' => $targetOrder->id,
+                    'bill_group' => trim((string) $assignment['bill_group']) ?: 'Bill A',
+                    'assigned_dining_resource_id' => $targetResourceId,
+                ]);
+            }
+
+            return $this->syncResourceStatusesAfterManage($diningSession);
+        });
+
+        if ($sourceSessionClosed) {
+            return redirect()
+                ->route('seats.index')
+                ->with('success', 'Order assignments have been saved and the original table is now available.');
+        }
+
+        return redirect()
+            ->route('seats.orders.show', $diningSession)
+            ->with('success', 'Order assignments have been saved.');
     }
 
     public function updateItem(Request $request, DiningSession $diningSession, OrderLine $orderLine)
@@ -261,7 +395,7 @@ class SeatOrderController extends Controller
             'lines.*.note' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        DB::transaction(function () use ($diningSession, $data) {
+        DB::transaction(function () use ($diningSession, $data, $request) {
             $order = $this->getCartOrder($diningSession);
 
             if (isset($data['lines']) && is_array($data['lines'])) {
@@ -280,9 +414,244 @@ class SeatOrderController extends Controller
                 'status' => 'sent_to_kitchen',
                 'sent_to_kitchen_at' => now(),
             ]);
+
+            $order->load(['orderLines.menu.printer', 'diningSession.diningResource']);
+            $this->createPrintJobsForOrder($order, $request);
         });
 
         return back()->with('success', 'Order sent to kitchen.');
+    }
+
+    public function reprint(Request $request, DiningSession $diningSession, PrintJob $printJob)
+    {
+        $orderIds = $diningSession->orders()->pluck('id');
+
+        abort_if(
+            $printJob->reference_type !== 'order' || ! $orderIds->contains((int) $printJob->reference_id),
+            403,
+            'This print job does not belong to this dining session.'
+        );
+
+        $payload = $printJob->payload ?? [];
+        $payload['is_reprint'] = true;
+        $payload['reprint_of'] = $printJob->job_no;
+        $payload['reprinted_at'] = now()->toDateTimeString();
+        $payload['reprinted_by'] = $request->user()?->name;
+
+        PrintJob::create([
+            'company_id' => $printJob->company_id,
+            'branch_id' => $printJob->branch_id,
+            'printer_id' => $printJob->printer_id,
+            'print_template_id' => $printJob->print_template_id,
+            'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ'),
+            'job_type' => $printJob->job_type,
+            'status' => 'pending',
+            'reference_type' => $printJob->reference_type,
+            'reference_id' => $printJob->reference_id,
+            'reference_no' => $printJob->reference_no,
+            'payload' => $payload,
+        ]);
+
+        return back()->with('success', 'Re-print job has been queued.');
+    }
+
+    public function previewPrintJob(DiningSession $diningSession, PrintJob $printJob)
+    {
+        $diningSession->loadMissing('branch');
+        $orderIds = $diningSession->orders()->pluck('id');
+
+        abort_if(
+            $printJob->reference_type !== 'order' || ! $orderIds->contains((int) $printJob->reference_id),
+            403,
+            'This print job does not belong to this dining session.'
+        );
+
+        $payload = $printJob->payload ?? [];
+        $jobType = (string) $printJob->job_type;
+        $title = match ($jobType) {
+            'stock_ticket' => 'Stock Slip',
+            'bar_ticket' => 'Bar Slip',
+            'cancel_slip' => 'Cancel Slip',
+            default => 'Kitchen Slip',
+        };
+
+        return view('prints.pos-document', [
+            'document' => [
+                'type' => 'slip',
+                'title' => $title,
+                'subtitle' => strtoupper(str_replace('_', ' ', $jobType)),
+                'status' => $printJob->status,
+                'no' => $printJob->reference_no,
+                'jobNo' => $printJob->job_no,
+                'printerName' => data_get($payload, 'printer.name', $printJob->printer?->name ?? 'Browser Preview'),
+                'branch' => $this->documentBranch($diningSession->branch),
+                'seat' => data_get($payload, 'order.seat'),
+                'date' => $printJob->created_at?->format('Y-m-d H:i'),
+                'staff' => data_get($payload, 'order.created_by') ?? data_get($payload, 'cancelled_by'),
+                'isReprint' => (bool) data_get($payload, 'is_reprint', false),
+                'isCancel' => (bool) data_get($payload, 'is_cancel_slip', false) || $jobType === 'cancel_slip',
+                'lines' => collect(data_get($payload, 'lines', []))
+                    ->map(fn (array $line): array => [
+                        'name' => (string) ($line['name'] ?? 'Menu item'),
+                        'quantity' => (float) ($line['quantity'] ?? 0),
+                        'note' => $line['note'] ?? null,
+                    ])
+                    ->values()
+                    ->all(),
+            ],
+        ]);
+    }
+
+    public function previewCurrentInvoice(Request $request, DiningSession $diningSession)
+    {
+        $diningSession->loadMissing(['branch', 'diningResource']);
+        $billGroup = trim((string) $request->query('bill_group', ''));
+        $orders = $diningSession->orders()
+            ->with(['orderLines' => fn ($query) => $query
+                ->where('status', '!=', 'cancelled')
+                ->whereDoesntHave('invoiceLines')
+                ->when($billGroup !== '', fn ($lineQuery) => $lineQuery->where('bill_group', $billGroup))])
+            ->whereNotIn('status', ['draft', 'cancelled'])
+            ->get();
+        $lines = $orders->flatMap->orderLines;
+
+        abort_if($lines->isEmpty(), 422, 'Please confirm at least one order before printing invoice.');
+
+        $subtotal = (float) $lines->sum('line_subtotal');
+        $taxAmount = (float) $lines->sum('tax_amount');
+        $discountAmount = min($subtotal, (float) $request->query('discount_amount', 0));
+        $grandTotal = max(0, $subtotal - $discountAmount) + $taxAmount;
+
+        return view('prints.pos-document', [
+            'document' => [
+                'type' => 'invoice',
+                'title' => 'Invoice',
+                'subtitle' => 'CUSTOMER COPY',
+                'status' => 'preview',
+                'no' => $diningSession->session_no,
+                'billName' => $billGroup !== '' ? $billGroup : null,
+                'jobNo' => null,
+                'printerName' => 'Browser Preview',
+                'branch' => $this->documentBranch($diningSession->branch),
+                'seat' => $diningSession->diningResource?->name,
+                'date' => now()->format('Y-m-d H:i'),
+                'staff' => auth()->user()?->name,
+                'isReprint' => false,
+                'isCancel' => false,
+                'subtotal' => $subtotal,
+                'discount' => $discountAmount,
+                'tax' => $taxAmount,
+                'grandTotal' => $grandTotal,
+                'paidAmount' => 0,
+                'balanceAmount' => $grandTotal,
+                'lines' => $lines
+                    ->map(fn (OrderLine $line): array => [
+                        'name' => $line->menu_name_snapshot,
+                        'quantity' => (float) $line->quantity,
+                        'unitPrice' => (float) $line->unit_price,
+                        'total' => (float) $line->line_total,
+                        'note' => $line->note,
+                    ])
+                    ->values()
+                    ->all(),
+            ],
+        ]);
+    }
+
+    public function previewInvoiceDocument(DiningSession $diningSession, Invoice $invoice, string $documentType)
+    {
+        abort_if((int) $invoice->dining_session_id !== (int) $diningSession->id, 403);
+        abort_if($documentType === 'receipt' && $invoice->status !== 'paid', 422, 'Receipt is available after payment is done.');
+
+        $invoice->load(['branch', 'lines', 'payments.paymentMethod', 'diningSession.diningResource']);
+        $latestPayment = $invoice->payments->sortByDesc('id')->first();
+
+        return view('prints.pos-document', [
+            'document' => [
+                'type' => $documentType,
+                'title' => $documentType === 'receipt' ? 'Receipt' : 'Invoice',
+                'subtitle' => $documentType === 'receipt' ? 'PAID CUSTOMER RECEIPT' : 'CUSTOMER INVOICE',
+                'status' => $invoice->status,
+                'no' => $invoice->invoice_no,
+                'jobNo' => null,
+                'printerName' => 'Browser Preview',
+                'branch' => $this->documentBranch($invoice->branch),
+                'seat' => $invoice->diningSession?->diningResource?->name,
+                'date' => ($invoice->issued_at ?? $invoice->created_at)?->format('Y-m-d H:i'),
+                'staff' => auth()->user()?->name,
+                'isReprint' => false,
+                'isCancel' => false,
+                'subtotal' => (float) $invoice->subtotal,
+                'discount' => (float) $invoice->discount_amount,
+                'tax' => (float) $invoice->tax_amount,
+                'grandTotal' => (float) $invoice->grand_total,
+                'paidAmount' => (float) $invoice->paid_amount,
+                'balanceAmount' => (float) $invoice->balance_amount,
+                'paymentMethod' => $this->paymentLabel($latestPayment),
+                'paymentCurrency' => $latestPayment?->currency,
+                'receivedAmount' => $latestPayment ? (float) $latestPayment->received_amount : null,
+                'changeUsdAmount' => $latestPayment ? (float) $latestPayment->change_usd_amount : null,
+                'changeKhrAmount' => $latestPayment ? (float) $latestPayment->change_khr_amount : null,
+                'paidAt' => $latestPayment?->paid_at?->format('Y-m-d H:i') ?? $invoice->paid_at?->format('Y-m-d H:i'),
+                'lines' => $invoice->lines
+                    ->map(fn ($line): array => [
+                        'name' => $line->menu_name_snapshot,
+                        'quantity' => (float) $line->quantity,
+                        'unitPrice' => (float) $line->unit_price,
+                        'total' => (float) $line->line_total,
+                        'note' => $line->note,
+                    ])
+                    ->values()
+                    ->all(),
+            ],
+        ]);
+    }
+
+    public function cancelPrintedLine(Request $request, DiningSession $diningSession, OrderLine $orderLine)
+    {
+        $this->ensureLineBelongsToSession($diningSession, $orderLine);
+
+        $orderLine->loadMissing(['order.diningSession.diningResource', 'menu.printer', 'invoiceLines']);
+
+        abort_if(
+            $orderLine->order?->status === 'draft',
+            422,
+            'Only printed order lines can be cancelled here.'
+        );
+
+        abort_if(
+            $orderLine->status === 'cancelled',
+            422,
+            'This menu line has already been cancelled.'
+        );
+
+        abort_if(
+            $orderLine->invoiceLines->isNotEmpty(),
+            422,
+            'This menu line cannot be cancelled after check bill.'
+        );
+
+        abort_if(
+            $diningSession->invoices()->where('status', '!=', 'cancelled')->exists(),
+            422,
+            'Printed menu lines cannot be cancelled after check bill.'
+        );
+
+        DB::transaction(function () use ($request, $orderLine) {
+            $orderLine->update(['status' => 'cancelled']);
+
+            if (! $orderLine->order->orderLines()->where('status', '!=', 'cancelled')->exists()) {
+                $orderLine->order->update([
+                    'status' => 'cancelled',
+                    'cancelled_by' => $request->user()?->id,
+                    'cancel_reason' => 'All printed lines cancelled before check bill.',
+                ]);
+            }
+
+            $this->createCancelSlipPrintJob($orderLine, $request);
+        });
+
+        return back()->with('success', 'Cancel slip has been queued.');
     }
 
     public function settle(Request $request, DiningSession $diningSession)
@@ -294,8 +663,9 @@ class SeatOrderController extends Controller
             'received_amount' => ['nullable', 'numeric', 'min:0'],
             'operation_status' => ['required', 'in:invoice,invoice_receipt_done'],
             'discount_amount' => ['nullable', 'numeric', 'min:0'],
-            'change_usd_amount' => ['nullable', 'numeric', 'min:0'],
-            'change_khr_amount' => ['nullable', 'numeric', 'min:0'],
+            'change_usd_amount' => ['nullable', 'integer', 'min:0'],
+            'change_khr_amount' => ['nullable', 'integer', 'min:0'],
+            'bill_group' => ['nullable', 'string', 'max:50'],
         ]);
 
         $activePosSession = $this->activePosSession($request);
@@ -307,10 +677,17 @@ class SeatOrderController extends Controller
         }
 
         DB::transaction(function () use ($diningSession, $activePosSession, $data, $request) {
+            $billGroup = trim((string) ($data['bill_group'] ?? ''));
             $orders = $diningSession->orders()
-                ->with('orderLines')
+                ->with(['orderLines' => fn ($query) => $query
+                    ->where('status', '!=', 'cancelled')
+                    ->whereDoesntHave('invoiceLines')
+                    ->when($billGroup !== '', fn ($lineQuery) => $lineQuery->where('bill_group', $billGroup))])
                 ->whereNotIn('status', ['draft', 'cancelled'])
-                ->whereDoesntHave('orderLines.invoiceLines')
+                ->whereHas('orderLines', fn ($query) => $query
+                    ->where('status', '!=', 'cancelled')
+                    ->whereDoesntHave('invoiceLines')
+                    ->when($billGroup !== '', fn ($lineQuery) => $lineQuery->where('bill_group', $billGroup)))
                 ->get();
 
             $orderLines = $orders->flatMap->orderLines;
@@ -387,8 +764,8 @@ class SeatOrderController extends Controller
                 $isCash = str_starts_with($data['method'], 'cash-');
                 $amountPaid = $data['currency'] === 'KHR' ? $grandTotal * $exchangeRate : $grandTotal;
                 $receivedAmount = $isCash ? (float) ($data['received_amount'] ?? $amountPaid) : $amountPaid;
-                $changeUsdAmount = $isCash ? (float) ($data['change_usd_amount'] ?? 0) : 0;
-                $changeKhrAmount = $isCash ? $this->roundKhrChange((float) ($data['change_khr_amount'] ?? 0)) : 0;
+                $changeUsdAmount = $isCash ? (float) floor((float) ($data['change_usd_amount'] ?? 0)) : 0;
+                $changeKhrAmount = $isCash ? $this->roundDownKhrChange((float) ($data['change_khr_amount'] ?? 0)) : 0;
 
                 if ($isCash) {
                     abort_if(
@@ -420,7 +797,7 @@ class SeatOrderController extends Controller
                     'currency' => $data['currency'],
                     'amount_paid' => $amountPaid,
                     'received_amount' => $receivedAmount,
-                    'change_usd_amount' => $changeUsdAmount,
+                    'change_usd_amount' => floor($changeUsdAmount),
                     'change_khr_amount' => $changeKhrAmount,
                     'exchange_rate_snapshot' => $exchangeRate,
                     'amount_usd_equivalent' => $grandTotal,
@@ -445,8 +822,15 @@ class SeatOrderController extends Controller
                 $activePosSession->increment('total_pay_later_khr', $grandTotal * $exchangeRate);
             }
 
+            $hasRemainingBillableLines = $diningSession->orders()
+                ->whereNotIn('status', ['draft', 'cancelled'])
+                ->whereHas('orderLines', fn ($query) => $query
+                    ->where('status', '!=', 'cancelled')
+                    ->whereDoesntHave('invoiceLines'))
+                ->exists();
+
             $diningSession->update([
-                'status' => $isPayLater ? 'invoiced' : 'paid',
+                'status' => $hasRemainingBillableLines ? 'open' : ($isPayLater ? 'invoiced' : 'paid'),
                 'closed_at' => null,
                 'closed_by' => null,
             ]);
@@ -576,6 +960,92 @@ class SeatOrderController extends Controller
         return $prefix.str_pad((string) $sequence, 3, '0', STR_PAD_LEFT);
     }
 
+    private function openSessionForResource(
+        DiningResource $resource,
+        DiningSession $sourceSession,
+        PosSession $activePosSession,
+        Request $request
+    ): DiningSession {
+        $session = DiningSession::query()
+            ->where('dining_resource_id', $resource->id)
+            ->where('branch_id', $activePosSession->branch_id)
+            ->where('status', 'open')
+            ->latest()
+            ->lockForUpdate()
+            ->first();
+
+        if ($session) {
+            return $session;
+        }
+
+        $hasLockedSession = DiningSession::query()
+            ->where('dining_resource_id', $resource->id)
+            ->where('branch_id', $activePosSession->branch_id)
+            ->whereIn('status', ['invoiced', 'pay_later', 'paid'])
+            ->exists();
+
+        abort_if($hasLockedSession, 422, 'Selected table already has a checked bill.');
+
+        $session = DiningSession::create([
+            'company_id' => $activePosSession->company_id,
+            'branch_id' => $activePosSession->branch_id,
+            'pos_terminal_id' => $activePosSession->pos_terminal_id,
+            'customer_id' => $sourceSession->customer_id,
+            'dining_resource_id' => $resource->id,
+            'session_no' => DocumentNumber::make(DiningSession::class, 'session_no', 'DS'),
+            'guest_count' => null,
+            'status' => 'open',
+            'opened_at' => now(),
+            'opened_by' => $request->user()?->id,
+            'note' => 'Created from manage orders split of '.$sourceSession->session_no,
+        ]);
+
+        $resource->update(['status' => 'occupied']);
+
+        return $session;
+    }
+
+    private function openManagedOrderForSession(DiningSession $targetSession, Order $sourceOrder): Order
+    {
+        if ((int) $sourceOrder->dining_session_id === (int) $targetSession->id) {
+            return $sourceOrder;
+        }
+
+        return Order::query()
+            ->where('dining_session_id', $targetSession->id)
+            ->where('status', $sourceOrder->status)
+            ->where('note', 'Managed order split')
+            ->latest()
+            ->first()
+            ?? Order::create([
+                'company_id' => $targetSession->company_id,
+                'branch_id' => $targetSession->branch_id,
+                'dining_session_id' => $targetSession->id,
+                'order_no' => $this->makeDiningSessionOrderNumber($targetSession),
+                'status' => $sourceOrder->status,
+                'sent_to_kitchen_at' => $sourceOrder->sent_to_kitchen_at,
+                'created_by' => auth()->id(),
+                'note' => 'Managed order split',
+            ]);
+    }
+
+    private function syncResourceStatusesAfterManage(DiningSession $sourceSession): bool
+    {
+        $hasRemainingOrders = $sourceSession->orders()
+            ->whereNotIn('status', ['draft', 'cancelled'])
+            ->whereHas('orderLines')
+            ->exists();
+
+        if (! $hasRemainingOrders) {
+            $sourceSession->update(['status' => 'cancelled']);
+            $sourceSession->diningResource()->update(['status' => 'available']);
+
+            return true;
+        }
+
+        return false;
+    }
+
     private function calculateLine(OrderLine $line): void
     {
         $subtotal = ((float) $line->quantity * (float) $line->unit_price) - (float) $line->discount_amount;
@@ -643,6 +1113,172 @@ class SeatOrderController extends Controller
                 $this->calculateLine($line);
                 $line->save();
             });
+    }
+
+    private function createPrintJobsForOrder(Order $order, Request $request): void
+    {
+        $defaultPrinters = Printer::query()
+            ->where('company_id', $order->company_id)
+            ->where('branch_id', $order->branch_id)
+            ->where('is_active', true)
+            ->get()
+            ->groupBy('printer_role')
+            ->map(fn ($printers) => $printers->firstWhere('is_default', true) ?? $printers->first());
+
+        $templates = PrintTemplate::query()
+            ->where('company_id', $order->company_id)
+            ->where(function ($query) use ($order) {
+                $query->whereNull('branch_id')
+                    ->orWhere('branch_id', $order->branch_id);
+            })
+            ->where('is_active', true)
+            ->where('is_default', true)
+            ->get()
+            ->keyBy('template_type');
+
+        $order->orderLines
+            ->filter(fn (OrderLine $line) => $line->menu && ($line->menu->print_route ?? 'none') !== 'none')
+            ->groupBy(function (OrderLine $line) use ($defaultPrinters) {
+                $route = $line->menu->print_route ?: 'kitchen';
+                $printer = $line->menu->printer ?: $defaultPrinters->get($route);
+
+                return ($printer?->id ?: 'route-'.$route).'|'.$route;
+            })
+            ->each(function ($lines, string $key) use ($order, $request, $defaultPrinters, $templates) {
+                [, $route] = explode('|', $key, 2);
+                $firstLine = $lines->first();
+                $printer = $firstLine->menu->printer ?: $defaultPrinters->get($route);
+                $jobType = match ($route) {
+                    'stock' => 'stock_ticket',
+                    'bar' => 'bar_ticket',
+                    'cashier' => 'receipt',
+                    default => 'kitchen_ticket',
+                };
+
+                PrintJob::create([
+                    'company_id' => $order->company_id,
+                    'branch_id' => $order->branch_id,
+                    'printer_id' => $printer?->id,
+                    'print_template_id' => $templates->get($jobType)?->id ?? $templates->get('kitchen_ticket')?->id,
+                    'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ'),
+                    'job_type' => $jobType,
+                    'status' => 'pending',
+                    'reference_type' => 'order',
+                    'reference_id' => $order->id,
+                    'reference_no' => $order->order_no,
+                    'payload' => [
+                        'route' => $route,
+                        'printer' => $printer ? [
+                            'name' => $printer->name,
+                            'code' => $printer->code,
+                            'connection_type' => $printer->connection_type,
+                            'network_protocol' => $printer->network_protocol,
+                            'ip_address' => $printer->ip_address,
+                            'port' => $printer->port,
+                            'paper_size' => $printer->paper_size,
+                        ] : null,
+                        'order' => [
+                            'id' => $order->id,
+                            'order_no' => $order->order_no,
+                            'seat' => $order->diningSession?->diningResource?->name,
+                            'sent_at' => $order->sent_to_kitchen_at?->toDateTimeString() ?? now()->toDateTimeString(),
+                            'created_by' => $request->user()?->name,
+                        ],
+                        'lines' => $lines->map(fn (OrderLine $line): array => [
+                            'order_line_id' => $line->id,
+                            'menu_id' => $line->menu_id,
+                            'name' => $line->menu_name_snapshot,
+                            'quantity' => (float) $line->quantity,
+                            'note' => $line->note,
+                        ])->values()->all(),
+                    ],
+                ]);
+            });
+    }
+
+    private function createCancelSlipPrintJob(OrderLine $orderLine, Request $request): void
+    {
+        $order = $orderLine->order;
+        $menu = $orderLine->menu;
+        $route = $menu?->print_route ?: 'kitchen';
+
+        if ($route === 'none') {
+            return;
+        }
+
+        $defaultPrinter = Printer::query()
+            ->where('company_id', $order->company_id)
+            ->where('branch_id', $order->branch_id)
+            ->where('printer_role', $route)
+            ->where('is_active', true)
+            ->orderByDesc('is_default')
+            ->orderBy('name')
+            ->first();
+        $printer = $menu?->printer ?: $defaultPrinter;
+
+        $template = PrintTemplate::query()
+            ->where('company_id', $order->company_id)
+            ->where(function ($query) use ($order) {
+                $query->whereNull('branch_id')
+                    ->orWhere('branch_id', $order->branch_id);
+            })
+            ->where('is_active', true)
+            ->where('is_default', true)
+            ->where('template_type', 'cancel_slip')
+            ->first()
+            ?? PrintTemplate::query()
+                ->where('company_id', $order->company_id)
+                ->where(function ($query) use ($order) {
+                    $query->whereNull('branch_id')
+                        ->orWhere('branch_id', $order->branch_id);
+                })
+                ->where('is_active', true)
+                ->where('is_default', true)
+                ->whereIn('template_type', ['kitchen_ticket', 'stock_ticket', 'bar_ticket'])
+                ->first();
+
+        PrintJob::create([
+            'company_id' => $order->company_id,
+            'branch_id' => $order->branch_id,
+            'printer_id' => $printer?->id,
+            'print_template_id' => $template?->id,
+            'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ'),
+            'job_type' => 'cancel_slip',
+            'status' => 'pending',
+            'reference_type' => 'order',
+            'reference_id' => $order->id,
+            'reference_no' => $order->order_no,
+            'payload' => [
+                'route' => $route,
+                'is_cancel_slip' => true,
+                'cancelled_at' => now()->toDateTimeString(),
+                'cancelled_by' => $request->user()?->name,
+                'printer' => $printer ? [
+                    'name' => $printer->name,
+                    'code' => $printer->code,
+                    'connection_type' => $printer->connection_type,
+                    'network_protocol' => $printer->network_protocol,
+                    'ip_address' => $printer->ip_address,
+                    'port' => $printer->port,
+                    'paper_size' => $printer->paper_size,
+                ] : null,
+                'order' => [
+                    'id' => $order->id,
+                    'order_no' => $order->order_no,
+                    'seat' => $order->diningSession?->diningResource?->name,
+                    'sent_at' => now()->toDateTimeString(),
+                    'created_by' => $request->user()?->name,
+                ],
+                'lines' => [[
+                    'order_line_id' => $orderLine->id,
+                    'menu_id' => $orderLine->menu_id,
+                    'name' => $orderLine->menu_name_snapshot,
+                    'quantity' => (float) $orderLine->quantity,
+                    'note' => $orderLine->note,
+                    'status' => 'cancelled',
+                ]],
+            ],
+        ]);
     }
 
     private function ensureLineBelongsToSession(DiningSession $diningSession, OrderLine $orderLine): void
@@ -714,13 +1350,38 @@ class SeatOrderController extends Controller
             ->value('rate') ?: 4100);
     }
 
-    private function roundKhrChange(float $amount): float
+    private function roundDownKhrChange(float $amount): float
     {
         if ($amount <= 0) {
             return 0;
         }
 
-        return ceil($amount / 100) * 100;
+        return floor($amount / 100) * 100;
+    }
+
+    private function documentBranch(?Branch $branch): array
+    {
+        return [
+            'name' => $branch?->name,
+            'phone' => $branch?->phone,
+            'vatNumber' => $branch?->vat_number,
+            'address' => $branch?->address,
+            'logoUrl' => $branch?->logo ? Storage::url($branch->logo) : null,
+            'paymentQrcodeUrl' => $branch?->payment_qrcode ? Storage::url($branch->payment_qrcode) : null,
+        ];
+    }
+
+    private function paymentLabel(?Payment $payment): ?string
+    {
+        if (! $payment) {
+            return null;
+        }
+
+        if ($payment->paymentMethod?->name) {
+            return $payment->paymentMethod->name;
+        }
+
+        return trim(($payment->currency ?? '').' Payment') ?: null;
     }
 
     private function paymentMethodsFor(PosSession $posSession): array
@@ -806,14 +1467,104 @@ class SeatOrderController extends Controller
             ->exists();
     }
 
+    private function printOrdersFor(DiningSession $diningSession): array
+    {
+        $orderIds = $diningSession->orders()
+            ->where('status', '!=', 'draft')
+            ->pluck('id');
+
+        if ($orderIds->isEmpty()) {
+            return [];
+        }
+
+        $hasInvoice = $diningSession->invoices()
+            ->where('status', '!=', 'cancelled')
+            ->exists();
+        $orderLines = OrderLine::query()
+            ->with('invoiceLines:id,order_line_id')
+            ->whereIn('order_id', $orderIds)
+            ->get(['id', 'status'])
+            ->keyBy('id');
+
+        return PrintJob::query()
+            ->with('printer:id,name,code,printer_role')
+            ->where('reference_type', 'order')
+            ->whereIn('reference_id', $orderIds)
+            ->latest('id')
+            ->get()
+            ->groupBy('reference_id')
+            ->map(function ($jobs, $orderId) use ($orderLines, $hasInvoice): array {
+                $firstJob = $jobs->first();
+
+                return [
+                    'orderId' => (int) $orderId,
+                    'orderNo' => $firstJob->reference_no ?? 'Order',
+                    'printedAt' => $firstJob->created_at?->format('Y-m-d H:i'),
+                    'printers' => $jobs
+                        ->groupBy(fn (PrintJob $job): string => (string) ($job->printer_id ?? 'default-'.$job->job_type))
+                        ->map(function ($printerJobs) use ($orderLines, $hasInvoice): array {
+                            $latestJob = $printerJobs->first();
+                            $payload = $latestJob->payload ?? [];
+                            $printer = $latestJob->printer;
+                            $lines = $printerJobs
+                                ->sortBy('id')
+                                ->flatMap(fn (PrintJob $job) => collect(data_get($job->payload ?? [], 'lines', [])))
+                                ->unique(fn (array $line): int => (int) ($line['order_line_id'] ?? 0));
+
+                            return [
+                                'jobId' => $latestJob->id,
+                                'jobNo' => $latestJob->job_no,
+                                'printerName' => $printer?->name ?? data_get($payload, 'printer.name', 'Default Printer'),
+                                'printerRole' => $printer?->printer_role ?? data_get($payload, 'route', 'general'),
+                                'status' => $latestJob->status,
+                                'isReprint' => (bool) data_get($payload, 'is_reprint', false),
+                                'reprintOf' => data_get($payload, 'reprint_of'),
+                                'printedAt' => $latestJob->created_at?->format('Y-m-d H:i'),
+                                'lines' => $lines
+                                    ->map(function (array $line) use ($orderLines, $hasInvoice): array {
+                                        $lineId = (int) ($line['order_line_id'] ?? 0);
+                                        $orderLine = $orderLines->get($lineId);
+                                        $status = (string) ($orderLine?->status ?? $line['status'] ?? 'ordered');
+
+                                        return [
+                                            'id' => $lineId,
+                                            'name' => (string) ($line['name'] ?? 'Menu item'),
+                                            'quantity' => (float) ($line['quantity'] ?? 0),
+                                            'note' => $line['note'] ?? null,
+                                            'status' => $status,
+                                            'canCancel' => $lineId > 0
+                                                && $status !== 'cancelled'
+                                                && ! $hasInvoice
+                                                && $orderLine
+                                                && $orderLine->invoiceLines->isEmpty(),
+                                        ];
+                                    })
+                                    ->values()
+                                    ->all(),
+                            ];
+                        })
+                        ->values()
+                        ->all(),
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
     private function formatOrder(Order $order): array
     {
         $lines = $order->orderLines;
-        $invoice = Invoice::query()
-            ->whereHas('lines', fn ($query) => $query->where('order_id', $order->id))
-            ->where('status', '!=', 'cancelled')
-            ->latest()
-            ->first(['id', 'invoice_no', 'status']);
+        $activeLines = $lines->where('status', '!=', 'cancelled');
+        $billableLines = $activeLines->filter(fn (OrderLine $line) => $line->invoiceLines->isEmpty());
+        $hasInvoicedLines = $activeLines->contains(fn (OrderLine $line) => $line->invoiceLines->isNotEmpty());
+        $hasBillableLines = $billableLines->isNotEmpty();
+        $invoice = ! $hasBillableLines && $hasInvoicedLines
+            ? Invoice::query()
+                ->whereHas('lines', fn ($query) => $query->where('order_id', $order->id))
+                ->where('status', '!=', 'cancelled')
+                ->latest()
+                ->first(['id', 'invoice_no', 'status'])
+            : null;
 
         return [
             'id' => $order->id,
@@ -821,22 +1572,28 @@ class SeatOrderController extends Controller
             'status' => $order->status,
             'invoice_no' => $invoice?->invoice_no,
             'invoice_status' => $invoice?->status,
-            'subtotal' => (float) $lines->sum('line_subtotal'),
-            'tax_amount' => (float) $lines->sum('tax_amount'),
-            'total_amount' => (float) $lines->sum('line_total'),
+            'subtotal' => (float) $billableLines->sum('line_subtotal'),
+            'tax_amount' => (float) $billableLines->sum('tax_amount'),
+            'total_amount' => (float) $billableLines->sum('line_total'),
             'created_at' => $order->created_at?->format('Y-m-d H:i'),
-            'lines' => $lines->map(fn ($line) => [
-                'id' => $line->id,
-                'menu_id' => $line->menu_id,
-                'menu_name' => $line->menu_name_snapshot,
-                'qty' => (float) $line->quantity,
-                'unit_price' => (float) $line->unit_price,
-                'subtotal' => (float) $line->line_subtotal,
-                'tax_amount' => (float) $line->tax_amount,
-                'total_amount' => (float) $line->line_total,
-                'note' => $line->note,
-                'status' => $line->status,
-            ]),
+            'lines' => $lines->map(function ($line): array {
+                $isCancelled = $line->status === 'cancelled';
+
+                return [
+                    'id' => $line->id,
+                    'menu_id' => $line->menu_id,
+                    'menu_name' => $line->menu_name_snapshot,
+                    'qty' => (float) $line->quantity,
+                    'unit_price' => $isCancelled ? 0 : (float) $line->unit_price,
+                    'subtotal' => $isCancelled ? 0 : (float) $line->line_subtotal,
+                    'tax_amount' => $isCancelled ? 0 : (float) $line->tax_amount,
+                    'total_amount' => $isCancelled ? 0 : (float) $line->line_total,
+                    'note' => $line->note,
+                    'status' => $line->status,
+                    'bill_group' => $line->bill_group ?: 'Bill A',
+                    'has_invoice' => $line->invoiceLines->isNotEmpty(),
+                ];
+            }),
         ];
     }
 

@@ -10,6 +10,7 @@ use App\Http\Controllers\MasterData\DiningResourceController;
 use App\Http\Controllers\MasterData\ExchangeRateController;
 use App\Http\Controllers\MasterData\MenuController;
 use App\Http\Controllers\MasterData\PosTerminalController;
+use App\Http\Controllers\MasterData\ProductController;
 use App\Http\Controllers\MasterData\SupplierController;
 use App\Http\Controllers\MasterData\TaxController;
 use App\Http\Controllers\MasterData\WarehouseLocationController;
@@ -139,11 +140,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('stock-movements.write-off.cancel');
 
     // Master data routes
-    Route::inertia('/master-data/products', 'MasterData/Products')->name('master-data.products');
+    Route::get('/master-data/products', [ProductController::class, 'index'])->name('master-data.products');
+    Route::post('/master-data/products/items', [ProductController::class, 'storeItem'])->name('master-data.products.items.store');
+    Route::post('/master-data/products/bom', [ProductController::class, 'storeBom'])->name('master-data.products.bom.store');
     Route::get('/master-data/company-branches', [CompanyBranchController::class, 'index'])->name('master-data.company-branches');
+    Route::post('/master-data/company-branches/branches/{branch}', [CompanyBranchController::class, 'updateBranch'])->name('master-data.company-branches.branches.update');
     Route::get('/master-data/customers', [CustomerController::class, 'index'])->name('master-data.customers');
     Route::get('/master-data/exchange-rates', [ExchangeRateController::class, 'index'])->name('master-data.exchange-rates');
     Route::get('/master-data/menu', [MenuController::class, 'index'])->name('master-data.menu');
+    Route::post('/master-data/menu/menus', [MenuController::class, 'storeMenu'])->name('master-data.menu.menus.store');
+    Route::patch('/master-data/menu/menus/{menu}', [MenuController::class, 'updateMenu'])->name('master-data.menu.menus.update');
+    Route::post('/master-data/menu/categories', [MenuController::class, 'storeCategory'])->name('master-data.menu.categories.store');
+    Route::post('/master-data/menu/prices', [MenuController::class, 'storePrice'])->name('master-data.menu.prices.store');
     Route::get('/master-data/pos-terminals', [PosTerminalController::class, 'index'])->name('master-data.pos-terminals');
     Route::get('/master-data/seats', [DiningResourceController::class, 'index'])->name('master-data.seats');
     Route::get('/master-data/suppliers', [SupplierController::class, 'index'])->name('master-data.suppliers');
@@ -157,6 +165,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Seat order routes
     Route::get('/orders/{diningSession}/menu', [SeatOrderController::class, 'show'])
         ->name('seats.orders.show');
+    Route::get('/orders/{diningSession}/manage', [SeatOrderController::class, 'manage'])
+        ->name('seats.orders.manage');
+    Route::post('/orders/{diningSession}/manage', [SeatOrderController::class, 'saveManage'])
+        ->name('seats.orders.manage.save');
 
     Route::post('/orders/{diningSession}/items', [SeatOrderController::class, 'addItem'])
         ->name('seats.orders.items.add');
@@ -172,6 +184,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/orders/{diningSession}/send-kitchen', [SeatOrderController::class, 'sendToKitchen'])
         ->name('seats.orders.send-kitchen');
+    Route::post('/orders/{diningSession}/print-jobs/{printJob}/reprint', [SeatOrderController::class, 'reprint'])
+        ->name('seats.orders.print-jobs.reprint');
+    Route::get('/orders/{diningSession}/print-jobs/{printJob}/preview', [SeatOrderController::class, 'previewPrintJob'])
+        ->name('seats.orders.print-jobs.preview');
+    Route::patch('/orders/{diningSession}/print-lines/{orderLine}/cancel', [SeatOrderController::class, 'cancelPrintedLine'])
+        ->name('seats.orders.print-lines.cancel');
+    Route::get('/orders/{diningSession}/print/current-invoice', [SeatOrderController::class, 'previewCurrentInvoice'])
+        ->name('seats.orders.current-invoice.preview');
+    Route::get('/orders/{diningSession}/invoices/{invoice}/print/{documentType}', [SeatOrderController::class, 'previewInvoiceDocument'])
+        ->whereIn('documentType', ['invoice', 'receipt'])
+        ->name('seats.orders.invoices.preview');
 
     Route::post('/orders/{diningSession}/settle', [SeatOrderController::class, 'settle'])
         ->name('seats.orders.settle');

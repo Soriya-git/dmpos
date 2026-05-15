@@ -26,6 +26,9 @@ return new class extends Migration
                 'receipt',
                 'invoice',
                 'kitchen_ticket',
+                'stock_ticket',
+                'bar_ticket',
+                'cancel_slip',
                 'payment_receipt',
             ])->default('receipt');
 

@@ -9,6 +9,7 @@ defineProps<{
     showAction?: boolean;
     variant?: 'cart' | 'bill';
     processing?: boolean;
+    disabled?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -62,8 +63,8 @@ const emit = defineEmits<{
         <button
             v-if="showAction ?? true"
             type="button"
-            class="w-full rounded-xl bg-[#23AA8F] py-3 text-xs font-black text-white shadow-lg shadow-[#23AA8F]/20 transition hover:bg-[#007882] disabled:opacity-60"
-            :disabled="processing"
+            class="w-full rounded-xl bg-[#23AA8F] py-3 text-xs font-black text-white shadow-lg shadow-[#23AA8F]/20 transition hover:bg-[#007882] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+            :disabled="processing || disabled"
             @click="emit('action')"
         >
             {{ actionLabel ?? 'PLACE ORDER' }}

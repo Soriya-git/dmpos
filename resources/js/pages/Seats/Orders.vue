@@ -2,10 +2,12 @@
 import { Head, router, useForm } from '@inertiajs/vue3';
 import {
     ArrowLeft,
+    ChevronDown,
     History,
     Maximize2,
     Minimize2,
     Pencil,
+    Printer,
     ReceiptText,
     Search,
     ShoppingCart,
@@ -48,6 +50,8 @@ type CartLine = {
     total_amount: number;
     note?: string | null;
     status: string;
+    bill_group?: string | null;
+    has_invoice?: boolean;
 };
 
 type OrderData = {
@@ -83,6 +87,34 @@ type InvoiceData = {
     }[];
 };
 
+type PrintLine = {
+    id: number;
+    name: string;
+    quantity: number;
+    note?: string | null;
+    status: string;
+    canCancel: boolean;
+};
+
+type PrintPrinterGroup = {
+    jobId: number;
+    jobNo: string;
+    printerName: string;
+    printerRole: string;
+    status: string;
+    isReprint: boolean;
+    reprintOf?: string | null;
+    printedAt?: string | null;
+    lines: PrintLine[];
+};
+
+type PrintOrderData = {
+    orderId: number;
+    orderNo: string;
+    printedAt?: string | null;
+    printers: PrintPrinterGroup[];
+};
+
 type PaymentMethodOption = {
     id: number;
     code?: string | null;
@@ -114,6 +146,7 @@ const props = defineProps<{
     exchangeRate: number;
     paymentMethods: PaymentMethodOption[];
     historyOrders: OrderData[];
+    printOrders: PrintOrderData[];
     invoices: InvoiceData[];
     filters: {
         category_id?: string | number | null;
@@ -121,16 +154,22 @@ const props = defineProps<{
     };
 }>();
 
-const activeTab = ref<'cart' | 'orders' | 'invoice'>('cart');
+const activeTab = ref<'cart' | 'print' | 'orders' | 'invoice'>('cart');
 const search = ref(props.filters.search ?? '');
 const categoryId = ref<string | number | null>(props.filters.category_id ?? '');
 const pageRoot = ref<HTMLElement | null>(null);
+const rightPanelWidth = ref(440);
+const isResizingPanel = ref(false);
 const isFullscreen = ref(false);
 const instructionNotes = ref<Record<number, string>>({});
 const discountMode = ref<'percent' | 'amount'>('percent');
 const discountValue = ref(0);
 const paymentOpen = ref(false);
+const selectedBillGroup = ref<string | null>(null);
 const editCustomerOpen = ref(false);
+const collapsedPrintGroups = ref<Record<string, boolean>>({});
+const reprintProcessingId = ref<number | null>(null);
+const cancelPrintLineProcessingId = ref<number | null>(null);
 const { imageUrl, money } = usePosFormatting();
 
 type PaymentPayload = {
@@ -182,6 +221,60 @@ const billableOrders = computed(() => {
     });
 });
 const hasBillableOrders = computed(() => billableOrders.value.length > 0);
+const billableBillGroups = computed(() => {
+    const groups = new Map<
+        string,
+        {
+            name: string;
+            orders: OrderData[];
+            lines: CartLine[];
+            subtotal: number;
+            taxAmount: number;
+            totalAmount: number;
+        }
+    >();
+
+    billableOrders.value.forEach((order) => {
+        order.lines
+            .filter((line) => line.status !== 'cancelled' && !line.has_invoice)
+            .forEach((line) => {
+                const name = line.bill_group || 'Bill A';
+
+                if (!groups.has(name)) {
+                    groups.set(name, {
+                        name,
+                        orders: [],
+                        lines: [],
+                        subtotal: 0,
+                        taxAmount: 0,
+                        totalAmount: 0,
+                    });
+                }
+
+                const group = groups.get(name);
+
+                if (!group) return;
+
+                if (!group.orders.some((item) => item.id === order.id)) {
+                    group.orders.push(order);
+                }
+
+                group.lines.push({ ...line, menu_name: line.menu_name });
+                group.subtotal += Number(line.subtotal ?? 0);
+                group.taxAmount += Number(line.tax_amount ?? 0);
+                group.totalAmount += Number(line.total_amount ?? 0);
+            });
+    });
+
+    return [...groups.values()].sort((a, b) => a.name.localeCompare(b.name));
+});
+const selectedBill = computed(() => {
+    return (
+        billableBillGroups.value.find(
+            (group) => group.name === selectedBillGroup.value,
+        ) ?? billableBillGroups.value[0] ?? null
+    );
+});
 const canCloseOrder = computed(() => {
     return (
         hasInvoice.value &&
@@ -212,6 +305,15 @@ const tabs = computed(() => [
         value: 'cart',
     },
     {
+        count: props.printOrders.reduce(
+            (total, order) => total + order.printers.length,
+            0,
+        ),
+        icon: Printer,
+        label: 'Print',
+        value: 'print',
+    },
+    {
         icon: History,
         label: 'Orders',
         value: 'orders',
@@ -225,15 +327,11 @@ const tabs = computed(() => [
 ]);
 
 const allOrdersSubtotal = computed(() => {
-    return billableOrders.value.reduce((total, order) => {
-        return total + Number(order.subtotal ?? 0);
-    }, 0);
+    return selectedBill.value?.subtotal ?? 0;
 });
 
 const allOrdersTax = computed(() => {
-    return billableOrders.value.reduce((total, order) => {
-        return total + Number(order.tax_amount ?? 0);
-    }, 0);
+    return selectedBill.value?.taxAmount ?? 0;
 });
 
 const discountAmount = computed(() => {
@@ -256,6 +354,10 @@ const allOrdersTotalAfterDiscount = computed(() => {
 const allOrdersFinalAmount = computed(() => {
     return allOrdersTotalAfterDiscount.value + allOrdersTax.value;
 });
+
+const rightPanelStyle = computed(() => ({
+    '--right-panel-width': `${rightPanelWidth.value}px`,
+}));
 
 function applyFilters() {
     router.get(
@@ -389,6 +491,7 @@ function sendToKitchen() {
             onSuccess: () => {
                 draftLines.value = [];
                 instructionNotes.value = {};
+                activeTab.value = 'print';
             },
             onFinish: () => {
                 sendKitchenProcessing.value = false;
@@ -397,10 +500,15 @@ function sendToKitchen() {
     );
 }
 
-function checkBill() {
+function checkBill(billGroup?: string) {
     if (cartLineCount.value > 0 || !hasBillableOrders.value) return;
 
+    selectedBillGroup.value = billGroup ?? selectedBill.value?.name ?? null;
     paymentOpen.value = true;
+}
+
+function manageOrders() {
+    router.get(`/orders/${props.diningSession.id}/manage`);
 }
 
 function confirmPayment(payload: PaymentPayload) {
@@ -415,6 +523,7 @@ function confirmPayment(payload: PaymentPayload) {
             discount_amount: discountAmount.value,
             change_usd_amount: payload.changeUsdAmount,
             change_khr_amount: payload.changeKhrAmount,
+            bill_group: selectedBill.value?.name ?? selectedBillGroup.value,
         },
         {
             preserveScroll: true,
@@ -423,6 +532,37 @@ function confirmPayment(payload: PaymentPayload) {
                 activeTab.value = 'invoice';
             },
         },
+    );
+}
+
+function openPrintPreview(url: string) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function previewCurrentInvoice() {
+    const params = new URLSearchParams({
+        discount_amount: String(discountAmount.value),
+    });
+    const billGroup = selectedBill.value?.name ?? selectedBillGroup.value;
+
+    if (billGroup) {
+        params.set('bill_group', billGroup);
+    }
+
+    openPrintPreview(
+        `/orders/${props.diningSession.id}/print/current-invoice?${params}`,
+    );
+}
+
+function previewPrintJob(job: PrintPrinterGroup) {
+    openPrintPreview(
+        `/orders/${props.diningSession.id}/print-jobs/${job.jobId}/preview`,
+    );
+}
+
+function previewInvoiceDocument(invoice: InvoiceData, documentType: 'invoice' | 'receipt') {
+    openPrintPreview(
+        `/orders/${props.diningSession.id}/invoices/${invoice.id}/print/${documentType}`,
     );
 }
 
@@ -451,6 +591,73 @@ function closeOrder() {
     );
 }
 
+function printGroupKey(order: PrintOrderData, printer: PrintPrinterGroup) {
+    return `${order.orderId}-${printer.jobId}`;
+}
+
+function isPrintGroupCollapsed(
+    order: PrintOrderData,
+    printer: PrintPrinterGroup,
+) {
+    return collapsedPrintGroups.value[printGroupKey(order, printer)] ?? false;
+}
+
+function togglePrintGroup(order: PrintOrderData, printer: PrintPrinterGroup) {
+    const key = printGroupKey(order, printer);
+    collapsedPrintGroups.value = {
+        ...collapsedPrintGroups.value,
+        [key]: !isPrintGroupCollapsed(order, printer),
+    };
+}
+
+function reprintJob(job: PrintPrinterGroup) {
+    if (reprintProcessingId.value) {
+        return;
+    }
+
+    reprintProcessingId.value = job.jobId;
+
+    router.post(
+        `/orders/${props.diningSession.id}/print-jobs/${job.jobId}/reprint`,
+        {},
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                reprintProcessingId.value = null;
+            },
+        },
+    );
+}
+
+function cancelPrintedLine(line: PrintLine) {
+    if (
+        cancelPrintLineProcessingId.value ||
+        !line.canCancel ||
+        hasInvoice.value
+    ) {
+        return;
+    }
+
+    cancelPrintLineProcessingId.value = line.id;
+
+    router.patch(
+        `/orders/${props.diningSession.id}/print-lines/${line.id}/cancel`,
+        {},
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                cancelPrintLineProcessingId.value = null;
+            },
+        },
+    );
+}
+
+function printLineStatusLabel(status: string) {
+    return status === 'cancelled'
+        ? 'Cancelled'
+        : status.replaceAll('_', ' ').toUpperCase();
+}
+
 async function toggleFullscreen() {
     if (isFullscreen.value) {
         if (document.fullscreenElement) {
@@ -466,6 +673,35 @@ async function toggleFullscreen() {
     }
 
     isFullscreen.value = true;
+}
+
+function startPanelResize(event: MouseEvent) {
+    isResizingPanel.value = true;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    resizePanel(event);
+    window.addEventListener('mousemove', resizePanel);
+    window.addEventListener('mouseup', stopPanelResize);
+}
+
+function resizePanel(event: MouseEvent) {
+    if (!isResizingPanel.value && event.type !== 'mousedown') {
+        return;
+    }
+
+    const viewportWidth = window.innerWidth;
+    const minWidth = 400;
+    const maxWidth = Math.min(620, Math.max(minWidth, viewportWidth - 520));
+    const nextWidth = viewportWidth - event.clientX;
+    rightPanelWidth.value = Math.min(maxWidth, Math.max(minWidth, nextWidth));
+}
+
+function stopPanelResize() {
+    isResizingPanel.value = false;
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    window.removeEventListener('mousemove', resizePanel);
+    window.removeEventListener('mouseup', stopPanelResize);
 }
 
 function syncFullscreenState() {
@@ -555,6 +791,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     document.removeEventListener('fullscreenchange', syncFullscreenState);
+    stopPanelResize();
 });
 </script>
 
@@ -636,7 +873,7 @@ onBeforeUnmount(() => {
                 </div>
 
                 <div
-                    class="min-h-0 flex-1 overflow-y-auto bg-gray-50/30 p-4 [scrollbar-color:#cbd5e1_transparent] [scrollbar-width:thin]"
+                    class="min-h-0 flex-1 [scrollbar-width:thin] [scrollbar-color:#cbd5e1_transparent] overflow-y-auto bg-gray-50/30 p-4"
                 >
                     <div
                         class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
@@ -672,8 +909,21 @@ onBeforeUnmount(() => {
             </section>
 
             <aside
-                class="flex h-[48vh] min-h-0 w-full flex-col bg-white lg:h-auto lg:w-[360px]"
+                class="relative flex h-[48vh] min-h-0 w-full flex-col bg-white lg:h-auto lg:w-[var(--right-panel-width)] lg:min-w-[400px] lg:max-w-[620px]"
+                :style="rightPanelStyle"
             >
+                <button
+                    type="button"
+                    class="absolute top-0 bottom-0 left-0 z-10 hidden w-2 -translate-x-1/2 cursor-col-resize items-center justify-center lg:flex"
+                    title="Resize order panel"
+                    @mousedown="startPanelResize"
+                >
+                    <span
+                        class="h-16 w-1 rounded-full bg-gray-200 transition hover:bg-[#23AA8F]"
+                        :class="isResizingPanel ? 'bg-[#23AA8F]' : ''"
+                    />
+                </button>
+
                 <div class="border-b border-gray-100 bg-white p-4">
                     <div class="flex items-center justify-between gap-3">
                         <div class="min-w-0">
@@ -735,7 +985,7 @@ onBeforeUnmount(() => {
                 </div>
 
                 <div
-                    class="min-h-0 flex-1 overflow-y-auto px-4 [scrollbar-color:#cbd5e1_transparent] [scrollbar-width:thin]"
+                    class="min-h-0 flex-1 [scrollbar-width:thin] [scrollbar-color:#cbd5e1_transparent] overflow-y-auto px-4"
                 >
                     <div v-if="activeTab === 'cart'" class="space-y-2 py-2">
                         <div
@@ -781,10 +1031,10 @@ onBeforeUnmount(() => {
                         </div>
                     </div>
 
-                    <div v-if="activeTab === 'orders'" class="space-y-3 py-2">
+                    <div v-if="activeTab === 'print'" class="space-y-3 py-2">
                         <article
-                            v-for="order in historyOrders"
-                            :key="order.id"
+                            v-for="order in printOrders"
+                            :key="order.orderId"
                             class="rounded-xl border border-gray-100 bg-white p-3 shadow-sm"
                         >
                             <div class="flex items-start justify-between gap-3">
@@ -792,36 +1042,249 @@ onBeforeUnmount(() => {
                                     <h3
                                         class="truncate text-xs font-black text-[#2A4858]"
                                     >
-                                        {{ order.order_no }}
+                                        {{ order.orderNo }}
                                     </h3>
                                     <p class="mt-0.5 text-[10px] text-gray-400">
-                                        {{ order.created_at }}
+                                        {{ order.printedAt }}
                                     </p>
                                 </div>
 
                                 <span
-                                    class="rounded-full bg-gray-100 px-2 py-1 text-[9px] font-bold text-gray-500 uppercase"
+                                    class="rounded-full bg-[#23AA8F]/10 px-2 py-1 text-[9px] font-bold text-[#007882] uppercase"
                                 >
-                                    {{ orderStatusLabel(order) }}
+                                    {{ order.printers.length }} Printer(s)
+                                </span>
+                            </div>
+
+                            <div class="mt-3 space-y-2">
+                                <section
+                                    v-for="printer in order.printers"
+                                    :key="printer.jobId"
+                                    class="rounded-xl border border-gray-100 bg-gray-50/70 p-2"
+                                >
+                                    <div
+                                        class="flex items-center justify-between gap-2"
+                                    >
+                                        <button
+                                            type="button"
+                                            class="flex min-w-0 flex-1 items-center gap-2 text-left"
+                                            @click="
+                                                togglePrintGroup(order, printer)
+                                            "
+                                        >
+                                            <ChevronDown
+                                                class="h-3.5 w-3.5 shrink-0 text-gray-400 transition"
+                                                :class="
+                                                    isPrintGroupCollapsed(
+                                                        order,
+                                                        printer,
+                                                    )
+                                                        ? '-rotate-90'
+                                                        : ''
+                                                "
+                                            />
+                                            <span
+                                                class="min-w-0 truncate text-xs font-black text-[#2A4858]"
+                                            >
+                                                {{ printer.printerName }}
+                                            </span>
+                                        </button>
+
+                                        <div class="flex shrink-0 gap-1">
+                                            <button
+                                                type="button"
+                                                class="h-7 rounded-lg border border-[#23AA8F]/30 bg-white px-2 text-[9px] font-black text-[#007882] transition hover:bg-[#23AA8F]/10"
+                                                @click="
+                                                    previewPrintJob(printer)
+                                                "
+                                            >
+                                                Preview
+                                            </button>
+                                            <button
+                                                type="button"
+                                                class="h-7 rounded-lg bg-[#2A4858] px-2 text-[9px] font-black text-white transition hover:bg-[#203946] disabled:opacity-60"
+                                                :disabled="
+                                                    reprintProcessingId ===
+                                                    printer.jobId
+                                                "
+                                                @click="reprintJob(printer)"
+                                            >
+                                                Re-print
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="mt-1 flex flex-wrap items-center gap-1 pl-5"
+                                    >
+                                        <span
+                                            class="rounded-full bg-white px-2 py-0.5 text-[9px] font-bold text-gray-400 uppercase"
+                                        >
+                                            {{ printer.printerRole }}
+                                        </span>
+                                        <span
+                                            v-if="printer.isReprint"
+                                            class="rounded-full bg-orange-50 px-2 py-0.5 text-[9px] font-black text-orange-500 uppercase"
+                                        >
+                                            Re-print
+                                            {{
+                                                printer.reprintOf
+                                                    ? `of ${printer.reprintOf}`
+                                                    : ''
+                                            }}
+                                        </span>
+                                        <span
+                                            class="rounded-full bg-white px-2 py-0.5 text-[9px] font-bold text-gray-400 uppercase"
+                                        >
+                                            {{ printer.status }}
+                                        </span>
+                                    </div>
+
+                                    <div
+                                        v-if="
+                                            !isPrintGroupCollapsed(
+                                                order,
+                                                printer,
+                                            )
+                                        "
+                                        class="mt-2 space-y-1.5 border-t border-dashed border-gray-200 pt-2"
+                                    >
+                                        <div
+                                            v-for="line in printer.lines"
+                                            :key="`${printer.jobId}-${line.id}-${line.name}`"
+                                            class="space-y-0.5"
+                                        >
+                                            <div
+                                                class="flex items-center justify-between gap-3 text-[11px]"
+                                            >
+                                                <span
+                                                    class="min-w-0 truncate text-gray-500"
+                                                    :class="
+                                                        line.status ===
+                                                        'cancelled'
+                                                            ? 'text-gray-400 line-through decoration-red-400 decoration-2'
+                                                            : ''
+                                                    "
+                                                >
+                                                    {{ line.name }} x
+                                                    {{ line.quantity }}
+                                                </span>
+
+                                                <div
+                                                    class="flex shrink-0 items-center gap-1"
+                                                >
+                                                    <span
+                                                        v-if="
+                                                            line.status ===
+                                                            'cancelled'
+                                                        "
+                                                        class="rounded-full bg-red-50 px-1.5 py-0.5 text-[8px] font-black text-red-500 uppercase"
+                                                    >
+                                                        {{
+                                                            printLineStatusLabel(
+                                                                line.status,
+                                                            )
+                                                        }}
+                                                    </span>
+                                                    <button
+                                                        type="button"
+                                                        class="flex h-6 w-6 items-center justify-center rounded-md text-red-400 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-30"
+                                                        title="Cancel printed item"
+                                                        :disabled="
+                                                            !line.canCancel ||
+                                                            hasInvoice ||
+                                                            cancelPrintLineProcessingId ===
+                                                                line.id
+                                                        "
+                                                        @click="
+                                                            cancelPrintedLine(
+                                                                line,
+                                                            )
+                                                        "
+                                                    >
+                                                        <X
+                                                            class="h-3.5 w-3.5"
+                                                        />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <p
+                                                v-if="line.note"
+                                                class="truncate pl-2 text-[10px] font-medium text-[#007882]"
+                                                :class="
+                                                    line.status ===
+                                                    'cancelled'
+                                                        ? 'text-gray-400 line-through decoration-red-400'
+                                                        : ''
+                                                "
+                                            >
+                                                {{ line.note }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </article>
+
+                        <div
+                            v-if="printOrders.length === 0"
+                            class="rounded-xl border border-dashed border-gray-200 p-8 text-center text-sm text-gray-400"
+                        >
+                            No print jobs for this seat yet.
+                        </div>
+                    </div>
+
+                    <div v-if="activeTab === 'orders'" class="space-y-3 py-2">
+                        <article
+                            v-for="bill in billableBillGroups"
+                            :key="bill.name"
+                            class="rounded-xl border border-gray-100 bg-white p-3 shadow-sm"
+                        >
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <h3
+                                        class="truncate text-xs font-black text-[#2A4858]"
+                                    >
+                                        {{ bill.name }}
+                                    </h3>
+                                    <p class="mt-0.5 text-[10px] text-gray-400">
+                                        {{
+                                            bill.orders
+                                                .map((order) => order.order_no)
+                                                .join(', ')
+                                        }}
+                                    </p>
+                                </div>
+
+                                <span
+                                    class="rounded-full bg-[#23AA8F]/10 px-2 py-1 text-[9px] font-bold text-[#007882] uppercase"
+                                >
+                                    Open Bill
                                 </span>
                             </div>
 
                             <div class="mt-3 space-y-1.5">
                                 <div
-                                    v-for="line in order.lines"
+                                    v-for="line in bill.lines"
                                     :key="line.id"
                                     class="space-y-0.5"
                                 >
                                     <div
-                                        class="flex justify-between gap-3 text-[11px]"
+                                        class="flex items-center justify-between gap-3 text-[11px]"
                                     >
-                                        <span
-                                            class="min-w-0 truncate text-gray-500"
+                                        <div
+                                            class="flex min-w-0 items-center gap-1.5"
                                         >
-                                            {{ line.menu_name }} x
-                                            {{ line.qty }}
-                                        </span>
-                                        <span class="font-bold text-[#2A4858]">
+                                            <span
+                                                class="min-w-0 truncate text-gray-500"
+                                            >
+                                                {{ line.menu_name }} x
+                                                {{ line.qty }}
+                                            </span>
+                                        </div>
+                                        <span
+                                            class="font-bold text-[#2A4858]"
+                                        >
                                             {{ money(line.total_amount) }}
                                         </span>
                                     </div>
@@ -835,17 +1298,67 @@ onBeforeUnmount(() => {
                             </div>
 
                             <div
-                                class="mt-3 border-t border-dashed pt-2 text-right text-xs font-black text-[#007882]"
+                                class="mt-3 flex items-center justify-between border-t border-dashed pt-2"
                             >
-                                {{ money(order.total_amount) }}
+                                <span class="text-xs font-black text-[#007882]">
+                                    {{ money(bill.totalAmount) }}
+                                </span>
+                                <button
+                                    type="button"
+                                    class="rounded-lg bg-[#23AA8F] px-3 py-2 text-[10px] font-black text-white transition hover:bg-[#007882] disabled:cursor-not-allowed disabled:bg-gray-300"
+                                    :disabled="cart.lines.length > 0"
+                                    @click="checkBill(bill.name)"
+                                >
+                                    PAY THIS BILL
+                                </button>
                             </div>
                         </article>
+
+                        <details
+                            v-if="historyOrders.length > 0"
+                            class="rounded-xl border border-gray-100 bg-white p-3 shadow-sm"
+                        >
+                            <summary
+                                class="cursor-pointer text-xs font-black text-[#2A4858]"
+                            >
+                                Order History
+                            </summary>
+
+                            <div class="mt-3 space-y-2">
+                                <article
+                                    v-for="order in historyOrders"
+                                    :key="order.id"
+                                    class="rounded-lg bg-gray-50 p-2"
+                                >
+                                    <div
+                                        class="flex items-center justify-between gap-3"
+                                    >
+                                        <span
+                                            class="truncate text-[11px] font-black text-[#2A4858]"
+                                        >
+                                            {{ order.order_no }}
+                                        </span>
+                                        <span
+                                            class="rounded-full bg-white px-2 py-1 text-[8px] font-black text-gray-500 uppercase"
+                                        >
+                                            {{ orderStatusLabel(order) }}
+                                        </span>
+                                    </div>
+                                </article>
+                            </div>
+                        </details>
 
                         <div
                             v-if="historyOrders.length === 0"
                             class="rounded-xl border border-dashed border-gray-200 p-8 text-center text-sm text-gray-400"
                         >
                             No previous order history for this seat.
+                        </div>
+                        <div
+                            v-else-if="billableBillGroups.length === 0"
+                            class="rounded-xl border border-dashed border-gray-200 p-8 text-center text-sm text-gray-400"
+                        >
+                            All bills for this seat have been checked.
                         </div>
                     </div>
 
@@ -927,6 +1440,34 @@ onBeforeUnmount(() => {
                                     }}</span>
                                 </div>
                             </div>
+
+                            <div class="mt-3 grid grid-cols-2 gap-2">
+                                <button
+                                    type="button"
+                                    class="rounded-xl border border-[#23AA8F]/30 bg-white py-2 text-[10px] font-black text-[#007882] transition hover:bg-[#23AA8F]/10"
+                                    @click="
+                                        previewInvoiceDocument(
+                                            invoice,
+                                            'invoice',
+                                        )
+                                    "
+                                >
+                                    Print Invoice
+                                </button>
+                                <button
+                                    v-if="invoice.status === 'paid'"
+                                    type="button"
+                                    class="rounded-xl bg-[#2A4858] py-2 text-[10px] font-black text-white transition hover:bg-[#203946]"
+                                    @click="
+                                        previewInvoiceDocument(
+                                            invoice,
+                                            'receipt',
+                                        )
+                                    "
+                                >
+                                    Print Receipt
+                                </button>
+                            </div>
                         </article>
 
                         <div
@@ -938,42 +1479,17 @@ onBeforeUnmount(() => {
                     </div>
                 </div>
 
-                <template v-if="activeTab === 'cart' && cart.lines.length > 0">
+                <template v-if="activeTab === 'cart'">
                     <PosTotalsPanel
                         :subtotal="money(cart.subtotal)"
-                        action-label="SEND TO KITCHEN"
-                        :show-action="cart.lines.length > 0"
+                        action-label="CONFIRM ORDER"
+                        :show-action="true"
                         :processing="sendKitchenProcessing"
+                        :disabled="cart.lines.length === 0"
                         variant="cart"
                         @action="sendToKitchen"
                     />
                 </template>
-
-                <div
-                    v-else-if="
-                        activeTab === 'cart' &&
-                        (hasBillableOrders || canCloseOrder)
-                    "
-                    class="border-t border-gray-100 bg-gray-50/50 p-4"
-                >
-                    <button
-                        v-if="activeTab === 'cart' && hasBillableOrders"
-                        type="button"
-                        class="w-full rounded-xl bg-[#23AA8F] py-3 text-xs font-black text-white shadow-lg shadow-[#23AA8F]/20 transition hover:bg-[#007882]"
-                        @click="checkBill"
-                    >
-                        CHECK BILL
-                    </button>
-
-                    <button
-                        v-else-if="activeTab === 'cart' && canCloseOrder"
-                        type="button"
-                        class="w-full rounded-xl bg-[#2A4858] py-3 text-xs font-black text-white shadow-lg shadow-[#2A4858]/15 transition hover:bg-[#203946]"
-                        @click="closeOrder"
-                    >
-                        CLOSE ORDER
-                    </button>
-                </div>
 
                 <div
                     v-if="activeTab === 'orders'"
@@ -983,7 +1499,12 @@ onBeforeUnmount(() => {
                         class="mb-3 space-y-2 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm"
                     >
                         <div class="flex justify-between text-[10px] font-bold">
-                            <span class="text-gray-400">Sub Total</span>
+                            <span class="text-gray-400">
+                                Sub Total
+                                <template v-if="selectedBill">
+                                    ({{ selectedBill.name }})
+                                </template>
+                            </span>
                             <span class="text-[#2A4858]">{{
                                 money(allOrdersSubtotal)
                             }}</span>
@@ -1058,19 +1579,31 @@ onBeforeUnmount(() => {
                         </div>
                     </div>
 
-                    <button
-                        v-if="cart.lines.length === 0 && hasBillableOrders"
-                        type="button"
-                        class="w-full rounded-xl bg-[#23AA8F] py-3 text-xs font-black text-white shadow-lg shadow-[#23AA8F]/20 transition hover:bg-[#007882]"
-                        @click="checkBill"
-                    >
-                        CHECK BILL
-                    </button>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button
+                            type="button"
+                            class="rounded-xl bg-[#2A4858] py-3 text-xs font-black text-white shadow-lg shadow-[#2A4858]/15 transition hover:bg-[#203946]"
+                            @click="manageOrders"
+                        >
+                            MANAGE ORDERS
+                        </button>
+
+                        <button
+                            type="button"
+                            class="rounded-xl bg-[#23AA8F] py-3 text-xs font-black text-white shadow-lg shadow-[#23AA8F]/20 transition hover:bg-[#007882] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+                            :disabled="
+                                cart.lines.length > 0 || !selectedBill
+                            "
+                            @click="checkBill(selectedBill?.name)"
+                        >
+                            CHECK BILL
+                        </button>
+                    </div>
 
                     <button
-                        v-else-if="hasInvoice && canCloseOrder"
+                        v-if="hasInvoice && canCloseOrder"
                         type="button"
-                        class="w-full rounded-xl bg-[#2A4858] py-3 text-xs font-black text-white shadow-lg shadow-[#2A4858]/15 transition hover:bg-[#203946]"
+                        class="mt-2 w-full rounded-xl bg-[#2A4858] py-3 text-xs font-black text-white shadow-lg shadow-[#2A4858]/15 transition hover:bg-[#203946]"
                         @click="closeOrder"
                     >
                         CLOSE ORDER
@@ -1097,10 +1630,12 @@ onBeforeUnmount(() => {
                 :discount-amount="discountAmount"
                 :tax-amount="allOrdersTax"
                 :final-amount="allOrdersFinalAmount"
+                :bill-name="selectedBill?.name ?? selectedBillGroup"
                 :exchange-rate="exchangeRate"
                 :payment-methods="paymentMethods"
                 @close="paymentOpen = false"
                 @confirm="confirmPayment"
+                @print-invoice="previewCurrentInvoice"
             />
 
             <div

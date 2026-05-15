@@ -45,6 +45,12 @@ class Menu extends Model
         return $this->belongsTo(Tax::class);
     }
 
+    /** @return BelongsTo<Item, $this> */
+    public function item(): BelongsTo
+    {
+        return $this->belongsTo(Item::class);
+    }
+
     /** @return HasMany<MenuPrice, $this> */
     public function prices(): HasMany
     {
@@ -57,16 +63,22 @@ class Menu extends Model
         return $this->hasOne(MenuPrice::class)->where('is_default', true);
     }
 
-    /** @return HasMany<BomHeader, $this> */
-    public function bomHeaders(): HasMany
+    /** @return BelongsTo<BomHeader, $this> */
+    public function bomHeader(): BelongsTo
     {
-        return $this->hasMany(BomHeader::class);
+        return $this->belongsTo(BomHeader::class);
     }
 
-    /** @return HasOne<BomHeader, $this> */
-    public function activeBom(): HasOne
+    /** @return BelongsTo<Printer, $this> */
+    public function printer(): BelongsTo
     {
-        return $this->hasOne(BomHeader::class)->where('status', 'active');
+        return $this->belongsTo(Printer::class);
+    }
+
+    /** @return BelongsTo<BomHeader, $this> */
+    public function activeBom(): BelongsTo
+    {
+        return $this->belongsTo(BomHeader::class, 'bom_header_id')->where('status', 'active');
     }
 
     /** @return HasMany<OrderLine, $this> */

@@ -24,9 +24,14 @@ class BomHeader extends Model
         return $this->belongsTo(Branch::class);
     }
 
-    public function menu()
+    public function outputItem()
     {
-        return $this->belongsTo(Menu::class);
+        return $this->belongsTo(Item::class, 'output_item_id');
+    }
+
+    public function menus()
+    {
+        return $this->hasMany(Menu::class);
     }
 
     public function lines()

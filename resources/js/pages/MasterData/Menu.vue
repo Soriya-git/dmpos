@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import {
     Layers3,
     Plus,
@@ -9,7 +9,7 @@ import {
     Utensils,
     X,
 } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import ApprovalActionMenu from '@/components/master-data/ApprovalActionMenu.vue';
 import MasterDataTable from '@/components/master-data/MasterDataTable.vue';
 import { Button } from '@/components/ui/button';
@@ -40,6 +40,11 @@ type MenuRecord = {
     category: string;
     branch: string;
     type: 'product' | 'service';
+    item: string | null;
+    bom: string | null;
+    printRoute: 'none' | 'stock' | 'kitchen' | 'bar' | 'cashier' | 'custom';
+    printerId: number | null;
+    printer: string | null;
     basePrice: string;
     defaultPrice: string;
     description: string | null;
@@ -72,10 +77,32 @@ type PriceRecord = {
 
 type PanelRecord = MenuRecord | CategoryRecord | PriceRecord;
 
+type OptionRecord = {
+    id: number;
+    name: string;
+    code: string | null;
+};
+
+type BomOption = OptionRecord & {
+    outputItemId: number | null;
+    outputItemName: string | null;
+};
+
+type PrinterOption = OptionRecord & {
+    role: string;
+    connectionType: string;
+    ipAddress: string | null;
+    port: number | null;
+};
+
 const props = defineProps<{
     menus: MenuRecord[];
     categories: CategoryRecord[];
     prices: PriceRecord[];
+    itemOptions: OptionRecord[];
+    bomOptions: BomOption[];
+    branchOptions: OptionRecord[];
+    printerOptions: PrinterOption[];
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -91,6 +118,37 @@ const selectedRecord = ref<PanelRecord | null>(null);
 const menus = ref<MenuRecord[]>([...props.menus]);
 const categories = ref<CategoryRecord[]>([...props.categories]);
 const prices = ref<PriceRecord[]>([...props.prices]);
+const sourceMode = ref<'item' | 'bom'>('item');
+
+const menuForm = useForm({
+    name: '',
+    code: '',
+    menu_category_id: '',
+    branch_id: '',
+    menu_type: 'product',
+    base_price: '0',
+    item_id: '',
+    bom_header_id: '',
+    printer_id: '',
+    print_route: 'kitchen',
+    description: '',
+    is_available: true,
+});
+
+const categoryForm = useForm({
+    name: '',
+    code: '',
+    branch_id: '',
+    description: '',
+});
+
+const priceForm = useForm({
+    menu_id: '',
+    branch_id: '',
+    price_name: 'Default Price',
+    price: '0',
+    is_default: true,
+});
 
 const tabs: {
     key: MenuView;
@@ -106,6 +164,27 @@ const normalizedSearch = computed(() => search.value.trim().toLowerCase());
 const filteredMenus = computed(() => filterRows(menus.value));
 const filteredCategories = computed(() => filterRows(categories.value));
 const filteredPrices = computed(() => filterRows(prices.value));
+
+watch(
+    () => props.menus,
+    (nextMenus) => {
+        menus.value = [...nextMenus];
+    },
+);
+
+watch(
+    () => props.categories,
+    (nextCategories) => {
+        categories.value = [...nextCategories];
+    },
+);
+
+watch(
+    () => props.prices,
+    (nextPrices) => {
+        prices.value = [...nextPrices];
+    },
+);
 
 const panelTitle = computed(() =>
     selectedRecord.value ? `Edit ${panelLabel()}` : `New ${panelLabel()}`,
@@ -154,6 +233,7 @@ function openPanel(
 ) {
     panelKind.value = kind;
     selectedRecord.value = record;
+    resetForms(record);
     panelOpen.value = true;
 }
 
@@ -190,6 +270,107 @@ function setCategoryStatus(record: CategoryRecord, status: ApprovalStatus) {
 
 function setPriceStatus(record: PriceRecord, status: ApprovalStatus) {
     record.status = status;
+}
+
+watch(
+    () => menuForm.bom_header_id,
+    (bomId) => {
+        if (!bomId) {
+            return;
+        }
+
+        const bom = props.bomOptions.find((option) => option.id === Number(bomId));
+
+        if (bom?.outputItemId) {
+            menuForm.item_id = String(bom.outputItemId);
+        }
+    },
+);
+
+function resetForms(record: PanelRecord | null) {
+    menuForm.reset();
+    categoryForm.reset();
+    priceForm.reset();
+    menuForm.clearErrors();
+    categoryForm.clearErrors();
+    priceForm.clearErrors();
+    sourceMode.value = 'item';
+
+    if (!record) {
+        return;
+    }
+
+    if (panelKind.value === 'menus' && 'basePrice' in record) {
+        menuForm.name = record.name;
+        menuForm.code = record.code;
+        menuForm.menu_type = record.type;
+        menuForm.base_price = record.basePrice;
+        menuForm.description = record.description ?? '';
+        menuForm.is_available = record.available;
+        menuForm.print_route = record.printRoute;
+        menuForm.printer_id = record.printerId ? String(record.printerId) : '';
+    }
+
+    if (panelKind.value === 'categories' && 'menusCount' in record) {
+        categoryForm.name = record.name;
+        categoryForm.code = record.code;
+        categoryForm.description = record.description ?? '';
+    }
+
+    if (panelKind.value === 'prices' && 'price' in record) {
+        priceForm.price_name = record.name;
+        priceForm.price = record.price;
+        priceForm.is_default = record.isDefault;
+    }
+}
+
+function submitPanel() {
+    if (selectedRecord.value) {
+        if (panelKind.value === 'menus' && 'basePrice' in selectedRecord.value) {
+            router.patch(
+                `/master-data/menu/menus/${selectedRecord.value.id}`,
+                {
+                    printer_id: menuForm.printer_id || null,
+                    print_route: menuForm.print_route,
+                },
+                {
+                    preserveScroll: true,
+                    onSuccess: closePanel,
+                },
+            );
+        } else {
+            closePanel();
+        }
+
+        return;
+    }
+
+    if (panelKind.value === 'menus') {
+        if (sourceMode.value === 'item') {
+            menuForm.bom_header_id = '';
+        }
+
+        menuForm.post('/master-data/menu/menus', {
+            preserveScroll: true,
+            onSuccess: closePanel,
+        });
+
+        return;
+    }
+
+    if (panelKind.value === 'categories') {
+        categoryForm.post('/master-data/menu/categories', {
+            preserveScroll: true,
+            onSuccess: closePanel,
+        });
+
+        return;
+    }
+
+    priceForm.post('/master-data/menu/prices', {
+        preserveScroll: true,
+        onSuccess: closePanel,
+    });
 }
 </script>
 
@@ -292,6 +473,16 @@ function setPriceStatus(record: PriceRecord, status: ApprovalStatus) {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
+                        Source
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
+                        Print To
+                    </th>
+                    <th
+                        class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
+                    >
                         Price
                     </th>
                     <th
@@ -335,6 +526,21 @@ function setPriceStatus(record: PriceRecord, status: ApprovalStatus) {
                         >
                             {{ row.type }}
                         </span>
+                    </td>
+                    <td class="px-4 py-3 text-xs text-slate-500">
+                        {{ row.bom || row.item || '-' }}
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex flex-col gap-1">
+                            <span
+                                class="w-fit rounded bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700"
+                            >
+                                {{ row.printRoute }}
+                            </span>
+                            <span class="text-[10px] text-slate-400">
+                                {{ row.printer || 'Default printer' }}
+                            </span>
+                        </div>
                     </td>
                     <td class="px-4 py-3 text-xs font-bold text-amber-700">
                         {{ row.defaultPrice }}
@@ -579,9 +785,25 @@ function setPriceStatus(record: PriceRecord, status: ApprovalStatus) {
                                 Code / Identifier
                             </span>
                             <Input
-                                :model-value="selectedRecord?.code ?? ''"
+                                v-if="panelKind === 'menus'"
+                                v-model="menuForm.code"
+                                :disabled="!!selectedRecord"
                                 class="mt-1 font-mono text-sm focus-visible:ring-[#007882]"
                                 placeholder="Ex: M-FRIED-RICE"
+                            />
+                            <Input
+                                v-else-if="panelKind === 'categories'"
+                                v-model="categoryForm.code"
+                                :disabled="!!selectedRecord"
+                                class="mt-1 font-mono text-sm focus-visible:ring-[#007882]"
+                                placeholder="Ex: CAT-FOOD"
+                            />
+                            <Input
+                                v-else
+                                v-model="priceForm.price_name"
+                                :disabled="!!selectedRecord"
+                                class="mt-1 font-mono text-sm focus-visible:ring-[#007882]"
+                                placeholder="Default Price"
                             />
                         </label>
 
@@ -592,11 +814,206 @@ function setPriceStatus(record: PriceRecord, status: ApprovalStatus) {
                                 Name / Description
                             </span>
                             <Input
-                                :model-value="selectedRecord?.name ?? ''"
+                                v-if="panelKind === 'menus'"
+                                v-model="menuForm.name"
+                                :disabled="!!selectedRecord"
                                 class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                placeholder="Enter name"
+                                placeholder="Enter menu name"
                             />
+                            <Input
+                                v-else-if="panelKind === 'categories'"
+                                v-model="categoryForm.name"
+                                :disabled="!!selectedRecord"
+                                class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                placeholder="Enter category name"
+                            />
+                            <select
+                                v-else
+                                v-model="priceForm.menu_id"
+                                :disabled="!!selectedRecord"
+                                class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                            >
+                                <option value="">Select menu</option>
+                                <option
+                                    v-for="menu in menus"
+                                    :key="menu.id"
+                                    :value="menu.id"
+                                >
+                                    {{ menu.name }}
+                                </option>
+                            </select>
+                            <p
+                                v-if="menuForm.errors.name || categoryForm.errors.name || priceForm.errors.menu_id"
+                                class="mt-1 text-[10px] font-bold text-rose-600"
+                            >
+                                {{
+                                    menuForm.errors.name ||
+                                    categoryForm.errors.name ||
+                                    priceForm.errors.menu_id
+                                }}
+                            </p>
                         </label>
+
+                        <label v-if="panelKind === 'menus'" class="block">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase"
+                            >
+                                Create From
+                            </span>
+                            <div
+                                class="mt-1 grid grid-cols-2 overflow-hidden rounded-md border border-slate-200 bg-white text-xs font-bold"
+                            >
+                                <button
+                                    type="button"
+                                    class="px-3 py-2"
+                                    :class="
+                                        sourceMode === 'item'
+                                            ? 'bg-[#007882] text-white'
+                                            : 'text-slate-500'
+                                    "
+                                    @click="sourceMode = 'item'"
+                                >
+                                    Item
+                                </button>
+                                <button
+                                    type="button"
+                                    class="px-3 py-2"
+                                    :class="
+                                        sourceMode === 'bom'
+                                            ? 'bg-[#007882] text-white'
+                                            : 'text-slate-500'
+                                    "
+                                    @click="sourceMode = 'bom'"
+                                >
+                                    BOM
+                                </button>
+                            </div>
+                        </label>
+
+                        <label
+                            v-if="panelKind === 'menus' && sourceMode === 'item'"
+                            class="block"
+                        >
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase"
+                            >
+                                Inventory Item
+                            </span>
+                            <select
+                                v-model="menuForm.item_id"
+                                :disabled="!!selectedRecord"
+                                class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                            >
+                                <option value="">No direct inventory item</option>
+                                <option
+                                    v-for="item in props.itemOptions"
+                                    :key="item.id"
+                                    :value="item.id"
+                                >
+                                    {{ item.code }} - {{ item.name }}
+                                </option>
+                            </select>
+                        </label>
+
+                        <label
+                            v-if="panelKind === 'menus' && sourceMode === 'bom'"
+                            class="block"
+                        >
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase"
+                            >
+                                BOM Header
+                            </span>
+                            <select
+                                v-model="menuForm.bom_header_id"
+                                :disabled="!!selectedRecord"
+                                class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                            >
+                                <option value="">Select BOM</option>
+                                <option
+                                    v-for="bom in props.bomOptions"
+                                    :key="bom.id"
+                                    :value="bom.id"
+                                >
+                                    {{ bom.code }} - {{ bom.name }}
+                                </option>
+                            </select>
+                        </label>
+
+                        <label
+                            v-if="panelKind === 'menus' && sourceMode === 'bom'"
+                            class="block"
+                        >
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase"
+                            >
+                                Output Item
+                            </span>
+                            <select
+                                v-model="menuForm.item_id"
+                                disabled
+                                class="mt-1 text-sm focus-visible:ring-[#007882]"
+                            >
+                                <option value="">Selected from BOM output</option>
+                                <option
+                                    v-for="item in props.itemOptions"
+                                    :key="item.id"
+                                    :value="item.id"
+                                >
+                                    {{ item.code }} - {{ item.name }}
+                                </option>
+                            </select>
+                        </label>
+
+                        <div
+                            v-if="panelKind === 'menus'"
+                            class="grid gap-3 border-t border-slate-200 pt-3 sm:grid-cols-2"
+                        >
+                            <label class="block">
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Print Route
+                                </span>
+                                <select
+                                    v-model="menuForm.print_route"
+                                    class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                                >
+                                    <option value="none">No Print</option>
+                                    <option value="stock">Stock</option>
+                                    <option value="kitchen">Kitchen</option>
+                                    <option value="bar">Bar</option>
+                                    <option value="cashier">Cashier</option>
+                                    <option value="custom">Custom</option>
+                                </select>
+                            </label>
+
+                            <label class="block">
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Printer
+                                </span>
+                                <select
+                                    v-model="menuForm.printer_id"
+                                    class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                                >
+                                    <option value="">Default by route</option>
+                                    <option
+                                        v-for="printer in props.printerOptions"
+                                        :key="printer.id"
+                                        :value="printer.id"
+                                    >
+                                        {{ printer.name }} - {{ printer.role }}
+                                        {{
+                                            printer.ipAddress
+                                                ? `(${printer.ipAddress}:${printer.port ?? 9100})`
+                                                : ''
+                                        }}
+                                    </option>
+                                </select>
+                            </label>
+                        </div>
 
                         <div
                             class="mt-2 space-y-3 border-t border-slate-200 pt-2"
@@ -608,10 +1025,12 @@ function setPriceStatus(record: PriceRecord, status: ApprovalStatus) {
                                     Menu Type
                                 </span>
                                 <select
+                                    v-model="menuForm.menu_type"
+                                    :disabled="!!selectedRecord"
                                     class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                                 >
-                                    <option>Product</option>
-                                    <option>Service</option>
+                                    <option value="product">Product</option>
+                                    <option value="service">Service</option>
                                 </select>
                             </label>
                             <label v-if="panelKind === 'menus'" class="block">
@@ -621,30 +1040,17 @@ function setPriceStatus(record: PriceRecord, status: ApprovalStatus) {
                                     Category
                                 </span>
                                 <select
+                                    v-model="menuForm.menu_category_id"
+                                    :disabled="!!selectedRecord"
                                     class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                                 >
+                                    <option value="">Uncategorized</option>
                                     <option
                                         v-for="category in categories"
                                         :key="category.id"
+                                        :value="category.id"
                                     >
                                         {{ category.name }}
-                                    </option>
-                                </select>
-                            </label>
-                            <label v-if="panelKind === 'prices'" class="block">
-                                <span
-                                    class="text-[10px] font-bold text-slate-400 uppercase"
-                                >
-                                    Menu
-                                </span>
-                                <select
-                                    class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
-                                >
-                                    <option
-                                        v-for="menu in menus"
-                                        :key="menu.id"
-                                    >
-                                        {{ menu.name }}
                                     </option>
                                 </select>
                             </label>
@@ -658,15 +1064,20 @@ function setPriceStatus(record: PriceRecord, status: ApprovalStatus) {
                                     Price
                                 </span>
                                 <Input
-                                    :model-value="
-                                        selectedRecord &&
-                                        'price' in selectedRecord
-                                            ? selectedRecord.price
-                                            : selectedRecord &&
-                                                'defaultPrice' in selectedRecord
-                                              ? selectedRecord.defaultPrice
-                                              : ''
-                                    "
+                                    v-if="panelKind === 'menus'"
+                                    v-model="menuForm.base_price"
+                                    :disabled="!!selectedRecord"
+                                    type="number"
+                                    step="0.01"
+                                    class="mt-1 font-bold text-[#007882] focus-visible:ring-[#007882]"
+                                    placeholder="0.00"
+                                />
+                                <Input
+                                    v-else
+                                    v-model="priceForm.price"
+                                    :disabled="!!selectedRecord"
+                                    type="number"
+                                    step="0.01"
                                     class="mt-1 font-bold text-[#007882] focus-visible:ring-[#007882]"
                                     placeholder="0.00"
                                 />
@@ -678,19 +1089,101 @@ function setPriceStatus(record: PriceRecord, status: ApprovalStatus) {
                                     Branch
                                 </span>
                                 <Input
+                                    v-if="selectedRecord"
                                     :model-value="
-                                        selectedRecord &&
                                         'branch' in selectedRecord
                                             ? selectedRecord.branch
                                             : ''
                                     "
+                                    disabled
                                     class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                    placeholder="Branch"
                                 />
+                                <select
+                                    v-else-if="panelKind === 'menus'"
+                                    v-model="menuForm.branch_id"
+                                    class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                                >
+                                    <option value="">Default branch</option>
+                                    <option
+                                        v-for="branch in props.branchOptions"
+                                        :key="branch.id"
+                                        :value="branch.id"
+                                    >
+                                        {{ branch.name }}
+                                    </option>
+                                </select>
+                                <select
+                                    v-else-if="panelKind === 'categories'"
+                                    v-model="categoryForm.branch_id"
+                                    class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                                >
+                                    <option value="">Default branch</option>
+                                    <option
+                                        v-for="branch in props.branchOptions"
+                                        :key="branch.id"
+                                        :value="branch.id"
+                                    >
+                                        {{ branch.name }}
+                                    </option>
+                                </select>
+                                <select
+                                    v-else
+                                    v-model="priceForm.branch_id"
+                                    class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                                >
+                                    <option value="">Default branch</option>
+                                    <option
+                                        v-for="branch in props.branchOptions"
+                                        :key="branch.id"
+                                        :value="branch.id"
+                                    >
+                                        {{ branch.name }}
+                                    </option>
+                                </select>
                             </label>
                         </div>
 
-                        <label class="block">
+                        <label v-if="panelKind === 'menus'" class="block">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase"
+                            >
+                                Description
+                            </span>
+                            <Input
+                                v-model="menuForm.description"
+                                :disabled="!!selectedRecord"
+                                class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                placeholder="Optional description"
+                            />
+                        </label>
+
+                        <label v-if="panelKind === 'categories'" class="block">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase"
+                            >
+                                Description
+                            </span>
+                            <Input
+                                v-model="categoryForm.description"
+                                :disabled="!!selectedRecord"
+                                class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                placeholder="Optional description"
+                            />
+                        </label>
+
+                        <label v-if="panelKind === 'prices'" class="flex items-center gap-2">
+                            <input
+                                v-model="priceForm.is_default"
+                                :disabled="!!selectedRecord"
+                                type="checkbox"
+                                class="size-4 rounded border-slate-300 text-[#007882]"
+                            />
+                            <span class="text-xs font-bold text-slate-500">
+                                Default price for this branch
+                            </span>
+                        </label>
+
+                        <label v-if="selectedRecord" class="block">
                             <span
                                 class="text-[10px] font-bold text-slate-400 uppercase"
                             >
@@ -716,7 +1209,12 @@ function setPriceStatus(record: PriceRecord, status: ApprovalStatus) {
                     </Button>
                     <Button
                         class="flex-1 rounded-lg bg-[#007882] text-xs font-bold text-white hover:bg-[#006871]"
-                        @click="closePanel"
+                        :disabled="
+                            menuForm.processing ||
+                            categoryForm.processing ||
+                            priceForm.processing
+                        "
+                        @click="submitPanel"
                     >
                         <Save class="size-4" />
                         Save Changes

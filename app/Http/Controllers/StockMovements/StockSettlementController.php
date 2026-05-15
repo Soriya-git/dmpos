@@ -153,6 +153,8 @@ class StockSettlementController extends Controller
                 'posTerminal:id,name,code',
                 'customer:id,name,phone_number',
                 'issuer:id,name',
+                'lines.menu.item:id,name,code,unit_id,cost',
+                'lines.menu.item.unit:id,name,code',
                 'lines.menu.activeBom.lines.item:id,name,code,unit_id,cost',
                 'lines.menu.activeBom.lines.unit:id,name,code',
             ])
@@ -177,7 +179,9 @@ class StockSettlementController extends Controller
     {
         $saleQty = $this->posSaleQuantity($invoice);
         $requirements = $this->requirementsForInvoice($invoice);
-        $missingBomCount = $invoice->lines->filter(fn (InvoiceLine $line) => ! $line->menu?->activeBom)->count();
+        $missingBomCount = $invoice->lines
+            ->filter(fn (InvoiceLine $line) => ! $line->menu?->activeBom && ! $line->menu?->item)
+            ->count();
 
         return [
             'id' => $invoice->id,
@@ -220,7 +224,25 @@ class StockSettlementController extends Controller
                 $bom = $line->menu?->activeBom;
 
                 if (! $bom || (float) $bom->output_quantity <= 0) {
-                    return collect();
+                    $item = $line->menu?->item;
+
+                    if (! $item) {
+                        return collect();
+                    }
+
+                    return collect([[
+                        'invoiceLineId' => $line->id,
+                        'menuName' => $line->menu_name_snapshot,
+                        'itemId' => $item->id,
+                        'item_id' => $item->id,
+                        'itemCode' => $item->code ?? 'ITEM-'.$item->id,
+                        'itemName' => $item->name,
+                        'unitId' => $item->unit_id,
+                        'unit_id' => $item->unit_id,
+                        'unit' => $item->unit?->code ?? $item->unit?->name ?? 'Unit',
+                        'quantity' => round((float) $line->quantity * $scale, 4),
+                        'menu_name' => $line->menu_name_snapshot,
+                    ]]);
                 }
 
                 return $bom->lines->map(function ($bomLine) use ($line, $bom, $scale) {
@@ -230,9 +252,9 @@ class StockSettlementController extends Controller
                     return [
                         'invoiceLineId' => $line->id,
                         'menuName' => $line->menu_name_snapshot,
-                        'itemId' => $bomLine->item_id,
-                        'item_id' => $bomLine->item_id,
-                        'itemCode' => $bomLine->item?->code ?? 'ITEM-'.$bomLine->item_id,
+                        'itemId' => $bomLine->component_item_id,
+                        'item_id' => $bomLine->component_item_id,
+                        'itemCode' => $bomLine->item?->code ?? 'ITEM-'.$bomLine->component_item_id,
                         'itemName' => $bomLine->item?->name ?? 'Inventory Item',
                         'unitId' => $bomLine->unit_id,
                         'unit_id' => $bomLine->unit_id,

@@ -42,6 +42,12 @@ class MenuSeeder extends Seeder
             $isFirstBranch = $branch->is(Branch::orderBy('id')->first());
 
             $this->seedStockItems($company, $branch, $units, $isFirstBranch);
+            $suffix = $isFirstBranch ? '' : '-'.$branch->code;
+            $directSaleItems = Item::query()
+                ->where('branch_id', $branch->id)
+                ->whereIn('code', ['DRK-COKE'.$suffix])
+                ->get()
+                ->keyBy('code');
 
             $menuCategories = [
                 'Appetizers' => [
@@ -100,6 +106,9 @@ class MenuSeeder extends Seeder
                         'company_id' => $company->id,
                         'branch_id' => $branch->id,
                         'menu_category_id' => $category->id,
+                        'item_id' => $menuName === 'Coca Cola'
+                            ? $directSaleItems->get('DRK-COKE'.$suffix)?->id
+                            : null,
                         'name' => $menuName,
                         'code' => $code,
                         'menu_type' => $menuType,
