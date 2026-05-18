@@ -16,8 +16,8 @@ defineProps<{
 
 <template>
     <AuthBase
-        title="Inertia.js Kitchen Sink"
-        description="Explore every Inertia feature in one demo app. Log in with the pre-filled credentials to get started."
+        title="Log in to your account"
+        description="Enter your email and password below to log in"
     >
         <Head title="Log in" />
 
