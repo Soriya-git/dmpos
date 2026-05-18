@@ -155,6 +155,10 @@ const masterDataSection: NavSectionType = {
             items: [
                 { title: 'Exchange Rate', href: '/master-data/exchange-rates' },
                 { title: 'Taxes', href: '/master-data/taxes' },
+                {
+                    title: 'Menu Pricelist',
+                    href: '/master-data/menu-price-lists',
+                },
             ],
         },
     ],

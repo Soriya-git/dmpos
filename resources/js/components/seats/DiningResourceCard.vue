@@ -20,6 +20,7 @@ type ActiveSession = {
     opened_at?: string | null;
     customer_name?: string | null;
     customer_phone?: string | null;
+    price_list_name?: string | null;
     can_close_order?: boolean;
 };
 
@@ -44,9 +45,17 @@ export type DiningCustomerOption = {
     phone_number: string;
 };
 
+export type DiningPriceListOption = {
+    id: number;
+    name: string;
+    code: string;
+    isDefault: boolean;
+};
+
 const props = defineProps<{
     resource: DiningResourceCardItem;
     customers: DiningCustomerOption[];
+    priceLists: DiningPriceListOption[];
     processing?: boolean;
     closeProcessing?: boolean;
 }>();
@@ -59,6 +68,7 @@ const emit = defineEmits<{
             customerId: number | null;
             customerPhone: string;
             customerName: string;
+            priceListId: number | null;
         },
     ];
     openOrder: [resource: DiningResourceCardItem];
@@ -69,6 +79,11 @@ const guestCount = ref<number | null>(props.resource.capacity || null);
 const customerId = ref<number | null>(null);
 const customerPhone = ref('');
 const customerName = ref('');
+const priceListId = ref<number | null>(
+    props.priceLists.find((priceList) => priceList.isDefault)?.id ??
+        props.priceLists[0]?.id ??
+        null,
+);
 const customerDropdownOpen = ref(false);
 const imageFailed = ref(false);
 
@@ -175,6 +190,7 @@ function checkIn() {
         customerId: customerId.value,
         customerPhone: customerPhone.value.trim(),
         customerName: customerName.value.trim(),
+        priceListId: priceListId.value,
     });
 }
 </script>
@@ -259,6 +275,12 @@ function checkIn() {
                     <p class="mt-1 text-[9px] text-gray-400">
                         {{ resource.active_session?.session_no }}
                     </p>
+                    <p
+                        v-if="resource.active_session?.price_list_name"
+                        class="mt-1 truncate text-[9px] font-bold text-[#007882]"
+                    >
+                        {{ resource.active_session.price_list_name }}
+                    </p>
                 </div>
 
                 <div class="mt-3 grid grid-cols-2 gap-2">
@@ -297,6 +319,19 @@ function checkIn() {
                         Ready for customer check-in
                     </p>
                 </div>
+                <select
+                    v-if="priceLists.length"
+                    v-model.number="priceListId"
+                    class="mt-2 h-8 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 text-xs font-bold text-[#2A4858] outline-none focus:border-[#007882]"
+                >
+                    <option
+                        v-for="priceList in priceLists"
+                        :key="priceList.id"
+                        :value="priceList.id"
+                    >
+                        {{ priceList.name }}
+                    </option>
+                </select>
                 <Button
                     type="button"
                     class="mt-2 h-8 w-full rounded-lg bg-[#2A4858] text-xs font-bold text-white hover:bg-[#203946]"
@@ -360,6 +395,20 @@ function checkIn() {
                         placeholder="Customer name (optional)"
                         class="h-8 rounded-lg border-gray-200 bg-gray-50 px-2 text-xs focus-visible:ring-[#007882]/30"
                     />
+
+                    <select
+                        v-if="priceLists.length"
+                        v-model.number="priceListId"
+                        class="h-8 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 text-xs font-bold text-[#2A4858] outline-none focus:border-[#007882]"
+                    >
+                        <option
+                            v-for="priceList in priceLists"
+                            :key="priceList.id"
+                            :value="priceList.id"
+                        >
+                            {{ priceList.name }}
+                        </option>
+                    </select>
 
                     <div class="relative">
                         <Users

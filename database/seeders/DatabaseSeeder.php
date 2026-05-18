@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             PaymentMethodSeeder::class,
             UnitSeeder::class,
             MenuSeeder::class,
+            MenuPriceListSeeder::class,
             BomSeeder::class,
             WarehouseSeeder::class,
             PurchaseSeeder::class,

@@ -4,6 +4,7 @@ import { Maximize2, Minimize2, Search } from 'lucide-vue-next';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import DiningResourceCard, {
     type DiningCustomerOption,
+    type DiningPriceListOption,
     type DiningResourceCardItem,
 } from '@/components/seats/DiningResourceCard.vue';
 import { Button } from '@/components/ui/button';
@@ -27,6 +28,7 @@ const props = defineProps<{
     resources: DiningResourceCardItem[];
     types: TypeItem[];
     customers: DiningCustomerOption[];
+    priceLists: DiningPriceListOption[];
     filters: {
         status?: string | null;
         type_id?: number | string | null;
@@ -46,6 +48,7 @@ const checkInForm = useForm({
     customer_id: null as number | null,
     customer_phone: '',
     customer_name: '',
+    menu_price_list_id: null as number | null,
     note: '',
 });
 
@@ -102,12 +105,14 @@ function checkIn(
         customerId: number | null;
         customerPhone: string;
         customerName: string;
+        priceListId: number | null;
     },
 ) {
     checkInForm.guest_count = payload.guestCount;
     checkInForm.customer_id = payload.customerId;
     checkInForm.customer_phone = payload.customerPhone;
     checkInForm.customer_name = payload.customerName;
+    checkInForm.menu_price_list_id = payload.priceListId;
 
     checkInForm.post(`/orders/${resource.id}/check-in`, {
         preserveScroll: true,
@@ -116,6 +121,7 @@ function checkIn(
             checkInForm.customer_id = null;
             checkInForm.customer_phone = '';
             checkInForm.customer_name = '';
+            checkInForm.menu_price_list_id = null;
         },
     });
 }
@@ -339,6 +345,7 @@ onBeforeUnmount(() => {
                         :key="resource.id"
                         :resource="resource"
                         :customers="customers"
+                        :price-lists="priceLists"
                         :processing="checkInForm.processing"
                         :close-processing="
                             closeProcessingSessionId ===

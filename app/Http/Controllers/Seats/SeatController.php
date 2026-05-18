@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\DiningResource;
 use App\Models\DiningResourceType;
 use App\Models\DiningSession;
+use App\Models\MenuPriceList;
 use App\Models\PosSession;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
@@ -41,6 +42,7 @@ class SeatController extends Controller
                 'diningResourceType',
                 'activeSession.customer',
                 'activeSession.invoices',
+                'activeSession.menuPriceList',
                 'activeSession.orders.orderLines.invoiceLines',
                 'activeSession.resourceBooking.customer',
             ])
@@ -90,6 +92,7 @@ class SeatController extends Controller
                         'opened_at' => $session->opened_at?->format('Y-m-d H:i'),
                         'customer_name' => $customerName,
                         'customer_phone' => $customerPhone,
+                        'price_list_name' => $session->menuPriceList?->name,
                         'can_close_order' => $this->canCloseOrder($session),
                     ] : null,
                 ];
@@ -109,6 +112,23 @@ class SeatController extends Controller
             ->limit(250)
             ->get(['id', 'name', 'phone_number']);
 
+        $priceLists = MenuPriceList::query()
+            ->where('company_id', $activePosSession->company_id)
+            ->where('is_active', true)
+            ->where(function ($query) use ($activePosSession): void {
+                $query->whereNull('branch_id')
+                    ->orWhere('branch_id', $activePosSession->branch_id);
+            })
+            ->orderByDesc('is_default')
+            ->orderBy('name')
+            ->get(['id', 'name', 'code', 'is_default'])
+            ->map(fn (MenuPriceList $priceList): array => [
+                'id' => $priceList->id,
+                'name' => $priceList->name,
+                'code' => $priceList->code,
+                'isDefault' => $priceList->is_default,
+            ]);
+
         return Inertia::render('Seats/Index', [
             'posSession' => [
                 'id' => $activePosSession->id,
@@ -121,6 +141,7 @@ class SeatController extends Controller
             'resources' => $resources,
             'types' => $types,
             'customers' => $customers,
+            'priceLists' => $priceLists,
             'filters' => [
                 'status' => $status,
                 'type_id' => $typeId,
@@ -154,6 +175,11 @@ class SeatController extends Controller
             'customer_phone' => ['nullable', 'string', 'max:50'],
             'customer_name' => ['nullable', 'string', 'max:255'],
             'note' => ['nullable', 'string', 'max:1000'],
+            'menu_price_list_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('menu_price_lists', 'id')->where('company_id', $activePosSession->company_id),
+            ],
         ]);
 
         if ($resource->status === 'occupied') {
@@ -190,6 +216,7 @@ class SeatController extends Controller
                 'pos_terminal_id' => $activePosSession->pos_terminal_id,
                 'customer_id' => $customerId,
                 'dining_resource_id' => $resource->id,
+                'menu_price_list_id' => $data['menu_price_list_id'] ?? $this->defaultPriceListId($activePosSession),
                 'session_no' => DocumentNumber::make(DiningSession::class, 'session_no', 'DS'),
                 'guest_count' => $data['guest_count'] ?? null,
                 'status' => 'open',
@@ -236,5 +263,19 @@ class SeatController extends Controller
                     return $line->invoiceLines->isEmpty();
                 });
             });
+    }
+
+    private function defaultPriceListId(PosSession $posSession): ?int
+    {
+        return MenuPriceList::query()
+            ->where('company_id', $posSession->company_id)
+            ->where('is_active', true)
+            ->where('is_default', true)
+            ->where(function ($query) use ($posSession): void {
+                $query->whereNull('branch_id')
+                    ->orWhere('branch_id', $posSession->branch_id);
+            })
+            ->orderByRaw('case when branch_id = ? then 0 when branch_id is null then 1 else 2 end', [$posSession->branch_id])
+            ->value('id');
     }
 }

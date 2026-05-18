@@ -36,6 +36,12 @@ class Order extends Model
         return $this->belongsTo(DiningSession::class);
     }
 
+    /** @return BelongsTo<MenuPriceList, $this> */
+    public function menuPriceList(): BelongsTo
+    {
+        return $this->belongsTo(MenuPriceList::class);
+    }
+
     /** @return HasMany<OrderLine, $this> */
     public function orderLines(): HasMany
     {

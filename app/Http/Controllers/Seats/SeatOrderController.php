@@ -13,6 +13,7 @@ use App\Models\InvoiceLine;
 use App\Models\Menu;
 use App\Models\MenuCategory;
 use App\Models\MenuPrice;
+use App\Models\MenuPriceList;
 use App\Models\Order;
 use App\Models\OrderLine;
 use App\Models\Payment;
@@ -48,6 +49,7 @@ class SeatOrderController extends Controller
         $diningSession->load([
             'diningResource.diningResourceType',
             'customer',
+            'menuPriceList',
             'orders.orderLines.menu',
         ]);
 
@@ -55,7 +57,7 @@ class SeatOrderController extends Controller
         $search = $request->query('search');
 
         $menus = Menu::query()
-            ->with(['menuCategory', 'defaultPrice'])
+            ->with(['menuCategory', 'prices'])
             ->where('company_id', $activePosSession->company_id)
             ->where(function ($q) use ($activePosSession) {
                 $q->whereNull('branch_id')
@@ -72,13 +74,12 @@ class SeatOrderController extends Controller
             })
             ->orderBy('name')
             ->get()
-            ->map(function ($menu) {
-                $defaultPrice = $this->defaultMenuPriceFor($menu);
-                $unitPrice = $menu->base_price ?? 0;
-
-                if ($defaultPrice) {
-                    $unitPrice = $defaultPrice->price;
-                }
+            ->map(function ($menu) use ($diningSession, $activePosSession) {
+                $unitPrice = $this->menuPriceFor(
+                    $menu,
+                    $diningSession->menu_price_list_id,
+                    $activePosSession->branch_id
+                );
 
                 return [
                     'id' => $menu->id,
@@ -87,7 +88,7 @@ class SeatOrderController extends Controller
                     'image' => $menu->image,
                     'category_name' => $menu->menuCategory?->name,
                     'menu_type' => $menu->menu_type,
-                    'unit_price' => (float) $unitPrice,
+                    'unit_price' => $unitPrice,
                 ];
             });
 
@@ -136,6 +137,7 @@ class SeatOrderController extends Controller
                 'seat_type' => $diningSession->diningResource?->diningResourceType?->name,
                 'customer_name' => $customerName,
                 'customer_phone' => $customerPhone,
+                'price_list_name' => $diningSession->menuPriceList?->name,
             ],
             'menus' => $menus,
             'categories' => $categories,
@@ -170,16 +172,11 @@ class SeatOrderController extends Controller
             'note' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $menu = Menu::with('defaultPrice')->findOrFail($data['menu_id']);
+        $menu = Menu::with('prices')->findOrFail($data['menu_id']);
 
         DB::transaction(function () use ($diningSession, $menu, $data) {
             $qty = (float) ($data['qty'] ?? 1);
-            $defaultPrice = $this->defaultMenuPriceFor($menu);
-            $unitPrice = (float) ($menu->base_price ?? 0);
-
-            if ($defaultPrice) {
-                $unitPrice = (float) $defaultPrice->price;
-            }
+            $unitPrice = $this->menuPriceFor($menu, $diningSession->menu_price_list_id, $diningSession->branch_id);
 
             $taxRate = 10;
 
@@ -1026,6 +1023,7 @@ class SeatOrderController extends Controller
             [
                 'company_id' => $diningSession->company_id,
                 'branch_id' => $diningSession->branch_id,
+                'menu_price_list_id' => $diningSession->menu_price_list_id,
                 'order_no' => $this->makeDiningSessionOrderNumber($diningSession),
                 'created_by' => auth()->id(),
             ]
@@ -1084,6 +1082,7 @@ class SeatOrderController extends Controller
             'pos_terminal_id' => $activePosSession->pos_terminal_id,
             'customer_id' => $sourceSession->customer_id,
             'dining_resource_id' => $resource->id,
+            'menu_price_list_id' => $sourceSession->menu_price_list_id,
             'session_no' => DocumentNumber::make(DiningSession::class, 'session_no', 'DS'),
             'guest_count' => null,
             'status' => 'open',
@@ -1113,6 +1112,7 @@ class SeatOrderController extends Controller
                 'company_id' => $targetSession->company_id,
                 'branch_id' => $targetSession->branch_id,
                 'dining_session_id' => $targetSession->id,
+                'menu_price_list_id' => $targetSession->menu_price_list_id,
                 'order_no' => $this->makeDiningSessionOrderNumber($targetSession),
                 'status' => $sourceOrder->status,
                 'sent_to_kitchen_at' => $sourceOrder->sent_to_kitchen_at,
@@ -1175,7 +1175,7 @@ class SeatOrderController extends Controller
             ->values();
 
         $menus = Menu::query()
-            ->with('defaultPrice')
+            ->with('prices')
             ->whereIn('id', $menuIds)
             ->get()
             ->keyBy('id');
@@ -1195,12 +1195,7 @@ class SeatOrderController extends Controller
                     ->map(fn ($note) => trim((string) $note))
                     ->filter()
                     ->last();
-                $defaultPrice = $this->defaultMenuPriceFor($menu);
-                $unitPrice = (float) ($menu->base_price ?? 0);
-
-                if ($defaultPrice) {
-                    $unitPrice = (float) $defaultPrice->price;
-                }
+                $unitPrice = $this->menuPriceFor($menu, $order->menu_price_list_id, $order->branch_id);
 
                 $line = new OrderLine([
                     'order_id' => $order->id,
@@ -1827,11 +1822,54 @@ class SeatOrderController extends Controller
         return Customer::query()->find($customerId);
     }
 
-    private function defaultMenuPriceFor(Menu $menu): ?MenuPrice
+    private function menuPriceFor(Menu $menu, ?int $priceListId, int $branchId): float
     {
-        return MenuPrice::query()
+        $query = MenuPrice::query()
             ->where('menu_id', $menu->id)
+            ->where('is_active', true)
+            ->where(function ($query) use ($branchId): void {
+                $query->where('branch_id', $branchId)
+                    ->orWhereNull('branch_id');
+            });
+
+        if ($priceListId) {
+            $price = (clone $query)
+                ->where('menu_price_list_id', $priceListId)
+                ->orderByRaw('case when branch_id = ? then 0 when branch_id is null then 1 else 2 end', [$branchId])
+                ->value('price');
+
+            if ($price !== null) {
+                return (float) $price;
+            }
+        }
+
+        $defaultListId = MenuPriceList::query()
+            ->where('company_id', $menu->company_id)
+            ->where('is_active', true)
             ->where('is_default', true)
-            ->first();
+            ->where(function ($query) use ($branchId): void {
+                $query->where('branch_id', $branchId)
+                    ->orWhereNull('branch_id');
+            })
+            ->orderByRaw('case when branch_id = ? then 0 when branch_id is null then 1 else 2 end', [$branchId])
+            ->value('id');
+
+        if ($defaultListId) {
+            $price = (clone $query)
+                ->where('menu_price_list_id', $defaultListId)
+                ->orderByRaw('case when branch_id = ? then 0 when branch_id is null then 1 else 2 end', [$branchId])
+                ->value('price');
+
+            if ($price !== null) {
+                return (float) $price;
+            }
+        }
+
+        $price = (clone $query)
+            ->where('is_default', true)
+            ->orderByRaw('case when branch_id = ? then 0 when branch_id is null then 1 else 2 end', [$branchId])
+            ->value('price');
+
+        return (float) ($price ?? $menu->base_price ?? 0);
     }
 }

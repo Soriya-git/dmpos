@@ -58,6 +58,12 @@ class DiningSession extends Model
         return $this->belongsTo(ResourceBooking::class);
     }
 
+    /** @return BelongsTo<MenuPriceList, $this> */
+    public function menuPriceList(): BelongsTo
+    {
+        return $this->belongsTo(MenuPriceList::class);
+    }
+
     /** @return HasMany<Order, $this> */
     public function orders(): HasMany
     {

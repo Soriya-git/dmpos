@@ -5,6 +5,7 @@ namespace App\Http\Controllers\MasterData;
 use App\Models\Menu;
 use App\Models\MenuCategory;
 use App\Models\MenuPrice;
+use App\Models\MenuPriceList;
 use App\Models\BomHeader;
 use App\Models\Branch;
 use App\Models\Company;
@@ -163,7 +164,7 @@ class MenuController
                 ->value('output_item_id');
         }
 
-        Menu::create([
+        $menu = Menu::create([
             ...$data,
             'company_id' => $companyId,
             'branch_id' => $data['branch_id'] ?? $branchId,
@@ -172,6 +173,20 @@ class MenuController
             'print_route' => $data['print_route'],
             'printer_id' => $data['printer_id'] ?: null,
         ]);
+
+        $defaultPriceList = $this->defaultPriceList($companyId, (int) $menu->branch_id);
+
+        if ($defaultPriceList) {
+            MenuPrice::create([
+                'menu_id' => $menu->id,
+                'branch_id' => $menu->branch_id,
+                'menu_price_list_id' => $defaultPriceList->id,
+                'price_name' => $defaultPriceList->name,
+                'price' => $menu->base_price,
+                'is_default' => true,
+                'is_active' => true,
+            ]);
+        }
 
         return back()->with('success', 'Menu has been created.');
     }
@@ -238,6 +253,7 @@ class MenuController
         MenuPrice::create([
             ...$data,
             'branch_id' => $data['branch_id'] ?? $branchId,
+            'menu_price_list_id' => $this->defaultPriceList($companyId, (int) ($data['branch_id'] ?? $branchId))?->id,
             'is_active' => true,
             'is_default' => $data['is_default'] ?? false,
         ]);
@@ -254,5 +270,19 @@ class MenuController
         abort_if(! $branchId, 422, 'No branch is available.');
 
         return [(int) $companyId, (int) $branchId];
+    }
+
+    private function defaultPriceList(int $companyId, int $branchId): ?MenuPriceList
+    {
+        return MenuPriceList::query()
+            ->where('company_id', $companyId)
+            ->where('is_active', true)
+            ->where('is_default', true)
+            ->where(function ($query) use ($branchId): void {
+                $query->where('branch_id', $branchId)
+                    ->orWhereNull('branch_id');
+            })
+            ->orderByRaw('case when branch_id = ? then 0 when branch_id is null then 1 else 2 end', [$branchId])
+            ->first();
     }
 }

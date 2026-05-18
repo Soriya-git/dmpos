@@ -25,4 +25,9 @@ class MenuPrice extends Model
     {
         return $this->belongsTo(Branch::class);
     }
+
+    public function priceList()
+    {
+        return $this->belongsTo(MenuPriceList::class, 'menu_price_list_id');
+    }
 }
