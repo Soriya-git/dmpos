@@ -47,7 +47,7 @@ class CustomerSeeder extends Seeder
                 [
                     'name' => 'Sokha Family',
                     'phone_number' => '089100'.$company->id.'002',
-                    'email' => 'sokha'.$company->id.'@example.com',
+                    'email' => 'sokha'.$company->id.'@diamond.com',
                     'address' => 'Family dining account',
                     'customer_group_id' => $groups['VIP']->id,
                     'note' => 'Seed customer for VIP dining workflows.',

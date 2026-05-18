@@ -19,7 +19,7 @@ class SupplierSeeder extends Seeder
                     'name' => 'Demo Supplier',
                     'contact_person' => 'Operations Desk',
                     'phone_number' => '012345678',
-                    'email' => 'demo.supplier'.$company->id.'@example.com',
+                    'email' => 'demo.supplier'.$company->id.'@diamond.com',
                     'address' => 'Primary demo supplier account',
                     'note' => 'Seed supplier used by purchase order demo data.',
                 ],

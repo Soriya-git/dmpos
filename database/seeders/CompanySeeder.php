@@ -26,9 +26,9 @@ class CompanySeeder extends Seeder
                     ['name' => 'DRG Central', 'code' => 'DRG-CEN'],
                 ],
                 'users' => [
-                    ['name' => 'DRG Manager', 'email' => 'drg.manager@example.com'],
-                    ['name' => 'DRG Cashier', 'email' => 'drg.cashier@example.com'],
-                    ['name' => 'DRG Server', 'email' => 'drg.server@example.com'],
+                    ['name' => 'DRG Manager', 'email' => 'drg.manager@diamond.com'],
+                    ['name' => 'DRG Cashier', 'email' => 'drg.cashier@diamond.com'],
+                    ['name' => 'DRG Server', 'email' => 'drg.server@diamond.com'],
                 ],
             ],
             [
@@ -39,9 +39,9 @@ class CompanySeeder extends Seeder
                     ['name' => 'MCG Airport', 'code' => 'MCG-AIR'],
                 ],
                 'users' => [
-                    ['name' => 'MCG Manager', 'email' => 'mcg.manager@example.com'],
-                    ['name' => 'MCG Cashier', 'email' => 'mcg.cashier@example.com'],
-                    ['name' => 'MCG Server', 'email' => 'mcg.server@example.com'],
+                    ['name' => 'MCG Manager', 'email' => 'mcg.manager@diamond.com'],
+                    ['name' => 'MCG Cashier', 'email' => 'mcg.cashier@diamond.com'],
+                    ['name' => 'MCG Server', 'email' => 'mcg.server@diamond.com'],
                 ],
             ],
         ];
@@ -50,7 +50,7 @@ class CompanySeeder extends Seeder
             $company = Company::create([
                 'name' => $companyData['name'],
                 'code' => $companyData['code'],
-                'email' => strtolower($companyData['code']).'@example.com',
+                'email' => strtolower($companyData['code']).'@diamond.com',
                 'phone' => '010000'.str_pad((string) Company::count(), 4, '0', STR_PAD_LEFT),
                 'address' => $companyData['name'].' Head Office',
             ]);
