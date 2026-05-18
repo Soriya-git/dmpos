@@ -1,6 +1,9 @@
-import SaleInvoiceController from './SaleInvoiceController'
+import SaleInvoiceController from './SaleInvoiceController';
 const Sales = {
-    SaleInvoiceController: Object.assign(SaleInvoiceController, SaleInvoiceController),
-}
+    SaleInvoiceController: Object.assign(
+        SaleInvoiceController,
+        SaleInvoiceController,
+    ),
+};
 
-export default Sales
+export default Sales;

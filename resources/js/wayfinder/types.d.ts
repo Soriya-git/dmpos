@@ -6,22 +6,61 @@ export namespace App {
         /**
          * @see [\App\Models\Contact](\D:\Lar\dmpos\app\Models\Contact.php)
          */
-        export type Contact = { id: number, first_name: string, last_name: string, email: string | null, phone: string | null, organization_id: number | null, is_favorite: boolean, created_at: string | null, updated_at: string | null, name: string, organization?: App.Models.Organization | null, notes?: App.Models.Note[] }
+        export type Contact = {
+            id: number;
+            first_name: string;
+            last_name: string;
+            email: string | null;
+            phone: string | null;
+            organization_id: number | null;
+            is_favorite: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            name: string;
+            organization?: App.Models.Organization | null;
+            notes?: App.Models.Note[];
+        };
 
         /**
          * @see [\App\Models\Organization](\D:\Lar\dmpos\app\Models\Organization.php)
          */
-        export type Organization = { id: number, name: string, created_at: string | null, updated_at: string | null, contacts?: App.Models.Contact[] }
+        export type Organization = {
+            id: number;
+            name: string;
+            created_at: string | null;
+            updated_at: string | null;
+            contacts?: App.Models.Contact[];
+        };
 
         /**
          * @see [\App\Models\Note](\D:\Lar\dmpos\app\Models\Note.php)
          */
-        export type Note = { id: number, body: string, contact_id: number, user_id: number, created_at: string | null, updated_at: string | null, contact?: App.Models.Contact | null, user?: App.Models.User | null }
+        export type Note = {
+            id: number;
+            body: string;
+            contact_id: number;
+            user_id: number;
+            created_at: string | null;
+            updated_at: string | null;
+            contact?: App.Models.Contact | null;
+            user?: App.Models.User | null;
+        };
 
         /**
          * @see [\App\Models\User](\D:\Lar\dmpos\app\Models\User.php)
          */
-        export type User = { id: number, name: string, email: string, email_verified_at: string | null, password: string, remember_token: string | null, created_at: string | null, updated_at: string | null, notes?: App.Models.Note[], notifications?: Illuminate.Notifications.DatabaseNotification[] }
+        export type User = {
+            id: number;
+            name: string;
+            email: string;
+            email_verified_at: string | null;
+            password: string;
+            remember_token: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            notes?: App.Models.Note[];
+            notifications?: Illuminate.Notifications.DatabaseNotification[];
+        };
     }
 
     export namespace Http {
@@ -32,12 +71,12 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Crm\DashboardController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php)
                          */
-                        export type Response = Inertia.Pages.Crm.Dashboard
+                        export type Response = Inertia.Pages.Crm.Dashboard;
 
                         /**
                          * @see [\App\Http\Controllers\Crm\DashboardController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -46,84 +85,88 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Response = Inertia.Pages.Contacts.Index
+                        export type Response = Inertia.Pages.Contacts.Index;
 
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Create {
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::create](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Response = Inertia.Pages.Contacts.Create
+                        export type Response = Inertia.Pages.Contacts.Create;
 
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::create](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Show {
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Response = Inertia.Pages.Contacts.Show
+                        export type Response = Inertia.Pages.Contacts.Show;
 
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Edit {
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::edit](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Response = Inertia.Pages.Contacts.Edit
+                        export type Response = Inertia.Pages.Contacts.Edit;
 
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::edit](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::store](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Request = {    first_name: string;
+                        export type Request = {
+                            first_name: string;
                             last_name: string;
                             email?: string | null;
                             phone?: string | null;
-                            organization_id?: string | null;}
+                            organization_id?: string | null;
+                        };
                     }
 
                     export namespace Update {
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::update](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Request = {    first_name: string;
+                        export type Request = {
+                            first_name: string;
                             last_name: string;
                             email?: string | null;
                             phone?: string | null;
-                            organization_id?: string | null;}
+                            organization_id?: string | null;
+                        };
                     }
 
                     export namespace Destroy {
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::destroy](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Favorite {
                         /**
                          * @see [\App\Http\Controllers\Crm\ContactController::favorite](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -132,31 +175,32 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Crm\OrganizationController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
                          */
-                        export type Response = Inertia.Pages.Organizations.Index
+                        export type Response =
+                            Inertia.Pages.Organizations.Index;
 
                         /**
                          * @see [\App\Http\Controllers\Crm\OrganizationController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Show {
                         /**
                          * @see [\App\Http\Controllers\Crm\OrganizationController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
                          */
-                        export type Response = Inertia.Pages.Organizations.Show
+                        export type Response = Inertia.Pages.Organizations.Show;
 
                         /**
                          * @see [\App\Http\Controllers\Crm\OrganizationController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Update {
                         /**
                          * @see [\App\Http\Controllers\Crm\OrganizationController::update](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
                          */
-                        export type Request = {    name: string;}
+                        export type Request = { name: string };
                     }
                 }
 
@@ -165,7 +209,7 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Crm\NoteController::store](\D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php)
                          */
-                        export type Request = {    body: string;}
+                        export type Request = { body: string };
                     }
                 }
             }
@@ -176,186 +220,214 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::useForm](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.UseForm
+                        export type Response =
+                            Inertia.Pages.Features.Forms.UseForm;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::useForm](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace FormComponent {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::formComponent](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.FormComponent
+                        export type Response =
+                            Inertia.Pages.Features.Forms.FormComponent;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::formComponent](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace FileUploads {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::fileUploads](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.FileUploads
+                        export type Response =
+                            Inertia.Pages.Features.Forms.FileUploads;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::fileUploads](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Validation {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::validation](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.Validation
+                        export type Response =
+                            Inertia.Pages.Features.Forms.Validation;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::validation](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Precognition {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::precognition](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.Precognition
+                        export type Response =
+                            Inertia.Pages.Features.Forms.Precognition;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::precognition](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace OptimisticUpdates {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::optimisticUpdates](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.OptimisticUpdates
+                        export type Response =
+                            Inertia.Pages.Features.Forms.OptimisticUpdates;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::optimisticUpdates](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace UseFormContext {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::useFormContext](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.UseFormContext
+                        export type Response =
+                            Inertia.Pages.Features.Forms.UseFormContext;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::useFormContext](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace DottedKeys {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::dottedKeys](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.DottedKeys
+                        export type Response =
+                            Inertia.Pages.Features.Forms.DottedKeys;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::dottedKeys](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Wayfinder {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::wayfinder](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.Wayfinder
+                        export type Response =
+                            Inertia.Pages.Features.Forms.Wayfinder;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::wayfinder](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace SubmitUseForm {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::submitUseForm](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             email: string;
                             bio?: string | null;
-                            role: "developer" | "designer" | "manager" | "other";
-                            subscribe?: boolean;}
+                            role:
+                                | 'developer'
+                                | 'designer'
+                                | 'manager'
+                                | 'other';
+                            subscribe?: boolean;
+                        };
                     }
 
                     export namespace SubmitFormComponent {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::submitFormComponent](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             email: string;
                             bio?: string | null;
-                            role: "developer" | "designer" | "manager" | "other";
-                            subscribe?: boolean;}
+                            role:
+                                | 'developer'
+                                | 'designer'
+                                | 'manager'
+                                | 'other';
+                            subscribe?: boolean;
+                        };
                     }
 
                     export namespace SubmitFileUploads {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::submitFileUploads](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = {    photo?: string | null;
+                        export type Request = {
+                            photo?: string | null;
                             files?: unknown[] | null;
-                            "files.*"?: string;}
+                            'files.*'?: string;
+                        };
                     }
 
                     export namespace SubmitValidation {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::submitValidation](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             email: string;
                             age: number;
-                            website?: string | null;}
+                            website?: string | null;
+                        };
                     }
 
                     export namespace SubmitValidationSecondary {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::submitValidationSecondary](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = {    title: string;
-                            body: string;}
+                        export type Request = { title: string; body: string };
                     }
 
                     export namespace StoreAccount {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::storeAccount](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = {    username: string;
+                        export type Request = {
+                            username: string;
                             email: string;
                             password: string;
-                            password_confirmation: string;}
+                            password_confirmation: string;
+                        };
                     }
 
                     export namespace SubmitDottedKeys {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::submitDottedKeys](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = {    "user.name": string;
-                            "user.email": string;
-                            "address.street": string;
-                            "address.city": string;
+                        export type Request = {
+                            'user.name': string;
+                            'user.email': string;
+                            'address.street': string;
+                            'address.city': string;
                             tags?: unknown[] | null;
-                            "tags.*"?: string | null;}
+                            'tags.*'?: string | null;
+                        };
                     }
 
                     export namespace ToggleFavorite {
                         /**
                          * @see [\App\Http\Controllers\Feature\FormController::toggleFavorite](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -364,217 +436,231 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::links](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.Links
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.Links;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::links](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PreserveState {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::preserveState](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.PreserveState
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.PreserveState;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::preserveState](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PreserveScroll {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::preserveScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.PreserveScroll
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.PreserveScroll;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::preserveScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace ViewTransitions {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::viewTransitions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.ViewTransitions
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.ViewTransitions;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::viewTransitions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HistoryManagement {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::historyManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.HistoryManagement
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.HistoryManagement;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::historyManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace AsyncRequests {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::asyncRequests](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.AsyncRequests
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.AsyncRequests;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::asyncRequests](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace AsyncSlow {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::asyncSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.AsyncRequests
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.AsyncRequests;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::asyncSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace ManualVisits {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::manualVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.ManualVisits
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.ManualVisits;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::manualVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace RedirectDemo {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::redirectDemo](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.Redirects
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.Redirects;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::redirectDemo](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace ScrollManagement {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::scrollManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.ScrollManagement
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.ScrollManagement;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::scrollManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace InstantVisits {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::instantVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.InstantVisits
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.InstantVisits;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::instantVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace InstantVisitTarget {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::instantVisitTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.InstantVisitTarget
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.InstantVisitTarget;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::instantVisitTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace UrlFragments {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::urlFragments](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.UrlFragments
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.UrlFragments;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::urlFragments](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PreserveFragmentTarget {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.UrlFragments
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.UrlFragments;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace LinksAction {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::linksAction](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HistoryAction {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::historyAction](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace RedirectStandard {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::redirectStandard](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace RedirectToRoute {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::redirectToRoute](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace RedirectExternal {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::redirectExternal](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace RedirectWithHash {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::redirectWithHash](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PreserveFragmentRedirect {
                         /**
                          * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentRedirect](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -583,96 +669,104 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::deferredProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.DeferredProps
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.DeferredProps;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::deferredProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PartialReloads {
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::partialReloads](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.PartialReloads
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.PartialReloads;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::partialReloads](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace InfiniteScroll {
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::infiniteScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.InfiniteScroll
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.InfiniteScroll;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::infiniteScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace WhenVisible {
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::whenVisible](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.WhenVisible
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.WhenVisible;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::whenVisible](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Polling {
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::polling](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.Polling
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.Polling;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::polling](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PropMerging {
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::propMerging](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.PropMerging
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.PropMerging;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::propMerging](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace OnceProps {
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::onceProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.OnceProps
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.OnceProps;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::onceProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace OptionalProps {
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::optionalProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.OptionalProps
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.OptionalProps;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\DataLoadingController::optionalProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -681,48 +775,52 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Feature\PrefetchingController::linkPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Prefetching.LinkPrefetch
+                        export type Response =
+                            Inertia.Pages.Features.Prefetching.LinkPrefetch;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\PrefetchingController::linkPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StaleWhileRevalidate {
                         /**
                          * @see [\App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Prefetching.StaleWhileRevalidate
+                        export type Response =
+                            Inertia.Pages.Features.Prefetching.StaleWhileRevalidate;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace ManualPrefetch {
                         /**
                          * @see [\App\Http\Controllers\Feature\PrefetchingController::manualPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Prefetching.ManualPrefetch
+                        export type Response =
+                            Inertia.Pages.Features.Prefetching.ManualPrefetch;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\PrefetchingController::manualPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace CacheManagement {
                         /**
                          * @see [\App\Http\Controllers\Feature\PrefetchingController::cacheManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Prefetching.CacheManagement
+                        export type Response =
+                            Inertia.Pages.Features.Prefetching.CacheManagement;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\PrefetchingController::cacheManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -731,57 +829,60 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Feature\StateController::remember](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                          */
-                        export type Response = Inertia.Pages.Features.State.Remember
+                        export type Response =
+                            Inertia.Pages.Features.State.Remember;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\StateController::remember](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace FlashData {
                         /**
                          * @see [\App\Http\Controllers\Feature\StateController::flashData](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                          */
-                        export type Response = Inertia.Pages.Features.State.FlashData
+                        export type Response =
+                            Inertia.Pages.Features.State.FlashData;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\StateController::flashData](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace SharedProps {
                         /**
                          * @see [\App\Http\Controllers\Feature\StateController::sharedProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                          */
-                        export type Response = Inertia.Pages.Features.State.SharedProps
+                        export type Response =
+                            Inertia.Pages.Features.State.SharedProps;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\StateController::sharedProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StoreFlashData {
                         /**
                          * @see [\App\Http\Controllers\Feature\StateController::storeFlashData](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StoreFlashDataError {
                         /**
                          * @see [\App\Http\Controllers\Feature\StateController::storeFlashDataError](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StoreFlashDataWarning {
                         /**
                          * @see [\App\Http\Controllers\Feature\StateController::storeFlashDataWarning](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -790,60 +891,65 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Layouts.PersistentLayouts
+                        export type Response =
+                            Inertia.Pages.Features.Layouts.PersistentLayouts;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PersistentLayoutsPageTwo {
                         /**
                          * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Layouts.PersistentLayoutsPageTwo
+                        export type Response =
+                            Inertia.Pages.Features.Layouts.PersistentLayoutsPageTwo;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace NestedLayouts {
                         /**
                          * @see [\App\Http\Controllers\Feature\LayoutController::nestedLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Layouts.NestedLayouts
+                        export type Response =
+                            Inertia.Pages.Features.Layouts.NestedLayouts;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\LayoutController::nestedLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Head {
                         /**
                          * @see [\App\Http\Controllers\Feature\LayoutController::head](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Layouts.Head
+                        export type Response =
+                            Inertia.Pages.Features.Layouts.Head;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\LayoutController::head](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace LayoutProps {
                         /**
                          * @see [\App\Http\Controllers\Feature\LayoutController::layoutProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Layouts.LayoutProps
+                        export type Response =
+                            Inertia.Pages.Features.Layouts.LayoutProps;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\LayoutController::layoutProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -852,62 +958,66 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Feature\EventController::globalEvents](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Events.GlobalEvents
+                        export type Response =
+                            Inertia.Pages.Features.Events.GlobalEvents;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\EventController::globalEvents](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace VisitCallbacks {
                         /**
                          * @see [\App\Http\Controllers\Feature\EventController::visitCallbacks](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Events.VisitCallbacks
+                        export type Response =
+                            Inertia.Pages.Features.Events.VisitCallbacks;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\EventController::visitCallbacks](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Progress {
                         /**
                          * @see [\App\Http\Controllers\Feature\EventController::progress](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Events.Progress
+                        export type Response =
+                            Inertia.Pages.Features.Events.Progress;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\EventController::progress](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace ProgressSlow {
                         /**
                          * @see [\App\Http\Controllers\Feature\EventController::progressSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Events.Progress
+                        export type Response =
+                            Inertia.Pages.Features.Events.Progress;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\EventController::progressSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace GlobalEventsAction {
                         /**
                          * @see [\App\Http\Controllers\Feature\EventController::globalEventsAction](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace VisitCallbacksAction {
                         /**
                          * @see [\App\Http\Controllers\Feature\EventController::visitCallbacksAction](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -916,52 +1026,54 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Errors.HttpExceptions
+                        export type Response =
+                            Inertia.Pages.Features.Errors.HttpExceptions;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace NetworkErrors {
                         /**
                          * @see [\App\Http\Controllers\Feature\NetworkErrorController::networkErrors](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Errors.NetworkErrors
+                        export type Response =
+                            Inertia.Pages.Features.Errors.NetworkErrors;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\NetworkErrorController::networkErrors](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HttpException403 {
                         /**
                          * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpException403](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HttpException404 {
                         /**
                          * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpException404](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HttpException500 {
                         /**
                          * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpException500](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HttpExceptionUnhandled {
                         /**
                          * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptionUnhandled](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -970,19 +1082,20 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Feature\HttpController::useHttp](\D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Http.UseHttp
+                        export type Response =
+                            Inertia.Pages.Features.Http.UseHttp;
 
                         /**
                          * @see [\App\Http\Controllers\Feature\HttpController::useHttp](\D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace UseHttpApi {
                         /**
                          * @see [\App\Http\Controllers\Feature\HttpController::useHttpApi](\D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -995,7 +1108,10 @@ export namespace Illuminate {
         /**
          * @see [\Illuminate\Notifications\DatabaseNotification](\D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Notifications\DatabaseNotification.php)
          */
-        export type DatabaseNotification = { incrementing: boolean, notifiable?: Illuminate.Notifications.DatabaseNotification | null }
+        export type DatabaseNotification = {
+            incrementing: boolean;
+            notifiable?: Illuminate.Notifications.DatabaseNotification | null;
+        };
     }
 
     export namespace Routing {
@@ -1004,55 +1120,81 @@ export namespace Illuminate {
                 /**
                  * @see [\Illuminate\Routing\RedirectController::__invoke](\D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php)
                  */
-                export type Request = Record<string, unknown>
+                export type Request = Record<string, unknown>;
             }
         }
     }
 }
 
 export namespace Inertia {
-    export type SharedData = {name: unknown, auth: {user: App.Models.User | null }, sidebarOpen: boolean }
+    export type SharedData = {
+        name: unknown;
+        auth: { user: App.Models.User | null };
+        sidebarOpen: boolean;
+    };
 
     export namespace Pages {
         export namespace Crm {
             /**
              * @see [\App\Http\Controllers\Crm\DashboardController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php)
              */
-            export type Dashboard = Inertia.SharedData & { totalContacts: unknown, totalOrganizations: unknown, recentNotesCount: unknown, recentActivity: Illuminate.Http.Resources.Json.AnonymousResourceCollection }
+            export type Dashboard = Inertia.SharedData & {
+                totalContacts: unknown;
+                totalOrganizations: unknown;
+                recentNotesCount: unknown;
+                recentActivity: Illuminate.Http.Resources.Json.AnonymousResourceCollection;
+            };
         }
 
         export namespace Contacts {
             /**
              * @see [\App\Http\Controllers\Crm\ContactController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
              */
-            export type Index = Inertia.SharedData & { contacts: unknown, filters: {search: unknown, favorite: boolean } }
+            export type Index = Inertia.SharedData & {
+                contacts: unknown;
+                filters: { search: unknown; favorite: boolean };
+            };
 
             /**
              * @see [\App\Http\Controllers\Crm\ContactController::create](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
              */
-            export type Create = Inertia.SharedData & { organizations: Illuminate.Http.Resources.Json.AnonymousResourceCollection }
+            export type Create = Inertia.SharedData & {
+                organizations: Illuminate.Http.Resources.Json.AnonymousResourceCollection;
+            };
 
             /**
              * @see [\App\Http\Controllers\Crm\ContactController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
              */
-            export type Show = Inertia.SharedData & { contact: App.Http.Resources.ContactResource, notes: unknown }
+            export type Show = Inertia.SharedData & {
+                contact: App.Http.Resources.ContactResource;
+                notes: unknown;
+            };
 
             /**
              * @see [\App\Http\Controllers\Crm\ContactController::edit](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
              */
-            export type Edit = Inertia.SharedData & { contact: App.Http.Resources.ContactResource, organizations: Illuminate.Http.Resources.Json.AnonymousResourceCollection }
+            export type Edit = Inertia.SharedData & {
+                contact: App.Http.Resources.ContactResource;
+                organizations: Illuminate.Http.Resources.Json.AnonymousResourceCollection;
+            };
         }
 
         export namespace Organizations {
             /**
              * @see [\App\Http\Controllers\Crm\OrganizationController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
              */
-            export type Index = Inertia.SharedData & { organizations: Illuminate.Http.Resources.Json.AnonymousResourceCollection, filters: {search: unknown } }
+            export type Index = Inertia.SharedData & {
+                organizations: Illuminate.Http.Resources.Json.AnonymousResourceCollection;
+                filters: { search: unknown };
+            };
 
             /**
              * @see [\App\Http\Controllers\Crm\OrganizationController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
              */
-            export type Show = Inertia.SharedData & { organization: App.Http.Resources.OrganizationResource, contacts: unknown }
+            export type Show = Inertia.SharedData & {
+                organization: App.Http.Resources.OrganizationResource;
+                contacts: unknown;
+            };
         }
 
         export namespace Features {
@@ -1060,256 +1202,323 @@ export namespace Inertia {
                 /**
                  * @see [\App\Http\Controllers\Feature\FormController::useForm](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                  */
-                export type UseForm = Inertia.SharedData
+                export type UseForm = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\FormController::formComponent](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                  */
-                export type FormComponent = Inertia.SharedData
+                export type FormComponent = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\FormController::fileUploads](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                  */
-                export type FileUploads = Inertia.SharedData
+                export type FileUploads = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\FormController::validation](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                  */
-                export type Validation = Inertia.SharedData
+                export type Validation = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\FormController::precognition](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                  */
-                export type Precognition = Inertia.SharedData
+                export type Precognition = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\FormController::optimisticUpdates](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                  */
-                export type OptimisticUpdates = Inertia.SharedData & { contacts: Illuminate.Http.Resources.Json.AnonymousResourceCollection }
+                export type OptimisticUpdates = Inertia.SharedData & {
+                    contacts: Illuminate.Http.Resources.Json.AnonymousResourceCollection;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\FormController::useFormContext](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                  */
-                export type UseFormContext = Inertia.SharedData
+                export type UseFormContext = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\FormController::dottedKeys](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                  */
-                export type DottedKeys = Inertia.SharedData
+                export type DottedKeys = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\FormController::wayfinder](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
                  */
-                export type Wayfinder = Inertia.SharedData & { sampleContact: App.Http.Resources.ContactResource }
+                export type Wayfinder = Inertia.SharedData & {
+                    sampleContact: App.Http.Resources.ContactResource;
+                };
             }
 
             export namespace Navigation {
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::links](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type Links = Inertia.SharedData & { timestamp: string }
+                export type Links = Inertia.SharedData & { timestamp: string };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::preserveState](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type PreserveState = Inertia.SharedData & { serverCounter: number, timestamp: string }
+                export type PreserveState = Inertia.SharedData & {
+                    serverCounter: number;
+                    timestamp: string;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::preserveScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type PreserveScroll = Inertia.SharedData & { timestamp: string }
+                export type PreserveScroll = Inertia.SharedData & {
+                    timestamp: string;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::viewTransitions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type ViewTransitions = Inertia.SharedData
+                export type ViewTransitions = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::historyManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type HistoryManagement = Inertia.SharedData & { visit: unknown, timestamp: string }
+                export type HistoryManagement = Inertia.SharedData & {
+                    visit: unknown;
+                    timestamp: string;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::asyncRequests](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  * @see [\App\Http\Controllers\Feature\NavigationController::asyncSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type AsyncRequests = Inertia.SharedData & { timestamp: string }
+                export type AsyncRequests = Inertia.SharedData & {
+                    timestamp: string;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::manualVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type ManualVisits = Inertia.SharedData & { timestamp: string, counter: number }
+                export type ManualVisits = Inertia.SharedData & {
+                    timestamp: string;
+                    counter: number;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::redirectDemo](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type Redirects = Inertia.SharedData & { timestamp: string }
+                export type Redirects = Inertia.SharedData & {
+                    timestamp: string;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::scrollManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type ScrollManagement = Inertia.SharedData & { timestamp: string, items: Record<string, string> }
+                export type ScrollManagement = Inertia.SharedData & {
+                    timestamp: string;
+                    items: Record<string, string>;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::instantVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type InstantVisits = Inertia.SharedData & { sourceTimestamp: string, message: string }
+                export type InstantVisits = Inertia.SharedData & {
+                    sourceTimestamp: string;
+                    message: string;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::instantVisitTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type InstantVisitTarget = Inertia.SharedData & { greeting: string, serverTimestamp: string, items: {id: number, name: string }[] }
+                export type InstantVisitTarget = Inertia.SharedData & {
+                    greeting: string;
+                    serverTimestamp: string;
+                    items: { id: number; name: string }[];
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NavigationController::urlFragments](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
                  */
-                export type UrlFragments = Inertia.SharedData & { timestamp: string, redirectedFrom?: string }
+                export type UrlFragments = Inertia.SharedData & {
+                    timestamp: string;
+                    redirectedFrom?: string;
+                };
             }
 
             export namespace DataLoading {
                 /**
                  * @see [\App\Http\Controllers\Feature\DataLoadingController::deferredProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                  */
-                export type DeferredProps = Inertia.SharedData & { quickStat: string, slowStats: unknown, heavyData: unknown }
+                export type DeferredProps = Inertia.SharedData & {
+                    quickStat: string;
+                    slowStats: unknown;
+                    heavyData: unknown;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\DataLoadingController::partialReloads](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                  */
-                export type PartialReloads = Inertia.SharedData & { users: {id: number, name: string, role: string }[], stats: {total: unknown, favorites: unknown }, timestamp: string, randomNumber: number }
+                export type PartialReloads = Inertia.SharedData & {
+                    users: { id: number; name: string; role: string }[];
+                    stats: { total: unknown; favorites: unknown };
+                    timestamp: string;
+                    randomNumber: number;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\DataLoadingController::infiniteScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                  */
-                export type InfiniteScroll = Inertia.SharedData & { contacts: unknown }
+                export type InfiniteScroll = Inertia.SharedData & {
+                    contacts: unknown;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\DataLoadingController::whenVisible](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                  */
-                export type WhenVisible = Inertia.SharedData & { section1: unknown, section2: unknown, section3: unknown }
+                export type WhenVisible = Inertia.SharedData & {
+                    section1: unknown;
+                    section2: unknown;
+                    section3: unknown;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\DataLoadingController::polling](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                  */
-                export type Polling = Inertia.SharedData & { currentTime: string, randomNumber: number, contactCount: unknown }
+                export type Polling = Inertia.SharedData & {
+                    currentTime: string;
+                    randomNumber: number;
+                    contactCount: unknown;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\DataLoadingController::propMerging](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                  */
-                export type PropMerging = Inertia.SharedData & { notifications: unknown, activities: unknown, contacts: unknown, timestamp: string }
+                export type PropMerging = Inertia.SharedData & {
+                    notifications: unknown;
+                    activities: unknown;
+                    contacts: unknown;
+                    timestamp: string;
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\DataLoadingController::onceProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                  */
-                export type OnceProps = Inertia.SharedData & { page: number, staticData: unknown, freshData: unknown, expiringData: unknown, aliasedData: unknown, dynamicData: {timestamp: string, randomNumber: number } }
+                export type OnceProps = Inertia.SharedData & {
+                    page: number;
+                    staticData: unknown;
+                    freshData: unknown;
+                    expiringData: unknown;
+                    aliasedData: unknown;
+                    dynamicData: { timestamp: string; randomNumber: number };
+                };
 
                 /**
                  * @see [\App\Http\Controllers\Feature\DataLoadingController::optionalProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
                  */
-                export type OptionalProps = Inertia.SharedData & { regularData: {timestamp: string, message: string }, optionalData: unknown, deferredData: unknown }
+                export type OptionalProps = Inertia.SharedData & {
+                    regularData: { timestamp: string; message: string };
+                    optionalData: unknown;
+                    deferredData: unknown;
+                };
             }
 
             export namespace Prefetching {
                 /**
                  * @see [\App\Http\Controllers\Feature\PrefetchingController::linkPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                  */
-                export type LinkPrefetch = Inertia.SharedData
+                export type LinkPrefetch = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                  */
-                export type StaleWhileRevalidate = Inertia.SharedData
+                export type StaleWhileRevalidate = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\PrefetchingController::manualPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                  */
-                export type ManualPrefetch = Inertia.SharedData
+                export type ManualPrefetch = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\PrefetchingController::cacheManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
                  */
-                export type CacheManagement = Inertia.SharedData
+                export type CacheManagement = Inertia.SharedData;
             }
 
             export namespace State {
                 /**
                  * @see [\App\Http\Controllers\Feature\StateController::remember](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                  */
-                export type Remember = Inertia.SharedData
+                export type Remember = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\StateController::flashData](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                  */
-                export type FlashData = Inertia.SharedData
+                export type FlashData = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\StateController::sharedProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
                  */
-                export type SharedProps = Inertia.SharedData
+                export type SharedProps = Inertia.SharedData;
             }
 
             export namespace Layouts {
                 /**
                  * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                  */
-                export type PersistentLayouts = Inertia.SharedData
+                export type PersistentLayouts = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                  */
-                export type PersistentLayoutsPageTwo = Inertia.SharedData
+                export type PersistentLayoutsPageTwo = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\LayoutController::nestedLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                  */
-                export type NestedLayouts = Inertia.SharedData
+                export type NestedLayouts = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\LayoutController::head](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                  */
-                export type Head = Inertia.SharedData
+                export type Head = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\LayoutController::layoutProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
                  */
-                export type LayoutProps = Inertia.SharedData
+                export type LayoutProps = Inertia.SharedData;
             }
 
             export namespace Events {
                 /**
                  * @see [\App\Http\Controllers\Feature\EventController::globalEvents](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                  */
-                export type GlobalEvents = Inertia.SharedData
+                export type GlobalEvents = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\EventController::visitCallbacks](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                  */
-                export type VisitCallbacks = Inertia.SharedData
+                export type VisitCallbacks = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\EventController::progress](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                  * @see [\App\Http\Controllers\Feature\EventController::progressSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
                  */
-                export type Progress = Inertia.SharedData
+                export type Progress = Inertia.SharedData;
             }
 
             export namespace Errors {
                 /**
                  * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
                  */
-                export type HttpExceptions = Inertia.SharedData
+                export type HttpExceptions = Inertia.SharedData;
 
                 /**
                  * @see [\App\Http\Controllers\Feature\NetworkErrorController::networkErrors](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
                  */
-                export type NetworkErrors = Inertia.SharedData
+                export type NetworkErrors = Inertia.SharedData;
             }
 
             export namespace Http {
                 /**
                  * @see [\App\Http\Controllers\Feature\HttpController::useHttp](\D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php)
                  */
-                export type UseHttp = Inertia.SharedData
+                export type UseHttp = Inertia.SharedData;
             }
         }
     }
@@ -1324,23 +1533,25 @@ export namespace Laravel {
                         /**
                          * @see [\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php)
                          */
-                        export type Request = {    "": string;
+                        export type Request = {
+                            '': string;
                             password: string;
-                            remember?: string;}
+                            remember?: string;
+                        };
                     }
 
                     export namespace Create {
                         /**
                          * @see [\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Destroy {
                         /**
                          * @see [\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -1349,14 +1560,14 @@ export namespace Laravel {
                         /**
                          * @see [\Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
                          * @see [\Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::store](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
@@ -1365,7 +1576,7 @@ export namespace Laravel {
                         /**
                          * @see [\Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController::show](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmedPasswordStatusController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -1378,6 +1589,6 @@ export namespace Closure {
         /**
          * @see [\Closure::__invoke](\D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Foundation\Configuration\ApplicationBuilder.php)
          */
-        export type Request = Record<string, unknown>
+        export type Request = Record<string, unknown>;
     }
 }

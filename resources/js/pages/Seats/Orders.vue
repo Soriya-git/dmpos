@@ -279,7 +279,9 @@ const selectedBill = computed(() => {
     return (
         billableBillGroups.value.find(
             (group) => group.name === selectedBillGroup.value,
-        ) ?? billableBillGroups.value[0] ?? null
+        ) ??
+        billableBillGroups.value[0] ??
+        null
     );
 });
 const canCloseOrder = computed(() => {
@@ -567,7 +569,10 @@ function previewPrintJob(job: PrintPrinterGroup) {
     );
 }
 
-function previewInvoiceDocument(invoice: InvoiceData, documentType: 'invoice' | 'receipt') {
+function previewInvoiceDocument(
+    invoice: InvoiceData,
+    documentType: 'invoice' | 'receipt',
+) {
     openPrintPreview(
         `/orders/${props.diningSession.id}/invoices/${invoice.id}/print/${documentType}`,
     );
@@ -688,7 +693,10 @@ function returnPrintedLine(line: PrintLine) {
         return;
     }
 
-    const quantity = Math.min(line.quantity, Number(rawQuantity || line.quantity));
+    const quantity = Math.min(
+        line.quantity,
+        Number(rawQuantity || line.quantity),
+    );
 
     if (!Number.isFinite(quantity) || quantity <= 0) {
         return;
@@ -972,7 +980,7 @@ onBeforeUnmount(() => {
             </section>
 
             <aside
-                class="relative flex h-[48vh] min-h-0 w-full flex-col bg-white lg:h-auto lg:w-[var(--right-panel-width)] lg:min-w-[400px] lg:max-w-[620px]"
+                class="relative flex h-[48vh] min-h-0 w-full flex-col bg-white lg:h-auto lg:w-[var(--right-panel-width)] lg:max-w-[620px] lg:min-w-[400px]"
                 :style="rightPanelStyle"
             >
                 <button
@@ -1115,14 +1123,16 @@ onBeforeUnmount(() => {
                                         "
                                     />
                                     <div class="min-w-0">
-                                    <h3
-                                        class="truncate text-xs font-black text-[#2A4858]"
-                                    >
-                                        {{ order.orderNo }}
-                                    </h3>
-                                    <p class="mt-0.5 text-[10px] text-gray-400">
-                                        {{ order.printedAt }}
-                                    </p>
+                                        <h3
+                                            class="truncate text-xs font-black text-[#2A4858]"
+                                        >
+                                            {{ order.orderNo }}
+                                        </h3>
+                                        <p
+                                            class="mt-0.5 text-[10px] text-gray-400"
+                                        >
+                                            {{ order.printedAt }}
+                                        </p>
                                     </div>
                                 </button>
 
@@ -1417,9 +1427,7 @@ onBeforeUnmount(() => {
                                                 }}
                                             </span>
                                         </div>
-                                        <span
-                                            class="font-bold text-[#2A4858]"
-                                        >
+                                        <span class="font-bold text-[#2A4858]">
                                             {{ money(line.total_amount) }}
                                         </span>
                                     </div>
@@ -1756,9 +1764,7 @@ onBeforeUnmount(() => {
                         <button
                             type="button"
                             class="rounded-xl bg-[#23AA8F] py-3 text-xs font-black text-white shadow-lg shadow-[#23AA8F]/20 transition hover:bg-[#007882] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
-                            :disabled="
-                                cart.lines.length > 0 || !selectedBill
-                            "
+                            :disabled="cart.lines.length > 0 || !selectedBill"
                             @click="checkBill(selectedBill?.name)"
                         >
                             CHECK BILL

@@ -1,0 +1,126 @@
+import {
+    queryParams,
+    type RouteQueryOptions,
+    type RouteDefinition,
+    applyUrlDefaults,
+} from './../../../../wayfinder';
+/**
+ * @see \App\Http\Controllers\MasterData\MenuPriceListController::store
+ * @see app/Http/Controllers/MasterData/MenuPriceListController.php:187
+ * @route '/master-data/menu-price-lists/prices'
+ */
+export const store = (
+    options?: RouteQueryOptions,
+): RouteDefinition<'post'> => ({
+    url: store.url(options),
+    method: 'post',
+});
+
+store.definition = {
+    methods: ['post'],
+    url: '/master-data/menu-price-lists/prices',
+} satisfies RouteDefinition<['post']>;
+
+/**
+ * @see \App\Http\Controllers\MasterData\MenuPriceListController::store
+ * @see app/Http/Controllers/MasterData/MenuPriceListController.php:187
+ * @route '/master-data/menu-price-lists/prices'
+ */
+store.url = (options?: RouteQueryOptions) => {
+    return store.definition.url + queryParams(options);
+};
+
+/**
+ * @see \App\Http\Controllers\MasterData\MenuPriceListController::store
+ * @see app/Http/Controllers/MasterData/MenuPriceListController.php:187
+ * @route '/master-data/menu-price-lists/prices'
+ */
+store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: store.url(options),
+    method: 'post',
+});
+
+/**
+ * @see \App\Http\Controllers\MasterData\MenuPriceListController::update
+ * @see app/Http/Controllers/MasterData/MenuPriceListController.php:230
+ * @route '/master-data/menu-price-lists/prices/{price}'
+ */
+export const update = (
+    args:
+        | { price: number | { id: number } }
+        | [price: number | { id: number }]
+        | number
+        | { id: number },
+    options?: RouteQueryOptions,
+): RouteDefinition<'patch'> => ({
+    url: update.url(args, options),
+    method: 'patch',
+});
+
+update.definition = {
+    methods: ['patch'],
+    url: '/master-data/menu-price-lists/prices/{price}',
+} satisfies RouteDefinition<['patch']>;
+
+/**
+ * @see \App\Http\Controllers\MasterData\MenuPriceListController::update
+ * @see app/Http/Controllers/MasterData/MenuPriceListController.php:230
+ * @route '/master-data/menu-price-lists/prices/{price}'
+ */
+update.url = (
+    args:
+        | { price: number | { id: number } }
+        | [price: number | { id: number }]
+        | number
+        | { id: number },
+    options?: RouteQueryOptions,
+) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { price: args };
+    }
+
+    if (typeof args === 'object' && !Array.isArray(args) && 'id' in args) {
+        args = { price: args.id };
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            price: args[0],
+        };
+    }
+
+    args = applyUrlDefaults(args);
+
+    const parsedArgs = {
+        price: typeof args.price === 'object' ? args.price.id : args.price,
+    };
+
+    return (
+        update.definition.url
+            .replace('{price}', parsedArgs.price.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+    );
+};
+
+/**
+ * @see \App\Http\Controllers\MasterData\MenuPriceListController::update
+ * @see app/Http/Controllers/MasterData/MenuPriceListController.php:230
+ * @route '/master-data/menu-price-lists/prices/{price}'
+ */
+update.patch = (
+    args:
+        | { price: number | { id: number } }
+        | [price: number | { id: number }]
+        | number
+        | { id: number },
+    options?: RouteQueryOptions,
+): RouteDefinition<'patch'> => ({
+    url: update.url(args, options),
+    method: 'patch',
+});
+const prices = {
+    store: Object.assign(store, store),
+    update: Object.assign(update, update),
+};
+
+export default prices;

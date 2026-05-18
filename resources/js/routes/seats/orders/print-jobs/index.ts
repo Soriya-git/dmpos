@@ -1,0 +1,215 @@
+import {
+    queryParams,
+    type RouteQueryOptions,
+    type RouteDefinition,
+    applyUrlDefaults,
+} from './../../../../wayfinder';
+/**
+ * @see \App\Http\Controllers\Seats\SeatOrderController::reprint
+ * @see app/Http/Controllers/Seats/SeatOrderController.php:422
+ * @route '/orders/{diningSession}/print-jobs/{printJob}/reprint'
+ */
+export const reprint = (
+    args:
+        | {
+              diningSession: number | { id: number };
+              printJob: number | { id: number };
+          }
+        | [
+              diningSession: number | { id: number },
+              printJob: number | { id: number },
+          ],
+    options?: RouteQueryOptions,
+): RouteDefinition<'post'> => ({
+    url: reprint.url(args, options),
+    method: 'post',
+});
+
+reprint.definition = {
+    methods: ['post'],
+    url: '/orders/{diningSession}/print-jobs/{printJob}/reprint',
+} satisfies RouteDefinition<['post']>;
+
+/**
+ * @see \App\Http\Controllers\Seats\SeatOrderController::reprint
+ * @see app/Http/Controllers/Seats/SeatOrderController.php:422
+ * @route '/orders/{diningSession}/print-jobs/{printJob}/reprint'
+ */
+reprint.url = (
+    args:
+        | {
+              diningSession: number | { id: number };
+              printJob: number | { id: number };
+          }
+        | [
+              diningSession: number | { id: number },
+              printJob: number | { id: number },
+          ],
+    options?: RouteQueryOptions,
+) => {
+    if (Array.isArray(args)) {
+        args = {
+            diningSession: args[0],
+            printJob: args[1],
+        };
+    }
+
+    args = applyUrlDefaults(args);
+
+    const parsedArgs = {
+        diningSession:
+            typeof args.diningSession === 'object'
+                ? args.diningSession.id
+                : args.diningSession,
+        printJob:
+            typeof args.printJob === 'object'
+                ? args.printJob.id
+                : args.printJob,
+    };
+
+    return (
+        reprint.definition.url
+            .replace('{diningSession}', parsedArgs.diningSession.toString())
+            .replace('{printJob}', parsedArgs.printJob.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+    );
+};
+
+/**
+ * @see \App\Http\Controllers\Seats\SeatOrderController::reprint
+ * @see app/Http/Controllers/Seats/SeatOrderController.php:422
+ * @route '/orders/{diningSession}/print-jobs/{printJob}/reprint'
+ */
+reprint.post = (
+    args:
+        | {
+              diningSession: number | { id: number };
+              printJob: number | { id: number };
+          }
+        | [
+              diningSession: number | { id: number },
+              printJob: number | { id: number },
+          ],
+    options?: RouteQueryOptions,
+): RouteDefinition<'post'> => ({
+    url: reprint.url(args, options),
+    method: 'post',
+});
+
+/**
+ * @see \App\Http\Controllers\Seats\SeatOrderController::preview
+ * @see app/Http/Controllers/Seats/SeatOrderController.php:455
+ * @route '/orders/{diningSession}/print-jobs/{printJob}/preview'
+ */
+export const preview = (
+    args:
+        | {
+              diningSession: number | { id: number };
+              printJob: number | { id: number };
+          }
+        | [
+              diningSession: number | { id: number },
+              printJob: number | { id: number },
+          ],
+    options?: RouteQueryOptions,
+): RouteDefinition<'get'> => ({
+    url: preview.url(args, options),
+    method: 'get',
+});
+
+preview.definition = {
+    methods: ['get', 'head'],
+    url: '/orders/{diningSession}/print-jobs/{printJob}/preview',
+} satisfies RouteDefinition<['get', 'head']>;
+
+/**
+ * @see \App\Http\Controllers\Seats\SeatOrderController::preview
+ * @see app/Http/Controllers/Seats/SeatOrderController.php:455
+ * @route '/orders/{diningSession}/print-jobs/{printJob}/preview'
+ */
+preview.url = (
+    args:
+        | {
+              diningSession: number | { id: number };
+              printJob: number | { id: number };
+          }
+        | [
+              diningSession: number | { id: number },
+              printJob: number | { id: number },
+          ],
+    options?: RouteQueryOptions,
+) => {
+    if (Array.isArray(args)) {
+        args = {
+            diningSession: args[0],
+            printJob: args[1],
+        };
+    }
+
+    args = applyUrlDefaults(args);
+
+    const parsedArgs = {
+        diningSession:
+            typeof args.diningSession === 'object'
+                ? args.diningSession.id
+                : args.diningSession,
+        printJob:
+            typeof args.printJob === 'object'
+                ? args.printJob.id
+                : args.printJob,
+    };
+
+    return (
+        preview.definition.url
+            .replace('{diningSession}', parsedArgs.diningSession.toString())
+            .replace('{printJob}', parsedArgs.printJob.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+    );
+};
+
+/**
+ * @see \App\Http\Controllers\Seats\SeatOrderController::preview
+ * @see app/Http/Controllers/Seats/SeatOrderController.php:455
+ * @route '/orders/{diningSession}/print-jobs/{printJob}/preview'
+ */
+preview.get = (
+    args:
+        | {
+              diningSession: number | { id: number };
+              printJob: number | { id: number };
+          }
+        | [
+              diningSession: number | { id: number },
+              printJob: number | { id: number },
+          ],
+    options?: RouteQueryOptions,
+): RouteDefinition<'get'> => ({
+    url: preview.url(args, options),
+    method: 'get',
+});
+/**
+ * @see \App\Http\Controllers\Seats\SeatOrderController::preview
+ * @see app/Http/Controllers/Seats/SeatOrderController.php:455
+ * @route '/orders/{diningSession}/print-jobs/{printJob}/preview'
+ */
+preview.head = (
+    args:
+        | {
+              diningSession: number | { id: number };
+              printJob: number | { id: number };
+          }
+        | [
+              diningSession: number | { id: number },
+              printJob: number | { id: number },
+          ],
+    options?: RouteQueryOptions,
+): RouteDefinition<'head'> => ({
+    url: preview.url(args, options),
+    method: 'head',
+});
+const printJobs = {
+    reprint: Object.assign(reprint, reprint),
+    preview: Object.assign(preview, preview),
+};
+
+export default printJobs;

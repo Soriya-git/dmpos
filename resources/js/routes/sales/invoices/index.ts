@@ -1,63 +1,90 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import {
+    queryParams,
+    type RouteQueryOptions,
+    type RouteDefinition,
+    applyUrlDefaults,
+} from './../../../wayfinder';
 /**
-* @see \App\Http\Controllers\Sales\SaleInvoiceController::receive
- * @see app/Http/Controllers/Sales/SaleInvoiceController.php:72
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::receive
+ * @see app/Http/Controllers/Sales/SaleInvoiceController.php:84
  * @route '/sales/invoices/{invoice}/receive'
  */
-export const receive = (args: { invoice: number | { id: number } } | [invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const receive = (
+    args:
+        | { invoice: number | { id: number } }
+        | [invoice: number | { id: number }]
+        | number
+        | { id: number },
+    options?: RouteQueryOptions,
+): RouteDefinition<'post'> => ({
     url: receive.url(args, options),
     method: 'post',
-})
+});
 
 receive.definition = {
-    methods: ["post"],
+    methods: ['post'],
     url: '/sales/invoices/{invoice}/receive',
-} satisfies RouteDefinition<["post"]>
+} satisfies RouteDefinition<['post']>;
 
 /**
-* @see \App\Http\Controllers\Sales\SaleInvoiceController::receive
- * @see app/Http/Controllers/Sales/SaleInvoiceController.php:72
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::receive
+ * @see app/Http/Controllers/Sales/SaleInvoiceController.php:84
  * @route '/sales/invoices/{invoice}/receive'
  */
-receive.url = (args: { invoice: number | { id: number } } | [invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+receive.url = (
+    args:
+        | { invoice: number | { id: number } }
+        | [invoice: number | { id: number }]
+        | number
+        | { id: number },
+    options?: RouteQueryOptions,
+) => {
     if (typeof args === 'string' || typeof args === 'number') {
-        args = { invoice: args }
+        args = { invoice: args };
     }
 
-            if (typeof args === 'object' && !Array.isArray(args) && 'id' in args) {
-            args = { invoice: args.id }
-        }
-    
+    if (typeof args === 'object' && !Array.isArray(args) && 'id' in args) {
+        args = { invoice: args.id };
+    }
+
     if (Array.isArray(args)) {
         args = {
-                    invoice: args[0],
-                }
+            invoice: args[0],
+        };
     }
 
-    args = applyUrlDefaults(args)
+    args = applyUrlDefaults(args);
 
     const parsedArgs = {
-                        invoice: typeof args.invoice === 'object'
-                ? args.invoice.id
-                : args.invoice,
-                }
+        invoice:
+            typeof args.invoice === 'object' ? args.invoice.id : args.invoice,
+    };
 
-    return receive.definition.url
+    return (
+        receive.definition.url
             .replace('{invoice}', parsedArgs.invoice.toString())
             .replace(/\/+$/, '') + queryParams(options)
-}
+    );
+};
 
 /**
-* @see \App\Http\Controllers\Sales\SaleInvoiceController::receive
- * @see app/Http/Controllers/Sales/SaleInvoiceController.php:72
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::receive
+ * @see app/Http/Controllers/Sales/SaleInvoiceController.php:84
  * @route '/sales/invoices/{invoice}/receive'
  */
-receive.post = (args: { invoice: number | { id: number } } | [invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+receive.post = (
+    args:
+        | { invoice: number | { id: number } }
+        | [invoice: number | { id: number }]
+        | number
+        | { id: number },
+    options?: RouteQueryOptions,
+): RouteDefinition<'post'> => ({
     url: receive.url(args, options),
     method: 'post',
-})
+});
 const invoices = {
     receive: Object.assign(receive, receive),
-}
+};
 
-export default invoices
+export default invoices;

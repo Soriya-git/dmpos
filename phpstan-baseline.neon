@@ -1,0 +1,985 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property App\\Models\\StockBalance\:\:\$stockLocation\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php
+
+		-
+			message: '#^Relation ''branch'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php
+
+		-
+			message: '#^Relation ''stockLocation'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php
+
+		-
+			message: '#^Relation ''unit'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php
+
+		-
+			message: '#^Relation ''warehouse'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>code" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 5
+			path: app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>location_type" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 6
+			path: app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GoodsReceipt\:\:\$lines\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GoodsReceipt\:\:\$purchaseOrder\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GoodsReceipt\:\:\$receiver\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GoodsReceipt\:\:\$stockLocation\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GoodsReceiptLine\:\:\$item\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GoodsReceiptLine\:\:\$stockLocation\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GoodsReceiptLine\:\:\$unit\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\PurchaseOrder\:\:\$lines\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\PurchaseOrderLine\:\:\$item\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\PurchaseOrderLine\:\:\$unit\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockLocation\:\:\$warehouse\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Relation ''goodsReceipt'' is not found in App\\Models\\GoodsReceiptLine model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Relation ''lines'' is not found in App\\Models\\GoodsReceipt model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Relation ''lines'' is not found in App\\Models\\PurchaseOrder model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Relation ''warehouse'' is not found in App\\Models\\StockLocation model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>code" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>warehouse_id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/CompanyBranchController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CustomerGroup\:\:\$customers_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/MasterData/CustomerController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\CustomerGroup\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/MasterData/CustomerController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/CustomerController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\DiningResourceType\:\:\$dining_resources_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/MasterData/DiningResourceController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/MasterData/DiningResourceController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ExchangeRate\:\:\$creator\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/MasterData/ExchangeRateController.php
+
+		-
+			message: '#^Relation ''company'' is not found in App\\Models\\ExchangeRate model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/MasterData/ExchangeRateController.php
+
+		-
+			message: '#^Relation ''creator'' is not found in App\\Models\\ExchangeRate model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/MasterData/ExchangeRateController.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Carbon\\CarbonImmutable\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/ExchangeRateController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/ExchangeRateController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\BomHeader\:\:\$outputItem\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/MasterData/MenuController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\MenuCategory\:\:\$menus_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/MasterData/MenuController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\MenuCategory\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/MasterData/MenuController.php
+
+		-
+			message: '#^Relation ''branch'' is not found in App\\Models\\MenuCategory model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/MasterData/MenuController.php
+
+		-
+			message: '#^Relation ''branch'' is not found in App\\Models\\MenuPrice model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/MasterData/MenuController.php
+
+		-
+			message: '#^Relation ''menu'' is not found in App\\Models\\MenuPrice model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/MasterData/MenuController.php
+
+		-
+			message: '#^Relation ''outputItem'' is not found in App\\Models\\BomHeader model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/MasterData/MenuController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>branch_id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/MenuController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>company_id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/MenuController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 5
+			path: app/Http/Controllers/MasterData/MenuController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>price" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/MenuController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\MenuPrice\:\:\$menu\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/MasterData/MenuPriceListController.php
+
+		-
+			message: '#^Relation ''menu'' is not found in App\\Models\\MenuPrice model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/MasterData/MenuPriceListController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>branch_id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/MenuPriceListController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>company_id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/MenuPriceListController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 7
+			path: app/Http/Controllers/MasterData/MenuPriceListController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 4
+			path: app/Http/Controllers/MasterData/PosTerminalController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\BomHeader\:\:\$lines\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/MasterData/ProductController.php
+
+		-
+			message: '#^Relation ''lines'' is not found in App\\Models\\BomHeader model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/MasterData/ProductController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>branch_id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/ProductController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>code" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/MasterData/ProductController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>company_id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/ProductController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 3
+			path: app/Http/Controllers/MasterData/ProductController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Tax\:\:\$menus_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/MasterData/TaxController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Tax\:\:\$order_lines_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/MasterData/TaxController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Tax\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/MasterData/TaxController.php
+
+		-
+			message: '#^Relation ''company'' is not found in App\\Models\\Tax model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/MasterData/TaxController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/MasterData/TaxController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Warehouse\:\:\$stock_locations_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/MasterData/WarehouseLocationController.php
+
+		-
+			message: '#^Relation ''branch'' is not found in App\\Models\\StockLocation model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/MasterData/WarehouseLocationController.php
+
+		-
+			message: '#^Relation ''branch'' is not found in App\\Models\\Warehouse model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/MasterData/WarehouseLocationController.php
+
+		-
+			message: '#^Relation ''warehouse'' is not found in App\\Models\\StockLocation model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/MasterData/WarehouseLocationController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 3
+			path: app/Http/Controllers/MasterData/WarehouseLocationController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\PurchaseOrder\:\:\$lines\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Purchase/PurchaseOrderController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\PurchaseOrderLine\:\:\$item\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Purchase/PurchaseOrderController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\PurchaseOrderLine\:\:\$unit\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Purchase/PurchaseOrderController.php
+
+		-
+			message: '#^Relation ''lines'' is not found in App\\Models\\PurchaseOrder model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Purchase/PurchaseOrderController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GoodsReceipt\:\:\$lines\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GoodsReceipt\:\:\$purchaseOrder\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GoodsReceipt\:\:\$stockLocation\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockLocation\:\:\$warehouse\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockTransfer\:\:\$goodsReceipt\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockTransfer\:\:\$lines\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockTransferLine\:\:\$item\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockTransferLine\:\:\$toLocation\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockTransferLine\:\:\$unit\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Putaway\\PutawayController\:\:moveBalance\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Relation ''goodsReceipt'' is not found in App\\Models\\StockTransfer model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Relation ''lines'' is not found in App\\Models\\GoodsReceipt model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Relation ''lines'' is not found in App\\Models\\StockTransfer model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Relation ''stockLocation'' is not found in App\\Models\\GoodsReceipt model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Relation ''stockTransfer'' is not found in App\\Models\\StockTransferLine model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Relation ''warehouse'' is not found in App\\Models\\StockLocation model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>code" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>transfer_no" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Putaway/PutawayController.php
+
+		-
+			message: '#^Relation ''paymentMethod'' is not found in App\\Models\\Payment model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Sales/SaleInvoiceController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Payment\:\:\$paymentMethod\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\PrintJob\:\:\$printer\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Anonymous function should return Illuminate\\Support\\Collection\<int, array\{id\: int, orderId\: int, orderNo\: string, menuName\: string, quantity\: float, unitPrice\: float, totalAmount\: float, note\: string\|null, \.\.\.\}\> but returns Illuminate\\Support\\Collection\<int, array\{id\: int, orderId\: int, orderNo\: string, menuName\: string, quantity\: float, unitPrice\: float, totalAmount\: float, note\: string\|null, \.\.\.\}\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int,App\\Models\\Order\>\:\:flatMap\(\) expects callable\(App\\Models\\Order, int\)\: \(array\<int, array\{id\: int, orderId\: int, orderNo\: string, menuName\: string, quantity\: float, unitPrice\: float, totalAmount\: float, note\: string\|null, status\: ''cancelled''\|''ordered''\|''preparing''\|''ready''\|''served'', billGroup\: non\-falsy\-string, diningResourceId\: int\<0, max\>\}\>\|Illuminate\\Support\\Collection\<int, array\{id\: int, orderId\: int, orderNo\: string, menuName\: string, quantity\: float, unitPrice\: float, totalAmount\: float, note\: string\|null, status\: ''cancelled''\|''ordered''\|''preparing''\|''ready''\|''served'', billGroup\: non\-falsy\-string, diningResourceId\: int\<0, max\>\}\>\), Closure\(App\\Models\\Order\)\: Illuminate\\Support\\Collection\<int, array\{id\: int, orderId\: int, orderNo\: string, menuName\: string, quantity\: float, unitPrice\: float, totalAmount\: float, note\: string\|null, status\: ''cancelled''\|''ordered''\|''preparing''\|''ready''\|''served'', billGroup\: non\-falsy\-string, diningResourceId\: int\<0, max\>\}\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Property App\\Models\\OrderLine\:\:\$status \(''cancelled''\|''ordered''\|''preparing''\|''ready''\|''served''\) does not accept ''returned''\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Relation ''printer'' is not found in App\\Models\\PrintJob model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>printer_role" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>quantity" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>status" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Using nullsafe property access on non\-nullable type App\\Models\\PaymentMethod\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Seats/SeatOrderController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockBalance\:\:\$item\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockBalance\:\:\$stockLocation\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockMovement\:\:\$fromLocation\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockMovement\:\:\$toLocation\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockTransfer\:\:\$lines\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockTransfer\:\:\$lines_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockTransferLine\:\:\$item\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Relation ''branch'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Relation ''fromLocation'' is not found in App\\Models\\StockMovement model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Relation ''item'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Relation ''lines'' is not found in App\\Models\\StockTransfer model\.$#'
+			identifier: larastan.relationExistence
+			count: 3
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Relation ''stockLocation'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 5
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Relation ''unit'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Relation ''warehouse'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Relation ''warehouse'' is not found in App\\Models\\StockLocation model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>code" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 8
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>item_type" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>location_type" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 5
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 23
+			path: app/Http/Controllers/StockMovements/InternalTransferController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockAdjustment\:\:\$lines\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockAdjustment\:\:\$lines_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockAdjustmentLine\:\:\$item\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockBalance\:\:\$item\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Relation ''branch'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Relation ''branch'' is not found in App\\Models\\StockLocation model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Relation ''item'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Relation ''lines'' is not found in App\\Models\\StockAdjustment model\.$#'
+			identifier: larastan.relationExistence
+			count: 3
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Relation ''stockLocation'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Relation ''unit'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Relation ''warehouse'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Relation ''warehouse'' is not found in App\\Models\\StockLocation model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>average_cost" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>code" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 7
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>item_type" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>location_type" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 17
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>quantity_available" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockAdjustmentController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\InvoiceLine\:\:\$menu\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Http/Controllers/StockMovements/StockSettlementController.php
+
+		-
+			message: '#^Relation ''item'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockSettlementController.php
+
+		-
+			message: '#^Relation ''menu'' is not found in App\\Models\\InvoiceLine model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockSettlementController.php
+
+		-
+			message: '#^Relation ''stockLocation'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/StockMovements/StockSettlementController.php
+
+		-
+			message: '#^Relation ''warehouse'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/StockMovements/StockSettlementController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>code" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 4
+			path: app/Http/Controllers/StockMovements/StockSettlementController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 7
+			path: app/Http/Controllers/StockMovements/StockSettlementController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockAdjustment\:\:\$lines\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockAdjustment\:\:\$lines_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockAdjustmentLine\:\:\$item\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\StockBalance\:\:\$item\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Relation ''branch'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Relation ''item'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Relation ''lines'' is not found in App\\Models\\StockAdjustment model\.$#'
+			identifier: larastan.relationExistence
+			count: 3
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Relation ''stockLocation'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Relation ''unit'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Relation ''warehouse'' is not found in App\\Models\\StockBalance model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>code" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 7
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>item_type" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>location_type" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 14
+			path: app/Http/Controllers/StockMovements/StockWriteOffController.php

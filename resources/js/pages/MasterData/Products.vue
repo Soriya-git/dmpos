@@ -761,12 +761,20 @@ function cancelUnit(record: UnitRecord) {
                                     v-model="itemForm.item_type"
                                     class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                                 >
-                                    <option value="raw_material">Raw Material</option>
-                                    <option value="ingredient">Ingredient</option>
+                                    <option value="raw_material">
+                                        Raw Material
+                                    </option>
+                                    <option value="ingredient">
+                                        Ingredient
+                                    </option>
                                     <option value="drink">Drink</option>
-                                    <option value="finished_product">Finished Product</option>
+                                    <option value="finished_product">
+                                        Finished Product
+                                    </option>
                                     <option value="packaging">Packaging</option>
-                                    <option value="service_material">Service Material</option>
+                                    <option value="service_material">
+                                        Service Material
+                                    </option>
                                     <option value="other">Other</option>
                                 </select>
                             </label>
@@ -991,7 +999,9 @@ function cancelUnit(record: UnitRecord) {
                                         class="h-9 min-w-0 flex-1 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                                         @change="syncLineUnit(index)"
                                     >
-                                        <option value="">Select component</option>
+                                        <option value="">
+                                            Select component
+                                        </option>
                                         <option
                                             v-for="item in props.itemOptions"
                                             :key="item.id"

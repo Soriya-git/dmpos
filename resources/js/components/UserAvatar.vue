@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue';
 import { useInitials } from '@/composables/useInitials';
 import type { User } from '@/types';
-import { computed, ref, watch } from 'vue';
 
 type Props = {
     user?: User | null;

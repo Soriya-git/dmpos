@@ -1,6 +1,9 @@
-import PosSessionController from './PosSessionController'
+import PosSessionController from './PosSessionController';
 const POS = {
-    PosSessionController: Object.assign(PosSessionController, PosSessionController),
-}
+    PosSessionController: Object.assign(
+        PosSessionController,
+        PosSessionController,
+    ),
+};
 
-export default POS
+export default POS;

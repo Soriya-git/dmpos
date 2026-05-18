@@ -205,10 +205,7 @@ function resetForms(record: PanelRecord | null) {
     paymentQrcodePreview.value = record.paymentQrcodeUrl;
 }
 
-function selectBranchImage(
-    event: Event,
-    field: 'logo' | 'payment_qrcode',
-) {
+function selectBranchImage(event: Event, field: 'logo' | 'payment_qrcode') {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] ?? null;
 

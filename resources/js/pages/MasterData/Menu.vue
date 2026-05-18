@@ -279,7 +279,9 @@ watch(
             return;
         }
 
-        const bom = props.bomOptions.find((option) => option.id === Number(bomId));
+        const bom = props.bomOptions.find(
+            (option) => option.id === Number(bomId),
+        );
 
         if (bom?.outputItemId) {
             menuForm.item_id = String(bom.outputItemId);
@@ -326,7 +328,10 @@ function resetForms(record: PanelRecord | null) {
 
 function submitPanel() {
     if (selectedRecord.value) {
-        if (panelKind.value === 'menus' && 'basePrice' in selectedRecord.value) {
+        if (
+            panelKind.value === 'menus' &&
+            'basePrice' in selectedRecord.value
+        ) {
             router.patch(
                 `/master-data/menu/menus/${selectedRecord.value.id}`,
                 {
@@ -843,7 +848,11 @@ function submitPanel() {
                                 </option>
                             </select>
                             <p
-                                v-if="menuForm.errors.name || categoryForm.errors.name || priceForm.errors.menu_id"
+                                v-if="
+                                    menuForm.errors.name ||
+                                    categoryForm.errors.name ||
+                                    priceForm.errors.menu_id
+                                "
                                 class="mt-1 text-[10px] font-bold text-rose-600"
                             >
                                 {{
@@ -891,7 +900,9 @@ function submitPanel() {
                         </label>
 
                         <label
-                            v-if="panelKind === 'menus' && sourceMode === 'item'"
+                            v-if="
+                                panelKind === 'menus' && sourceMode === 'item'
+                            "
                             class="block"
                         >
                             <span
@@ -904,7 +915,9 @@ function submitPanel() {
                                 :disabled="!!selectedRecord"
                                 class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                             >
-                                <option value="">No direct inventory item</option>
+                                <option value="">
+                                    No direct inventory item
+                                </option>
                                 <option
                                     v-for="item in props.itemOptions"
                                     :key="item.id"
@@ -954,7 +967,9 @@ function submitPanel() {
                                 disabled
                                 class="mt-1 text-sm focus-visible:ring-[#007882]"
                             >
-                                <option value="">Selected from BOM output</option>
+                                <option value="">
+                                    Selected from BOM output
+                                </option>
                                 <option
                                     v-for="item in props.itemOptions"
                                     :key="item.id"
@@ -1171,7 +1186,10 @@ function submitPanel() {
                             />
                         </label>
 
-                        <label v-if="panelKind === 'prices'" class="flex items-center gap-2">
+                        <label
+                            v-if="panelKind === 'prices'"
+                            class="flex items-center gap-2"
+                        >
                             <input
                                 v-model="priceForm.is_default"
                                 :disabled="!!selectedRecord"
