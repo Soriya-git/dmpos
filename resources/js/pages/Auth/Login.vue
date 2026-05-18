@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Form, Head } from '@inertiajs/vue3';
+import { Form, Head, router } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import AuthBase from '@/layouts/AuthLayout.vue';
+import { dashboard } from '@/wayfinder/routes';
 import { store } from '@/wayfinder/routes/login';
 
 defineProps<{
@@ -31,6 +32,7 @@ defineProps<{
         <Form
             v-bind="store.form()"
             :reset-on-success="['password']"
+            @success="router.visit(dashboard(), { replace: true })"
             v-slot="{ errors, processing }"
             class="flex flex-col gap-6"
         >
@@ -46,7 +48,7 @@ defineProps<{
                         :tabindex="1"
                         autocomplete="email"
                         placeholder="email@example.com"
-                        default-value="test@example.com"
+                        default-value="drg.manager@diamond.com"
                     />
                     <InputError :message="errors.email" />
                 </div>

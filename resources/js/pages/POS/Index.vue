@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import UserAvatar from '@/components/UserAvatar.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { login } from '@/wayfinder/routes';
 
 type Terminal = {
     id: number;
@@ -218,7 +219,13 @@ const cancelClose = () => {
 };
 
 const logout = () => {
-    router.post('/logout');
+    router.post(
+        '/logout',
+        {},
+        {
+            onSuccess: () => router.visit(login(), { replace: true }),
+        },
+    );
 };
 
 const formatMoney = (value: number | string | null | undefined) => {

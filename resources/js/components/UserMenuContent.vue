@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Link, router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import { Camera, LogOut, Monitor, Moon, Palette, Sun } from 'lucide-vue-next';
 import { ref } from 'vue';
 import {
@@ -11,7 +11,7 @@ import {
 import UserInfo from '@/components/UserInfo.vue';
 import { useAppearance } from '@/composables/useAppearance';
 import type { User } from '@/types';
-import { logout } from '@/wayfinder/routes';
+import { login, logout } from '@/wayfinder/routes';
 
 type Props = {
     user: User;
@@ -22,6 +22,13 @@ const imageInput = ref<HTMLInputElement | null>(null);
 
 const handleLogout = () => {
     router.cancelAll();
+    router.post(
+        logout.url(),
+        {},
+        {
+            onSuccess: () => router.visit(login(), { replace: true }),
+        },
+    );
 };
 
 const openImagePicker = () => {
@@ -107,16 +114,12 @@ defineProps<Props>();
         </DropdownMenuItem>
     </DropdownMenuGroup>
     <DropdownMenuSeparator />
-    <DropdownMenuItem :as-child="true">
-        <Link
-            class="block w-full cursor-pointer"
-            :href="logout()"
-            @click="handleLogout"
-            as="button"
-            data-test="logout-button"
-        >
-            <LogOut class="mr-2 h-4 w-4" />
-            Log out
-        </Link>
+    <DropdownMenuItem
+        class="cursor-pointer"
+        data-test="logout-button"
+        @click="handleLogout"
+    >
+        <LogOut class="mr-2 h-4 w-4" />
+        Log out
     </DropdownMenuItem>
 </template>
