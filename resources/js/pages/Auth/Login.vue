@@ -32,7 +32,7 @@ defineProps<{
         <Form
             v-bind="store.form()"
             :reset-on-success="['password']"
-            @success="router.visit(dashboard(), { replace: true })"
+            @success="router.visit(dashboard().url, { replace: true })"
             v-slot="{ errors, processing }"
             class="flex flex-col gap-6"
         >

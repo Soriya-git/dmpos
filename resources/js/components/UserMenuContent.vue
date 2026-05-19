@@ -11,7 +11,7 @@ import {
 import UserInfo from '@/components/UserInfo.vue';
 import { useAppearance } from '@/composables/useAppearance';
 import type { User } from '@/types';
-import { login, logout } from '@/wayfinder/routes';
+import { logout } from '@/wayfinder/routes';
 
 type Props = {
     user: User;
@@ -20,15 +20,12 @@ type Props = {
 const { appearance, updateAppearance } = useAppearance();
 const imageInput = ref<HTMLInputElement | null>(null);
 
-const handleLogout = () => {
-    router.cancelAll();
-    router.post(
-        logout.url(),
-        {},
-        {
-            onSuccess: () => router.visit(login(), { replace: true }),
-        },
-    );
+const handleLogout = (event: Event) => {
+    event.preventDefault();
+
+    router.post(logout().url, {
+        replace: true,
+    });
 };
 
 const openImagePicker = () => {
@@ -114,12 +111,15 @@ defineProps<Props>();
         </DropdownMenuItem>
     </DropdownMenuGroup>
     <DropdownMenuSeparator />
-    <DropdownMenuItem
-        class="cursor-pointer"
-        data-test="logout-button"
-        @click="handleLogout"
-    >
-        <LogOut class="mr-2 h-4 w-4" />
-        Log out
+    <DropdownMenuItem>
+        <button
+            type="button"
+            class="block w-full text-left"
+            @click="handleLogout"
+            data-test="logout-button"
+        >
+            <LogOut class="mr-2 h-4 w-4" />
+            Log out
+        </button>
     </DropdownMenuItem>
 </template>

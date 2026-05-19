@@ -223,7 +223,7 @@ const logout = () => {
         '/logout',
         {},
         {
-            onSuccess: () => router.visit(login(), { replace: true }),
+            onSuccess: () => router.visit(login().url, { replace: true }),
         },
     );
 };
