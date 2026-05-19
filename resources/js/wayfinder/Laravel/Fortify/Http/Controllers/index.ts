@@ -7,8 +7,8 @@ import ConfirmedPasswordStatusController from './ConfirmedPasswordStatusControll
 
 export const Controllers = {
     AuthenticatedSessionController,
-    ConfirmablePasswordController,
     ConfirmedPasswordStatusController,
+    ConfirmablePasswordController,
 };
 
 export default Controllers;

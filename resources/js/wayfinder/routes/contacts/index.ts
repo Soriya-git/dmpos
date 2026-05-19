@@ -13,8 +13,8 @@ import notes from './notes';
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:20
+ * @route "http://localhost/contacts"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -23,13 +23,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 index.definition = {
     methods: ['get', 'head'],
-    url: '/contacts',
+    url: 'http://localhost/contacts',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:20
+ * @route "http://localhost/contacts"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options);
@@ -37,8 +37,8 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:20
+ * @route "http://localhost/contacts"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -47,8 +47,8 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:20
+ * @route "http://localhost/contacts"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
@@ -57,8 +57,8 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:20
+ * @route "http://localhost/contacts"
  */
 const indexForm = (
     options?: RouteQueryOptions,
@@ -69,8 +69,8 @@ const indexForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:20
+ * @route "http://localhost/contacts"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -79,8 +79,8 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:20
+ * @route "http://localhost/contacts"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(formSafeOptions('head', options)),
@@ -90,8 +90,8 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 index.form = indexForm;
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "/contacts/create"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:42
+ * @route "http://localhost/contacts/create"
  */
 export const create = (
     options?: RouteQueryOptions,
@@ -102,13 +102,13 @@ export const create = (
 
 create.definition = {
     methods: ['get', 'head'],
-    url: '/contacts/create',
+    url: 'http://localhost/contacts/create',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "/contacts/create"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:42
+ * @route "http://localhost/contacts/create"
  */
 create.url = (options?: RouteQueryOptions) => {
     return create.definition.url + queryParams(options);
@@ -116,8 +116,8 @@ create.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "/contacts/create"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:42
+ * @route "http://localhost/contacts/create"
  */
 create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: create.url(options),
@@ -126,8 +126,8 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "/contacts/create"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:42
+ * @route "http://localhost/contacts/create"
  */
 create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: create.url(options),
@@ -136,8 +136,8 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "/contacts/create"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:42
+ * @route "http://localhost/contacts/create"
  */
 const createForm = (
     options?: RouteQueryOptions,
@@ -148,8 +148,8 @@ const createForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "/contacts/create"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:42
+ * @route "http://localhost/contacts/create"
  */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: create.url(options),
@@ -158,8 +158,8 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "/contacts/create"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:42
+ * @route "http://localhost/contacts/create"
  */
 createForm.head = (
     options?: RouteQueryOptions,
@@ -171,8 +171,8 @@ createForm.head = (
 create.form = createForm;
 /**
  * @see \App\Http\Controllers\Crm\ContactController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:51
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:51
+ * @route "http://localhost/contacts"
  */
 export const store = (
     options?: RouteQueryOptions,
@@ -183,13 +183,13 @@ export const store = (
 
 store.definition = {
     methods: ['post'],
-    url: '/contacts',
+    url: 'http://localhost/contacts',
 } satisfies RouteDefinition<['post']>;
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:51
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:51
+ * @route "http://localhost/contacts"
  */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options);
@@ -197,8 +197,8 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:51
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:51
+ * @route "http://localhost/contacts"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
@@ -207,8 +207,8 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:51
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:51
+ * @route "http://localhost/contacts"
  */
 const storeForm = (
     options?: RouteQueryOptions,
@@ -219,8 +219,8 @@ const storeForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:51
- * @route "/contacts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:51
+ * @route "http://localhost/contacts"
  */
 storeForm.post = (
     options?: RouteQueryOptions,
@@ -232,8 +232,8 @@ storeForm.post = (
 store.form = storeForm;
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:60
+ * @route "http://localhost/contacts/{contact}"
  */
 export const show = (
     args:
@@ -249,13 +249,13 @@ export const show = (
 
 show.definition = {
     methods: ['get', 'head'],
-    url: '/contacts/{contact}',
+    url: 'http://localhost/contacts/{contact}',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:60
+ * @route "http://localhost/contacts/{contact}"
  */
 show.url = (
     args:
@@ -295,8 +295,8 @@ show.url = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:60
+ * @route "http://localhost/contacts/{contact}"
  */
 show.get = (
     args:
@@ -312,8 +312,8 @@ show.get = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:60
+ * @route "http://localhost/contacts/{contact}"
  */
 show.head = (
     args:
@@ -329,8 +329,8 @@ show.head = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:60
+ * @route "http://localhost/contacts/{contact}"
  */
 const showForm = (
     args:
@@ -346,8 +346,8 @@ const showForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:60
+ * @route "http://localhost/contacts/{contact}"
  */
 showForm.get = (
     args:
@@ -363,8 +363,8 @@ showForm.get = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:60
+ * @route "http://localhost/contacts/{contact}"
  */
 showForm.head = (
     args:
@@ -381,8 +381,8 @@ showForm.head = (
 show.form = showForm;
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "/contacts/{contact}/edit"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:72
+ * @route "http://localhost/contacts/{contact}/edit"
  */
 export const edit = (
     args:
@@ -398,13 +398,13 @@ export const edit = (
 
 edit.definition = {
     methods: ['get', 'head'],
-    url: '/contacts/{contact}/edit',
+    url: 'http://localhost/contacts/{contact}/edit',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "/contacts/{contact}/edit"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:72
+ * @route "http://localhost/contacts/{contact}/edit"
  */
 edit.url = (
     args:
@@ -444,8 +444,8 @@ edit.url = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "/contacts/{contact}/edit"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:72
+ * @route "http://localhost/contacts/{contact}/edit"
  */
 edit.get = (
     args:
@@ -461,8 +461,8 @@ edit.get = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "/contacts/{contact}/edit"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:72
+ * @route "http://localhost/contacts/{contact}/edit"
  */
 edit.head = (
     args:
@@ -478,8 +478,8 @@ edit.head = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "/contacts/{contact}/edit"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:72
+ * @route "http://localhost/contacts/{contact}/edit"
  */
 const editForm = (
     args:
@@ -495,8 +495,8 @@ const editForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "/contacts/{contact}/edit"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:72
+ * @route "http://localhost/contacts/{contact}/edit"
  */
 editForm.get = (
     args:
@@ -512,8 +512,8 @@ editForm.get = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "/contacts/{contact}/edit"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:72
+ * @route "http://localhost/contacts/{contact}/edit"
  */
 editForm.head = (
     args:
@@ -530,8 +530,8 @@ editForm.head = (
 edit.form = editForm;
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:84
+ * @route "http://localhost/contacts/{contact}"
  */
 export const update = (
     args:
@@ -547,13 +547,13 @@ export const update = (
 
 update.definition = {
     methods: ['put', 'patch'],
-    url: '/contacts/{contact}',
+    url: 'http://localhost/contacts/{contact}',
 } satisfies RouteDefinition<['put', 'patch']>;
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:84
+ * @route "http://localhost/contacts/{contact}"
  */
 update.url = (
     args:
@@ -593,8 +593,8 @@ update.url = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:84
+ * @route "http://localhost/contacts/{contact}"
  */
 update.put = (
     args:
@@ -610,8 +610,8 @@ update.put = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:84
+ * @route "http://localhost/contacts/{contact}"
  */
 update.patch = (
     args:
@@ -627,8 +627,8 @@ update.patch = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:84
+ * @route "http://localhost/contacts/{contact}"
  */
 const updateForm = (
     args:
@@ -644,8 +644,8 @@ const updateForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:84
+ * @route "http://localhost/contacts/{contact}"
  */
 updateForm.put = (
     args:
@@ -661,8 +661,8 @@ updateForm.put = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:84
+ * @route "http://localhost/contacts/{contact}"
  */
 updateForm.patch = (
     args:
@@ -679,8 +679,8 @@ updateForm.patch = (
 update.form = updateForm;
 /**
  * @see \App\Http\Controllers\Crm\ContactController::destroy
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:93
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:93
+ * @route "http://localhost/contacts/{contact}"
  */
 export const destroy = (
     args:
@@ -696,13 +696,13 @@ export const destroy = (
 
 destroy.definition = {
     methods: ['delete'],
-    url: '/contacts/{contact}',
+    url: 'http://localhost/contacts/{contact}',
 } satisfies RouteDefinition<['delete']>;
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::destroy
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:93
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:93
+ * @route "http://localhost/contacts/{contact}"
  */
 destroy.url = (
     args:
@@ -742,8 +742,8 @@ destroy.url = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::destroy
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:93
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:93
+ * @route "http://localhost/contacts/{contact}"
  */
 destroy.delete = (
     args:
@@ -759,8 +759,8 @@ destroy.delete = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::destroy
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:93
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:93
+ * @route "http://localhost/contacts/{contact}"
  */
 const destroyForm = (
     args:
@@ -776,8 +776,8 @@ const destroyForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::destroy
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:93
- * @route "/contacts/{contact}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:93
+ * @route "http://localhost/contacts/{contact}"
  */
 destroyForm.delete = (
     args:
@@ -794,8 +794,8 @@ destroyForm.delete = (
 destroy.form = destroyForm;
 /**
  * @see \App\Http\Controllers\Crm\ContactController::favorite
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:102
- * @route "/contacts/{contact}/favorite"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:102
+ * @route "http://localhost/contacts/{contact}/favorite"
  */
 export const favorite = (
     args:
@@ -811,13 +811,13 @@ export const favorite = (
 
 favorite.definition = {
     methods: ['post'],
-    url: '/contacts/{contact}/favorite',
+    url: 'http://localhost/contacts/{contact}/favorite',
 } satisfies RouteDefinition<['post']>;
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::favorite
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:102
- * @route "/contacts/{contact}/favorite"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:102
+ * @route "http://localhost/contacts/{contact}/favorite"
  */
 favorite.url = (
     args:
@@ -857,8 +857,8 @@ favorite.url = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::favorite
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:102
- * @route "/contacts/{contact}/favorite"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:102
+ * @route "http://localhost/contacts/{contact}/favorite"
  */
 favorite.post = (
     args:
@@ -874,8 +874,8 @@ favorite.post = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::favorite
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:102
- * @route "/contacts/{contact}/favorite"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:102
+ * @route "http://localhost/contacts/{contact}/favorite"
  */
 const favoriteForm = (
     args:
@@ -891,8 +891,8 @@ const favoriteForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::favorite
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:102
- * @route "/contacts/{contact}/favorite"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php:102
+ * @route "http://localhost/contacts/{contact}/favorite"
  */
 favoriteForm.post = (
     args:

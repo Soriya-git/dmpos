@@ -11,8 +11,8 @@ import {
 } from './../../../index';
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:106
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:106
+ * @route "http://localhost/storage/{path}"
  */
 export const upload = (
     args: { path: string | number } | [path: string | number] | string | number,
@@ -24,12 +24,12 @@ export const upload = (
 
 upload.definition = {
     methods: ['put'],
-    url: '/storage/{path}',
+    url: 'http://localhost/storage/{path}',
 } satisfies RouteDefinition<['put']>;
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:106
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:106
+ * @route "http://localhost/storage/{path}"
  */
 upload.url = (
     args: { path: string | number } | [path: string | number] | string | number,
@@ -59,8 +59,8 @@ upload.url = (
 };
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:106
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:106
+ * @route "http://localhost/storage/{path}"
  */
 upload.put = (
     args: { path: string | number } | [path: string | number] | string | number,
@@ -71,8 +71,8 @@ upload.put = (
 });
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:106
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:106
+ * @route "http://localhost/storage/{path}"
  */
 const uploadForm = (
     args: { path: string | number } | [path: string | number] | string | number,
@@ -83,8 +83,8 @@ const uploadForm = (
 });
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:106
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:106
+ * @route "http://localhost/storage/{path}"
  */
 uploadForm.put = (
     args: { path: string | number } | [path: string | number] | string | number,

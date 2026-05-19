@@ -11,8 +11,8 @@ import {
 
 /**
  * @see \App\Http\Controllers\Crm\NoteController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php:12
- * @route "/contacts/{contact}/notes"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/NoteController.php:12
+ * @route "http://localhost/contacts/{contact}/notes"
  */
 export const store = (
     args:
@@ -28,13 +28,13 @@ export const store = (
 
 store.definition = {
     methods: ['post'],
-    url: '/contacts/{contact}/notes',
+    url: 'http://localhost/contacts/{contact}/notes',
 } satisfies RouteDefinition<['post']>;
 
 /**
  * @see \App\Http\Controllers\Crm\NoteController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php:12
- * @route "/contacts/{contact}/notes"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/NoteController.php:12
+ * @route "http://localhost/contacts/{contact}/notes"
  */
 store.url = (
     args:
@@ -74,8 +74,8 @@ store.url = (
 
 /**
  * @see \App\Http\Controllers\Crm\NoteController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php:12
- * @route "/contacts/{contact}/notes"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/NoteController.php:12
+ * @route "http://localhost/contacts/{contact}/notes"
  */
 store.post = (
     args:
@@ -91,8 +91,8 @@ store.post = (
 
 /**
  * @see \App\Http\Controllers\Crm\NoteController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php:12
- * @route "/contacts/{contact}/notes"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/NoteController.php:12
+ * @route "http://localhost/contacts/{contact}/notes"
  */
 const storeForm = (
     args:
@@ -108,8 +108,8 @@ const storeForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\NoteController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php:12
- * @route "/contacts/{contact}/notes"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/NoteController.php:12
+ * @route "http://localhost/contacts/{contact}/notes"
  */
 storeForm.post = (
     args:

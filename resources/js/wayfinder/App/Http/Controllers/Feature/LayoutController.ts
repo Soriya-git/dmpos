@@ -11,8 +11,8 @@ import {
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:10
- * @route "/features/layouts/persistent-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:10
+ * @route "http://localhost/features/layouts/persistent-layouts"
  */
 export const persistentLayouts = (
     options?: RouteQueryOptions,
@@ -23,13 +23,13 @@ export const persistentLayouts = (
 
 persistentLayouts.definition = {
     methods: ['get', 'head'],
-    url: '/features/layouts/persistent-layouts',
+    url: 'http://localhost/features/layouts/persistent-layouts',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:10
- * @route "/features/layouts/persistent-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:10
+ * @route "http://localhost/features/layouts/persistent-layouts"
  */
 persistentLayouts.url = (options?: RouteQueryOptions) => {
     return persistentLayouts.definition.url + queryParams(options);
@@ -37,8 +37,8 @@ persistentLayouts.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:10
- * @route "/features/layouts/persistent-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:10
+ * @route "http://localhost/features/layouts/persistent-layouts"
  */
 persistentLayouts.get = (
     options?: RouteQueryOptions,
@@ -49,8 +49,8 @@ persistentLayouts.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:10
- * @route "/features/layouts/persistent-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:10
+ * @route "http://localhost/features/layouts/persistent-layouts"
  */
 persistentLayouts.head = (
     options?: RouteQueryOptions,
@@ -61,8 +61,8 @@ persistentLayouts.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:10
- * @route "/features/layouts/persistent-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:10
+ * @route "http://localhost/features/layouts/persistent-layouts"
  */
 const persistentLayoutsForm = (
     options?: RouteQueryOptions,
@@ -73,8 +73,8 @@ const persistentLayoutsForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:10
- * @route "/features/layouts/persistent-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:10
+ * @route "http://localhost/features/layouts/persistent-layouts"
  */
 persistentLayoutsForm.get = (
     options?: RouteQueryOptions,
@@ -85,8 +85,8 @@ persistentLayoutsForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:10
- * @route "/features/layouts/persistent-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:10
+ * @route "http://localhost/features/layouts/persistent-layouts"
  */
 persistentLayoutsForm.head = (
     options?: RouteQueryOptions,
@@ -98,8 +98,8 @@ persistentLayoutsForm.head = (
 persistentLayouts.form = persistentLayoutsForm;
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "/features/layouts/persistent-layouts/page-2"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:15
+ * @route "http://localhost/features/layouts/persistent-layouts/page-2"
  */
 export const persistentLayoutsPageTwo = (
     options?: RouteQueryOptions,
@@ -110,13 +110,13 @@ export const persistentLayoutsPageTwo = (
 
 persistentLayoutsPageTwo.definition = {
     methods: ['get', 'head'],
-    url: '/features/layouts/persistent-layouts/page-2',
+    url: 'http://localhost/features/layouts/persistent-layouts/page-2',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "/features/layouts/persistent-layouts/page-2"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:15
+ * @route "http://localhost/features/layouts/persistent-layouts/page-2"
  */
 persistentLayoutsPageTwo.url = (options?: RouteQueryOptions) => {
     return persistentLayoutsPageTwo.definition.url + queryParams(options);
@@ -124,8 +124,8 @@ persistentLayoutsPageTwo.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "/features/layouts/persistent-layouts/page-2"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:15
+ * @route "http://localhost/features/layouts/persistent-layouts/page-2"
  */
 persistentLayoutsPageTwo.get = (
     options?: RouteQueryOptions,
@@ -136,8 +136,8 @@ persistentLayoutsPageTwo.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "/features/layouts/persistent-layouts/page-2"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:15
+ * @route "http://localhost/features/layouts/persistent-layouts/page-2"
  */
 persistentLayoutsPageTwo.head = (
     options?: RouteQueryOptions,
@@ -148,8 +148,8 @@ persistentLayoutsPageTwo.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "/features/layouts/persistent-layouts/page-2"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:15
+ * @route "http://localhost/features/layouts/persistent-layouts/page-2"
  */
 const persistentLayoutsPageTwoForm = (
     options?: RouteQueryOptions,
@@ -160,8 +160,8 @@ const persistentLayoutsPageTwoForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "/features/layouts/persistent-layouts/page-2"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:15
+ * @route "http://localhost/features/layouts/persistent-layouts/page-2"
  */
 persistentLayoutsPageTwoForm.get = (
     options?: RouteQueryOptions,
@@ -172,8 +172,8 @@ persistentLayoutsPageTwoForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "/features/layouts/persistent-layouts/page-2"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:15
+ * @route "http://localhost/features/layouts/persistent-layouts/page-2"
  */
 persistentLayoutsPageTwoForm.head = (
     options?: RouteQueryOptions,
@@ -185,8 +185,8 @@ persistentLayoutsPageTwoForm.head = (
 persistentLayoutsPageTwo.form = persistentLayoutsPageTwoForm;
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::nestedLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:20
- * @route "/features/layouts/nested-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:20
+ * @route "http://localhost/features/layouts/nested-layouts"
  */
 export const nestedLayouts = (
     options?: RouteQueryOptions,
@@ -197,13 +197,13 @@ export const nestedLayouts = (
 
 nestedLayouts.definition = {
     methods: ['get', 'head'],
-    url: '/features/layouts/nested-layouts',
+    url: 'http://localhost/features/layouts/nested-layouts',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::nestedLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:20
- * @route "/features/layouts/nested-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:20
+ * @route "http://localhost/features/layouts/nested-layouts"
  */
 nestedLayouts.url = (options?: RouteQueryOptions) => {
     return nestedLayouts.definition.url + queryParams(options);
@@ -211,8 +211,8 @@ nestedLayouts.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::nestedLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:20
- * @route "/features/layouts/nested-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:20
+ * @route "http://localhost/features/layouts/nested-layouts"
  */
 nestedLayouts.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: nestedLayouts.url(options),
@@ -221,8 +221,8 @@ nestedLayouts.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::nestedLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:20
- * @route "/features/layouts/nested-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:20
+ * @route "http://localhost/features/layouts/nested-layouts"
  */
 nestedLayouts.head = (
     options?: RouteQueryOptions,
@@ -233,8 +233,8 @@ nestedLayouts.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::nestedLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:20
- * @route "/features/layouts/nested-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:20
+ * @route "http://localhost/features/layouts/nested-layouts"
  */
 const nestedLayoutsForm = (
     options?: RouteQueryOptions,
@@ -245,8 +245,8 @@ const nestedLayoutsForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::nestedLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:20
- * @route "/features/layouts/nested-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:20
+ * @route "http://localhost/features/layouts/nested-layouts"
  */
 nestedLayoutsForm.get = (
     options?: RouteQueryOptions,
@@ -257,8 +257,8 @@ nestedLayoutsForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::nestedLayouts
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:20
- * @route "/features/layouts/nested-layouts"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:20
+ * @route "http://localhost/features/layouts/nested-layouts"
  */
 nestedLayoutsForm.head = (
     options?: RouteQueryOptions,
@@ -270,8 +270,8 @@ nestedLayoutsForm.head = (
 nestedLayouts.form = nestedLayoutsForm;
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::head
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:25
- * @route "/features/layouts/head"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:25
+ * @route "http://localhost/features/layouts/head"
  */
 export const head = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: head.url(options),
@@ -280,13 +280,13 @@ export const head = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 head.definition = {
     methods: ['get', 'head'],
-    url: '/features/layouts/head',
+    url: 'http://localhost/features/layouts/head',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::head
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:25
- * @route "/features/layouts/head"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:25
+ * @route "http://localhost/features/layouts/head"
  */
 head.url = (options?: RouteQueryOptions) => {
     return head.definition.url + queryParams(options);
@@ -294,8 +294,8 @@ head.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::head
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:25
- * @route "/features/layouts/head"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:25
+ * @route "http://localhost/features/layouts/head"
  */
 head.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: head.url(options),
@@ -304,8 +304,8 @@ head.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::head
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:25
- * @route "/features/layouts/head"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:25
+ * @route "http://localhost/features/layouts/head"
  */
 head.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: head.url(options),
@@ -314,8 +314,8 @@ head.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::head
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:25
- * @route "/features/layouts/head"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:25
+ * @route "http://localhost/features/layouts/head"
  */
 const headForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: head.url(options),
@@ -324,8 +324,8 @@ const headForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::head
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:25
- * @route "/features/layouts/head"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:25
+ * @route "http://localhost/features/layouts/head"
  */
 headForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: head.url(options),
@@ -334,8 +334,8 @@ headForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::head
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:25
- * @route "/features/layouts/head"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:25
+ * @route "http://localhost/features/layouts/head"
  */
 headForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: head.url(formSafeOptions('head', options)),
@@ -345,8 +345,8 @@ headForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 head.form = headForm;
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::layoutProps
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:30
- * @route "/features/layouts/layout-props"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:30
+ * @route "http://localhost/features/layouts/layout-props"
  */
 export const layoutProps = (
     options?: RouteQueryOptions,
@@ -357,13 +357,13 @@ export const layoutProps = (
 
 layoutProps.definition = {
     methods: ['get', 'head'],
-    url: '/features/layouts/layout-props',
+    url: 'http://localhost/features/layouts/layout-props',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::layoutProps
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:30
- * @route "/features/layouts/layout-props"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:30
+ * @route "http://localhost/features/layouts/layout-props"
  */
 layoutProps.url = (options?: RouteQueryOptions) => {
     return layoutProps.definition.url + queryParams(options);
@@ -371,8 +371,8 @@ layoutProps.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::layoutProps
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:30
- * @route "/features/layouts/layout-props"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:30
+ * @route "http://localhost/features/layouts/layout-props"
  */
 layoutProps.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: layoutProps.url(options),
@@ -381,8 +381,8 @@ layoutProps.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::layoutProps
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:30
- * @route "/features/layouts/layout-props"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:30
+ * @route "http://localhost/features/layouts/layout-props"
  */
 layoutProps.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: layoutProps.url(options),
@@ -391,8 +391,8 @@ layoutProps.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::layoutProps
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:30
- * @route "/features/layouts/layout-props"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:30
+ * @route "http://localhost/features/layouts/layout-props"
  */
 const layoutPropsForm = (
     options?: RouteQueryOptions,
@@ -403,8 +403,8 @@ const layoutPropsForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::layoutProps
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:30
- * @route "/features/layouts/layout-props"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:30
+ * @route "http://localhost/features/layouts/layout-props"
  */
 layoutPropsForm.get = (
     options?: RouteQueryOptions,
@@ -415,8 +415,8 @@ layoutPropsForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::layoutProps
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:30
- * @route "/features/layouts/layout-props"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php:30
+ * @route "http://localhost/features/layouts/layout-props"
  */
 layoutPropsForm.head = (
     options?: RouteQueryOptions,

@@ -11,8 +11,8 @@ import {
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 const DashboardController = (
     options?: RouteQueryOptions,
@@ -23,13 +23,13 @@ const DashboardController = (
 
 DashboardController.definition = {
     methods: ['get', 'head'],
-    url: '/dashboard',
+    url: 'http://localhost/dashboard',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 DashboardController.url = (options?: RouteQueryOptions) => {
     return DashboardController.definition.url + queryParams(options);
@@ -37,8 +37,8 @@ DashboardController.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 DashboardController.get = (
     options?: RouteQueryOptions,
@@ -49,8 +49,8 @@ DashboardController.get = (
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 DashboardController.head = (
     options?: RouteQueryOptions,
@@ -61,8 +61,8 @@ DashboardController.head = (
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 const DashboardControllerForm = (
     options?: RouteQueryOptions,
@@ -73,8 +73,8 @@ const DashboardControllerForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 DashboardControllerForm.get = (
     options?: RouteQueryOptions,
@@ -85,8 +85,8 @@ DashboardControllerForm.get = (
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 DashboardControllerForm.head = (
     options?: RouteQueryOptions,

@@ -11,8 +11,8 @@ import {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 export const show = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(options),
@@ -21,13 +21,13 @@ export const show = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 show.definition = {
     methods: ['get', 'head'],
-    url: '/user/confirm-password',
+    url: 'http://localhost/user/confirm-password',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 show.url = (options?: RouteQueryOptions) => {
     return show.definition.url + queryParams(options);
@@ -35,8 +35,8 @@ show.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(options),
@@ -45,8 +45,8 @@ show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(options),
@@ -55,8 +55,8 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 const showForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(options),
@@ -65,8 +65,8 @@ const showForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 showForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(options),
@@ -75,8 +75,8 @@ showForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 showForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(formSafeOptions('head', options)),
@@ -86,8 +86,8 @@ showForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 show.form = showForm;
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::store
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:51
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:51
+ * @route "http://localhost/user/confirm-password"
  */
 export const store = (
     options?: RouteQueryOptions,
@@ -98,13 +98,13 @@ export const store = (
 
 store.definition = {
     methods: ['post'],
-    url: '/user/confirm-password',
+    url: 'http://localhost/user/confirm-password',
 } satisfies RouteDefinition<['post']>;
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::store
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:51
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:51
+ * @route "http://localhost/user/confirm-password"
  */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options);
@@ -112,8 +112,8 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::store
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:51
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:51
+ * @route "http://localhost/user/confirm-password"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
@@ -122,8 +122,8 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::store
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:51
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:51
+ * @route "http://localhost/user/confirm-password"
  */
 const storeForm = (
     options?: RouteQueryOptions,
@@ -134,8 +134,8 @@ const storeForm = (
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::store
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:51
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:51
+ * @route "http://localhost/user/confirm-password"
  */
 storeForm.post = (
     options?: RouteQueryOptions,

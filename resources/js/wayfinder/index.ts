@@ -10,17 +10,26 @@ export type QueryParams = {
 };
 
 type Method = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options';
+type ParamValue = string | number | boolean;
 type UrlDefaults = Record<string, unknown>;
 
 let urlDefaults: () => UrlDefaults = () => ({});
 
-export type RouteDefinition<TMethod extends Method | Method[]> = {
+export type RouteDefinition<
+    TMethod extends Method | Method[],
+    TComponent extends string | Record<string, string> | undefined = undefined,
+> = {
     url: string;
+    component?: TComponent;
 } & (TMethod extends Method[] ? { methods: TMethod } : { method: TMethod });
 
-export type RouteFormDefinition<TMethod extends Method> = {
+export type RouteFormDefinition<
+    TMethod extends Method,
+    TComponent extends string | Record<string, string> | undefined = undefined,
+> = {
     action: string;
     method: TMethod;
+    component?: TComponent;
 };
 
 export type RouteQueryOptions = {
@@ -28,7 +37,17 @@ export type RouteQueryOptions = {
     mergeQuery?: QueryParams;
 };
 
-const getValue = (value: string | number | boolean) => {
+export const formSafeOptions = (
+    method: Method,
+    options?: RouteQueryOptions,
+): RouteQueryOptions => ({
+    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+        _method: method.toUpperCase(),
+        ...(options?.query ?? options?.mergeQuery),
+    },
+});
+
+const getValue = (value: ParamValue) => {
     if (value === true) {
         return '1';
     }
@@ -46,7 +65,9 @@ const addNestedParams = (
     params: URLSearchParams,
 ) => {
     Object.entries(obj).forEach(([subKey, value]) => {
-        if (value === undefined) return;
+        if (value === undefined) {
+            return;
+        }
 
         const paramKey = `${prefix}[${subKey}]`;
 
@@ -58,6 +79,18 @@ const addNestedParams = (
             params.set(paramKey, getValue(value as string | number | boolean));
         }
     });
+};
+
+const clearParamFamily = (params: URLSearchParams, key: string) => {
+    const toDelete = new Set<string>();
+
+    params.forEach((_, paramKey) => {
+        if (paramKey === key || paramKey.startsWith(`${key}[`)) {
+            toDelete.add(paramKey);
+        }
+    });
+
+    toDelete.forEach((paramKey) => params.delete(paramKey));
 };
 
 export const queryParams = (options?: RouteQueryOptions) => {
@@ -77,26 +110,19 @@ export const queryParams = (options?: RouteQueryOptions) => {
     for (const key in query) {
         const queryValue = query[key];
 
+        if (includeExisting) {
+            clearParamFamily(params, key);
+        }
+
         if (queryValue === undefined || queryValue === null) {
-            params.delete(key);
             continue;
         }
 
         if (Array.isArray(queryValue)) {
-            if (params.has(`${key}[]`)) {
-                params.delete(`${key}[]`);
-            }
-
             queryValue.forEach((value) => {
                 params.append(`${key}[]`, value.toString());
             });
         } else if (typeof queryValue === 'object') {
-            params.forEach((_, paramKey) => {
-                if (paramKey.startsWith(`${key}[`)) {
-                    params.delete(paramKey);
-                }
-            });
-
             addNestedParams(queryValue, key, params);
         } else {
             params.set(key, getValue(queryValue));
@@ -106,66 +132,6 @@ export const queryParams = (options?: RouteQueryOptions) => {
     const str = params.toString();
 
     return str.length > 0 ? `?${str}` : '';
-};
-
-export const formSafeOptions = (
-    method: Method,
-    options?: RouteQueryOptions,
-): RouteQueryOptions | undefined => {
-    if (method === 'get' || method === 'post') {
-        return options;
-    }
-
-    if (options?.mergeQuery) {
-        return {
-            ...options,
-            mergeQuery: {
-                ...options.mergeQuery,
-                _method: method,
-            },
-        };
-    }
-
-    return {
-        ...options,
-        query: {
-            ...(options?.query ?? {}),
-            _method: method,
-        },
-    };
-};
-
-export const setUrlDefaults = (params: UrlDefaults | (() => UrlDefaults)) => {
-    urlDefaults = typeof params === 'function' ? params : () => params;
-};
-
-export const addUrlDefault = (
-    key: string,
-    value: string | number | boolean,
-) => {
-    const params = urlDefaults();
-    params[key] = value;
-
-    urlDefaults = () => params;
-};
-
-export const applyUrlDefaults = <T extends UrlDefaults | undefined>(
-    existing: T,
-): T => {
-    const existingParams = { ...(existing ?? ({} as UrlDefaults)) };
-    const defaultParams = urlDefaults();
-
-    for (const key in defaultParams) {
-        if (
-            existingParams[key] === undefined &&
-            defaultParams[key] !== undefined
-        ) {
-            (existingParams as Record<string, unknown>)[key] =
-                defaultParams[key];
-        }
-    }
-
-    return existingParams as T;
 };
 
 export const validateParameters = (
@@ -191,4 +157,39 @@ export const validateParameters = (
             );
         }
     }
+};
+
+export const setUrlDefaults = (params: UrlDefaults | (() => UrlDefaults)) => {
+    urlDefaults = typeof params === 'function' ? params : () => params;
+};
+
+export const addUrlDefault = (
+    key: string,
+    value: string | number | boolean,
+) => {
+    const previousDefaults = urlDefaults;
+
+    urlDefaults = () => ({
+        ...previousDefaults(),
+        [key]: value,
+    });
+};
+
+export const applyUrlDefaults = <T extends UrlDefaults | undefined>(
+    existing: T,
+): T => {
+    const existingParams = { ...(existing ?? ({} as UrlDefaults)) };
+    const defaultParams = urlDefaults();
+
+    for (const key in defaultParams) {
+        if (
+            existingParams[key] === undefined &&
+            defaultParams[key] !== undefined
+        ) {
+            (existingParams as Record<string, unknown>)[key] =
+                defaultParams[key];
+        }
+    }
+
+    return existingParams as T;
 };

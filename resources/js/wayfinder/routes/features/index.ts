@@ -12,15 +12,15 @@ import prefetching from './prefetching';
 import state from './state';
 
 export const features = {
-    dataLoading,
     errors,
-    events,
-    forms,
     http,
-    layouts,
-    navigation,
+    dataLoading,
     prefetching,
     state,
+    navigation,
+    events,
+    forms,
+    layouts,
 };
 
 export default features;

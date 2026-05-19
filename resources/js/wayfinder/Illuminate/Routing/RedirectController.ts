@@ -11,8 +11,8 @@ import {
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 const RedirectController = (
     options?: RouteQueryOptions,
@@ -23,15 +23,15 @@ const RedirectController = (
 
 RedirectController.definition = {
     methods: ['get', 'head', 'post', 'put', 'patch', 'delete', 'options'],
-    url: '/',
+    url: 'http://localhost',
 } satisfies RouteDefinition<
     ['get', 'head', 'post', 'put', 'patch', 'delete', 'options']
 >;
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectController.url = (options?: RouteQueryOptions) => {
     return RedirectController.definition.url + queryParams(options);
@@ -39,8 +39,8 @@ RedirectController.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectController.get = (
     options?: RouteQueryOptions,
@@ -51,8 +51,8 @@ RedirectController.get = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectController.head = (
     options?: RouteQueryOptions,
@@ -63,8 +63,8 @@ RedirectController.head = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectController.post = (
     options?: RouteQueryOptions,
@@ -75,8 +75,8 @@ RedirectController.post = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectController.put = (
     options?: RouteQueryOptions,
@@ -87,8 +87,8 @@ RedirectController.put = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectController.patch = (
     options?: RouteQueryOptions,
@@ -99,8 +99,8 @@ RedirectController.patch = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectController.delete = (
     options?: RouteQueryOptions,
@@ -111,8 +111,8 @@ RedirectController.delete = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectController.options = (
     options?: RouteQueryOptions,
@@ -123,8 +123,8 @@ RedirectController.options = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 const RedirectControllerForm = (
     options?: RouteQueryOptions,
@@ -135,8 +135,8 @@ const RedirectControllerForm = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectControllerForm.get = (
     options?: RouteQueryOptions,
@@ -147,8 +147,8 @@ RedirectControllerForm.get = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectControllerForm.head = (
     options?: RouteQueryOptions,
@@ -159,8 +159,8 @@ RedirectControllerForm.head = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectControllerForm.post = (
     options?: RouteQueryOptions,
@@ -171,8 +171,8 @@ RedirectControllerForm.post = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectControllerForm.put = (
     options?: RouteQueryOptions,
@@ -183,8 +183,8 @@ RedirectControllerForm.put = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectControllerForm.patch = (
     options?: RouteQueryOptions,
@@ -195,8 +195,8 @@ RedirectControllerForm.patch = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectControllerForm.delete = (
     options?: RouteQueryOptions,
@@ -207,8 +207,8 @@ RedirectControllerForm.delete = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 RedirectControllerForm.options = (
     options?: RouteQueryOptions,

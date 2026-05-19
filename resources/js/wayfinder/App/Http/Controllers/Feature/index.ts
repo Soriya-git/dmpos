@@ -12,15 +12,15 @@ import PrefetchingController from './PrefetchingController';
 import StateController from './StateController';
 
 export const Feature = {
-    DataLoadingController,
-    EventController,
-    FormController,
-    HttpController,
     LayoutController,
     NavigationController,
-    NetworkErrorController,
     PrefetchingController,
+    EventController,
     StateController,
+    DataLoadingController,
+    HttpController,
+    NetworkErrorController,
+    FormController,
 };
 
 export default Feature;

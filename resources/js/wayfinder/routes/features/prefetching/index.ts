@@ -11,8 +11,8 @@ import {
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "/features/prefetching/link-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:10
+ * @route "http://localhost/features/prefetching/link-prefetch"
  */
 export const linkPrefetch = (
     options?: RouteQueryOptions,
@@ -23,13 +23,13 @@ export const linkPrefetch = (
 
 linkPrefetch.definition = {
     methods: ['get', 'head'],
-    url: '/features/prefetching/link-prefetch',
+    url: 'http://localhost/features/prefetching/link-prefetch',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "/features/prefetching/link-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:10
+ * @route "http://localhost/features/prefetching/link-prefetch"
  */
 linkPrefetch.url = (options?: RouteQueryOptions) => {
     return linkPrefetch.definition.url + queryParams(options);
@@ -37,8 +37,8 @@ linkPrefetch.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "/features/prefetching/link-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:10
+ * @route "http://localhost/features/prefetching/link-prefetch"
  */
 linkPrefetch.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: linkPrefetch.url(options),
@@ -47,8 +47,8 @@ linkPrefetch.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "/features/prefetching/link-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:10
+ * @route "http://localhost/features/prefetching/link-prefetch"
  */
 linkPrefetch.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: linkPrefetch.url(options),
@@ -57,8 +57,8 @@ linkPrefetch.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "/features/prefetching/link-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:10
+ * @route "http://localhost/features/prefetching/link-prefetch"
  */
 const linkPrefetchForm = (
     options?: RouteQueryOptions,
@@ -69,8 +69,8 @@ const linkPrefetchForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "/features/prefetching/link-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:10
+ * @route "http://localhost/features/prefetching/link-prefetch"
  */
 linkPrefetchForm.get = (
     options?: RouteQueryOptions,
@@ -81,8 +81,8 @@ linkPrefetchForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "/features/prefetching/link-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:10
+ * @route "http://localhost/features/prefetching/link-prefetch"
  */
 linkPrefetchForm.head = (
     options?: RouteQueryOptions,
@@ -94,8 +94,8 @@ linkPrefetchForm.head = (
 linkPrefetch.form = linkPrefetchForm;
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "/features/prefetching/stale-while-revalidate"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:15
+ * @route "http://localhost/features/prefetching/stale-while-revalidate"
  */
 export const staleWhileRevalidate = (
     options?: RouteQueryOptions,
@@ -106,13 +106,13 @@ export const staleWhileRevalidate = (
 
 staleWhileRevalidate.definition = {
     methods: ['get', 'head'],
-    url: '/features/prefetching/stale-while-revalidate',
+    url: 'http://localhost/features/prefetching/stale-while-revalidate',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "/features/prefetching/stale-while-revalidate"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:15
+ * @route "http://localhost/features/prefetching/stale-while-revalidate"
  */
 staleWhileRevalidate.url = (options?: RouteQueryOptions) => {
     return staleWhileRevalidate.definition.url + queryParams(options);
@@ -120,8 +120,8 @@ staleWhileRevalidate.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "/features/prefetching/stale-while-revalidate"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:15
+ * @route "http://localhost/features/prefetching/stale-while-revalidate"
  */
 staleWhileRevalidate.get = (
     options?: RouteQueryOptions,
@@ -132,8 +132,8 @@ staleWhileRevalidate.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "/features/prefetching/stale-while-revalidate"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:15
+ * @route "http://localhost/features/prefetching/stale-while-revalidate"
  */
 staleWhileRevalidate.head = (
     options?: RouteQueryOptions,
@@ -144,8 +144,8 @@ staleWhileRevalidate.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "/features/prefetching/stale-while-revalidate"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:15
+ * @route "http://localhost/features/prefetching/stale-while-revalidate"
  */
 const staleWhileRevalidateForm = (
     options?: RouteQueryOptions,
@@ -156,8 +156,8 @@ const staleWhileRevalidateForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "/features/prefetching/stale-while-revalidate"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:15
+ * @route "http://localhost/features/prefetching/stale-while-revalidate"
  */
 staleWhileRevalidateForm.get = (
     options?: RouteQueryOptions,
@@ -168,8 +168,8 @@ staleWhileRevalidateForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "/features/prefetching/stale-while-revalidate"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:15
+ * @route "http://localhost/features/prefetching/stale-while-revalidate"
  */
 staleWhileRevalidateForm.head = (
     options?: RouteQueryOptions,
@@ -181,8 +181,8 @@ staleWhileRevalidateForm.head = (
 staleWhileRevalidate.form = staleWhileRevalidateForm;
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "/features/prefetching/manual-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:20
+ * @route "http://localhost/features/prefetching/manual-prefetch"
  */
 export const manualPrefetch = (
     options?: RouteQueryOptions,
@@ -193,13 +193,13 @@ export const manualPrefetch = (
 
 manualPrefetch.definition = {
     methods: ['get', 'head'],
-    url: '/features/prefetching/manual-prefetch',
+    url: 'http://localhost/features/prefetching/manual-prefetch',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "/features/prefetching/manual-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:20
+ * @route "http://localhost/features/prefetching/manual-prefetch"
  */
 manualPrefetch.url = (options?: RouteQueryOptions) => {
     return manualPrefetch.definition.url + queryParams(options);
@@ -207,8 +207,8 @@ manualPrefetch.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "/features/prefetching/manual-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:20
+ * @route "http://localhost/features/prefetching/manual-prefetch"
  */
 manualPrefetch.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: manualPrefetch.url(options),
@@ -217,8 +217,8 @@ manualPrefetch.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "/features/prefetching/manual-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:20
+ * @route "http://localhost/features/prefetching/manual-prefetch"
  */
 manualPrefetch.head = (
     options?: RouteQueryOptions,
@@ -229,8 +229,8 @@ manualPrefetch.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "/features/prefetching/manual-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:20
+ * @route "http://localhost/features/prefetching/manual-prefetch"
  */
 const manualPrefetchForm = (
     options?: RouteQueryOptions,
@@ -241,8 +241,8 @@ const manualPrefetchForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "/features/prefetching/manual-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:20
+ * @route "http://localhost/features/prefetching/manual-prefetch"
  */
 manualPrefetchForm.get = (
     options?: RouteQueryOptions,
@@ -253,8 +253,8 @@ manualPrefetchForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "/features/prefetching/manual-prefetch"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:20
+ * @route "http://localhost/features/prefetching/manual-prefetch"
  */
 manualPrefetchForm.head = (
     options?: RouteQueryOptions,
@@ -266,8 +266,8 @@ manualPrefetchForm.head = (
 manualPrefetch.form = manualPrefetchForm;
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "/features/prefetching/cache-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:25
+ * @route "http://localhost/features/prefetching/cache-management"
  */
 export const cacheManagement = (
     options?: RouteQueryOptions,
@@ -278,13 +278,13 @@ export const cacheManagement = (
 
 cacheManagement.definition = {
     methods: ['get', 'head'],
-    url: '/features/prefetching/cache-management',
+    url: 'http://localhost/features/prefetching/cache-management',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "/features/prefetching/cache-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:25
+ * @route "http://localhost/features/prefetching/cache-management"
  */
 cacheManagement.url = (options?: RouteQueryOptions) => {
     return cacheManagement.definition.url + queryParams(options);
@@ -292,8 +292,8 @@ cacheManagement.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "/features/prefetching/cache-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:25
+ * @route "http://localhost/features/prefetching/cache-management"
  */
 cacheManagement.get = (
     options?: RouteQueryOptions,
@@ -304,8 +304,8 @@ cacheManagement.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "/features/prefetching/cache-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:25
+ * @route "http://localhost/features/prefetching/cache-management"
  */
 cacheManagement.head = (
     options?: RouteQueryOptions,
@@ -316,8 +316,8 @@ cacheManagement.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "/features/prefetching/cache-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:25
+ * @route "http://localhost/features/prefetching/cache-management"
  */
 const cacheManagementForm = (
     options?: RouteQueryOptions,
@@ -328,8 +328,8 @@ const cacheManagementForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "/features/prefetching/cache-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:25
+ * @route "http://localhost/features/prefetching/cache-management"
  */
 cacheManagementForm.get = (
     options?: RouteQueryOptions,
@@ -340,8 +340,8 @@ cacheManagementForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "/features/prefetching/cache-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php:25
+ * @route "http://localhost/features/prefetching/cache-management"
  */
 cacheManagementForm.head = (
     options?: RouteQueryOptions,

@@ -11,8 +11,8 @@ import {
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException403
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:15
- * @route "/features/errors/http-exceptions/403"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:15
+ * @route "http://localhost/features/errors/http-exceptions/403"
  */
 export const method403 = (
     options?: RouteQueryOptions,
@@ -23,13 +23,13 @@ export const method403 = (
 
 method403.definition = {
     methods: ['get', 'head'],
-    url: '/features/errors/http-exceptions/403',
+    url: 'http://localhost/features/errors/http-exceptions/403',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException403
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:15
- * @route "/features/errors/http-exceptions/403"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:15
+ * @route "http://localhost/features/errors/http-exceptions/403"
  */
 method403.url = (options?: RouteQueryOptions) => {
     return method403.definition.url + queryParams(options);
@@ -37,8 +37,8 @@ method403.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException403
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:15
- * @route "/features/errors/http-exceptions/403"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:15
+ * @route "http://localhost/features/errors/http-exceptions/403"
  */
 method403.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: method403.url(options),
@@ -47,8 +47,8 @@ method403.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException403
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:15
- * @route "/features/errors/http-exceptions/403"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:15
+ * @route "http://localhost/features/errors/http-exceptions/403"
  */
 method403.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: method403.url(options),
@@ -57,8 +57,8 @@ method403.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException403
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:15
- * @route "/features/errors/http-exceptions/403"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:15
+ * @route "http://localhost/features/errors/http-exceptions/403"
  */
 const method403Form = (
     options?: RouteQueryOptions,
@@ -69,8 +69,8 @@ const method403Form = (
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException403
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:15
- * @route "/features/errors/http-exceptions/403"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:15
+ * @route "http://localhost/features/errors/http-exceptions/403"
  */
 method403Form.get = (
     options?: RouteQueryOptions,
@@ -81,8 +81,8 @@ method403Form.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException403
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:15
- * @route "/features/errors/http-exceptions/403"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:15
+ * @route "http://localhost/features/errors/http-exceptions/403"
  */
 method403Form.head = (
     options?: RouteQueryOptions,
@@ -94,8 +94,8 @@ method403Form.head = (
 method403.form = method403Form;
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException404
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:20
- * @route "/features/errors/http-exceptions/404"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:20
+ * @route "http://localhost/features/errors/http-exceptions/404"
  */
 export const method404 = (
     options?: RouteQueryOptions,
@@ -106,13 +106,13 @@ export const method404 = (
 
 method404.definition = {
     methods: ['get', 'head'],
-    url: '/features/errors/http-exceptions/404',
+    url: 'http://localhost/features/errors/http-exceptions/404',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException404
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:20
- * @route "/features/errors/http-exceptions/404"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:20
+ * @route "http://localhost/features/errors/http-exceptions/404"
  */
 method404.url = (options?: RouteQueryOptions) => {
     return method404.definition.url + queryParams(options);
@@ -120,8 +120,8 @@ method404.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException404
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:20
- * @route "/features/errors/http-exceptions/404"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:20
+ * @route "http://localhost/features/errors/http-exceptions/404"
  */
 method404.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: method404.url(options),
@@ -130,8 +130,8 @@ method404.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException404
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:20
- * @route "/features/errors/http-exceptions/404"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:20
+ * @route "http://localhost/features/errors/http-exceptions/404"
  */
 method404.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: method404.url(options),
@@ -140,8 +140,8 @@ method404.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException404
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:20
- * @route "/features/errors/http-exceptions/404"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:20
+ * @route "http://localhost/features/errors/http-exceptions/404"
  */
 const method404Form = (
     options?: RouteQueryOptions,
@@ -152,8 +152,8 @@ const method404Form = (
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException404
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:20
- * @route "/features/errors/http-exceptions/404"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:20
+ * @route "http://localhost/features/errors/http-exceptions/404"
  */
 method404Form.get = (
     options?: RouteQueryOptions,
@@ -164,8 +164,8 @@ method404Form.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException404
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:20
- * @route "/features/errors/http-exceptions/404"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:20
+ * @route "http://localhost/features/errors/http-exceptions/404"
  */
 method404Form.head = (
     options?: RouteQueryOptions,
@@ -177,8 +177,8 @@ method404Form.head = (
 method404.form = method404Form;
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException500
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:25
- * @route "/features/errors/http-exceptions/500"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:25
+ * @route "http://localhost/features/errors/http-exceptions/500"
  */
 export const method500 = (
     options?: RouteQueryOptions,
@@ -189,13 +189,13 @@ export const method500 = (
 
 method500.definition = {
     methods: ['get', 'head'],
-    url: '/features/errors/http-exceptions/500',
+    url: 'http://localhost/features/errors/http-exceptions/500',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException500
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:25
- * @route "/features/errors/http-exceptions/500"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:25
+ * @route "http://localhost/features/errors/http-exceptions/500"
  */
 method500.url = (options?: RouteQueryOptions) => {
     return method500.definition.url + queryParams(options);
@@ -203,8 +203,8 @@ method500.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException500
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:25
- * @route "/features/errors/http-exceptions/500"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:25
+ * @route "http://localhost/features/errors/http-exceptions/500"
  */
 method500.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: method500.url(options),
@@ -213,8 +213,8 @@ method500.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException500
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:25
- * @route "/features/errors/http-exceptions/500"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:25
+ * @route "http://localhost/features/errors/http-exceptions/500"
  */
 method500.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: method500.url(options),
@@ -223,8 +223,8 @@ method500.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException500
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:25
- * @route "/features/errors/http-exceptions/500"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:25
+ * @route "http://localhost/features/errors/http-exceptions/500"
  */
 const method500Form = (
     options?: RouteQueryOptions,
@@ -235,8 +235,8 @@ const method500Form = (
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException500
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:25
- * @route "/features/errors/http-exceptions/500"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:25
+ * @route "http://localhost/features/errors/http-exceptions/500"
  */
 method500Form.get = (
     options?: RouteQueryOptions,
@@ -247,8 +247,8 @@ method500Form.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpException500
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:25
- * @route "/features/errors/http-exceptions/500"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:25
+ * @route "http://localhost/features/errors/http-exceptions/500"
  */
 method500Form.head = (
     options?: RouteQueryOptions,
@@ -260,8 +260,8 @@ method500Form.head = (
 method500.form = method500Form;
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpExceptionUnhandled
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:30
- * @route "/features/errors/http-exceptions/unhandled"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:30
+ * @route "http://localhost/features/errors/http-exceptions/unhandled"
  */
 export const unhandled = (
     options?: RouteQueryOptions,
@@ -272,13 +272,13 @@ export const unhandled = (
 
 unhandled.definition = {
     methods: ['get', 'head'],
-    url: '/features/errors/http-exceptions/unhandled',
+    url: 'http://localhost/features/errors/http-exceptions/unhandled',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpExceptionUnhandled
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:30
- * @route "/features/errors/http-exceptions/unhandled"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:30
+ * @route "http://localhost/features/errors/http-exceptions/unhandled"
  */
 unhandled.url = (options?: RouteQueryOptions) => {
     return unhandled.definition.url + queryParams(options);
@@ -286,8 +286,8 @@ unhandled.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpExceptionUnhandled
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:30
- * @route "/features/errors/http-exceptions/unhandled"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:30
+ * @route "http://localhost/features/errors/http-exceptions/unhandled"
  */
 unhandled.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: unhandled.url(options),
@@ -296,8 +296,8 @@ unhandled.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpExceptionUnhandled
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:30
- * @route "/features/errors/http-exceptions/unhandled"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:30
+ * @route "http://localhost/features/errors/http-exceptions/unhandled"
  */
 unhandled.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: unhandled.url(options),
@@ -306,8 +306,8 @@ unhandled.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpExceptionUnhandled
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:30
- * @route "/features/errors/http-exceptions/unhandled"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:30
+ * @route "http://localhost/features/errors/http-exceptions/unhandled"
  */
 const unhandledForm = (
     options?: RouteQueryOptions,
@@ -318,8 +318,8 @@ const unhandledForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpExceptionUnhandled
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:30
- * @route "/features/errors/http-exceptions/unhandled"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:30
+ * @route "http://localhost/features/errors/http-exceptions/unhandled"
  */
 unhandledForm.get = (
     options?: RouteQueryOptions,
@@ -330,8 +330,8 @@ unhandledForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NetworkErrorController::httpExceptionUnhandled
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php:30
- * @route "/features/errors/http-exceptions/unhandled"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php:30
+ * @route "http://localhost/features/errors/http-exceptions/unhandled"
  */
 unhandledForm.head = (
     options?: RouteQueryOptions,

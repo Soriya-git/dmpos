@@ -12,8 +12,8 @@ import redirects2243608 from './redirects';
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::links
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:13
- * @route "/features/navigation/links"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:13
+ * @route "http://localhost/features/navigation/links"
  */
 export const links = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: links.url(options),
@@ -22,13 +22,13 @@ export const links = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 links.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/links',
+    url: 'http://localhost/features/navigation/links',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::links
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:13
- * @route "/features/navigation/links"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:13
+ * @route "http://localhost/features/navigation/links"
  */
 links.url = (options?: RouteQueryOptions) => {
     return links.definition.url + queryParams(options);
@@ -36,8 +36,8 @@ links.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::links
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:13
- * @route "/features/navigation/links"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:13
+ * @route "http://localhost/features/navigation/links"
  */
 links.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: links.url(options),
@@ -46,8 +46,8 @@ links.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::links
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:13
- * @route "/features/navigation/links"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:13
+ * @route "http://localhost/features/navigation/links"
  */
 links.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: links.url(options),
@@ -56,8 +56,8 @@ links.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::links
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:13
- * @route "/features/navigation/links"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:13
+ * @route "http://localhost/features/navigation/links"
  */
 const linksForm = (
     options?: RouteQueryOptions,
@@ -68,8 +68,8 @@ const linksForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::links
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:13
- * @route "/features/navigation/links"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:13
+ * @route "http://localhost/features/navigation/links"
  */
 linksForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: links.url(options),
@@ -78,8 +78,8 @@ linksForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::links
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:13
- * @route "/features/navigation/links"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:13
+ * @route "http://localhost/features/navigation/links"
  */
 linksForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: links.url(formSafeOptions('head', options)),
@@ -89,8 +89,8 @@ linksForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 links.form = linksForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveState
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:25
- * @route "/features/navigation/preserve-state"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:25
+ * @route "http://localhost/features/navigation/preserve-state"
  */
 export const preserveState = (
     options?: RouteQueryOptions,
@@ -101,13 +101,13 @@ export const preserveState = (
 
 preserveState.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/preserve-state',
+    url: 'http://localhost/features/navigation/preserve-state',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveState
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:25
- * @route "/features/navigation/preserve-state"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:25
+ * @route "http://localhost/features/navigation/preserve-state"
  */
 preserveState.url = (options?: RouteQueryOptions) => {
     return preserveState.definition.url + queryParams(options);
@@ -115,8 +115,8 @@ preserveState.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveState
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:25
- * @route "/features/navigation/preserve-state"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:25
+ * @route "http://localhost/features/navigation/preserve-state"
  */
 preserveState.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: preserveState.url(options),
@@ -125,8 +125,8 @@ preserveState.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveState
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:25
- * @route "/features/navigation/preserve-state"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:25
+ * @route "http://localhost/features/navigation/preserve-state"
  */
 preserveState.head = (
     options?: RouteQueryOptions,
@@ -137,8 +137,8 @@ preserveState.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveState
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:25
- * @route "/features/navigation/preserve-state"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:25
+ * @route "http://localhost/features/navigation/preserve-state"
  */
 const preserveStateForm = (
     options?: RouteQueryOptions,
@@ -149,8 +149,8 @@ const preserveStateForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveState
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:25
- * @route "/features/navigation/preserve-state"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:25
+ * @route "http://localhost/features/navigation/preserve-state"
  */
 preserveStateForm.get = (
     options?: RouteQueryOptions,
@@ -161,8 +161,8 @@ preserveStateForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveState
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:25
- * @route "/features/navigation/preserve-state"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:25
+ * @route "http://localhost/features/navigation/preserve-state"
  */
 preserveStateForm.head = (
     options?: RouteQueryOptions,
@@ -174,8 +174,8 @@ preserveStateForm.head = (
 preserveState.form = preserveStateForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveScroll
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:33
- * @route "/features/navigation/preserve-scroll"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:33
+ * @route "http://localhost/features/navigation/preserve-scroll"
  */
 export const preserveScroll = (
     options?: RouteQueryOptions,
@@ -186,13 +186,13 @@ export const preserveScroll = (
 
 preserveScroll.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/preserve-scroll',
+    url: 'http://localhost/features/navigation/preserve-scroll',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveScroll
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:33
- * @route "/features/navigation/preserve-scroll"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:33
+ * @route "http://localhost/features/navigation/preserve-scroll"
  */
 preserveScroll.url = (options?: RouteQueryOptions) => {
     return preserveScroll.definition.url + queryParams(options);
@@ -200,8 +200,8 @@ preserveScroll.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveScroll
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:33
- * @route "/features/navigation/preserve-scroll"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:33
+ * @route "http://localhost/features/navigation/preserve-scroll"
  */
 preserveScroll.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: preserveScroll.url(options),
@@ -210,8 +210,8 @@ preserveScroll.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveScroll
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:33
- * @route "/features/navigation/preserve-scroll"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:33
+ * @route "http://localhost/features/navigation/preserve-scroll"
  */
 preserveScroll.head = (
     options?: RouteQueryOptions,
@@ -222,8 +222,8 @@ preserveScroll.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveScroll
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:33
- * @route "/features/navigation/preserve-scroll"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:33
+ * @route "http://localhost/features/navigation/preserve-scroll"
  */
 const preserveScrollForm = (
     options?: RouteQueryOptions,
@@ -234,8 +234,8 @@ const preserveScrollForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveScroll
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:33
- * @route "/features/navigation/preserve-scroll"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:33
+ * @route "http://localhost/features/navigation/preserve-scroll"
  */
 preserveScrollForm.get = (
     options?: RouteQueryOptions,
@@ -246,8 +246,8 @@ preserveScrollForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::preserveScroll
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:33
- * @route "/features/navigation/preserve-scroll"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:33
+ * @route "http://localhost/features/navigation/preserve-scroll"
  */
 preserveScrollForm.head = (
     options?: RouteQueryOptions,
@@ -259,8 +259,8 @@ preserveScrollForm.head = (
 preserveScroll.form = preserveScrollForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::viewTransitions
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:40
- * @route "/features/navigation/view-transitions"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:40
+ * @route "http://localhost/features/navigation/view-transitions"
  */
 export const viewTransitions = (
     options?: RouteQueryOptions,
@@ -271,13 +271,13 @@ export const viewTransitions = (
 
 viewTransitions.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/view-transitions',
+    url: 'http://localhost/features/navigation/view-transitions',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::viewTransitions
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:40
- * @route "/features/navigation/view-transitions"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:40
+ * @route "http://localhost/features/navigation/view-transitions"
  */
 viewTransitions.url = (options?: RouteQueryOptions) => {
     return viewTransitions.definition.url + queryParams(options);
@@ -285,8 +285,8 @@ viewTransitions.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::viewTransitions
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:40
- * @route "/features/navigation/view-transitions"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:40
+ * @route "http://localhost/features/navigation/view-transitions"
  */
 viewTransitions.get = (
     options?: RouteQueryOptions,
@@ -297,8 +297,8 @@ viewTransitions.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::viewTransitions
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:40
- * @route "/features/navigation/view-transitions"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:40
+ * @route "http://localhost/features/navigation/view-transitions"
  */
 viewTransitions.head = (
     options?: RouteQueryOptions,
@@ -309,8 +309,8 @@ viewTransitions.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::viewTransitions
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:40
- * @route "/features/navigation/view-transitions"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:40
+ * @route "http://localhost/features/navigation/view-transitions"
  */
 const viewTransitionsForm = (
     options?: RouteQueryOptions,
@@ -321,8 +321,8 @@ const viewTransitionsForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::viewTransitions
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:40
- * @route "/features/navigation/view-transitions"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:40
+ * @route "http://localhost/features/navigation/view-transitions"
  */
 viewTransitionsForm.get = (
     options?: RouteQueryOptions,
@@ -333,8 +333,8 @@ viewTransitionsForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::viewTransitions
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:40
- * @route "/features/navigation/view-transitions"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:40
+ * @route "http://localhost/features/navigation/view-transitions"
  */
 viewTransitionsForm.head = (
     options?: RouteQueryOptions,
@@ -346,8 +346,8 @@ viewTransitionsForm.head = (
 viewTransitions.form = viewTransitionsForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::historyManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:45
- * @route "/features/navigation/history-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:45
+ * @route "http://localhost/features/navigation/history-management"
  */
 export const historyManagement = (
     options?: RouteQueryOptions,
@@ -358,13 +358,13 @@ export const historyManagement = (
 
 historyManagement.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/history-management',
+    url: 'http://localhost/features/navigation/history-management',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::historyManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:45
- * @route "/features/navigation/history-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:45
+ * @route "http://localhost/features/navigation/history-management"
  */
 historyManagement.url = (options?: RouteQueryOptions) => {
     return historyManagement.definition.url + queryParams(options);
@@ -372,8 +372,8 @@ historyManagement.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::historyManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:45
- * @route "/features/navigation/history-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:45
+ * @route "http://localhost/features/navigation/history-management"
  */
 historyManagement.get = (
     options?: RouteQueryOptions,
@@ -384,8 +384,8 @@ historyManagement.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::historyManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:45
- * @route "/features/navigation/history-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:45
+ * @route "http://localhost/features/navigation/history-management"
  */
 historyManagement.head = (
     options?: RouteQueryOptions,
@@ -396,8 +396,8 @@ historyManagement.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::historyManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:45
- * @route "/features/navigation/history-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:45
+ * @route "http://localhost/features/navigation/history-management"
  */
 const historyManagementForm = (
     options?: RouteQueryOptions,
@@ -408,8 +408,8 @@ const historyManagementForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::historyManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:45
- * @route "/features/navigation/history-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:45
+ * @route "http://localhost/features/navigation/history-management"
  */
 historyManagementForm.get = (
     options?: RouteQueryOptions,
@@ -420,8 +420,8 @@ historyManagementForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::historyManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:45
- * @route "/features/navigation/history-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:45
+ * @route "http://localhost/features/navigation/history-management"
  */
 historyManagementForm.head = (
     options?: RouteQueryOptions,
@@ -433,8 +433,8 @@ historyManagementForm.head = (
 historyManagement.form = historyManagementForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncRequests
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:58
- * @route "/features/navigation/async-requests"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:58
+ * @route "http://localhost/features/navigation/async-requests"
  */
 export const asyncRequests = (
     options?: RouteQueryOptions,
@@ -445,13 +445,13 @@ export const asyncRequests = (
 
 asyncRequests.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/async-requests',
+    url: 'http://localhost/features/navigation/async-requests',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncRequests
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:58
- * @route "/features/navigation/async-requests"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:58
+ * @route "http://localhost/features/navigation/async-requests"
  */
 asyncRequests.url = (options?: RouteQueryOptions) => {
     return asyncRequests.definition.url + queryParams(options);
@@ -459,8 +459,8 @@ asyncRequests.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncRequests
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:58
- * @route "/features/navigation/async-requests"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:58
+ * @route "http://localhost/features/navigation/async-requests"
  */
 asyncRequests.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: asyncRequests.url(options),
@@ -469,8 +469,8 @@ asyncRequests.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncRequests
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:58
- * @route "/features/navigation/async-requests"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:58
+ * @route "http://localhost/features/navigation/async-requests"
  */
 asyncRequests.head = (
     options?: RouteQueryOptions,
@@ -481,8 +481,8 @@ asyncRequests.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncRequests
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:58
- * @route "/features/navigation/async-requests"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:58
+ * @route "http://localhost/features/navigation/async-requests"
  */
 const asyncRequestsForm = (
     options?: RouteQueryOptions,
@@ -493,8 +493,8 @@ const asyncRequestsForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncRequests
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:58
- * @route "/features/navigation/async-requests"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:58
+ * @route "http://localhost/features/navigation/async-requests"
  */
 asyncRequestsForm.get = (
     options?: RouteQueryOptions,
@@ -505,8 +505,8 @@ asyncRequestsForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncRequests
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:58
- * @route "/features/navigation/async-requests"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:58
+ * @route "http://localhost/features/navigation/async-requests"
  */
 asyncRequestsForm.head = (
     options?: RouteQueryOptions,
@@ -518,8 +518,8 @@ asyncRequestsForm.head = (
 asyncRequests.form = asyncRequestsForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:69
- * @route "/features/navigation/async-slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:69
+ * @route "http://localhost/features/navigation/async-slow"
  */
 export const asyncSlow = (
     options?: RouteQueryOptions,
@@ -530,13 +530,13 @@ export const asyncSlow = (
 
 asyncSlow.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/async-slow',
+    url: 'http://localhost/features/navigation/async-slow',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:69
- * @route "/features/navigation/async-slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:69
+ * @route "http://localhost/features/navigation/async-slow"
  */
 asyncSlow.url = (options?: RouteQueryOptions) => {
     return asyncSlow.definition.url + queryParams(options);
@@ -544,8 +544,8 @@ asyncSlow.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:69
- * @route "/features/navigation/async-slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:69
+ * @route "http://localhost/features/navigation/async-slow"
  */
 asyncSlow.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: asyncSlow.url(options),
@@ -554,8 +554,8 @@ asyncSlow.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:69
- * @route "/features/navigation/async-slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:69
+ * @route "http://localhost/features/navigation/async-slow"
  */
 asyncSlow.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: asyncSlow.url(options),
@@ -564,8 +564,8 @@ asyncSlow.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:69
- * @route "/features/navigation/async-slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:69
+ * @route "http://localhost/features/navigation/async-slow"
  */
 const asyncSlowForm = (
     options?: RouteQueryOptions,
@@ -576,8 +576,8 @@ const asyncSlowForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:69
- * @route "/features/navigation/async-slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:69
+ * @route "http://localhost/features/navigation/async-slow"
  */
 asyncSlowForm.get = (
     options?: RouteQueryOptions,
@@ -588,8 +588,8 @@ asyncSlowForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::asyncSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:69
- * @route "/features/navigation/async-slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:69
+ * @route "http://localhost/features/navigation/async-slow"
  */
 asyncSlowForm.head = (
     options?: RouteQueryOptions,
@@ -601,8 +601,8 @@ asyncSlowForm.head = (
 asyncSlow.form = asyncSlowForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::manualVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:103
- * @route "/features/navigation/manual-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:103
+ * @route "http://localhost/features/navigation/manual-visits"
  */
 export const manualVisits = (
     options?: RouteQueryOptions,
@@ -613,13 +613,13 @@ export const manualVisits = (
 
 manualVisits.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/manual-visits',
+    url: 'http://localhost/features/navigation/manual-visits',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::manualVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:103
- * @route "/features/navigation/manual-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:103
+ * @route "http://localhost/features/navigation/manual-visits"
  */
 manualVisits.url = (options?: RouteQueryOptions) => {
     return manualVisits.definition.url + queryParams(options);
@@ -627,8 +627,8 @@ manualVisits.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::manualVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:103
- * @route "/features/navigation/manual-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:103
+ * @route "http://localhost/features/navigation/manual-visits"
  */
 manualVisits.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: manualVisits.url(options),
@@ -637,8 +637,8 @@ manualVisits.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::manualVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:103
- * @route "/features/navigation/manual-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:103
+ * @route "http://localhost/features/navigation/manual-visits"
  */
 manualVisits.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: manualVisits.url(options),
@@ -647,8 +647,8 @@ manualVisits.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::manualVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:103
- * @route "/features/navigation/manual-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:103
+ * @route "http://localhost/features/navigation/manual-visits"
  */
 const manualVisitsForm = (
     options?: RouteQueryOptions,
@@ -659,8 +659,8 @@ const manualVisitsForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::manualVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:103
- * @route "/features/navigation/manual-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:103
+ * @route "http://localhost/features/navigation/manual-visits"
  */
 manualVisitsForm.get = (
     options?: RouteQueryOptions,
@@ -671,8 +671,8 @@ manualVisitsForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::manualVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:103
- * @route "/features/navigation/manual-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:103
+ * @route "http://localhost/features/navigation/manual-visits"
  */
 manualVisitsForm.head = (
     options?: RouteQueryOptions,
@@ -684,8 +684,8 @@ manualVisitsForm.head = (
 manualVisits.form = manualVisitsForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectDemo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:111
- * @route "/features/navigation/redirects"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:111
+ * @route "http://localhost/features/navigation/redirects"
  */
 export const redirects = (
     options?: RouteQueryOptions,
@@ -696,13 +696,13 @@ export const redirects = (
 
 redirects.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/redirects',
+    url: 'http://localhost/features/navigation/redirects',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectDemo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:111
- * @route "/features/navigation/redirects"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:111
+ * @route "http://localhost/features/navigation/redirects"
  */
 redirects.url = (options?: RouteQueryOptions) => {
     return redirects.definition.url + queryParams(options);
@@ -710,8 +710,8 @@ redirects.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectDemo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:111
- * @route "/features/navigation/redirects"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:111
+ * @route "http://localhost/features/navigation/redirects"
  */
 redirects.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: redirects.url(options),
@@ -720,8 +720,8 @@ redirects.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectDemo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:111
- * @route "/features/navigation/redirects"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:111
+ * @route "http://localhost/features/navigation/redirects"
  */
 redirects.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: redirects.url(options),
@@ -730,8 +730,8 @@ redirects.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectDemo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:111
- * @route "/features/navigation/redirects"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:111
+ * @route "http://localhost/features/navigation/redirects"
  */
 const redirectsForm = (
     options?: RouteQueryOptions,
@@ -742,8 +742,8 @@ const redirectsForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectDemo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:111
- * @route "/features/navigation/redirects"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:111
+ * @route "http://localhost/features/navigation/redirects"
  */
 redirectsForm.get = (
     options?: RouteQueryOptions,
@@ -754,8 +754,8 @@ redirectsForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectDemo
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:111
- * @route "/features/navigation/redirects"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:111
+ * @route "http://localhost/features/navigation/redirects"
  */
 redirectsForm.head = (
     options?: RouteQueryOptions,
@@ -767,8 +767,8 @@ redirectsForm.head = (
 redirects.form = redirectsForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::scrollManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:135
- * @route "/features/navigation/scroll-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:135
+ * @route "http://localhost/features/navigation/scroll-management"
  */
 export const scrollManagement = (
     options?: RouteQueryOptions,
@@ -779,13 +779,13 @@ export const scrollManagement = (
 
 scrollManagement.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/scroll-management',
+    url: 'http://localhost/features/navigation/scroll-management',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::scrollManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:135
- * @route "/features/navigation/scroll-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:135
+ * @route "http://localhost/features/navigation/scroll-management"
  */
 scrollManagement.url = (options?: RouteQueryOptions) => {
     return scrollManagement.definition.url + queryParams(options);
@@ -793,8 +793,8 @@ scrollManagement.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::scrollManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:135
- * @route "/features/navigation/scroll-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:135
+ * @route "http://localhost/features/navigation/scroll-management"
  */
 scrollManagement.get = (
     options?: RouteQueryOptions,
@@ -805,8 +805,8 @@ scrollManagement.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::scrollManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:135
- * @route "/features/navigation/scroll-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:135
+ * @route "http://localhost/features/navigation/scroll-management"
  */
 scrollManagement.head = (
     options?: RouteQueryOptions,
@@ -817,8 +817,8 @@ scrollManagement.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::scrollManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:135
- * @route "/features/navigation/scroll-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:135
+ * @route "http://localhost/features/navigation/scroll-management"
  */
 const scrollManagementForm = (
     options?: RouteQueryOptions,
@@ -829,8 +829,8 @@ const scrollManagementForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::scrollManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:135
- * @route "/features/navigation/scroll-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:135
+ * @route "http://localhost/features/navigation/scroll-management"
  */
 scrollManagementForm.get = (
     options?: RouteQueryOptions,
@@ -841,8 +841,8 @@ scrollManagementForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::scrollManagement
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:135
- * @route "/features/navigation/scroll-management"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:135
+ * @route "http://localhost/features/navigation/scroll-management"
  */
 scrollManagementForm.head = (
     options?: RouteQueryOptions,
@@ -854,8 +854,8 @@ scrollManagementForm.head = (
 scrollManagement.form = scrollManagementForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:79
- * @route "/features/navigation/instant-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:79
+ * @route "http://localhost/features/navigation/instant-visits"
  */
 export const instantVisits = (
     options?: RouteQueryOptions,
@@ -866,13 +866,13 @@ export const instantVisits = (
 
 instantVisits.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/instant-visits',
+    url: 'http://localhost/features/navigation/instant-visits',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:79
- * @route "/features/navigation/instant-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:79
+ * @route "http://localhost/features/navigation/instant-visits"
  */
 instantVisits.url = (options?: RouteQueryOptions) => {
     return instantVisits.definition.url + queryParams(options);
@@ -880,8 +880,8 @@ instantVisits.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:79
- * @route "/features/navigation/instant-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:79
+ * @route "http://localhost/features/navigation/instant-visits"
  */
 instantVisits.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: instantVisits.url(options),
@@ -890,8 +890,8 @@ instantVisits.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:79
- * @route "/features/navigation/instant-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:79
+ * @route "http://localhost/features/navigation/instant-visits"
  */
 instantVisits.head = (
     options?: RouteQueryOptions,
@@ -902,8 +902,8 @@ instantVisits.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:79
- * @route "/features/navigation/instant-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:79
+ * @route "http://localhost/features/navigation/instant-visits"
  */
 const instantVisitsForm = (
     options?: RouteQueryOptions,
@@ -914,8 +914,8 @@ const instantVisitsForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:79
- * @route "/features/navigation/instant-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:79
+ * @route "http://localhost/features/navigation/instant-visits"
  */
 instantVisitsForm.get = (
     options?: RouteQueryOptions,
@@ -926,8 +926,8 @@ instantVisitsForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisits
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:79
- * @route "/features/navigation/instant-visits"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:79
+ * @route "http://localhost/features/navigation/instant-visits"
  */
 instantVisitsForm.head = (
     options?: RouteQueryOptions,
@@ -939,8 +939,8 @@ instantVisitsForm.head = (
 instantVisits.form = instantVisitsForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisitTarget
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:87
- * @route "/features/navigation/instant-visit-target"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:87
+ * @route "http://localhost/features/navigation/instant-visit-target"
  */
 export const instantVisitTarget = (
     options?: RouteQueryOptions,
@@ -951,13 +951,13 @@ export const instantVisitTarget = (
 
 instantVisitTarget.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/instant-visit-target',
+    url: 'http://localhost/features/navigation/instant-visit-target',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisitTarget
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:87
- * @route "/features/navigation/instant-visit-target"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:87
+ * @route "http://localhost/features/navigation/instant-visit-target"
  */
 instantVisitTarget.url = (options?: RouteQueryOptions) => {
     return instantVisitTarget.definition.url + queryParams(options);
@@ -965,8 +965,8 @@ instantVisitTarget.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisitTarget
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:87
- * @route "/features/navigation/instant-visit-target"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:87
+ * @route "http://localhost/features/navigation/instant-visit-target"
  */
 instantVisitTarget.get = (
     options?: RouteQueryOptions,
@@ -977,8 +977,8 @@ instantVisitTarget.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisitTarget
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:87
- * @route "/features/navigation/instant-visit-target"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:87
+ * @route "http://localhost/features/navigation/instant-visit-target"
  */
 instantVisitTarget.head = (
     options?: RouteQueryOptions,
@@ -989,8 +989,8 @@ instantVisitTarget.head = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisitTarget
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:87
- * @route "/features/navigation/instant-visit-target"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:87
+ * @route "http://localhost/features/navigation/instant-visit-target"
  */
 const instantVisitTargetForm = (
     options?: RouteQueryOptions,
@@ -1001,8 +1001,8 @@ const instantVisitTargetForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisitTarget
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:87
- * @route "/features/navigation/instant-visit-target"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:87
+ * @route "http://localhost/features/navigation/instant-visit-target"
  */
 instantVisitTargetForm.get = (
     options?: RouteQueryOptions,
@@ -1013,8 +1013,8 @@ instantVisitTargetForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::instantVisitTarget
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:87
- * @route "/features/navigation/instant-visit-target"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:87
+ * @route "http://localhost/features/navigation/instant-visit-target"
  */
 instantVisitTargetForm.head = (
     options?: RouteQueryOptions,
@@ -1026,8 +1026,8 @@ instantVisitTargetForm.head = (
 instantVisitTarget.form = instantVisitTargetForm;
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::urlFragments
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:147
- * @route "/features/navigation/url-fragments"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:147
+ * @route "http://localhost/features/navigation/url-fragments"
  */
 export const urlFragments = (
     options?: RouteQueryOptions,
@@ -1038,13 +1038,13 @@ export const urlFragments = (
 
 urlFragments.definition = {
     methods: ['get', 'head'],
-    url: '/features/navigation/url-fragments',
+    url: 'http://localhost/features/navigation/url-fragments',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::urlFragments
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:147
- * @route "/features/navigation/url-fragments"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:147
+ * @route "http://localhost/features/navigation/url-fragments"
  */
 urlFragments.url = (options?: RouteQueryOptions) => {
     return urlFragments.definition.url + queryParams(options);
@@ -1052,8 +1052,8 @@ urlFragments.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::urlFragments
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:147
- * @route "/features/navigation/url-fragments"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:147
+ * @route "http://localhost/features/navigation/url-fragments"
  */
 urlFragments.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: urlFragments.url(options),
@@ -1062,8 +1062,8 @@ urlFragments.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::urlFragments
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:147
- * @route "/features/navigation/url-fragments"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:147
+ * @route "http://localhost/features/navigation/url-fragments"
  */
 urlFragments.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: urlFragments.url(options),
@@ -1072,8 +1072,8 @@ urlFragments.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::urlFragments
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:147
- * @route "/features/navigation/url-fragments"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:147
+ * @route "http://localhost/features/navigation/url-fragments"
  */
 const urlFragmentsForm = (
     options?: RouteQueryOptions,
@@ -1084,8 +1084,8 @@ const urlFragmentsForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::urlFragments
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:147
- * @route "/features/navigation/url-fragments"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:147
+ * @route "http://localhost/features/navigation/url-fragments"
  */
 urlFragmentsForm.get = (
     options?: RouteQueryOptions,
@@ -1096,8 +1096,8 @@ urlFragmentsForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::urlFragments
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:147
- * @route "/features/navigation/url-fragments"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php:147
+ * @route "http://localhost/features/navigation/url-fragments"
  */
 urlFragmentsForm.head = (
     options?: RouteQueryOptions,

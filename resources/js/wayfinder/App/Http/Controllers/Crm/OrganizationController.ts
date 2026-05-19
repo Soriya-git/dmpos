@@ -12,8 +12,8 @@ import {
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "/organizations"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:16
+ * @route "http://localhost/organizations"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -22,13 +22,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 index.definition = {
     methods: ['get', 'head'],
-    url: '/organizations',
+    url: 'http://localhost/organizations',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "/organizations"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:16
+ * @route "http://localhost/organizations"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options);
@@ -36,8 +36,8 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "/organizations"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:16
+ * @route "http://localhost/organizations"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -46,8 +46,8 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "/organizations"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:16
+ * @route "http://localhost/organizations"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
@@ -56,8 +56,8 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "/organizations"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:16
+ * @route "http://localhost/organizations"
  */
 const indexForm = (
     options?: RouteQueryOptions,
@@ -68,8 +68,8 @@ const indexForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "/organizations"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:16
+ * @route "http://localhost/organizations"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -78,8 +78,8 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "/organizations"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:16
+ * @route "http://localhost/organizations"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(formSafeOptions('head', options)),
@@ -89,8 +89,8 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 index.form = indexForm;
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:32
+ * @route "http://localhost/organizations/{organization}"
  */
 export const show = (
     args:
@@ -106,13 +106,13 @@ export const show = (
 
 show.definition = {
     methods: ['get', 'head'],
-    url: '/organizations/{organization}',
+    url: 'http://localhost/organizations/{organization}',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:32
+ * @route "http://localhost/organizations/{organization}"
  */
 show.url = (
     args:
@@ -154,8 +154,8 @@ show.url = (
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:32
+ * @route "http://localhost/organizations/{organization}"
  */
 show.get = (
     args:
@@ -171,8 +171,8 @@ show.get = (
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:32
+ * @route "http://localhost/organizations/{organization}"
  */
 show.head = (
     args:
@@ -188,8 +188,8 @@ show.head = (
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:32
+ * @route "http://localhost/organizations/{organization}"
  */
 const showForm = (
     args:
@@ -205,8 +205,8 @@ const showForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:32
+ * @route "http://localhost/organizations/{organization}"
  */
 showForm.get = (
     args:
@@ -222,8 +222,8 @@ showForm.get = (
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:32
+ * @route "http://localhost/organizations/{organization}"
  */
 showForm.head = (
     args:
@@ -240,8 +240,8 @@ showForm.head = (
 show.form = showForm;
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:48
+ * @route "http://localhost/organizations/{organization}"
  */
 export const update = (
     args:
@@ -257,13 +257,13 @@ export const update = (
 
 update.definition = {
     methods: ['put', 'patch'],
-    url: '/organizations/{organization}',
+    url: 'http://localhost/organizations/{organization}',
 } satisfies RouteDefinition<['put', 'patch']>;
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:48
+ * @route "http://localhost/organizations/{organization}"
  */
 update.url = (
     args:
@@ -305,8 +305,8 @@ update.url = (
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:48
+ * @route "http://localhost/organizations/{organization}"
  */
 update.put = (
     args:
@@ -322,8 +322,8 @@ update.put = (
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:48
+ * @route "http://localhost/organizations/{organization}"
  */
 update.patch = (
     args:
@@ -339,8 +339,8 @@ update.patch = (
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:48
+ * @route "http://localhost/organizations/{organization}"
  */
 const updateForm = (
     args:
@@ -356,8 +356,8 @@ const updateForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:48
+ * @route "http://localhost/organizations/{organization}"
  */
 updateForm.put = (
     args:
@@ -373,8 +373,8 @@ updateForm.put = (
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "/organizations/{organization}"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php:48
+ * @route "http://localhost/organizations/{organization}"
  */
 updateForm.patch = (
     args:

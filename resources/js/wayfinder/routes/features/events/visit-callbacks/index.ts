@@ -10,8 +10,8 @@ import {
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacksAction
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:27
- * @route "/features/events/visit-callbacks/action"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:27
+ * @route "http://localhost/features/events/visit-callbacks/action"
  */
 export const action = (
     options?: RouteQueryOptions,
@@ -22,13 +22,13 @@ export const action = (
 
 action.definition = {
     methods: ['post'],
-    url: '/features/events/visit-callbacks/action',
+    url: 'http://localhost/features/events/visit-callbacks/action',
 } satisfies RouteDefinition<['post']>;
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacksAction
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:27
- * @route "/features/events/visit-callbacks/action"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:27
+ * @route "http://localhost/features/events/visit-callbacks/action"
  */
 action.url = (options?: RouteQueryOptions) => {
     return action.definition.url + queryParams(options);
@@ -36,8 +36,8 @@ action.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacksAction
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:27
- * @route "/features/events/visit-callbacks/action"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:27
+ * @route "http://localhost/features/events/visit-callbacks/action"
  */
 action.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: action.url(options),
@@ -46,8 +46,8 @@ action.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacksAction
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:27
- * @route "/features/events/visit-callbacks/action"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:27
+ * @route "http://localhost/features/events/visit-callbacks/action"
  */
 const actionForm = (
     options?: RouteQueryOptions,
@@ -58,8 +58,8 @@ const actionForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacksAction
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:27
- * @route "/features/events/visit-callbacks/action"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:27
+ * @route "http://localhost/features/events/visit-callbacks/action"
  */
 actionForm.post = (
     options?: RouteQueryOptions,

@@ -10,8 +10,8 @@ import {
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::submitValidationSecondary
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:66
- * @route "/features/forms/validation/secondary"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php:66
+ * @route "http://localhost/features/forms/validation/secondary"
  */
 export const secondary = (
     options?: RouteQueryOptions,
@@ -22,13 +22,13 @@ export const secondary = (
 
 secondary.definition = {
     methods: ['post'],
-    url: '/features/forms/validation/secondary',
+    url: 'http://localhost/features/forms/validation/secondary',
 } satisfies RouteDefinition<['post']>;
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::submitValidationSecondary
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:66
- * @route "/features/forms/validation/secondary"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php:66
+ * @route "http://localhost/features/forms/validation/secondary"
  */
 secondary.url = (options?: RouteQueryOptions) => {
     return secondary.definition.url + queryParams(options);
@@ -36,8 +36,8 @@ secondary.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::submitValidationSecondary
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:66
- * @route "/features/forms/validation/secondary"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php:66
+ * @route "http://localhost/features/forms/validation/secondary"
  */
 secondary.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: secondary.url(options),
@@ -46,8 +46,8 @@ secondary.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::submitValidationSecondary
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:66
- * @route "/features/forms/validation/secondary"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php:66
+ * @route "http://localhost/features/forms/validation/secondary"
  */
 const secondaryForm = (
     options?: RouteQueryOptions,
@@ -58,8 +58,8 @@ const secondaryForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::submitValidationSecondary
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:66
- * @route "/features/forms/validation/secondary"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php:66
+ * @route "http://localhost/features/forms/validation/secondary"
  */
 secondaryForm.post = (
     options?: RouteQueryOptions,

@@ -12,8 +12,8 @@ import useHttpE30dfc8 from './use-http';
 
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "/features/http/use-http"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/HttpController.php:12
+ * @route "http://localhost/features/http/use-http"
  */
 export const useHttp = (
     options?: RouteQueryOptions,
@@ -24,13 +24,13 @@ export const useHttp = (
 
 useHttp.definition = {
     methods: ['get', 'head'],
-    url: '/features/http/use-http',
+    url: 'http://localhost/features/http/use-http',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "/features/http/use-http"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/HttpController.php:12
+ * @route "http://localhost/features/http/use-http"
  */
 useHttp.url = (options?: RouteQueryOptions) => {
     return useHttp.definition.url + queryParams(options);
@@ -38,8 +38,8 @@ useHttp.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "/features/http/use-http"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/HttpController.php:12
+ * @route "http://localhost/features/http/use-http"
  */
 useHttp.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: useHttp.url(options),
@@ -48,8 +48,8 @@ useHttp.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "/features/http/use-http"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/HttpController.php:12
+ * @route "http://localhost/features/http/use-http"
  */
 useHttp.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: useHttp.url(options),
@@ -58,8 +58,8 @@ useHttp.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "/features/http/use-http"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/HttpController.php:12
+ * @route "http://localhost/features/http/use-http"
  */
 const useHttpForm = (
     options?: RouteQueryOptions,
@@ -70,8 +70,8 @@ const useHttpForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "/features/http/use-http"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/HttpController.php:12
+ * @route "http://localhost/features/http/use-http"
  */
 useHttpForm.get = (
     options?: RouteQueryOptions,
@@ -82,8 +82,8 @@ useHttpForm.get = (
 
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "/features/http/use-http"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/HttpController.php:12
+ * @route "http://localhost/features/http/use-http"
  */
 useHttpForm.head = (
     options?: RouteQueryOptions,

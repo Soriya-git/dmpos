@@ -12,8 +12,8 @@ import {
 import localA914886 from './local';
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:98
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:98
+ * @route "http://localhost/storage/{path}"
  */
 export const local = (
     args: { path: string | number } | [path: string | number] | string | number,
@@ -25,12 +25,12 @@ export const local = (
 
 local.definition = {
     methods: ['get', 'head'],
-    url: '/storage/{path}',
+    url: 'http://localhost/storage/{path}',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:98
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:98
+ * @route "http://localhost/storage/{path}"
  */
 local.url = (
     args: { path: string | number } | [path: string | number] | string | number,
@@ -60,8 +60,8 @@ local.url = (
 };
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:98
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:98
+ * @route "http://localhost/storage/{path}"
  */
 local.get = (
     args: { path: string | number } | [path: string | number] | string | number,
@@ -72,8 +72,8 @@ local.get = (
 });
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:98
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:98
+ * @route "http://localhost/storage/{path}"
  */
 local.head = (
     args: { path: string | number } | [path: string | number] | string | number,
@@ -84,8 +84,8 @@ local.head = (
 });
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:98
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:98
+ * @route "http://localhost/storage/{path}"
  */
 const localForm = (
     args: { path: string | number } | [path: string | number] | string | number,
@@ -96,8 +96,8 @@ const localForm = (
 });
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:98
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:98
+ * @route "http://localhost/storage/{path}"
  */
 localForm.get = (
     args: { path: string | number } | [path: string | number] | string | number,
@@ -108,8 +108,8 @@ localForm.get = (
 });
 
 /**
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:98
- * @route "/storage/{path}"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemServiceProvider.php:98
+ * @route "http://localhost/storage/{path}"
  */
 localForm.head = (
     args: { path: string | number } | [path: string | number] | string | number,

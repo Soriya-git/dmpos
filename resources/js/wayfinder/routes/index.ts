@@ -11,8 +11,8 @@ import {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 export const login = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: login.url(options),
@@ -21,13 +21,13 @@ export const login = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 login.definition = {
     methods: ['get', 'head'],
-    url: '/login',
+    url: 'http://localhost/login',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 login.url = (options?: RouteQueryOptions) => {
     return login.definition.url + queryParams(options);
@@ -35,8 +35,8 @@ login.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 login.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: login.url(options),
@@ -45,8 +45,8 @@ login.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 login.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: login.url(options),
@@ -55,8 +55,8 @@ login.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 const loginForm = (
     options?: RouteQueryOptions,
@@ -67,8 +67,8 @@ const loginForm = (
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 loginForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: login.url(options),
@@ -77,8 +77,8 @@ loginForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 loginForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: login.url(formSafeOptions('head', options)),
@@ -88,8 +88,8 @@ loginForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 login.form = loginForm;
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "/logout"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
+ * @route "http://localhost/logout"
  */
 export const logout = (
     options?: RouteQueryOptions,
@@ -100,13 +100,13 @@ export const logout = (
 
 logout.definition = {
     methods: ['post'],
-    url: '/logout',
+    url: 'http://localhost/logout',
 } satisfies RouteDefinition<['post']>;
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "/logout"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
+ * @route "http://localhost/logout"
  */
 logout.url = (options?: RouteQueryOptions) => {
     return logout.definition.url + queryParams(options);
@@ -114,8 +114,8 @@ logout.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "/logout"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
+ * @route "http://localhost/logout"
  */
 logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: logout.url(options),
@@ -124,8 +124,8 @@ logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "/logout"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
+ * @route "http://localhost/logout"
  */
 const logoutForm = (
     options?: RouteQueryOptions,
@@ -136,8 +136,8 @@ const logoutForm = (
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "/logout"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
+ * @route "http://localhost/logout"
  */
 logoutForm.post = (
     options?: RouteQueryOptions,
@@ -149,8 +149,8 @@ logoutForm.post = (
 logout.form = logoutForm;
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 export const home = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: home.url(options),
@@ -159,15 +159,15 @@ export const home = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 home.definition = {
     methods: ['get', 'head', 'post', 'put', 'patch', 'delete', 'options'],
-    url: '/',
+    url: 'http://localhost',
 } satisfies RouteDefinition<
     ['get', 'head', 'post', 'put', 'patch', 'delete', 'options']
 >;
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 home.url = (options?: RouteQueryOptions) => {
     return home.definition.url + queryParams(options);
@@ -175,8 +175,8 @@ home.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 home.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: home.url(options),
@@ -185,8 +185,8 @@ home.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: home.url(options),
@@ -195,8 +195,8 @@ home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 home.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: home.url(options),
@@ -205,8 +205,8 @@ home.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 home.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: home.url(options),
@@ -215,8 +215,8 @@ home.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 home.patch = (options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
     url: home.url(options),
@@ -225,8 +225,8 @@ home.patch = (options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 home.delete = (options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: home.url(options),
@@ -235,8 +235,8 @@ home.delete = (options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 home.options = (options?: RouteQueryOptions): RouteDefinition<'options'> => ({
     url: home.url(options),
@@ -245,8 +245,8 @@ home.options = (options?: RouteQueryOptions): RouteDefinition<'options'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 const homeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: home.url(options),
@@ -255,8 +255,8 @@ const homeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 homeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: home.url(options),
@@ -265,8 +265,8 @@ homeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 homeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: home.url(formSafeOptions('head', options)),
@@ -275,8 +275,8 @@ homeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 homeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: home.url(options),
@@ -285,8 +285,8 @@ homeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 homeForm.put = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: home.url(formSafeOptions('put', options)),
@@ -295,8 +295,8 @@ homeForm.put = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 homeForm.patch = (
     options?: RouteQueryOptions,
@@ -307,8 +307,8 @@ homeForm.patch = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 homeForm.delete = (
     options?: RouteQueryOptions,
@@ -319,8 +319,8 @@ homeForm.delete = (
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
- * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "/"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php:19
+ * @route "http://localhost"
  */
 homeForm.options = (
     options?: RouteQueryOptions,
@@ -332,8 +332,8 @@ homeForm.options = (
 home.form = homeForm;
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 export const dashboard = (
     options?: RouteQueryOptions,
@@ -344,13 +344,13 @@ export const dashboard = (
 
 dashboard.definition = {
     methods: ['get', 'head'],
-    url: '/dashboard',
+    url: 'http://localhost/dashboard',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 dashboard.url = (options?: RouteQueryOptions) => {
     return dashboard.definition.url + queryParams(options);
@@ -358,8 +358,8 @@ dashboard.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 dashboard.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: dashboard.url(options),
@@ -368,8 +368,8 @@ dashboard.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: dashboard.url(options),
@@ -378,8 +378,8 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 const dashboardForm = (
     options?: RouteQueryOptions,
@@ -390,8 +390,8 @@ const dashboardForm = (
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 dashboardForm.get = (
     options?: RouteQueryOptions,
@@ -402,8 +402,8 @@ dashboardForm.get = (
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
- * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "/dashboard"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php:14
+ * @route "http://localhost/dashboard"
  */
 dashboardForm.head = (
     options?: RouteQueryOptions,

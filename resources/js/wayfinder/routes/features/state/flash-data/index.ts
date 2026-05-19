@@ -10,8 +10,8 @@ import {
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataError
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:28
- * @route "/features/state/flash-data/error"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php:28
+ * @route "http://localhost/features/state/flash-data/error"
  */
 export const error = (
     options?: RouteQueryOptions,
@@ -22,13 +22,13 @@ export const error = (
 
 error.definition = {
     methods: ['post'],
-    url: '/features/state/flash-data/error',
+    url: 'http://localhost/features/state/flash-data/error',
 } satisfies RouteDefinition<['post']>;
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataError
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:28
- * @route "/features/state/flash-data/error"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php:28
+ * @route "http://localhost/features/state/flash-data/error"
  */
 error.url = (options?: RouteQueryOptions) => {
     return error.definition.url + queryParams(options);
@@ -36,8 +36,8 @@ error.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataError
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:28
- * @route "/features/state/flash-data/error"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php:28
+ * @route "http://localhost/features/state/flash-data/error"
  */
 error.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: error.url(options),
@@ -46,8 +46,8 @@ error.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataError
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:28
- * @route "/features/state/flash-data/error"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php:28
+ * @route "http://localhost/features/state/flash-data/error"
  */
 const errorForm = (
     options?: RouteQueryOptions,
@@ -58,8 +58,8 @@ const errorForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataError
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:28
- * @route "/features/state/flash-data/error"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php:28
+ * @route "http://localhost/features/state/flash-data/error"
  */
 errorForm.post = (
     options?: RouteQueryOptions,
@@ -71,8 +71,8 @@ errorForm.post = (
 error.form = errorForm;
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataWarning
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:35
- * @route "/features/state/flash-data/warning"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php:35
+ * @route "http://localhost/features/state/flash-data/warning"
  */
 export const warning = (
     options?: RouteQueryOptions,
@@ -83,13 +83,13 @@ export const warning = (
 
 warning.definition = {
     methods: ['post'],
-    url: '/features/state/flash-data/warning',
+    url: 'http://localhost/features/state/flash-data/warning',
 } satisfies RouteDefinition<['post']>;
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataWarning
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:35
- * @route "/features/state/flash-data/warning"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php:35
+ * @route "http://localhost/features/state/flash-data/warning"
  */
 warning.url = (options?: RouteQueryOptions) => {
     return warning.definition.url + queryParams(options);
@@ -97,8 +97,8 @@ warning.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataWarning
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:35
- * @route "/features/state/flash-data/warning"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php:35
+ * @route "http://localhost/features/state/flash-data/warning"
  */
 warning.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: warning.url(options),
@@ -107,8 +107,8 @@ warning.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataWarning
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:35
- * @route "/features/state/flash-data/warning"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php:35
+ * @route "http://localhost/features/state/flash-data/warning"
  */
 const warningForm = (
     options?: RouteQueryOptions,
@@ -119,8 +119,8 @@ const warningForm = (
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataWarning
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:35
- * @route "/features/state/flash-data/warning"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php:35
+ * @route "http://localhost/features/state/flash-data/warning"
  */
 warningForm.post = (
     options?: RouteQueryOptions,

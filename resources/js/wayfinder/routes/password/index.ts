@@ -12,8 +12,8 @@ import confirmD7e05fe from './confirm';
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 export const confirm = (
     options?: RouteQueryOptions,
@@ -24,13 +24,13 @@ export const confirm = (
 
 confirm.definition = {
     methods: ['get', 'head'],
-    url: '/user/confirm-password',
+    url: 'http://localhost/user/confirm-password',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 confirm.url = (options?: RouteQueryOptions) => {
     return confirm.definition.url + queryParams(options);
@@ -38,8 +38,8 @@ confirm.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 confirm.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: confirm.url(options),
@@ -48,8 +48,8 @@ confirm.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 confirm.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: confirm.url(options),
@@ -58,8 +58,8 @@ confirm.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 const confirmForm = (
     options?: RouteQueryOptions,
@@ -70,8 +70,8 @@ const confirmForm = (
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 confirmForm.get = (
     options?: RouteQueryOptions,
@@ -82,8 +82,8 @@ confirmForm.get = (
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php:40
- * @route "/user/confirm-password"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php:40
+ * @route "http://localhost/user/confirm-password"
  */
 confirmForm.head = (
     options?: RouteQueryOptions,
@@ -95,8 +95,8 @@ confirmForm.head = (
 confirm.form = confirmForm;
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmedPasswordStatusController.php:17
- * @route "/user/confirmed-password-status"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmedPasswordStatusController.php:17
+ * @route "http://localhost/user/confirmed-password-status"
  */
 export const confirmation = (
     options?: RouteQueryOptions,
@@ -107,13 +107,13 @@ export const confirmation = (
 
 confirmation.definition = {
     methods: ['get', 'head'],
-    url: '/user/confirmed-password-status',
+    url: 'http://localhost/user/confirmed-password-status',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmedPasswordStatusController.php:17
- * @route "/user/confirmed-password-status"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmedPasswordStatusController.php:17
+ * @route "http://localhost/user/confirmed-password-status"
  */
 confirmation.url = (options?: RouteQueryOptions) => {
     return confirmation.definition.url + queryParams(options);
@@ -121,8 +121,8 @@ confirmation.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmedPasswordStatusController.php:17
- * @route "/user/confirmed-password-status"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmedPasswordStatusController.php:17
+ * @route "http://localhost/user/confirmed-password-status"
  */
 confirmation.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: confirmation.url(options),
@@ -131,8 +131,8 @@ confirmation.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmedPasswordStatusController.php:17
- * @route "/user/confirmed-password-status"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmedPasswordStatusController.php:17
+ * @route "http://localhost/user/confirmed-password-status"
  */
 confirmation.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: confirmation.url(options),
@@ -141,8 +141,8 @@ confirmation.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmedPasswordStatusController.php:17
- * @route "/user/confirmed-password-status"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmedPasswordStatusController.php:17
+ * @route "http://localhost/user/confirmed-password-status"
  */
 const confirmationForm = (
     options?: RouteQueryOptions,
@@ -153,8 +153,8 @@ const confirmationForm = (
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmedPasswordStatusController.php:17
- * @route "/user/confirmed-password-status"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmedPasswordStatusController.php:17
+ * @route "http://localhost/user/confirmed-password-status"
  */
 confirmationForm.get = (
     options?: RouteQueryOptions,
@@ -165,8 +165,8 @@ confirmationForm.get = (
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController::show
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmedPasswordStatusController.php:17
- * @route "/user/confirmed-password-status"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmedPasswordStatusController.php:17
+ * @route "http://localhost/user/confirmed-password-status"
  */
 confirmationForm.head = (
     options?: RouteQueryOptions,

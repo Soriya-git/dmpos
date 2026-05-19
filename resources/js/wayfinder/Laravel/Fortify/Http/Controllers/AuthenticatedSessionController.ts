@@ -11,8 +11,8 @@ import {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 export const create = (
     options?: RouteQueryOptions,
@@ -23,13 +23,13 @@ export const create = (
 
 create.definition = {
     methods: ['get', 'head'],
-    url: '/login',
+    url: 'http://localhost/login',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 create.url = (options?: RouteQueryOptions) => {
     return create.definition.url + queryParams(options);
@@ -37,8 +37,8 @@ create.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: create.url(options),
@@ -47,8 +47,8 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: create.url(options),
@@ -57,8 +57,8 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 const createForm = (
     options?: RouteQueryOptions,
@@ -69,8 +69,8 @@ const createForm = (
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: create.url(options),
@@ -79,8 +79,8 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:47
+ * @route "http://localhost/login"
  */
 createForm.head = (
     options?: RouteQueryOptions,
@@ -92,8 +92,8 @@ createForm.head = (
 create.form = createForm;
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:58
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:58
+ * @route "http://localhost/login"
  */
 export const store = (
     options?: RouteQueryOptions,
@@ -104,13 +104,13 @@ export const store = (
 
 store.definition = {
     methods: ['post'],
-    url: '/login',
+    url: 'http://localhost/login',
 } satisfies RouteDefinition<['post']>;
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:58
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:58
+ * @route "http://localhost/login"
  */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options);
@@ -118,8 +118,8 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:58
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:58
+ * @route "http://localhost/login"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
@@ -128,8 +128,8 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:58
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:58
+ * @route "http://localhost/login"
  */
 const storeForm = (
     options?: RouteQueryOptions,
@@ -140,8 +140,8 @@ const storeForm = (
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:58
- * @route "/login"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:58
+ * @route "http://localhost/login"
  */
 storeForm.post = (
     options?: RouteQueryOptions,
@@ -153,8 +153,8 @@ storeForm.post = (
 store.form = storeForm;
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "/logout"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
+ * @route "http://localhost/logout"
  */
 export const destroy = (
     options?: RouteQueryOptions,
@@ -165,13 +165,13 @@ export const destroy = (
 
 destroy.definition = {
     methods: ['post'],
-    url: '/logout',
+    url: 'http://localhost/logout',
 } satisfies RouteDefinition<['post']>;
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "/logout"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
+ * @route "http://localhost/logout"
  */
 destroy.url = (options?: RouteQueryOptions) => {
     return destroy.definition.url + queryParams(options);
@@ -179,8 +179,8 @@ destroy.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "/logout"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
+ * @route "http://localhost/logout"
  */
 destroy.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: destroy.url(options),
@@ -189,8 +189,8 @@ destroy.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "/logout"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
+ * @route "http://localhost/logout"
  */
 const destroyForm = (
     options?: RouteQueryOptions,
@@ -201,8 +201,8 @@ const destroyForm = (
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
- * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "/logout"
+ * @see /home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php:100
+ * @route "http://localhost/logout"
  */
 destroyForm.post = (
     options?: RouteQueryOptions,

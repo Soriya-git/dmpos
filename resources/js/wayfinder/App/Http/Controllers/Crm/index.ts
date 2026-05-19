@@ -7,10 +7,10 @@ import NoteController from './NoteController';
 import OrganizationController from './OrganizationController';
 
 export const Crm = {
-    ContactController,
-    DashboardController,
     NoteController,
+    DashboardController,
     OrganizationController,
+    ContactController,
 };
 
 export default Crm;

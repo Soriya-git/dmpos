@@ -11,8 +11,8 @@ import {
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::progressSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:37
- * @route "/features/events/progress/slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:37
+ * @route "http://localhost/features/events/progress/slow"
  */
 export const slow = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: slow.url(options),
@@ -21,13 +21,13 @@ export const slow = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 slow.definition = {
     methods: ['get', 'head'],
-    url: '/features/events/progress/slow',
+    url: 'http://localhost/features/events/progress/slow',
 } satisfies RouteDefinition<['get', 'head']>;
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::progressSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:37
- * @route "/features/events/progress/slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:37
+ * @route "http://localhost/features/events/progress/slow"
  */
 slow.url = (options?: RouteQueryOptions) => {
     return slow.definition.url + queryParams(options);
@@ -35,8 +35,8 @@ slow.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::progressSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:37
- * @route "/features/events/progress/slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:37
+ * @route "http://localhost/features/events/progress/slow"
  */
 slow.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: slow.url(options),
@@ -45,8 +45,8 @@ slow.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::progressSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:37
- * @route "/features/events/progress/slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:37
+ * @route "http://localhost/features/events/progress/slow"
  */
 slow.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: slow.url(options),
@@ -55,8 +55,8 @@ slow.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::progressSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:37
- * @route "/features/events/progress/slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:37
+ * @route "http://localhost/features/events/progress/slow"
  */
 const slowForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: slow.url(options),
@@ -65,8 +65,8 @@ const slowForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::progressSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:37
- * @route "/features/events/progress/slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:37
+ * @route "http://localhost/features/events/progress/slow"
  */
 slowForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: slow.url(options),
@@ -75,8 +75,8 @@ slowForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::progressSlow
- * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:37
- * @route "/features/events/progress/slow"
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php:37
+ * @route "http://localhost/features/events/progress/slow"
  */
 slowForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: slow.url(formSafeOptions('head', options)),
