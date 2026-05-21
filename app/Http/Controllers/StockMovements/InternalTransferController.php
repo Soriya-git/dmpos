@@ -118,6 +118,8 @@ class InternalTransferController extends Controller
         $transfers = StockTransfer::query()
             ->with([
                 'creator:id,name',
+                'approver:id,name',
+                'canceller:id,name',
                 'fromWarehouse:id,name,code',
                 'toWarehouse:id,name,code',
                 'fromLocation:id,name,code,location_type',
@@ -441,6 +443,8 @@ class InternalTransferController extends Controller
 
         $stockTransfer->update([
             'status' => 'rejected',
+            'cancelled_at' => now(),
+            'cancelled_by' => $request->user()->id,
             'cancel_reason' => 'Rejected by approver',
         ]);
 
@@ -537,6 +541,8 @@ class InternalTransferController extends Controller
             'code' => $transfer->transfer_no,
             'date' => $transfer->transfer_date?->toDateString(),
             'displayDate' => $transfer->transfer_date?->format('M d, Y') ?? $transfer->created_at?->format('M d, Y'),
+            'approvedAt' => $transfer->approved_at?->format('M d, Y H:i'),
+            'cancelledAt' => $transfer->cancelled_at?->format('M d, Y H:i'),
             'fromWarehouse' => $transfer->fromWarehouse?->name ?? 'Warehouse',
             'toWarehouse' => $transfer->toWarehouse?->name ?? 'Warehouse',
             'fromLocation' => $transfer->fromLocation?->name ?? 'Location',
@@ -546,6 +552,9 @@ class InternalTransferController extends Controller
             'totalCost' => (float) $transfer->lines->sum(fn (StockTransferLine $line) => (float) $line->total_cost),
             'note' => $transfer->note,
             'createdBy' => $transfer->creator?->name ?? 'System',
+            'approvedBy' => $transfer->approver?->name,
+            'cancelledBy' => $transfer->canceller?->name,
+            'actionStatus' => $this->actionStatus($transfer),
             'status' => $transfer->status,
             'lines' => $transfer->lines->map(function (StockTransferLine $line) use (&$movementGroups, $sourceBalances, $transfer): array {
                 $movement = $movementGroups->get($line->item_id)?->shift();
@@ -572,5 +581,22 @@ class InternalTransferController extends Controller
                 ];
             }),
         ];
+    }
+
+    private function actionStatus(StockTransfer $transfer): ?string
+    {
+        if ($transfer->status === 'received' || $transfer->status === 'approved') {
+            return 'Approved';
+        }
+
+        if ($transfer->status === 'rejected') {
+            return 'Rejected';
+        }
+
+        if ($transfer->status === 'cancelled') {
+            return 'Cancelled';
+        }
+
+        return null;
     }
 }

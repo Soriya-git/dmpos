@@ -217,6 +217,8 @@ class StockAdjustmentController extends Controller
                 'warehouse:id,name,code',
                 'stockLocation:id,name,code',
                 'creator:id,name',
+                'confirmer:id,name',
+                'canceller:id,name',
                 'lines.item:id,name,code',
                 'lines.unit:id,name,code',
                 'lines.stockLocation:id,name,code',
@@ -552,6 +554,11 @@ class StockAdjustmentController extends Controller
             'totalCost' => (float) $adjustment->lines->sum(fn (StockAdjustmentLine $line) => abs((float) $line->total_cost)),
             'reason' => $adjustment->lines->pluck('reason')->filter()->first() ?? $adjustment->note,
             'createdBy' => $adjustment->creator?->name ?? 'System',
+            'confirmedBy' => $adjustment->confirmer?->name,
+            'cancelledBy' => $adjustment->canceller?->name,
+            'confirmedAt' => $adjustment->confirmed_at?->format('M d, Y H:i'),
+            'cancelledAt' => $adjustment->cancelled_at?->format('M d, Y H:i'),
+            'actionStatus' => $this->actionStatus($adjustment),
             'status' => $adjustment->status === 'confirmed' ? 'approved' : $adjustment->status,
             'lines' => $adjustment->lines->map(fn (StockAdjustmentLine $line): array => [
                 'id' => $line->id,
@@ -569,5 +576,20 @@ class StockAdjustmentController extends Controller
                 'note' => $line->note,
             ]),
         ];
+    }
+
+    private function actionStatus(StockAdjustment $adjustment): ?string
+    {
+        if ($adjustment->status === 'confirmed') {
+            return 'Approved';
+        }
+
+        if ($adjustment->status === 'cancelled') {
+            return str_starts_with((string) $adjustment->cancel_reason, 'Rejected')
+                ? 'Rejected'
+                : 'Cancelled';
+        }
+
+        return null;
     }
 }

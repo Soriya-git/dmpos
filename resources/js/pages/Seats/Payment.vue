@@ -110,6 +110,10 @@ function methodKey(
 ) {
     const code = method.code?.toLowerCase().replaceAll('_', '-');
 
+    if (code?.startsWith('ebank-')) {
+        return code.replace('ebank-', 'ebanking-');
+    }
+
     if (code) return code;
 
     return `${method.type === 'bank' ? 'ebanking' : method.type}-${method.currency.toLowerCase()}`;
@@ -124,6 +128,9 @@ function iconForMethod(method: PaymentMethodOption) {
 }
 
 const availableMethods = computed(() => {
+    const payLaterMethod = methods.find(
+        (method) => method.type === 'pay_later',
+    );
     const databaseMethods =
         props.paymentMethods?.map<PaymentMethod>((method) => ({
             currency: method.currency,
@@ -139,11 +146,10 @@ const availableMethods = computed(() => {
             ? databaseMethods
             : methods.filter((method) => method.type !== 'pay_later');
 
-    if (props.allowPayLater ?? true) {
-        return [
-            ...baseMethods,
-            methods.find((method) => method.type === 'pay_later')!,
-        ];
+    if ((props.allowPayLater ?? true) && payLaterMethod) {
+        return baseMethods.some((method) => method.id === payLaterMethod.id)
+            ? baseMethods
+            : [...baseMethods, payLaterMethod];
     }
 
     return baseMethods;
@@ -287,12 +293,12 @@ const operationStatus = computed<'invoice' | 'invoice_receipt_done'>(() => {
 
 const operationStatusLabel = computed(() => {
     return operationStatus.value === 'invoice'
-        ? 'Invoice'
+        ? 'AR Invoice / Pay Later'
         : 'Invoice and Receipt Done';
 });
 
 const mainActionLabel = computed(() => {
-    if (selectedMethod.value.type === 'pay_later') return 'Pay Later';
+    if (selectedMethod.value.type === 'pay_later') return 'Create AR Invoice';
     if (selectedMethod.value.type === 'bank') return 'Confirm Bank Receipt';
 
     return 'Receive Payment';
@@ -673,11 +679,11 @@ function confirmPayment() {
                         <FileText class="h-8 w-8 text-orange-400" />
                     </div>
                     <h3 class="text-lg font-black text-[#2A4858]">
-                        Deferred Payment
+                        AR Invoice
                     </h3>
                     <p class="mt-2 px-6 text-xs text-gray-500">
-                        The order will stay at invoice status and can be paid
-                        later.
+                        This creates an unpaid invoice that can be collected
+                        later from Invoice Management.
                     </p>
                 </div>
 

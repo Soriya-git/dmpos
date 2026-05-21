@@ -51,4 +51,9 @@ class GoodsReceipt extends Model
     {
         return $this->belongsTo(User::class, 'received_by');
     }
+
+    public function canceller()
+    {
+        return $this->belongsTo(User::class, 'cancelled_by');
+    }
 }

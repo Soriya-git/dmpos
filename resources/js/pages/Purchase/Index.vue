@@ -2,14 +2,12 @@
 import { Head, router, useForm } from '@inertiajs/vue3';
 import {
     ArrowLeft,
-    CalendarDays,
     Filter,
     PackagePlus,
     Plus,
     RotateCcw,
     Search,
     Trash2,
-    X,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import InputError from '@/components/InputError.vue';
@@ -20,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
+import POModal from './POModal.vue';
 
 type PurchaseStatus =
     | 'created'
@@ -56,6 +55,17 @@ type PurchaseOrder = {
     display_order_date?: string | null;
     expected_date?: string | null;
     display_expected_date?: string | null;
+    created_by?: string | null;
+    created_by_email?: string | null;
+    approved_by?: string | null;
+    approved_by_email?: string | null;
+    display_approved_at?: string | null;
+    rejected_by?: string | null;
+    rejected_by_email?: string | null;
+    display_rejected_at?: string | null;
+    cancelled_by?: string | null;
+    cancelled_by_email?: string | null;
+    display_cancelled_at?: string | null;
     grand_total: number;
     lines: PurchaseOrderLine[];
 };
@@ -224,13 +234,6 @@ function money(value: number | string | null | undefined) {
     });
 }
 
-function numberValue(value: number | string | null | undefined) {
-    return Number(value ?? 0).toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 4,
-    });
-}
-
 function statusLabel(value: string) {
     const labels: Record<string, string> = {
         created: 'Pending',
@@ -367,10 +370,6 @@ function openDetail(order: PurchaseOrder) {
 
 function closeDetail() {
     detailOrder.value = null;
-}
-
-function isPending(order: PurchaseOrder) {
-    return order.status === 'created';
 }
 
 function updateOrderStatus(
@@ -921,194 +920,11 @@ function updateOrderStatus(
                 </div>
             </section>
 
-            <div
+            <POModal
                 v-if="detailOrder"
-                class="fixed inset-0 z-[75] flex items-center justify-center bg-[#2a4858]/20 p-4 backdrop-blur-sm"
-                @click.self="closeDetail"
-            >
-                <section
-                    class="flex max-h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-lg bg-white shadow-2xl"
-                >
-                    <header
-                        class="flex items-start justify-between gap-4 border-b border-slate-100 p-5"
-                    >
-                        <div>
-                            <p
-                                class="text-xs font-bold tracking-widest text-slate-400 uppercase"
-                            >
-                                Purchase Order Detail
-                            </p>
-                            <h2 class="mt-1 text-xl font-bold text-[#2a4858]">
-                                {{ detailOrder.po_no }}
-                            </h2>
-                            <p class="mt-1 text-sm text-slate-500">
-                                {{ detailOrder.supplier_name ?? 'No supplier' }}
-                            </p>
-                        </div>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            class="h-9 w-9 rounded-lg border-slate-100 p-0 text-slate-400"
-                            title="Close"
-                            @click="closeDetail"
-                        >
-                            <X class="size-4" />
-                        </Button>
-                    </header>
-
-                    <div class="min-h-0 flex-1 overflow-y-auto p-5">
-                        <div class="mb-4 grid gap-3 text-sm sm:grid-cols-3">
-                            <div class="rounded-lg bg-slate-50 p-3">
-                                <p
-                                    class="text-xs font-bold text-slate-400 uppercase"
-                                >
-                                    Order Date
-                                </p>
-                                <p class="font-bold text-[#2a4858]">
-                                    {{
-                                        detailOrder.display_order_date ??
-                                        detailOrder.order_date ??
-                                        '-'
-                                    }}
-                                </p>
-                            </div>
-                            <div class="rounded-lg bg-amber-50 p-3">
-                                <p
-                                    class="text-xs font-bold text-amber-600 uppercase"
-                                >
-                                    Expected Date
-                                </p>
-                                <p class="font-bold text-[#2a4858]">
-                                    {{
-                                        detailOrder.display_expected_date ??
-                                        detailOrder.expected_date ??
-                                        '-'
-                                    }}
-                                </p>
-                            </div>
-                            <div class="rounded-lg bg-slate-50 p-3">
-                                <p
-                                    class="text-xs font-bold text-slate-400 uppercase"
-                                >
-                                    Status
-                                </p>
-                                <span
-                                    class="mt-1 inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase"
-                                    :class="statusClass(detailOrder.status)"
-                                >
-                                    {{ statusLabel(detailOrder.status) }}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm">
-                                <thead>
-                                    <tr class="border-b border-slate-100">
-                                        <th
-                                            class="py-3 pr-4 text-xs font-bold text-slate-400 uppercase"
-                                        >
-                                            Item
-                                        </th>
-                                        <th
-                                            class="px-4 py-3 text-right text-xs font-bold text-slate-400 uppercase"
-                                        >
-                                            Ordered
-                                        </th>
-                                        <th
-                                            class="px-4 py-3 text-right text-xs font-bold text-slate-400 uppercase"
-                                        >
-                                            Received
-                                        </th>
-                                        <th
-                                            class="px-4 py-3 text-right text-xs font-bold text-slate-400 uppercase"
-                                        >
-                                            Cost
-                                        </th>
-                                        <th
-                                            class="py-3 pl-4 text-right text-xs font-bold text-slate-400 uppercase"
-                                        >
-                                            Total
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr
-                                        v-for="line in detailOrder.lines"
-                                        :key="line.id"
-                                        class="border-b border-slate-50"
-                                    >
-                                        <td class="py-4 pr-4">
-                                            <div
-                                                class="font-bold text-[#2a4858]"
-                                            >
-                                                {{ line.item_name ?? 'Item' }}
-                                            </div>
-                                            <p
-                                                class="mt-1 text-xs text-slate-400"
-                                            >
-                                                {{ line.item_code ?? '-' }} /
-                                                {{ line.unit_code ?? '-' }}
-                                            </p>
-                                        </td>
-                                        <td
-                                            class="px-4 py-4 text-right font-bold text-[#2a4858]"
-                                        >
-                                            {{
-                                                numberValue(
-                                                    line.quantity_ordered,
-                                                )
-                                            }}
-                                        </td>
-                                        <td
-                                            class="px-4 py-4 text-right font-bold text-[#2a4858]"
-                                        >
-                                            {{
-                                                numberValue(
-                                                    line.quantity_received,
-                                                )
-                                            }}
-                                        </td>
-                                        <td
-                                            class="px-4 py-4 text-right font-mono font-bold text-[#2a4858]"
-                                        >
-                                            {{ money(line.unit_cost) }}
-                                        </td>
-                                        <td
-                                            class="py-4 pl-4 text-right font-mono font-bold text-[#007882]"
-                                        >
-                                            {{ money(line.line_total) }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <footer
-                        class="flex flex-col justify-between gap-3 border-t border-slate-100 bg-slate-50 p-5 sm:flex-row sm:items-center"
-                    >
-                        <div
-                            class="flex items-center gap-2 text-sm text-slate-500"
-                        >
-                            <CalendarDays class="size-4 text-[#007882]" />
-                            {{ detailOrder.lines.length }} item line{{
-                                detailOrder.lines.length === 1 ? '' : 's'
-                            }}
-                        </div>
-                        <div class="text-right">
-                            <p
-                                class="text-xs font-bold tracking-widest text-slate-400 uppercase"
-                            >
-                                Grand Total
-                            </p>
-                            <p class="text-xl font-bold text-[#007882]">
-                                {{ money(detailOrder.grand_total) }}
-                            </p>
-                        </div>
-                    </footer>
-                </section>
-            </div>
+                :order="detailOrder"
+                @close="closeDetail"
+            />
         </main>
     </AppLayout>
 </template>

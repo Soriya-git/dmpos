@@ -152,6 +152,7 @@ class WarehouseSeeder extends Seeder
 
             $items = Item::where('company_id', $company->id)
                 ->where('is_stockable', true)
+                ->where('is_active', true)
                 ->get();
 
             foreach ($items as $item) {

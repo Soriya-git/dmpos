@@ -31,7 +31,7 @@ class PurchaseOrderController extends Controller
         ]);
 
         $orders = PurchaseOrder::query()
-            ->with(['lines.item', 'lines.unit'])
+            ->with(['creator', 'approver', 'rejecter', 'canceller', 'lines.item', 'lines.unit'])
             ->where('company_id', $companyId)
             ->when($branchId, fn ($query) => $query->where(function ($inner) use ($branchId) {
                 $inner->whereNull('branch_id')->orWhere('branch_id', $branchId);
@@ -220,6 +220,20 @@ class PurchaseOrderController extends Controller
             'display_order_date' => $order->order_date?->format('M d, Y'),
             'expected_date' => $order->expected_date?->toDateString(),
             'display_expected_date' => $order->expected_date?->format('M d, Y'),
+            'created_by' => $order->creator?->name,
+            'created_by_email' => $order->creator?->email,
+            'approved_by' => $order->approver?->name,
+            'approved_by_email' => $order->approver?->email,
+            'approved_at' => $order->approved_at?->toDateTimeString(),
+            'display_approved_at' => $order->approved_at?->format('M d, Y h:i A'),
+            'rejected_by' => $order->rejecter?->name,
+            'rejected_by_email' => $order->rejecter?->email,
+            'rejected_at' => $order->rejected_at?->toDateTimeString(),
+            'display_rejected_at' => $order->rejected_at?->format('M d, Y h:i A'),
+            'cancelled_by' => $order->canceller?->name,
+            'cancelled_by_email' => $order->canceller?->email,
+            'cancelled_at' => $order->cancelled_at?->toDateTimeString(),
+            'display_cancelled_at' => $order->cancelled_at?->format('M d, Y h:i A'),
             'subtotal' => (float) $order->subtotal,
             'discount_amount' => (float) $order->discount_amount,
             'tax_amount' => (float) $order->tax_amount,

@@ -5,13 +5,10 @@ namespace Database\Seeders;
 use App\Models\Branch;
 use App\Models\Company;
 use App\Models\Item;
-use App\Models\ItemUnitConversion;
 use App\Models\Menu;
 use App\Models\MenuCategory;
 use App\Models\MenuPrice;
-use App\Models\Unit;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Collection;
 
 class MenuSeeder extends Seeder
 {
@@ -21,225 +18,166 @@ class MenuSeeder extends Seeder
             return;
         }
 
-        $units = Unit::whereIn('code', [
-            'BTL',
-            'CASE12',
-            'G',
-            'KG',
-            'L',
-            'ML',
-            'PCS',
-            'BOX',
-            'TRAY',
-        ])->get()->keyBy('code');
-
-        if ($units->count() < 9) {
-            return;
-        }
-
-        Branch::with('company')->orderBy('id')->get()->each(function (Branch $branch) use ($units) {
+        Branch::with('company')->orderBy('id')->get()->each(function (Branch $branch) {
             $company = $branch->company;
             $isFirstBranch = $branch->is(Branch::orderBy('id')->first());
 
-            $this->seedStockItems($company, $branch, $units, $isFirstBranch);
-            $suffix = $isFirstBranch ? '' : '-'.$branch->code;
-            $directSaleItems = Item::query()
-                ->where('branch_id', $branch->id)
-                ->whereIn('code', ['DRK-COKE'.$suffix])
-                ->get()
-                ->keyBy('code');
+            // Create menu categories
+            $appetizersCategory = MenuCategory::create([
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
+                'name' => 'Appetizers',
+                'code' => $branch->code.'-APP',
+            ]);
 
-            $menuCategories = [
-                'Appetizers' => [
-                    ['Spring Rolls', 2.50],
-                    ['Chicken Satay', 3.25],
-                    ['Garlic Bread', 2.00],
-                    ['Fried Wontons', 2.75],
-                    ['Fresh Salad', 3.00],
-                ],
-                'Mains' => [
-                    ['Fried Rice', 3.50],
-                    ['Grilled Chicken', 5.50],
-                    ['Beef Lok Lak', 6.25],
-                    ['Seafood Noodles', 5.75],
-                    ['Vegetable Curry', 4.75],
-                ],
-                'Drinks' => [
-                    ['Coca Cola', 1.00],
-                    ['Iced Lemon Tea', 1.25],
-                    ['Fresh Orange Juice', 2.00],
-                    ['Mineral Water', 0.75],
-                    ['Hot Coffee', 1.50],
-                ],
-                'Desserts' => [
-                    ['Mango Sticky Rice', 2.75],
-                    ['Chocolate Brownie', 2.50],
-                    ['Coconut Jelly', 1.75],
-                    ['Ice Cream Scoop', 1.50],
-                    ['Banana Fritter', 2.25],
-                ],
-                'Services' => [
-                    ['Special Room Service', 5.00],
-                    ['Cake Cutting Service', 3.00],
-                    ['Private Dining Setup', 8.00],
-                    ['Corkage Service', 4.00],
-                    ['Event Cleanup Service', 6.00],
-                ],
-            ];
+            $mainsCategory = MenuCategory::create([
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
+                'name' => 'Mains',
+                'code' => $branch->code.'-MAI',
+            ]);
 
-            foreach ($menuCategories as $categoryIndex => $menus) {
-                $categoryName = is_string($categoryIndex) ? $categoryIndex : '';
-                $categoryCode = strtoupper(substr($categoryName, 0, 3));
+            $drinksCategory = MenuCategory::create([
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
+                'name' => 'Drinks',
+                'code' => $branch->code.'-DRI',
+            ]);
 
-                $category = MenuCategory::create([
-                    'company_id' => $company->id,
-                    'branch_id' => $branch->id,
-                    'name' => $categoryName,
-                    'code' => $branch->code.'-'.$categoryCode,
-                ]);
+            $dessertsCategory = MenuCategory::create([
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
+                'name' => 'Desserts',
+                'code' => $branch->code.'-DES',
+            ]);
 
-                foreach ($menus as $menuIndex => [$menuName, $price]) {
-                    $menuType = $categoryName === 'Services' ? 'service' : 'product';
-                    $code = $this->menuCode($branch, $menuName, $categoryName, $menuIndex, $isFirstBranch);
+            $servicesCategory = MenuCategory::create([
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
+                'name' => 'Services',
+                'code' => $branch->code.'-SER',
+            ]);
 
-                    $menu = Menu::create([
-                        'company_id' => $company->id,
-                        'branch_id' => $branch->id,
-                        'menu_category_id' => $category->id,
-                        'item_id' => $menuName === 'Coca Cola'
-                            ? $directSaleItems->get('DRK-COKE'.$suffix)?->id
-                            : null,
-                        'name' => $menuName,
-                        'code' => $code,
-                        'menu_type' => $menuType,
-                        'base_price' => $price,
-                        'description' => $menuName.' for '.$branch->name,
-                    ]);
+            // Appetizers - generic items (no items linked)
+            $this->createGenericMenu($branch, $company, $appetizersCategory, 'Spring Rolls', 2.50, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $appetizersCategory, 'Chicken Satay', 3.25, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $appetizersCategory, 'Garlic Bread', 2.00, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $appetizersCategory, 'Fried Wontons', 2.75, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $appetizersCategory, 'Fresh Salad', 3.00, $isFirstBranch);
 
-                    MenuPrice::create([
-                        'menu_id' => $menu->id,
-                        'branch_id' => $branch->id,
-                        'price_name' => 'Default Price',
-                        'price' => $price,
-                        'is_default' => true,
-                    ]);
-                }
-            }
+            // Mains - Fried Rice (will be linked to BOM by BomSeeder)
+            $this->createBomMenu($branch, $company, $mainsCategory, 'Fried Rice', 3.50, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $mainsCategory, 'Grilled Chicken', 5.50, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $mainsCategory, 'Beef Lok Lak', 6.25, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $mainsCategory, 'Seafood Noodles', 5.75, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $mainsCategory, 'Vegetable Curry', 4.75, $isFirstBranch);
+
+            // Drinks - link to actual items from ItemSeeder
+            $this->createMenuFromItem($branch, $company, $drinksCategory, 'Coca Cola', 1.00, 'BE-001', $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $drinksCategory, 'Iced Lemon Tea', 1.25, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $drinksCategory, 'Fresh Orange Juice', 2.00, $isFirstBranch);
+            $this->createMenuFromItem($branch, $company, $drinksCategory, 'Mineral Water', 0.75, 'WA-001', $isFirstBranch);
+            // Hot Coffee (will be linked to BOM by BomSeeder)
+            $this->createBomMenu($branch, $company, $drinksCategory, 'Hot Coffee', 1.50, $isFirstBranch);
+
+            // Desserts - generic items (no items linked)
+            $this->createGenericMenu($branch, $company, $dessertsCategory, 'Mango Sticky Rice', 2.75, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $dessertsCategory, 'Chocolate Brownie', 2.50, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $dessertsCategory, 'Coconut Jelly', 1.75, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $dessertsCategory, 'Ice Cream Scoop', 1.50, $isFirstBranch);
+            $this->createGenericMenu($branch, $company, $dessertsCategory, 'Banana Fritter', 2.25, $isFirstBranch);
+
+            // Services - service type items
+            $this->createServiceMenu($branch, $company, $servicesCategory, 'Special Room Service', 5.00, $isFirstBranch);
+            $this->createServiceMenu($branch, $company, $servicesCategory, 'Cake Cutting Service', 3.00, $isFirstBranch);
+            $this->createServiceMenu($branch, $company, $servicesCategory, 'Private Dining Setup', 8.00, $isFirstBranch);
+            $this->createServiceMenu($branch, $company, $servicesCategory, 'Corkage Service', 4.00, $isFirstBranch);
+            $this->createServiceMenu($branch, $company, $servicesCategory, 'Event Cleanup Service', 6.00, $isFirstBranch);
         });
     }
 
-    /**
-     * @param  Collection<string, Unit>  $units
-     */
-    private function seedStockItems(Company $company, Branch $branch, $units, bool $useLegacyCodes): void
+    private function createGenericMenu(Branch $branch, Company $company, $category, string $menuName, float $price, bool $useLegacyCodes): Menu
     {
-        $suffix = $useLegacyCodes ? '' : '-'.$branch->code;
+        $code = $this->menuCode($branch, $menuName, $category->name, 0, $useLegacyCodes);
 
-        $rice = Item::create([
+        return Menu::create([
             'company_id' => $company->id,
             'branch_id' => $branch->id,
-            'unit_id' => $units['KG']->id,
-            'name' => 'Rice',
-            'code' => 'RM-RICE'.$suffix,
-            'item_type' => 'raw_material',
-            'cost' => 0.80,
-        ]);
-
-        $egg = Item::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'unit_id' => $units['PCS']->id,
-            'name' => 'Egg',
-            'code' => 'RM-EGG'.$suffix,
-            'item_type' => 'ingredient',
-            'cost' => 0.15,
-        ]);
-
-        $cola = Item::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'unit_id' => $units['BTL']->id,
-            'name' => 'Coca Cola Bottle',
-            'code' => 'DRK-COKE'.$suffix,
-            'item_type' => 'drink',
-            'cost' => 0.45,
-        ]);
-
-        $coffee = Item::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'unit_id' => $units['KG']->id,
-            'name' => 'Coffee Beans',
-            'code' => 'RM-COFFEE-BEAN'.$suffix,
-            'item_type' => 'ingredient',
-            'cost' => 9.50,
-        ]);
-
-        $milk = Item::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'unit_id' => $units['L']->id,
-            'name' => 'Fresh Milk',
-            'code' => 'RM-MILK'.$suffix,
-            'item_type' => 'ingredient',
-            'cost' => 1.20,
-        ]);
-
-        $sugar = Item::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'unit_id' => $units['KG']->id,
-            'name' => 'Sugar',
-            'code' => 'RM-SUGAR'.$suffix,
-            'item_type' => 'ingredient',
-            'cost' => 0.95,
-        ]);
-
-        $paperCup = Item::create([
-            'company_id' => $company->id,
-            'branch_id' => $branch->id,
-            'unit_id' => $units['PCS']->id,
-            'name' => 'Paper Cup',
-            'code' => 'PKG-PAPER-CUP'.$suffix,
-            'item_type' => 'packaging',
-            'cost' => 0.04,
-        ]);
-
-        $this->seedItemUnitConversions($company, $branch, $units, [
-            [$egg, 'TRAY', 'PCS', 30, true, false],
-            [$cola, 'CASE12', 'BTL', 12, true, true],
-            [$coffee, 'KG', 'G', 1000, false, false],
-            [$coffee, 'G', 'KG', 0.001, false, false],
-            [$milk, 'L', 'ML', 1000, false, false],
-            [$milk, 'ML', 'L', 0.001, false, false],
-            [$sugar, 'KG', 'G', 1000, false, false],
-            [$sugar, 'G', 'KG', 0.001, false, false],
-            [$paperCup, 'BOX', 'PCS', 50, true, false],
-            [$rice, 'KG', 'G', 1000, false, false],
-            [$rice, 'G', 'KG', 0.001, false, false],
+            'menu_category_id' => $category->id,
+            'item_id' => null,
+            'bom_header_id' => null,
+            'name' => $menuName,
+            'code' => $code,
+            'menu_type' => 'product',
+            'base_price' => $price,
+            'description' => $menuName.' for '.$branch->name,
+            'is_active' => true,
         ]);
     }
 
-    /**
-     * @param  Collection<string, Unit>  $units
-     * @param  array<int, array{0: Item, 1: string, 2: string, 3: float|int, 4: bool, 5: bool}>  $conversions
-     */
-    private function seedItemUnitConversions(Company $company, Branch $branch, $units, array $conversions): void
+    private function createBomMenu(Branch $branch, Company $company, $category, string $menuName, float $price, bool $useLegacyCodes): Menu
     {
-        foreach ($conversions as [$item, $fromCode, $toCode, $factor, $purchaseDefault, $salesDefault]) {
-            ItemUnitConversion::create([
-                'company_id' => $company->id,
-                'branch_id' => $branch->id,
-                'item_id' => $item->id,
-                'from_unit_id' => $units[$fromCode]->id,
-                'to_unit_id' => $units[$toCode]->id,
-                'factor' => $factor,
-                'is_purchase_default' => $purchaseDefault,
-                'is_sales_default' => $salesDefault,
-                'is_inventory_default' => $fromCode === $item->unit->code,
-                'description' => "1 {$fromCode} = {$factor} {$toCode} for {$item->name}.",
-            ]);
+        $code = $this->menuCode($branch, $menuName, $category->name, 0, $useLegacyCodes);
+
+        return Menu::create([
+            'company_id' => $company->id,
+            'branch_id' => $branch->id,
+            'menu_category_id' => $category->id,
+            'item_id' => null,
+            'bom_header_id' => null, // Will be set by BomSeeder
+            'name' => $menuName,
+            'code' => $code,
+            'menu_type' => 'product',
+            'base_price' => $price,
+            'description' => $menuName.' recipe for '.$branch->name,
+            'is_active' => true,
+        ]);
+    }
+
+    private function createServiceMenu(Branch $branch, Company $company, $category, string $menuName, float $price, bool $useLegacyCodes): Menu
+    {
+        $code = $this->menuCode($branch, $menuName, $category->name, 0, $useLegacyCodes);
+
+        return Menu::create([
+            'company_id' => $company->id,
+            'branch_id' => $branch->id,
+            'menu_category_id' => $category->id,
+            'item_id' => null,
+            'bom_header_id' => null,
+            'name' => $menuName,
+            'code' => $code,
+            'menu_type' => 'service',
+            'base_price' => $price,
+            'description' => $menuName.' for '.$branch->name,
+            'is_active' => true,
+        ]);
+    }
+
+    private function createMenuFromItem(Branch $branch, Company $company, $category, string $menuName, float $price, string $itemCode, bool $useLegacyCodes): ?Menu
+    {
+        $item = Item::where('company_id', $company->id)
+            ->where('code', $itemCode)
+            ->first();
+
+        if (! $item) {
+            return null;
         }
+
+        $code = $this->menuCode($branch, $menuName, $category->name, 0, $useLegacyCodes);
+
+        return Menu::create([
+            'company_id' => $company->id,
+            'branch_id' => $branch->id,
+            'menu_category_id' => $category->id,
+            'item_id' => $item->id,
+            'bom_header_id' => null,
+            'name' => $menuName,
+            'code' => $code,
+            'menu_type' => 'product',
+            'base_price' => $price,
+            'description' => $menuName.' from '.$item->name.' for '.$branch->name,
+            'is_active' => true,
+        ]);
     }
 
     private function menuCode(Branch $branch, string $menuName, string $categoryName, int $menuIndex, bool $useLegacyCodes): string

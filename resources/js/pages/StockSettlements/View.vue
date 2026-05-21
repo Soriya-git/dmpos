@@ -46,6 +46,12 @@ type Settlement = {
     requirementCount: number;
     missingBomCount: number;
     grandTotal: number;
+    createdBy?: string | null;
+    settledBy?: string | null;
+    rejectedBy?: string | null;
+    settledAt?: string | null;
+    rejectedAt?: string | null;
+    note?: string | null;
     lines: {
         id: number;
         menuName: string;
@@ -86,6 +92,25 @@ const pageErrors = computed(() =>
     ),
 );
 const canAct = computed(() => props.settlement.status === 'pending');
+const actionInfo = computed(() => {
+    if (props.settlement.status === 'approved') {
+        return {
+            status: 'Approved',
+            name: props.settlement.settledBy,
+            at: actionDate(props.settlement.settledAt),
+        };
+    }
+
+    if (props.settlement.status === 'rejected') {
+        return {
+            status: 'Rejected',
+            name: props.settlement.rejectedBy,
+            at: actionDate(props.settlement.rejectedAt),
+        };
+    }
+
+    return null;
+});
 const scale = computed(() => {
     const saleQty = Number(props.settlement.posSaleQty || 0);
     return saleQty > 0 ? Number(qtyToSettle.value || 0) / saleQty : 1;
@@ -111,6 +136,22 @@ function money(value: number | string | null | undefined) {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     });
+}
+
+function actionDate(value: string | null | undefined) {
+    if (!value) return null;
+
+    const parsed = new Date(value.replace(' ', 'T'));
+
+    if (!Number.isNaN(parsed.getTime())) {
+        return parsed.toLocaleDateString(undefined, {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric',
+        });
+    }
+
+    return value.match(/^[A-Za-z]{3}\s+\d{1,2},\s+\d{4}/)?.[0] ?? value;
 }
 
 function statusClass(value: string) {
@@ -255,7 +296,7 @@ function submitConfirmed() {
                     </div>
                 </div>
 
-                <div class="mb-6 grid gap-4 md:grid-cols-4">
+                <div class="mb-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
                     <div
                         class="rounded-lg border-l-4 border-[#007882] bg-white p-4 shadow-sm"
                     >
@@ -300,6 +341,27 @@ function submitConfirmed() {
                         <h3 class="mt-1 text-xl font-bold text-[#2a4858]">
                             {{ money(settlement.grandTotal) }}
                         </h3>
+                    </div>
+                    <div
+                        class="rounded-lg border-l-4 border-slate-300 bg-white p-4 shadow-sm"
+                    >
+                        <p class="text-xs font-bold text-slate-500 uppercase">
+                            People
+                        </p>
+                        <p class="mt-1 font-bold text-[#2a4858]">
+                            Created: {{ settlement.createdBy ?? '-' }}
+                        </p>
+                        <p class="mt-1 text-xs font-semibold text-slate-500">
+                            <span v-if="actionInfo">
+                                {{ actionInfo.status
+                                }}<template v-if="actionInfo.at">
+                                    at
+                                    {{ actionInfo.at }}</template
+                                >
+                                by {{ actionInfo.name ?? '-' }}
+                            </span>
+                            <span v-else>-</span>
+                        </p>
                     </div>
                 </div>
 

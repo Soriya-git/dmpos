@@ -1,0 +1,157 @@
+﻿name,code,type,description,primary unit,size
+Angkor,BE-001,Beer,Angkor,Bottle,330 ml
+Heineken Bottle,BE-002,Beer,Heineken Bottle,Bottle,330 ml
+Tiger Lager Beer Bottle,BE-003,Beer,Tiger Lager Beer Bottle,Bottle,330 ml
+Budweiser,BE-004,Beer,Budweiser,Bottle,330 ml
+Budweiser (Aluminum),BE-005,Beer,Budweiser (Aluminum),Bottle,330 ml
+Corona,BE-006,Beer,Corona,Bottle,330 ml
+Hanuman Bottle (Black),DB-001,Beer Dark Lager,Hanuman Bottle (Black),Bottle,330 ml
+Tiger Crystal Beer Bottle,LB-001,Beer (Light),Tiger Crystal Beer Bottle,Bottle,330 ml
+Hanuman premium Lager Bottle,BE-007,Beer,Hanuman premium Lager Bottle,Bottle,330 ml
+Moët & Chandon Champagne,CH-001,Champagne,Moët & Chandon Champagne,Bottle,750 ml
+Lotus Cigarettes (Regular),CI-001,Cigarette,Lotus Cigarettes (Regular),Packs,20 PCs
+Chunghwa Cigarettes (Soft Pack),CI-002,Cigarette,Chunghwa Cigarettes (Soft Pack),Packs,20 PCs
+Huanghelou 1916 Cigarettes,CI-003,Cigarette,Huanghelou 1916 Cigarettes,Packs,20 PCs
+He Tian Xia Cigarettes (Regular),CI-004,Cigarette,He Tian Xia Cigarettes (Regular),Packs,20 PCs
+Gui Yan Kuayue Cigarettes (Slim),CI-005,Cigarette,Gui Yan Kuayue Cigarettes (Slim),Packs,20 PCs
+Rémy Martin Louis XIII,CO-001,Cognac,Rémy Martin Louis XIII,Bottle,700 ml
+Hennessy Paradis,CO-002,Cognac,Hennessy Paradis,Bottle,700 ml
+Martell XO,CO-003,Cognac,Martell XO,Bottle,700 ml
+Hennessy XO,CO-004,Cognac,Hennessy XO,Bottle,700 ml
+Martell Cordon Bleu,CO-005,Cognac,Martell Cordon Bleu,Bottle,700 ml
+Martell Noblige,CO-006,Cognac,Martell Noblige,Bottle,700 ml
+Hennessy VSOP,CO-007,Cognac,Hennessy VSOP,Bottle,700 ml
+Tissues,CS-001,Consumable,Tissues,Pack,300 g
+Royal,PC-001,Play Cards,Royal,piece,52 Cards
+Red Bull,ED-001,Energy Drink,Red Bull,Can,250 ml
+Fruit Platter (Premium),FR-001,Fruit,Fruit Platter (Premium),Set,Premium
+Fruit Platter (Large),FR-002,Fruit,Fruit Platter (Large),Set,Large
+YESHU-Coconut juice,PL-001,Plant protein drink,YESHU-Coconut juice,Can,245 ml
+Yili Pure Milk,PU-001,Pure Milk,Yili Pure Milk,Pack Carton,250 ml
+Schweppe,SW-001,Soda Water,Schweppe,Can,330​ ml
+Schweppe Lemon,SW-002,Soda Water,Schweppe Lemon,Can,330​ ml
+Coca-Cola,SD-001,Soft Drink,Coca-Cola,Can,330 ml
+Sprite,SD-002,Soft Drink,Sprite,Can,330 ml
+Fruit juice,SD-003,Soft Drink,Fruit juice,Can,330​ ml
+Moutai,SP-001,Spirit,Moutai,Bottle,500 ml
+Ginseng Tea,TE-001,Tea,Ginseng Tea,Glass,330 ml
+Master Kong Green Tea,GT-001,Tea (Green Tea),Master Kong Green Tea,Can,500 ml
+Master Kong RedTea,RT-001,Tea (Red Tea),Master Kong RedTea,Can,500 ml
+Chingbo Liang,HT-001,Tea Herbal,Chingbo Liang,Can,300 ml
+Elan Mineral Water 1.5 l,WA-001,Water,Elan Mineral Water 1.5 l,Bottle,1.5 L
+Elan Mineral Water 300 ml,WA-002,Water,Elan Mineral Water 300 ml,Bottle,300ml
+Kulen Water 500ml,WA-003,Water,Kulen Water 500ml,Bottle,500 ml
+Vital 500 ml,WA-004,Water,Vital 500 ml,Bottle,500 ml
+Macallan 18-Year Double Cask,WH-002,Whisky,Macallan 18-Year Double Cask,Bottle,700 ml
+Macallan 12-Year Single Cask 700ml,WH-003,Whisky,Macallan 12-Year Single Cask 700ml,Bottle,700 ml
+Macallan 15-Year Double Cask 700ml ,WH-004,Whisky,Macallan 15-Year Double Cask 700ml ,Bottle,700 ml
+Royal Salute 21-Year,WH-005,Whisky,Royal Salute 21-Year,Bottle,700 ml
+Penfolds Bin 407,WI-001,Wine,Penfolds Bin 407,Bottle,750 ml
+Château Lafite Rothschild 2020,WI-002,Wine,Château Lafite Rothschild 2020,Bottle,750 ml
+Penfolds Bin 2,WI-003,Wine,Penfolds Bin 2,Bottle,750 ml
+Hanuman Black Can,DB-002,Beer Dark Lager,Hanuman Black Can,Can,330 ml
+He Cheng Tian Xia,DR-001,Dried Fruits,He Cheng Tian Xia,Packs,100 g
+Fiji,WA-005,Water,Fiji,Bottle,330 ml
+John Walker XR 21,WH-006,Whisky,John Walker XR 21,Bottle,750 ml
+Mevius (Original),CI-006,Cigarette,Mevius (Original),Packs,20 PCs
+Esse (Change),CI-007,Cigarette,Esse (Change),Packs,20 PCs
+Evian 330 ml,WA-006,Water,Evian 330 ml,Bottle,330 ml
+YJPX-9788,PC-002,Play Cards,YJPX-9788,piece,52 Cards
+989D,PC-003,Play Cards,989D,piece,52 Cards
+Glenfiddich 12Year 70CL,WH-007,Whisky,Glenfiddich 12Year 70CL,Bottle,70 cl
+Glenfiddich 18Year 70CL,WH-008,Whisky,Glenfiddich 18Year 70CL,Bottle,70 cl
+ABC Smooth Stout Can,SB-001,Smooth Stout,ABC Smooth Stout Can,Can,330 ml
+Vattanac Premium Light Bottle 330ml,LB-002,Beer (Light),Vattanac Premium Light Bottle 330ml,Bottle,330 ml
+ABC Extra Stout (Singapore) Can,EX-001,Extra Stout,ABC Extra Stout (Singapore) Can,Can,330 ml
+Cambodia lite Bottle 330ml,LB-003,Beer (Light),Cambodia lite Bottle 330ml,Bottle,330 ml
+Kulen Water 330ml,WA-007,Water,Kulen Water 330ml,Bottle,330 ml
+Jinro,SP-002,Spirit,Jinro,Bottle,360 ml
+Dalmore 12 Years (Highland Single Malt Scotch) 70cl ,WH-009,Whisky,Dalmore 12 Years (Highland Single Malt Scotch) 70cl ,Bottle,70cl
+Dalmore 15 Years (Highland Single Malt Scotch) 70cl,WH-010,Whisky,Dalmore 15 Years (Highland Single Malt Scotch) 70cl,Bottle,70cl
+Johnnie Walker Aged 18 Years 75cl,WH-012,Whisky,Johnnie Walker Aged 18 Years 75cl,Bottle,75cl
+Johnnie Walker Blue Label 75cl,WH-013,Whisky,Johnnie Walker Blue Label 75cl,Bottle,75cl
+Chivas Regal 18 Years 70cl,WH-014,Whisky,Chivas Regal 18 Years 70cl,Bottle,70cl
+Chivas Regal 25 Years 75cl,WH-015,Whisky,Chivas Regal 25 Years 75cl,Bottle,75cl
+THREE WOOD (Auchentoshan) 70cl,WH-016,Whisky,THREE WOOD (Auchentoshan) 70cl,Bottle,70cl
+Courvoisier VSOP 70cl,CO-008,Cognac,Courvoisier VSOP 70cl,Bottle,70cl
+Courvoisier XO 70cl,CO-009,Cognac,Courvoisier XO 70cl,Bottle,70cl
+Auchentoshan 18Y 70cl,WH-017,Whisky,Auchentoshan 18Y 70cl,Bottle,70cl
+Jack Daniel's Single Barrel 70cl,WH-018,Whisky,Jack Daniel's Single Barrel 70cl,Bottle,70cl
+Jack Daniel's Tennessee No.27 Gold 70cl,WH-019,Whisky,Jack Daniel's Tennessee No.27 Gold 70cl,Bottle,70cl
+Chivas XV,WH-020,Whisky,Chivas XV,Bottle,70cl
+Jack Daniel's Tennessee No.07 1L,WH-021,Whisky,Jack Daniel's Tennessee No.07 1L,Bottle,1L
+Maker's Mark 75cl,WH-022,Whisky,Maker's Mark 75cl,Bottle,75cl
+Jack Gentleman 100cl,WH-023,Whisky,Jack Gentleman 100cl,Bottle,100cl
+Auchentoshan 12Y 70cl,WH-024,Whisky,Auchentoshan 12Y 70cl,Bottle,70cl
+Ballantine Christmas 70cl,WH-025,Whisky,Ballantine Christmas 70cl,Bottle,70cl
+Ballantine 17 Years 70cl,WH-026,Whisky,Ballantine 17 Years 70cl,Bottle,70cl
+Ballantine 21 Years 70cl,WH-027,Whisky,Ballantine 21 Years 70cl,Bottle,70cl
+Royal Salute 38 Years 70cl,WH-028,Whisky,Royal Salute 38 Years 70cl,Bottle,70cl
+Remy Martin VSOP 70cl,CO-010,Cognac,Remy Martin VSOP 70cl,Bottle,70cl
+Remy Martin XO 70cl,CO-011,Cognac,Remy Martin XO 70cl,Bottle,70cl
+Johnnie Walker Double Black 100cl,WH-029,Whisky,Johnnie Walker Double Black 100cl,Bottle,100cl
+Johnnie Walker Blue Label 1L,WH-030,Whisky,Johnnie Walker Blue Label 1L,Bottle,1L
+Hongmen XO 70cl,CO-012,Cognac,Hongmen XO 70cl,Bottle,70cl
+Patron Gold 75cl,TQ-001,Tequila,Patron Gold 75cl,Bottle,75cl
+Patron Gold 1L,TQ-002,Tequila,Patron Gold 1L,Bottle,1L
+Patron Silver 1L,TQ-003,Tequila,Patron Silver 1L,Bottle,1L
+Patron Reposado 75cl,TQ-004,Tequila,Patron Reposado 75cl,Bottle,75cl
+Cambodia Bottle Supreme Super Fresh,BS-001,Beer (Supreme),Cambodia Bottle Supreme Super Fresh,Bottle,330ml
+Esprit De Pavie (Bordeaux 2017),RW-001,Red Wine,Esprit De Pavie (Bordeaux 2017),Bottle,75cl
+Chateau Pavie 2008 75cl,RW-002,Red Wine,Chateau Pavie 2008 75cl,Bottle,75cl
+Chateau Pavie 2013 75cl,RW-003,Red Wine,Chateau Pavie 2013 75cl,Bottle,75cl
+Chateau Camensac Haut Medoc 2019 Year 75cl ,RW-004,Red Wine,Chateau Camensac Haut Medoc 2019 Year 75cl ,Bottle,75cl
+Moutont Cated Reserve (medoc 2018),RW-005,Red Wine,Moutont Cated Reserve (medoc 2018),Bottle,75cl
+Moutont Cated (Bordeaux),RW-006,Red Wine,Moutont Cated (Bordeaux),Bottle,75cl
+Penfold Bin 8,RW-007,Red Wine,Penfold Bin 8,Bottle,75cl
+Penfold Bin 389,RW-008,Red Wine,Penfold Bin 389,Bottle,75cl
+Barwang The Wall Shiraz,RW-009,Red Wine,Barwang The Wall Shiraz,Bottle,75cl
+Chateau Forlouis 2018,RW-010,Red Wine,Chateau Forlouis 2018,Bottle,75cl
+Unanime Gran Vino Tinto,RW-011,Red Wine,Unanime Gran Vino Tinto,Bottle,75cl
+Tocornal,RW-012,Red Wine,Tocornal,Bottle,75cl
+Balduzzi Cabernet Reserve,RW-013,Red Wine,Balduzzi Cabernet Reserve,Bottle,75cl
+Balduzzi Cabernet Classic,RW-014,Red Wine,Balduzzi Cabernet Classic,Bottle,75cl
+Balduzzi Grand Reserve 75cl,RW-015,Red Wine,Balduzzi Grand Reserve 75cl,Bottle,75cl
+Villa bellerose saint emilion 75cl,RW-016,Red Wine,Villa bellerose saint emilion 75cl,Bottle,75cl
+Red Yellow Tail (Australian) Shiraz,RW-017,Red Wine,Red Yellow Tail (Australian) Shiraz,Bottle,75cl
+White Yellow Tail (Australia) Chardonnay,WW-001,White Wine,White Yellow Tail (Australia) Chardonnay,Bottle,75cl
+Moet & Chandon Rose Imperial 75cl,CH-002,Champagne,Moet & Chandon Rose Imperial 75cl,Bottle,75cl
+Dom Perignon 75cl,CH-003,Champagne,Dom Perignon 75cl,Bottle,75cl
+Taittinger Brut75cl,CH-004,Champagne,Taittinger Brut75cl,Bottle,75cl
+Freschello Extra Dry Rose,SK-001,Sparkling (Wine),Freschello Extra Dry Rose,Bottle,75cl
+Cielo Deor Gold Collection,SK-002,Sparkling (Wine),Cielo Deor Gold Collection,Bottle,75cl
+Chandon Sparkling Brut Rose 75cl,SK-003,Sparkling (Wine),Chandon Sparkling Brut Rose 75cl,Bottle,75cl
+Chandon Sparkling Brut NV 75cl,SK-004,Sparkling (Wine),Chandon Sparkling Brut NV 75cl,Bottle,75cl
+Tonic Water,MI-001,Mixer,Tonic Water,Can/Bottle,330ml
+Mevius 7 Option Purple,CI-008,Cigarette,Mevius 7 Option Purple,Packs,20 PCs
+Mevius 7 Freezy Dew,CI-009,Cigarette,Mevius 7 Freezy Dew,Packs,20 PCs
+Mevius 7 Midnight Chill,CI-010,Cigarette,Mevius 7 Midnight Chill,Packs,20 PCs
+Mevius 7 Kiwami,CI-011,Cigarette,Mevius 7 Kiwami,Packs,20 PCs
+Mevius 7 Sky Blue,CI-012,Cigarette,Mevius 7 Sky Blue,Packs,20 PCs
+Mevius 7 Option Yello Red,CI-013,Cigarette,Mevius 7 Option Yello Red,Packs,20 PCs
+ABC Extra Stout Bottle,EX-002,Extra Stout,ABC Extra Stout Bottle,Bottle,330ml
+555 State Express ,CI-014,Cigarette,555 State Express ,Packs,20 PCs
+Yeo's Mixed,FJ-001,Fruit Juice,Yeo's Mixed,Can,300ml
+ABC Extra Stout Can,EX-003,Extra Stout,ABC Extra Stout Can,Can,300ml
+Bacchus,ED-002,Energy Drink,Bacchus,Can,300ml
+Tsingtao - Premium Chinese Lager Beer,BE-009,Beer,Tsingtao - Premium Chinese Lager Beer,Bottle,330ml
+Elan Mineral Water 500ml,WA-008,water,Elan Mineral Water 500ml,Bottle,500ml
+Cambodia Lite Can 330ml,LB-004,Beer (Light),Cambodia Lite Can 330ml,Can,330ml
+ABC Smooth Stout Bottle,SB-002,Smooth Stout,ABC Smooth Stout Bottle,Bottle,330ml
+Deetlefs Stonecross merlot pinotage 2020,RW-018,Red Wine,Deetlefs Stonecross merlot pinotage 2020,Bottle,75cl
+Lotus Cigarettes (Slim),CI-015,Cigarette,Lotus Cigarettes (Slim),Packs,20 PCs
+Esse (Lights),CI-016,Cigarette,Esse (Lights),Packs,20 PCs
+Moet & Chandon Brut Imperial 75cl,CH-005,Champagne,Moet & Chandon Brut Imperial 75cl,Bottle,75cl
+Hanuman Lite Bottle,LB-006,Beer (Light),Hanuman Lite Bottle,Bottle,330ml
+Chum-Churum Saero Soju,SP-003,Spirit,Chum-Churum Saero Soju,bottle,375ml
+Fanta (Orang Flavor),WA-009,Water,Fanta (Orang Flavor),Bottle,1.5l
+Hanuman premium Lager Can,SD-004,Soft Drink,Hanuman premium Lager Can,Can,330ml
+Budweiser Can ,BE-010,Beer,Budweiser Can ,Can,330ml
+Kulen Water 1.5L,WA-010,Water,Kulen Water 1.5L,Bottle,1.5l
+Ganzberg Snow Can,LB-007,Beer (Light),Ganzberg Snow Can,Can,330ml
+Perrier Water 750ml,SD-005,Soft Drink,Perrier Water 750ml,Bottle,750ml
+Anchor Smooth Pilsener Beer Can,BE-008,Beer,Anchor Smooth Pilsener Beer Can,Can,330ml
+Johnnie Walker Gold Labal 75cl,WH-031,Whisky,Johnnie Walker Gold Labal 75cl,Bottle,75cl
+Glenfiddich 15Year 70CL,WH-032,Whisky,Glenfiddich 15Year 70CL,Bottle,70cl
+Morodox 20cl,WH-033,Whisky,Morodox 20cl,Bottle,20cl
+He Cheng Tian Xia white,DR-002,Dried Fruits,He Cheng Tian Xia white,Packs,88g

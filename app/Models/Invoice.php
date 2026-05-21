@@ -82,6 +82,18 @@ class Invoice extends Model
     }
 
     /** @return BelongsTo<User, $this> */
+    public function stockSettler(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'stock_settled_by');
+    }
+
+    /** @return BelongsTo<User, $this> */
+    public function stockRejecter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'stock_rejected_by');
+    }
+
+    /** @return BelongsTo<User, $this> */
     public function canceller(): BelongsTo
     {
         return $this->belongsTo(User::class, 'cancelled_by');

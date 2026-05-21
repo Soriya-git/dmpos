@@ -65,4 +65,14 @@ class StockTransfer extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function canceller()
+    {
+        return $this->belongsTo(User::class, 'cancelled_by');
+    }
 }

@@ -48,4 +48,9 @@ class StockAdjustment extends Model
     {
         return $this->belongsTo(User::class, 'confirmed_by');
     }
+
+    public function canceller()
+    {
+        return $this->belongsTo(User::class, 'cancelled_by');
+    }
 }

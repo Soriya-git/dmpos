@@ -1803,6 +1803,7 @@ onBeforeUnmount(() => {
                 :final-amount="allOrdersFinalAmount"
                 :bill-name="selectedBill?.name ?? selectedBillGroup"
                 :exchange-rate="exchangeRate"
+                :allow-pay-later="true"
                 :payment-methods="paymentMethods"
                 @close="paymentOpen = false"
                 @confirm="confirmPayment"

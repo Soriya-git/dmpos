@@ -20,6 +20,7 @@ return new class extends Migration
 
             $table->string('name');
             $table->string('code')->nullable();
+            $table->text('size')->nullable();
 
             $table->enum('item_type', [
                 'raw_material',

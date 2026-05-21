@@ -6,6 +6,7 @@ import {
     ChevronDown,
     Eye,
     Filter,
+    MoreVertical,
     Printer,
     RotateCcw,
     Search,
@@ -14,6 +15,13 @@ import {
 import { computed, ref } from 'vue';
 import TablePagination from '@/components/TablePagination.vue';
 import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { usePagination } from '@/composables/usePagination';
 import { usePosFormatting } from '@/composables/usePosFormatting';
@@ -44,6 +52,9 @@ type SaleInvoice = {
     paid_amount: number;
     balance_amount: number;
     exchange_rate?: number | null;
+    order_created_by: string[];
+    invoice_created_by?: string | null;
+    receipt_created_by?: string | null;
     lines: SaleInvoiceLine[];
 };
 
@@ -59,8 +70,19 @@ type SaleInvoiceLine = {
     note?: string | null;
 };
 
+type PaymentMethodOption = {
+    id: number;
+    code?: string | null;
+    label: string;
+    type: 'cash' | 'bank';
+    currency: 'USD' | 'KHR';
+};
+
 type PaymentPayload = {
+    changeKhrAmount: number;
+    changeUsdAmount: number;
     method: string;
+    paymentMethodId?: number | null;
     currency: 'USD' | 'KHR';
     receivedAmount: number;
     operationStatus: 'invoice' | 'invoice_receipt_done';
@@ -87,6 +109,7 @@ const props = defineProps<{
         opening_cash_khr: number;
     };
     invoices: SaleInvoice[];
+    paymentMethods: PaymentMethodOption[];
     paymentSummary: PaymentSummary;
     filters: {
         start_date?: string | null;
@@ -227,6 +250,10 @@ function printInvoice(_invoice: SaleInvoice) {
     // Printing will be wired in a later pass.
 }
 
+function namesList(names: string[] | null | undefined) {
+    return names?.length ? names.join(', ') : '-';
+}
+
 function confirmPayment(payload: PaymentPayload) {
     if (!selectedInvoice.value) return;
 
@@ -234,9 +261,12 @@ function confirmPayment(payload: PaymentPayload) {
         `/sales/invoices/${selectedInvoice.value.id}/receive`,
         {
             method: payload.method,
+            payment_method_id: payload.paymentMethodId,
             currency: payload.currency,
             received_amount: payload.receivedAmount,
             operation_status: payload.operationStatus,
+            change_usd_amount: payload.changeUsdAmount,
+            change_khr_amount: payload.changeKhrAmount,
         },
         {
             preserveScroll: true,
@@ -706,58 +736,84 @@ function statusLabel(status: InvoiceStatus) {
                                             }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            <div
-                                                class="flex items-center justify-end gap-2"
-                                            >
-                                                <Button
-                                                    type="button"
-                                                    variant="outline"
-                                                    class="h-8 w-8 rounded-lg border-gray-100 bg-white p-0 text-[#2A4858] hover:border-[#23AA8F]/40 hover:bg-[#23AA8F]/10"
-                                                    title="View invoice items"
-                                                    @click.stop="
-                                                        showInvoiceDetail(
-                                                            invoice,
-                                                        )
-                                                    "
-                                                >
-                                                    <Eye class="h-4 w-4" />
-                                                </Button>
-
-                                                <Button
-                                                    type="button"
-                                                    variant="outline"
-                                                    class="h-8 w-8 rounded-lg border-gray-100 bg-white p-0 text-[#2A4858] hover:border-[#23AA8F]/40 hover:bg-[#23AA8F]/10"
-                                                    title="Print invoice"
-                                                    @click.stop="
-                                                        printInvoice(invoice)
-                                                    "
-                                                >
-                                                    <Printer class="h-4 w-4" />
-                                                </Button>
-
-                                                <Button
-                                                    v-if="
-                                                        invoice.status !==
-                                                        'paid'
-                                                    "
-                                                    type="button"
-                                                    class="h-8 rounded-lg bg-[#23AA8F] px-3 text-[10px] font-black text-white hover:bg-[#007882]"
-                                                    @click.stop="
-                                                        openPayment(invoice)
-                                                    "
-                                                >
-                                                    Receive
-                                                </Button>
-                                                <span
-                                                    v-else
-                                                    class="text-[10px] font-black text-gray-300 uppercase"
-                                                >
-                                                    {{
-                                                        statusLabel(
-                                                            invoice.status,
-                                                        )
-                                                    }}
-                                                </span>
+                                            <div class="flex justify-end">
+                                                <DropdownMenu :modal="false">
+                                                    <DropdownMenuTrigger
+                                                        as-child
+                                                    >
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            class="size-8 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-[#007882]"
+                                                            title="Actions"
+                                                            @click.stop
+                                                        >
+                                                            <MoreVertical
+                                                                class="h-4 w-4"
+                                                            />
+                                                            <span
+                                                                class="sr-only"
+                                                            >
+                                                                Open actions
+                                                            </span>
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent
+                                                        align="end"
+                                                        class="z-[80] w-44"
+                                                        @click.stop
+                                                    >
+                                                        <DropdownMenuItem
+                                                            @select="
+                                                                showInvoiceDetail(
+                                                                    invoice,
+                                                                )
+                                                            "
+                                                        >
+                                                            <Eye
+                                                                class="h-4 w-4 text-[#007882]"
+                                                            />
+                                                            View
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            @select="
+                                                                printInvoice(
+                                                                    invoice,
+                                                                )
+                                                            "
+                                                        >
+                                                            <Printer
+                                                                class="h-4 w-4 text-[#2A4858]"
+                                                            />
+                                                            Print Invoice
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuSeparator />
+                                                        <DropdownMenuItem
+                                                            v-if="
+                                                                invoice.status !==
+                                                                'paid'
+                                                            "
+                                                            @select="
+                                                                openPayment(
+                                                                    invoice,
+                                                                )
+                                                            "
+                                                        >
+                                                            Receive Payment
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            v-else
+                                                            disabled
+                                                        >
+                                                            {{
+                                                                statusLabel(
+                                                                    invoice.status,
+                                                                )
+                                                            }}
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
                                             </div>
                                         </td>
                                     </tr>
@@ -802,6 +858,7 @@ function statusLabel(status: InvoiceStatus) {
                 :final-amount="selectedInvoice.balance_amount"
                 :exchange-rate="selectedInvoice.exchange_rate ?? 4100"
                 :allow-pay-later="false"
+                :payment-methods="paymentMethods"
                 @close="closePayment"
                 @confirm="confirmPayment"
             />
@@ -846,6 +903,47 @@ function statusLabel(status: InvoiceStatus) {
                     </header>
 
                     <div class="min-h-0 flex-1 overflow-y-auto p-5">
+                        <div class="mb-4 grid gap-3 text-sm sm:grid-cols-3">
+                            <div class="rounded-xl bg-gray-50 p-3">
+                                <p
+                                    class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                >
+                                    Order Created By
+                                </p>
+                                <p class="mt-1 font-black text-[#2A4858]">
+                                    {{
+                                        namesList(
+                                            detailInvoice.order_created_by,
+                                        )
+                                    }}
+                                </p>
+                            </div>
+                            <div class="rounded-xl bg-gray-50 p-3">
+                                <p
+                                    class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                >
+                                    Invoice Created By
+                                </p>
+                                <p class="mt-1 font-black text-[#2A4858]">
+                                    {{
+                                        detailInvoice.invoice_created_by ?? '-'
+                                    }}
+                                </p>
+                            </div>
+                            <div class="rounded-xl bg-gray-50 p-3">
+                                <p
+                                    class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                >
+                                    Receipt Created By
+                                </p>
+                                <p class="mt-1 font-black text-[#2A4858]">
+                                    {{
+                                        detailInvoice.receipt_created_by ?? '-'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
                                 <thead>

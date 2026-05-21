@@ -25,7 +25,7 @@ class GoodsReceiptController extends Controller
         [$companyId, $branchId] = $this->scope($request);
 
         $receipts = GoodsReceipt::query()
-            ->with(['purchaseOrder', 'stockLocation', 'receiver', 'lines.item', 'lines.unit', 'lines.stockLocation'])
+            ->with(['purchaseOrder', 'stockLocation', 'receiver', 'canceller', 'lines.item', 'lines.unit', 'lines.stockLocation'])
             ->where('company_id', $companyId)
             ->when($branchId, fn ($query) => $query->where('branch_id', $branchId))
             ->latest()
@@ -350,9 +350,11 @@ class GoodsReceiptController extends Controller
             'purchase_order_no' => $receipt->purchaseOrder?->po_no,
             'status' => $receipt->status,
             'created_at' => $receipt->created_at?->format('M d, Y h:i A'),
+            'updated_at' => $receipt->updated_at?->format('M d, Y h:i A'),
             'received_at' => $receipt->received_at?->format('M d, Y h:i A'),
             'staging_area' => $receipt->stockLocation?->code ?? $receipt->stockLocation?->name,
             'operator' => $receipt->receiver?->name,
+            'cancelled_by' => $receipt->canceller?->name,
             'line_count' => $receipt->lines->count(),
             'lines' => $receipt->lines->map(fn (GoodsReceiptLine $line) => [
                 'id' => $line->id,

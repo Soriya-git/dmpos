@@ -39,8 +39,10 @@ class SaleInvoiceController extends Controller
         $invoiceModels = Invoice::query()
             ->with([
                 'customer',
-                'lines',
+                'issuer:id,name',
+                'lines.order.creator:id,name',
                 'payments.paymentMethod',
+                'payments.receiver:id,name',
                 'posTerminal',
                 'diningSession.diningResource',
             ])
@@ -72,6 +74,7 @@ class SaleInvoiceController extends Controller
                 'opening_cash_khr' => (float) $activePosSession->opening_cash_khr,
             ],
             'invoices' => $invoices,
+            'paymentMethods' => $this->paymentMethodsFor($activePosSession),
             'paymentSummary' => $this->paymentSummary($invoiceModels, $activePosSession),
             'filters' => [
                 'start_date' => $filters['start_date'] ?? null,
@@ -85,9 +88,12 @@ class SaleInvoiceController extends Controller
     {
         $data = $request->validate([
             'method' => ['required', 'string', 'max:50'],
+            'payment_method_id' => ['nullable', 'exists:payment_methods,id'],
             'currency' => ['required', 'in:USD,KHR'],
             'received_amount' => ['nullable', 'numeric', 'min:0'],
             'operation_status' => ['required', 'in:invoice_receipt_done'],
+            'change_usd_amount' => ['nullable', 'integer', 'min:0'],
+            'change_khr_amount' => ['nullable', 'integer', 'min:0'],
         ]);
 
         $activePosSession = $this->activePosSession($request);
@@ -106,7 +112,39 @@ class SaleInvoiceController extends Controller
             $balanceUsd = (float) $invoice->balance_amount;
             $exchangeRate = (float) ($invoice->exchange_rate_snapshot ?: 4100);
             $amountPaid = $data['currency'] === 'KHR' ? $balanceUsd * $exchangeRate : $balanceUsd;
-            $method = $this->paymentMethodFor($data['method'], $data['currency'], $activePosSession);
+            $method = $this->paymentMethodFor(
+                $data['method'],
+                $data['currency'],
+                $activePosSession,
+                $data['payment_method_id'] ?? null,
+            );
+
+            abort_if(! $method, 422, 'Please select a valid payment method.');
+
+            $isCash = str_starts_with($data['method'], 'cash-');
+            $receivedAmount = $isCash ? (float) ($data['received_amount'] ?? $amountPaid) : $amountPaid;
+            $changeUsdAmount = $isCash ? (float) floor((float) ($data['change_usd_amount'] ?? 0)) : 0;
+            $changeKhrAmount = $isCash ? $this->roundDownKhrChange((float) ($data['change_khr_amount'] ?? 0)) : 0;
+
+            if ($isCash) {
+                abort_if(
+                    $receivedAmount < $amountPaid,
+                    422,
+                    'Received cash must be enough to cover the invoice balance.'
+                );
+
+                $overpaidUsd = $data['currency'] === 'USD'
+                    ? $receivedAmount - $amountPaid
+                    : ($receivedAmount - $amountPaid) / $exchangeRate;
+                $changeUsdEquivalent = $changeUsdAmount + ($changeKhrAmount / $exchangeRate);
+                $roundingToleranceUsd = 99 / $exchangeRate;
+
+                abort_if(
+                    $changeUsdEquivalent > $overpaidUsd + $roundingToleranceUsd + 0.01,
+                    422,
+                    'Change amount cannot be greater than the overpaid amount.'
+                );
+            }
 
             Payment::create([
                 'company_id' => $invoice->company_id,
@@ -117,6 +155,9 @@ class SaleInvoiceController extends Controller
                 'status' => 'paid',
                 'currency' => $data['currency'],
                 'amount_paid' => $amountPaid,
+                'received_amount' => $receivedAmount,
+                'change_usd_amount' => floor($changeUsdAmount),
+                'change_khr_amount' => $changeKhrAmount,
                 'exchange_rate_snapshot' => $exchangeRate,
                 'amount_usd_equivalent' => $balanceUsd,
                 'amount_khr_equivalent' => $balanceUsd * $exchangeRate,
@@ -130,6 +171,16 @@ class SaleInvoiceController extends Controller
                 'balance_amount' => 0,
                 'paid_at' => now(),
             ]);
+
+            $this->recordReceivedPaymentTotals(
+                $activePosSession,
+                $data['method'],
+                $data['currency'],
+                $amountPaid,
+                $receivedAmount,
+                $changeUsdAmount,
+                $changeKhrAmount,
+            );
 
             $invoice->diningSession?->update([
                 'status' => 'paid',
@@ -149,13 +200,43 @@ class SaleInvoiceController extends Controller
             ->first();
     }
 
-    private function paymentMethodFor(string $method, string $currency, PosSession $posSession): ?PaymentMethod
+    private function paymentMethodFor(string $method, string $currency, PosSession $posSession, ?int $paymentMethodId = null): ?PaymentMethod
     {
+        if ($paymentMethodId) {
+            $paymentMethod = PaymentMethod::query()
+                ->where('id', $paymentMethodId)
+                ->where('company_id', $posSession->company_id)
+                ->where('currency', $currency)
+                ->where('is_active', true)
+                ->where(function ($query) use ($posSession) {
+                    $query->whereNull('branch_id')
+                        ->orWhere('branch_id', $posSession->branch_id);
+                })
+                ->first();
+
+            if ($paymentMethod) {
+                return $paymentMethod;
+            }
+
+            $paymentMethod = PaymentMethod::query()
+                ->where('id', $paymentMethodId)
+                ->where('company_id', $posSession->company_id)
+                ->where('currency', $currency)
+                ->where('is_active', true)
+                ->first();
+
+            if ($paymentMethod) {
+                return $paymentMethod;
+            }
+        }
+
         $code = match ($method) {
             'cash-usd' => 'CASH_USD',
             'cash-khr' => 'CASH_KHR',
             'ebanking-usd' => 'EBANK_USD',
             'ebanking-khr' => 'EBANK_KHR',
+            'ebank-usd' => 'EBANK_USD',
+            'ebank-khr' => 'EBANK_KHR',
             default => null,
         };
 
@@ -168,13 +249,21 @@ class SaleInvoiceController extends Controller
                 $query->whereNull('branch_id')
                     ->orWhere('branch_id', $posSession->branch_id);
             })
-            ->first();
+            ->orderByRaw('case when branch_id = ? then 0 when branch_id is null then 1 else 2 end', [$posSession->branch_id])
+            ->first()
+            ?? PaymentMethod::query()
+                ->where('company_id', $posSession->company_id)
+                ->where('currency', $currency)
+                ->where('is_active', true)
+                ->when($code, fn ($query) => $query->where('code', $code))
+                ->first();
     }
 
     private function formatInvoice(Invoice $invoice): array
     {
         $customer = $this->customerFor($invoice->customer_id);
         $posTerminal = $this->posTerminalFor($invoice->pos_terminal_id);
+        $latestPayment = $invoice->payments->sortByDesc('id')->first();
         $customerName = 'Walk-in Customer';
         $customerPhone = null;
         $posName = 'Terminal';
@@ -205,6 +294,13 @@ class SaleInvoiceController extends Controller
             'paid_amount' => (float) $invoice->paid_amount,
             'balance_amount' => (float) $invoice->balance_amount,
             'exchange_rate' => (float) $invoice->exchange_rate_snapshot,
+            'order_created_by' => $invoice->lines
+                ->pluck('order.creator.name')
+                ->filter()
+                ->unique()
+                ->values(),
+            'invoice_created_by' => $invoice->issuer?->name ?? 'System',
+            'receipt_created_by' => $latestPayment?->receiver?->name,
             'lines' => $invoice->lines->map(fn ($line) => [
                 'id' => $line->id,
                 'menu_name' => $line->menu_name_snapshot,
@@ -275,6 +371,83 @@ class SaleInvoiceController extends Controller
             'expected_cash_usd' => (float) $posSession->opening_cash_usd + $summary['cash_usd'],
             'expected_cash_khr' => (float) $posSession->opening_cash_khr + $summary['cash_khr'],
         ];
+    }
+
+    private function paymentMethodsFor(PosSession $posSession): array
+    {
+        $paymentMethods = PaymentMethod::query()
+            ->where('company_id', $posSession->company_id)
+            ->where('is_active', true)
+            ->whereIn('currency', ['USD', 'KHR'])
+            ->whereIn('method_type', ['cash', 'bank'])
+            ->where(function ($query) use ($posSession) {
+                $query->whereNull('branch_id')
+                    ->orWhere('branch_id', $posSession->branch_id);
+            })
+            ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 else 2 end")
+            ->orderBy('currency')
+            ->get();
+
+        if ($paymentMethods->isEmpty()) {
+            $paymentMethods = PaymentMethod::query()
+                ->where('company_id', $posSession->company_id)
+                ->where('is_active', true)
+                ->whereIn('currency', ['USD', 'KHR'])
+                ->whereIn('method_type', ['cash', 'bank'])
+                ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 else 2 end")
+                ->orderBy('currency')
+                ->get();
+        }
+
+        return $paymentMethods
+            ->map(fn (PaymentMethod $paymentMethod) => [
+                'id' => $paymentMethod->id,
+                'code' => $paymentMethod->code,
+                'label' => $paymentMethod->name,
+                'type' => $paymentMethod->method_type,
+                'currency' => $paymentMethod->currency,
+            ])
+            ->values()
+            ->all();
+    }
+
+    private function recordReceivedPaymentTotals(
+        PosSession $posSession,
+        string $method,
+        string $currency,
+        float $amountPaid,
+        float $receivedAmount,
+        float $changeUsdAmount,
+        float $changeKhrAmount,
+    ): void {
+        if (str_starts_with($method, 'cash-')) {
+            $cashUsdChange = $currency === 'USD' ? $receivedAmount : 0;
+            $cashKhrChange = $currency === 'KHR' ? $receivedAmount : 0;
+
+            $posSession->increment('total_cash_usd', $cashUsdChange - $changeUsdAmount);
+            $posSession->increment('total_cash_khr', $cashKhrChange - $changeKhrAmount);
+
+            return;
+        }
+
+        if (str_starts_with($method, 'ebanking-')) {
+            if ($currency === 'USD') {
+                $posSession->increment('total_ebanking_usd', $amountPaid);
+
+                return;
+            }
+
+            $posSession->increment('total_ebanking_khr', $amountPaid);
+        }
+    }
+
+    private function roundDownKhrChange(float $amount): float
+    {
+        if ($amount <= 0) {
+            return 0;
+        }
+
+        return floor($amount / 100) * 100;
     }
 
     private function customerFor(?int $customerId): ?Customer

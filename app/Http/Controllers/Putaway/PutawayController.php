@@ -26,7 +26,7 @@ class PutawayController extends Controller
         [$companyId, $branchId] = $this->scope($request);
 
         $transfers = StockTransfer::query()
-            ->with(['goodsReceipt', 'creator', 'lines.item', 'lines.unit', 'lines.toLocation'])
+            ->with(['goodsReceipt', 'creator', 'approver', 'canceller', 'lines.item', 'lines.unit', 'lines.toLocation'])
             ->where('company_id', $companyId)
             ->where('from_branch_id', $branchId)
             ->where('transfer_type', 'internal_transfer')
@@ -373,8 +373,14 @@ class PutawayController extends Controller
             'id' => $transfer->id,
             'transfer_no' => $transfer->transfer_no,
             'created_at' => $transfer->created_at?->format('M d, Y H:i'),
+            'updated_at' => $transfer->updated_at?->format('M d, Y H:i'),
+            'approved_at' => $transfer->approved_at?->format('M d, Y H:i'),
+            'cancelled_at' => $transfer->cancelled_at?->format('M d, Y H:i'),
             'goods_receipt_no' => $transfer->goodsReceipt?->receipt_no,
             'assigned_staff' => $transfer->creator?->name ?? 'Unassigned',
+            'created_by' => $transfer->creator?->name,
+            'approved_by' => $transfer->approver?->name,
+            'cancelled_by' => $transfer->canceller?->name,
             'item_count' => $transfer->lines->count(),
             'total_quantity' => $transfer->lines->sum(fn (StockTransferLine $line) => (float) ($transfer->status === 'received' ? $line->quantity_received : $line->quantity_requested)),
             'status' => $transfer->status,

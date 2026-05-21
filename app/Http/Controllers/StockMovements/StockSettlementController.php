@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\StockMovements;
 
 use App\Http\Controllers\Controller;
-use App\Models\Branch;
 use App\Models\Company;
 use App\Models\Invoice;
 use App\Models\InvoiceLine;
@@ -23,10 +22,10 @@ class StockSettlementController extends Controller
 {
     public function index(Request $request): Response
     {
-        [$companyId, $branchId] = $this->scope($request);
+        [$companyId, $branchIds] = $this->scope($request);
         $filters = $this->filters($request);
 
-        $invoices = $this->invoiceQuery($companyId, $branchId, $filters)
+        $invoices = $this->invoiceQuery($companyId, $branchIds, $filters)
             ->latest('issued_at')
             ->latest('id')
             ->get()
@@ -40,27 +39,30 @@ class StockSettlementController extends Controller
 
     public function show(Request $request, Invoice $invoice): Response
     {
-        [$companyId, $branchId] = $this->scope($request);
+        [$companyId, $branchIds] = $this->scope($request);
 
-        abort_if((int) $invoice->company_id !== $companyId || (int) $invoice->branch_id !== $branchId, 403);
+        abort_if(
+            (int) $invoice->company_id !== $companyId || ! $branchIds->contains((int) $invoice->branch_id),
+            403
+        );
 
-        $invoice = $this->invoiceQuery($companyId, $branchId, [])->findOrFail($invoice->id);
+        $invoice = $this->invoiceQuery($companyId, $branchIds, [])->findOrFail($invoice->id);
         $formatted = $this->formatInvoice($invoice, true);
         $itemIds = collect($formatted['requirements'])->pluck('itemId')->unique()->values();
 
         return Inertia::render('StockSettlements/View', [
             'settlement' => $formatted,
-            'balancesByItem' => $this->balancesForItems($companyId, $branchId, $itemIds),
+            'balancesByItem' => $this->balancesForItems($companyId, (int) $invoice->branch_id, $itemIds),
         ]);
     }
 
     public function approve(Request $request)
     {
-        [$companyId, $branchId] = $this->scope($request);
+        [$companyId, $branchIds] = $this->scope($request);
 
         $data = $request->validate([
             'invoice_ids' => ['required', 'array', 'min:1'],
-            'invoice_ids.*' => ['integer', Rule::exists('invoices', 'id')->where('company_id', $companyId)->where('branch_id', $branchId)],
+            'invoice_ids.*' => ['integer', Rule::exists('invoices', 'id')->where('company_id', $companyId)->whereIn('branch_id', $branchIds->all())],
             'quantities' => ['nullable', 'array'],
             'quantities.*' => ['nullable', 'numeric', 'gt:0'],
             'allocations' => ['nullable', 'array'],
@@ -71,8 +73,8 @@ class StockSettlementController extends Controller
             'note' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        DB::transaction(function () use ($request, $data, $companyId, $branchId) {
-            $invoices = $this->invoiceQuery($companyId, $branchId, [])
+        DB::transaction(function () use ($request, $data, $companyId, $branchIds) {
+            $invoices = $this->invoiceQuery($companyId, $branchIds, [])
                 ->whereIn('id', $data['invoice_ids'])
                 ->lockForUpdate()
                 ->get();
@@ -122,17 +124,17 @@ class StockSettlementController extends Controller
 
     public function reject(Request $request)
     {
-        [$companyId, $branchId] = $this->scope($request);
+        [$companyId, $branchIds] = $this->scope($request);
 
         $data = $request->validate([
             'invoice_ids' => ['required', 'array', 'min:1'],
-            'invoice_ids.*' => ['integer', Rule::exists('invoices', 'id')->where('company_id', $companyId)->where('branch_id', $branchId)],
+            'invoice_ids.*' => ['integer', Rule::exists('invoices', 'id')->where('company_id', $companyId)->whereIn('branch_id', $branchIds->all())],
             'note' => ['nullable', 'string', 'max:1000'],
         ]);
 
         Invoice::query()
             ->where('company_id', $companyId)
-            ->where('branch_id', $branchId)
+            ->whereIn('branch_id', $branchIds)
             ->whereIn('id', $data['invoice_ids'])
             ->where('stock_settlement_status', 'pending')
             ->update([
@@ -145,7 +147,7 @@ class StockSettlementController extends Controller
         return back()->with('success', 'Selected POS sale stock settlement has been rejected.');
     }
 
-    private function invoiceQuery(int $companyId, int $branchId, array $filters)
+    private function invoiceQuery(int $companyId, Collection $branchIds, array $filters)
     {
         return Invoice::query()
             ->with([
@@ -153,13 +155,15 @@ class StockSettlementController extends Controller
                 'posTerminal:id,name,code',
                 'customer:id,name,phone_number',
                 'issuer:id,name',
+                'stockSettler:id,name',
+                'stockRejecter:id,name',
                 'lines.menu.item:id,name,code,unit_id,cost',
                 'lines.menu.item.unit:id,name,code',
                 'lines.menu.activeBom.lines.item:id,name,code,unit_id,cost',
                 'lines.menu.activeBom.lines.unit:id,name,code',
             ])
             ->where('company_id', $companyId)
-            ->where('branch_id', $branchId)
+            ->whereIn('branch_id', $branchIds)
             ->whereNot('status', 'cancelled')
             ->whereHas('lines')
             ->when($filters['search'] ?? null, function ($query, string $search) {
@@ -169,7 +173,18 @@ class StockSettlementController extends Controller
                         ->orWhereHas('lines', fn ($line) => $line->where('menu_name_snapshot', 'like', "%{$search}%"));
                 });
             })
-            ->when($filters['status'] ?? null, fn ($query, $status) => $query->where('stock_settlement_status', $status))
+            ->when($filters['status'] ?? null, function ($query, string $status) {
+                if ($status === 'pending') {
+                    $query->where(function ($inner) {
+                        $inner->where('stock_settlement_status', 'pending')
+                            ->orWhereNull('stock_settlement_status');
+                    });
+
+                    return;
+                }
+
+                $query->where('stock_settlement_status', $status);
+            })
             ->when($filters['pos_terminal_id'] ?? null, fn ($query, $terminalId) => $query->where('pos_terminal_id', $terminalId))
             ->when($filters['date_from'] ?? null, fn ($query, $date) => $query->whereDate('issued_at', '>=', $date))
             ->when($filters['date_to'] ?? null, fn ($query, $date) => $query->whereDate('issued_at', '<=', $date));
@@ -198,6 +213,9 @@ class StockSettlementController extends Controller
             'requirementCount' => $requirements->count(),
             'missingBomCount' => $missingBomCount,
             'grandTotal' => (float) $invoice->grand_total,
+            'createdBy' => $invoice->issuer?->name ?? 'System',
+            'settledBy' => $invoice->stockSettler?->name,
+            'rejectedBy' => $invoice->stockRejecter?->name,
             'settledAt' => $invoice->stock_settled_at?->format('Y-m-d H:i'),
             'rejectedAt' => $invoice->stock_rejected_at?->format('Y-m-d H:i'),
             'note' => $invoice->stock_settlement_note,
@@ -413,11 +431,17 @@ class StockSettlementController extends Controller
     {
         $user = $request->user();
         $companyId = $user->company_id ?? Company::query()->value('id');
-        $branchId = $user->branch_id ?? Branch::query()->where('company_id', $companyId)->value('id');
+        $branchIds = $user->branches()
+            ->where('branches.company_id', $companyId)
+            ->pluck('branches.id')
+            ->push($user->branch_id)
+            ->filter()
+            ->unique()
+            ->values();
 
         abort_if(! $companyId, 422, 'No company is available for stock settlement.');
-        abort_if(! $branchId, 422, 'No branch is available for stock settlement.');
+        abort_if($branchIds->isEmpty(), 422, 'No branch is available for stock settlement.');
 
-        return [(int) $companyId, (int) $branchId];
+        return [(int) $companyId, $branchIds];
     }
 }

@@ -32,6 +32,7 @@ class StockOperationSeeder extends Seeder
 
         $item = Item::where('company_id', $company->id)
             ->where('is_stockable', true)
+            ->where('is_active', true)
             ->first();
 
         if (! $item) {

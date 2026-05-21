@@ -1,0 +1,38 @@
+﻿branch_code,menu_name,bom_no,bom_name,output_item_code,output_item_name,output_unit,output_quantity,status,effective_from,effective_to,component_item_code,component_item_name,component_unit,quantity,wastage_percent,estimated_cost,note
+B001,Premium Fruit Sharing Set,,Premium Fruit Sharing Set Standard BOM,FP-PREMIUM-FRUIT-SHARING,Premium Fruit Sharing Set,Set,1,active,2026-05-01,,FR-001,Fruit Platter (Premium),Set,1,1,0,Main fruit platter for sharing set
+B001,Premium Fruit Sharing Set,,Premium Fruit Sharing Set Standard BOM,FP-PREMIUM-FRUIT-SHARING,Premium Fruit Sharing Set,Set,1,active,2026-05-01,,WA-003,Kulen Water 500ml,Bottle,2,0,0,Drinking water included in set
+B001,Premium Fruit Sharing Set,,Premium Fruit Sharing Set Standard BOM,FP-PREMIUM-FRUIT-SHARING,Premium Fruit Sharing Set,Set,1,active,2026-05-01,,CS-001,Tissues,Pack,0.05,0,0,Small tissue consumption per set
+B001,Large Fruit Party Set,,Large Fruit Party Set Standard BOM,FP-LARGE-FRUIT-PARTY,Large Fruit Party Set,Set,1,active,2026-05-01,,FR-002,Fruit Platter (Large),Set,1,1,0,Large fruit platter for group serving
+B001,Large Fruit Party Set,,Large Fruit Party Set Standard BOM,FP-LARGE-FRUIT-PARTY,Large Fruit Party Set,Set,1,active,2026-05-01,,WA-010,Kulen Water 1.5L,Bottle,1,0,0,Shared water bottle
+B001,Large Fruit Party Set,,Large Fruit Party Set Standard BOM,FP-LARGE-FRUIT-PARTY,Large Fruit Party Set,Set,1,active,2026-05-01,,CS-001,Tissues,Pack,0.08,0,0,Tissue usage for group serving
+B001,Soft Drink Sharing Combo,,Soft Drink Sharing Combo Standard BOM,FP-SOFT-DRINK-SHARING,Soft Drink Sharing Combo,Set,1,active,2026-05-01,,SD-001,Coca-Cola,Can,2,0,0,Main soft drink option
+B001,Soft Drink Sharing Combo,,Soft Drink Sharing Combo Standard BOM,FP-SOFT-DRINK-SHARING,Soft Drink Sharing Combo,Set,1,active,2026-05-01,,SD-002,Sprite,Can,2,0,0,Second soft drink option
+B001,Soft Drink Sharing Combo,,Soft Drink Sharing Combo Standard BOM,FP-SOFT-DRINK-SHARING,Soft Drink Sharing Combo,Set,1,active,2026-05-01,,WA-002,Elan Mineral Water 300 ml,Bottle,2,0,0,Water included for sharing
+B001,Soft Drink Sharing Combo,,Soft Drink Sharing Combo Standard BOM,FP-SOFT-DRINK-SHARING,Soft Drink Sharing Combo,Set,1,active,2026-05-01,,CS-001,Tissues,Pack,0.05,0,0,Tissue usage per combo
+B001,Family Refreshment Set,,Family Refreshment Set Standard BOM,FP-FAMILY-REFRESHMENT,Family Refreshment Set,Set,1,active,2026-05-01,,SD-001,Coca-Cola,Can,1,0,0,Soft drink portion
+B001,Family Refreshment Set,,Family Refreshment Set Standard BOM,FP-FAMILY-REFRESHMENT,Family Refreshment Set,Set,1,active,2026-05-01,,SD-002,Sprite,Can,1,0,0,Soft drink portion
+B001,Family Refreshment Set,,Family Refreshment Set Standard BOM,FP-FAMILY-REFRESHMENT,Family Refreshment Set,Set,1,active,2026-05-01,,SD-003,Fruit juice,Can,1,0,0,Juice portion
+B001,Family Refreshment Set,,Family Refreshment Set Standard BOM,FP-FAMILY-REFRESHMENT,Family Refreshment Set,Set,1,active,2026-05-01,,GT-001,Master Kong Green Tea,Can,1,0,0,Tea drink portion
+B001,Family Refreshment Set,,Family Refreshment Set Standard BOM,FP-FAMILY-REFRESHMENT,Family Refreshment Set,Set,1,active,2026-05-01,,WA-004,Vital 500 ml,Bottle,2,0,0,Water portion
+B001,Soda Lemon Cooler,,Soda Lemon Cooler Standard BOM,FP-SODA-LEMON-COOLER,Soda Lemon Cooler,Glass,1,active,2026-05-01,,SW-001,Schweppe,Can,0.75,0,0,Soda water base
+B001,Soda Lemon Cooler,,Soda Lemon Cooler Standard BOM,FP-SODA-LEMON-COOLER,Soda Lemon Cooler,Glass,1,active,2026-05-01,,SW-002,Schweppe Lemon,Can,0.25,0,0,Lemon flavor mix
+B001,Soda Lemon Cooler,,Soda Lemon Cooler Standard BOM,FP-SODA-LEMON-COOLER,Soda Lemon Cooler,Glass,1,active,2026-05-01,,WA-002,Elan Mineral Water 300 ml,Bottle,0.25,0,0,Dilution and serving balance
+B001,Coconut Milk Cooler,,Coconut Milk Cooler Standard BOM,FP-COCONUT-MILK-COOLER,Coconut Milk Cooler,Glass,1,active,2026-05-01,,PL-001,YESHU-Coconut juice,Can,1,0,0,Coconut juice base
+B001,Coconut Milk Cooler,,Coconut Milk Cooler Standard BOM,FP-COCONUT-MILK-COOLER,Coconut Milk Cooler,Glass,1,active,2026-05-01,,PU-001,Yili Pure Milk,Pack,0.5,1,0,Milk portion for creamy taste
+B001,Fruit Milk Drink,,Fruit Milk Drink Standard BOM,FP-FRUIT-MILK-DRINK,Fruit Milk Drink,Glass,1,active,2026-05-01,,SD-003,Fruit juice,Can,0.75,0,0,Fruit juice base
+B001,Fruit Milk Drink,,Fruit Milk Drink Standard BOM,FP-FRUIT-MILK-DRINK,Fruit Milk Drink,Glass,1,active,2026-05-01,,PU-001,Yili Pure Milk,Pack,0.5,1,0,Milk portion for texture
+B001,Tea Refreshment Set,,Tea Refreshment Set Standard BOM,FP-TEA-REFRESHMENT,Tea Refreshment Set,Set,1,active,2026-05-01,,GT-001,Master Kong Green Tea,Can,1,0,0,Green tea serving
+B001,Tea Refreshment Set,,Tea Refreshment Set Standard BOM,FP-TEA-REFRESHMENT,Tea Refreshment Set,Set,1,active,2026-05-01,,RT-001,Master Kong RedTea,Can,1,0,0,Red tea serving
+B001,Tea Refreshment Set,,Tea Refreshment Set Standard BOM,FP-TEA-REFRESHMENT,Tea Refreshment Set,Set,1,active,2026-05-01,,HT-001,Chingbo Liang,Can,1,0,0,Herbal tea serving
+B001,Tea Refreshment Set,,Tea Refreshment Set Standard BOM,FP-TEA-REFRESHMENT,Tea Refreshment Set,Set,1,active,2026-05-01,,WA-002,Elan Mineral Water 300 ml,Bottle,1,0,0,Water included in set
+B001,Ginseng Tea Service,,Ginseng Tea Service Standard BOM,FP-GINSENG-TEA-SERVICE,Ginseng Tea Service,Set,1,active,2026-05-01,,TE-001,Ginseng Tea,Glass,1,0,0,Prepared ginseng tea glass
+B001,Ginseng Tea Service,,Ginseng Tea Service Standard BOM,FP-GINSENG-TEA-SERVICE,Ginseng Tea Service,Set,1,active,2026-05-01,,CS-001,Tissues,Pack,0.02,0,0,Service tissue portion
+B001,Premium Water Service Set,,Premium Water Service Set Standard BOM,FP-PREMIUM-WATER-SERVICE,Premium Water Service Set,Set,1,active,2026-05-01,,WA-005,Fiji,Bottle,1,0,0,Premium water bottle
+B001,Premium Water Service Set,,Premium Water Service Set Standard BOM,FP-PREMIUM-WATER-SERVICE,Premium Water Service Set,Set,1,active,2026-05-01,,WA-006,Evian 330 ml,Bottle,1,0,0,Premium water bottle
+B001,Premium Water Service Set,,Premium Water Service Set Standard BOM,FP-PREMIUM-WATER-SERVICE,Premium Water Service Set,Set,1,active,2026-05-01,,CS-001,Tissues,Pack,0.03,0,0,Service tissue portion
+B001,Standard Water Service Set,,Standard Water Service Set Standard BOM,FP-STANDARD-WATER-SERVICE,Standard Water Service Set,Set,1,active,2026-05-01,,WA-003,Kulen Water 500ml,Bottle,2,0,0,Standard bottled water
+B001,Standard Water Service Set,,Standard Water Service Set Standard BOM,FP-STANDARD-WATER-SERVICE,Standard Water Service Set,Set,1,active,2026-05-01,,WA-008,Elan Mineral Water 500ml,Bottle,2,0,0,Standard bottled water
+B001,Snack and Fruit Refreshment Set,,Snack and Fruit Refreshment Set Standard BOM,FP-SNACK-FRUIT-REFRESHMENT,Snack and Fruit Refreshment Set,Set,1,active,2026-05-01,,FR-002,Fruit Platter (Large),Set,1,1,0,Fruit sharing portion
+B001,Snack and Fruit Refreshment Set,,Snack and Fruit Refreshment Set Standard BOM,FP-SNACK-FRUIT-REFRESHMENT,Snack and Fruit Refreshment Set,Set,1,active,2026-05-01,,DR-001,He Cheng Tian Xia,Packs,1,0,0,Dried fruit snack
+B001,Snack and Fruit Refreshment Set,,Snack and Fruit Refreshment Set Standard BOM,FP-SNACK-FRUIT-REFRESHMENT,Snack and Fruit Refreshment Set,Set,1,active,2026-05-01,,DR-002,He Cheng Tian Xia white,Packs,1,0,0,Dried fruit snack
+B001,Snack and Fruit Refreshment Set,,Snack and Fruit Refreshment Set Standard BOM,FP-SNACK-FRUIT-REFRESHMENT,Snack and Fruit Refreshment Set,Set,1,active,2026-05-01,,WA-003,Kulen Water 500ml,Bottle,2,0,0,Water for refreshment set
