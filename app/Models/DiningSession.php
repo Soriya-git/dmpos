@@ -18,6 +18,7 @@ class DiningSession extends Model
     protected $guarded = [];
 
     protected $casts = [
+        'pos_open_date' => 'date',
         'opened_at' => 'datetime',
         'closed_at' => 'datetime',
     ];

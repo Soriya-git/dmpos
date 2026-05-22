@@ -122,6 +122,27 @@ class WarehouseSeeder extends Seeder
                     'is_saleable' => false,
                     'description' => 'Hold scrap and other non-saleable goods issue stock.',
                 ],
+                [
+                    'name' => 'Customer Keep Stock A',
+                    'code' => 'CUS-A',
+                    'location_type' => 'customer_stock',
+                    'is_saleable' => false,
+                    'description' => 'Customer-owned leftover stock kept at the restaurant.',
+                ],
+                [
+                    'name' => 'Customer Keep Stock B',
+                    'code' => 'CUS-B',
+                    'location_type' => 'customer_stock',
+                    'is_saleable' => false,
+                    'description' => 'Secondary customer-owned keep stock location.',
+                ],
+                [
+                    'name' => 'Customer Keep Stock Cold Room',
+                    'code' => 'CUS-COLD',
+                    'location_type' => 'customer_stock',
+                    'is_saleable' => false,
+                    'description' => 'Cold storage for customer-owned drinks and chilled items.',
+                ],
             ];
 
             foreach ($locations as $location) {

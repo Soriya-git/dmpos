@@ -22,6 +22,7 @@ use App\Http\Controllers\Putaway\PutawayController;
 use App\Http\Controllers\Sales\SaleInvoiceController;
 use App\Http\Controllers\Seats\SeatController;
 use App\Http\Controllers\Seats\SeatOrderController;
+use App\Http\Controllers\StockCustomer\StockCustomerController;
 use App\Http\Controllers\StockMovements\InternalTransferController;
 use App\Http\Controllers\StockMovements\StockAdjustmentController;
 use App\Http\Controllers\StockMovements\StockSettlementController;
@@ -50,6 +51,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sales', [SaleInvoiceController::class, 'index'])->name('sales.index');
     Route::post('/sales/invoices/{invoice}/receive', [SaleInvoiceController::class, 'receive'])
         ->name('sales.invoices.receive');
+    Route::patch('/sales/invoices/{invoice}/cancel', [SaleInvoiceController::class, 'cancel'])
+        ->name('sales.invoices.cancel');
+    Route::patch('/sales/invoices/{invoice}/receipts/cancel', [SaleInvoiceController::class, 'cancelInvoicePayments'])
+        ->name('sales.invoices.receipts.cancel');
+    Route::patch('/sales/payments/{payment}/cancel', [SaleInvoiceController::class, 'cancelPayment'])
+        ->name('sales.payments.cancel');
 
     // Purchase order routes
     Route::get('/purchase', [PurchaseOrderController::class, 'index'])->name('purchase.index');
@@ -87,6 +94,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('putaway.cancel');
     Route::get('/putaway/completed-goods-receipts', [PutawayController::class, 'receipts'])
         ->name('putaway.completed-goods-receipts');
+
+    // Customer keep stock routes
+    Route::get('/stock-customer', [StockCustomerController::class, 'index'])->name('stock-customer.index');
+    Route::get('/stock-customer/create', [StockCustomerController::class, 'create'])->name('stock-customer.create');
+    Route::post('/stock-customer', [StockCustomerController::class, 'store'])->name('stock-customer.store');
+    Route::patch('/stock-customer/{stockTransfer}', [StockCustomerController::class, 'update'])->name('stock-customer.update');
+    Route::patch('/stock-customer/{stockTransfer}/approve', [StockCustomerController::class, 'approve'])->name('stock-customer.approve');
+    Route::patch('/stock-customer/{stockTransfer}/reject', [StockCustomerController::class, 'reject'])->name('stock-customer.reject');
+    Route::patch('/stock-customer/{stockTransfer}/cancel', [StockCustomerController::class, 'cancel'])->name('stock-customer.cancel');
+    Route::get('/stock-customer/invoices', [StockCustomerController::class, 'invoices'])->name('stock-customer.invoices');
+    Route::get('/stock-customer/items/{item}', [StockCustomerController::class, 'item'])->name('stock-customer.items.show');
 
     // Inventory balance routes
     Route::get('/balance-on-hand', [BalanceOnHandController::class, 'index'])

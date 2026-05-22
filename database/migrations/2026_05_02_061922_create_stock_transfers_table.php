@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('invoice_id')->nullable()->constrained()->nullOnDelete();
 
             $table->foreignId('from_branch_id')->constrained('branches')->restrictOnDelete();
             $table->foreignId('to_branch_id')->constrained('branches')->restrictOnDelete();
@@ -33,6 +34,7 @@ return new class extends Migration
                 'scrap_transfer',
                 'damage_transfer',
                 'obsolete_transfer',
+                'customer_stock_keep',
             ])->default('internal_transfer');
 
             $table->enum('status', [

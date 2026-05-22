@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('branch_id')->constrained()->cascadeOnDelete();
             $table->foreignId('pos_terminal_id')->nullable()->constrained()->nullOnDelete();
+            $table->date('pos_open_date')->nullable();
 
             $table->foreignId('customer_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('dining_resource_id')->constrained()->cascadeOnDelete();
@@ -47,6 +48,7 @@ return new class extends Migration
 
             $table->index(['branch_id', 'status']);
             $table->index(['dining_resource_id', 'status']);
+            $table->index(['branch_id', 'pos_open_date'], 'ds_branch_pos_open_date_idx');
         });
     }
 

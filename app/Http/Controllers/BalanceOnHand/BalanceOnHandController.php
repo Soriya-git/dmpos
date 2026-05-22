@@ -19,6 +19,7 @@ class BalanceOnHandController extends Controller
 
         $items = Item::query()
             ->with(['unit:id,name,code', 'stockBalances' => fn ($query) => $query
+                ->with('stockLocation:id,location_type')
                 ->when($branchId, fn ($query) => $query->where('branch_id', $branchId))])
             ->where('company_id', $companyId)
             ->where('is_stockable', true)
@@ -29,10 +30,16 @@ class BalanceOnHandController extends Controller
             ->orderBy('name')
             ->get()
             ->map(function (Item $item): array {
+                $companyBalances = $item->stockBalances
+                    ->filter(fn (StockBalance $balance) => $balance->stockLocation?->location_type !== 'customer_stock');
+                $customerBalances = $item->stockBalances
+                    ->filter(fn (StockBalance $balance) => $balance->stockLocation?->location_type === 'customer_stock');
+                $companyAvailable = $companyBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available);
+                $customerAvailable = $customerBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available);
                 $quantityOnHand = $item->stockBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_on_hand);
-                $quantityAvailable = $item->stockBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available);
+                $quantityAvailable = $companyAvailable + $customerAvailable;
                 $quantityReserved = $item->stockBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_reserved);
-                $stockValue = $item->stockBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available * (float) $balance->average_cost);
+                $stockValue = $companyBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available * (float) $balance->average_cost);
                 $minimumStock = (float) $item->minimum_stock_qty;
 
                 return [
@@ -44,10 +51,12 @@ class BalanceOnHandController extends Controller
                     'minimumStockQty' => $minimumStock,
                     'quantityOnHand' => $quantityOnHand,
                     'quantityAvailable' => $quantityAvailable,
+                    'companyQuantityAvailable' => $companyAvailable,
+                    'customerQuantityAvailable' => $customerAvailable,
                     'quantityReserved' => $quantityReserved,
                     'stockValue' => $stockValue,
-                    'locationsCount' => $item->stockBalances->where('quantity_available', '>', 0)->count(),
-                    'status' => $this->stockStatus($quantityAvailable, $minimumStock),
+                    'locationsCount' => $companyBalances->where('quantity_available', '>', 0)->count(),
+                    'status' => $this->stockStatus($companyAvailable, $minimumStock),
                 ];
             });
 

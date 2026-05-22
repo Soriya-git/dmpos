@@ -105,13 +105,13 @@ class SaleInvoiceController extends Controller
         }
 
         abort_if($invoice->branch_id !== $activePosSession->branch_id, 403);
-        abort_if(in_array($invoice->status, ['paid', 'cancelled'], true), 422, 'This invoice cannot receive payment.');
+        abort_if(in_array($invoice->status, ['cancelled'], true), 422, 'This invoice cannot receive payment.');
         abort_if((float) $invoice->balance_amount <= 0, 422, 'This invoice has no balance to receive.');
 
         DB::transaction(function () use ($invoice, $activePosSession, $data, $request) {
+            $invoice->refresh();
             $balanceUsd = (float) $invoice->balance_amount;
             $exchangeRate = (float) ($invoice->exchange_rate_snapshot ?: 4100);
-            $amountPaid = $data['currency'] === 'KHR' ? $balanceUsd * $exchangeRate : $balanceUsd;
             $method = $this->paymentMethodFor(
                 $data['method'],
                 $data['currency'],
@@ -122,20 +122,17 @@ class SaleInvoiceController extends Controller
             abort_if(! $method, 422, 'Please select a valid payment method.');
 
             $isCash = str_starts_with($data['method'], 'cash-');
-            $receivedAmount = $isCash ? (float) ($data['received_amount'] ?? $amountPaid) : $amountPaid;
+            $targetAmount = $data['currency'] === 'KHR' ? $balanceUsd * $exchangeRate : $balanceUsd;
+            $receivedAmount = (float) ($data['received_amount'] ?? $targetAmount);
             $changeUsdAmount = $isCash ? (float) floor((float) ($data['change_usd_amount'] ?? 0)) : 0;
             $changeKhrAmount = $isCash ? $this->roundDownKhrChange((float) ($data['change_khr_amount'] ?? 0)) : 0;
 
-            if ($isCash) {
-                abort_if(
-                    $receivedAmount < $amountPaid,
-                    422,
-                    'Received cash must be enough to cover the invoice balance.'
-                );
+            abort_if($receivedAmount <= 0, 422, 'Payment amount must be greater than zero.');
 
+            if ($isCash) {
                 $overpaidUsd = $data['currency'] === 'USD'
-                    ? $receivedAmount - $amountPaid
-                    : ($receivedAmount - $amountPaid) / $exchangeRate;
+                    ? max(0, $receivedAmount - $targetAmount)
+                    : max(0, ($receivedAmount - $targetAmount) / $exchangeRate);
                 $changeUsdEquivalent = $changeUsdAmount + ($changeKhrAmount / $exchangeRate);
                 $roundingToleranceUsd = 99 / $exchangeRate;
 
@@ -146,31 +143,35 @@ class SaleInvoiceController extends Controller
                 );
             }
 
+            $netReceivedUsd = $data['currency'] === 'KHR'
+                ? ($receivedAmount - $changeKhrAmount - ($changeUsdAmount * $exchangeRate)) / $exchangeRate
+                : $receivedAmount - $changeUsdAmount - ($changeKhrAmount / $exchangeRate);
+            $paidUsd = round(min($balanceUsd, max(0, $netReceivedUsd)), 2);
+
+            abort_if($paidUsd <= 0, 422, 'Payment amount must be greater than zero.');
+
+            $amountPaid = $data['currency'] === 'KHR' ? $paidUsd * $exchangeRate : $paidUsd;
+
             Payment::create([
                 'company_id' => $invoice->company_id,
                 'branch_id' => $invoice->branch_id,
                 'invoice_id' => $invoice->id,
                 'payment_method_id' => $method?->id,
                 'payment_no' => DocumentNumber::make(Payment::class, 'payment_no', 'PY'),
-                'status' => 'paid',
+                'status' => $paidUsd >= $balanceUsd ? 'paid' : 'partial',
                 'currency' => $data['currency'],
                 'amount_paid' => $amountPaid,
                 'received_amount' => $receivedAmount,
                 'change_usd_amount' => floor($changeUsdAmount),
                 'change_khr_amount' => $changeKhrAmount,
                 'exchange_rate_snapshot' => $exchangeRate,
-                'amount_usd_equivalent' => $balanceUsd,
-                'amount_khr_equivalent' => $balanceUsd * $exchangeRate,
+                'amount_usd_equivalent' => $paidUsd,
+                'amount_khr_equivalent' => $paidUsd * $exchangeRate,
                 'paid_at' => now(),
                 'received_by' => $request->user()->id,
             ]);
 
-            $invoice->update([
-                'status' => 'paid',
-                'paid_amount' => (float) $invoice->grand_total,
-                'balance_amount' => 0,
-                'paid_at' => now(),
-            ]);
+            $this->syncInvoicePaymentStatus($invoice);
 
             $this->recordReceivedPaymentTotals(
                 $activePosSession,
@@ -182,14 +183,155 @@ class SaleInvoiceController extends Controller
                 $changeKhrAmount,
             );
 
+            $invoice->refresh();
             $invoice->diningSession?->update([
-                'status' => 'paid',
+                'status' => $invoice->status === 'paid' ? 'paid' : 'invoiced',
                 'closed_at' => null,
                 'closed_by' => null,
             ]);
         });
 
         return back()->with('success', 'Payment completed.');
+    }
+
+    public function cancel(Request $request, Invoice $invoice)
+    {
+        $activePosSession = $this->activePosSession($request);
+
+        if (! $activePosSession) {
+            return redirect()
+                ->route('pos-sessions.index')
+                ->with('error', 'Please open POS session first.');
+        }
+
+        abort_if($invoice->branch_id !== $activePosSession->branch_id, 403);
+        abort_if($invoice->status === 'cancelled', 422, 'This invoice is already cancelled.');
+
+        DB::transaction(function () use ($request, $invoice, $activePosSession) {
+            $invoice->load(['payments.paymentMethod', 'lines']);
+
+            foreach ($invoice->payments->where('status', '!=', 'cancelled') as $payment) {
+                $this->reversePosSessionPaymentTotals($activePosSession, $payment);
+                $payment->update([
+                    'status' => 'cancelled',
+                    'cancelled_by' => $request->user()->id,
+                    'cancel_reason' => 'Invoice cancelled.',
+                ]);
+            }
+
+            $wasStockSettled = ($invoice->stock_settlement_status ?? 'pending') === 'approved'
+                && (float) $invoice->stock_settled_quantity > 0;
+
+            $invoice->update([
+                'status' => 'cancelled',
+                'paid_amount' => 0,
+                'balance_amount' => 0,
+                'paid_at' => null,
+                'cancelled_at' => now(),
+                'cancelled_by' => $request->user()->id,
+                'cancel_reason' => 'Cancelled from invoice management.',
+                'stock_settlement_status' => $wasStockSettled ? 'pending' : ($invoice->stock_settlement_status ?? 'pending'),
+                'stock_settlement_note' => $wasStockSettled
+                    ? 'Invoice cancelled after stock settlement. Pending reversal.'
+                    : $invoice->stock_settlement_note,
+            ]);
+
+            $invoice->lines()->update([
+                'order_id' => null,
+                'order_line_id' => null,
+            ]);
+
+            $invoice->diningSession?->update([
+                'status' => 'open',
+                'closed_at' => null,
+                'closed_by' => null,
+            ]);
+        });
+
+        return back()->with('success', 'Invoice cancelled. The order can be invoiced again or cancelled.');
+    }
+
+    public function cancelPayment(Request $request, Payment $payment)
+    {
+        $activePosSession = $this->activePosSession($request);
+
+        if (! $activePosSession) {
+            return redirect()
+                ->route('pos-sessions.index')
+                ->with('error', 'Please open POS session first.');
+        }
+
+        $payment->load(['invoice.diningSession', 'paymentMethod']);
+
+        abort_if($payment->branch_id !== $activePosSession->branch_id, 403);
+        abort_if($payment->status === 'cancelled', 422, 'This receipt is already cancelled.');
+
+        DB::transaction(function () use ($request, $payment, $activePosSession) {
+            $this->reversePosSessionPaymentTotals($activePosSession, $payment);
+
+            $payment->update([
+                'status' => 'cancelled',
+                'cancelled_by' => $request->user()->id,
+                'cancel_reason' => 'Receipt cancelled from invoice management.',
+            ]);
+
+            $invoice = $payment->invoice;
+
+            if ($invoice) {
+                $this->syncInvoicePaymentStatus($invoice);
+                $invoice->refresh();
+
+                $invoice->diningSession?->update([
+                    'status' => $invoice->status === 'paid' ? 'paid' : 'invoiced',
+                    'closed_at' => null,
+                    'closed_by' => null,
+                ]);
+            }
+        });
+
+        return back()->with('success', 'Receipt cancelled. The invoice is open for payment again.');
+    }
+
+    public function cancelInvoicePayments(Request $request, Invoice $invoice)
+    {
+        $activePosSession = $this->activePosSession($request);
+
+        if (! $activePosSession) {
+            return redirect()
+                ->route('pos-sessions.index')
+                ->with('error', 'Please open POS session first.');
+        }
+
+        abort_if($invoice->branch_id !== $activePosSession->branch_id, 403);
+        abort_if($invoice->status === 'cancelled', 422, 'Cancelled invoices cannot have receipts cancelled.');
+
+        DB::transaction(function () use ($request, $invoice, $activePosSession) {
+            $invoice->load(['diningSession', 'payments.paymentMethod']);
+            $payments = $invoice->payments->where('status', '!=', 'cancelled');
+
+            abort_if($payments->isEmpty(), 422, 'This invoice has no active receipts to cancel.');
+
+            foreach ($payments as $payment) {
+                $this->reversePosSessionPaymentTotals($activePosSession, $payment);
+
+                $payment->update([
+                    'status' => 'cancelled',
+                    'cancelled_by' => $request->user()->id,
+                    'cancel_reason' => 'All invoice receipts cancelled from invoice management.',
+                ]);
+            }
+
+            $this->syncInvoicePaymentStatus($invoice);
+            $invoice->refresh();
+
+            $invoice->diningSession?->update([
+                'status' => $invoice->status === 'paid' ? 'paid' : 'invoiced',
+                'closed_at' => null,
+                'closed_by' => null,
+            ]);
+        });
+
+        return back()->with('success', 'All receipts for this invoice have been cancelled.');
     }
 
     private function activePosSession(Request $request): ?PosSession
@@ -263,7 +405,10 @@ class SaleInvoiceController extends Controller
     {
         $customer = $this->customerFor($invoice->customer_id);
         $posTerminal = $this->posTerminalFor($invoice->pos_terminal_id);
-        $latestPayment = $invoice->payments->sortByDesc('id')->first();
+        $latestPayment = $invoice->payments
+            ->where('status', '!=', 'cancelled')
+            ->sortByDesc('id')
+            ->first();
         $customerName = 'Walk-in Customer';
         $customerPhone = null;
         $posName = 'Terminal';
@@ -279,6 +424,7 @@ class SaleInvoiceController extends Controller
 
         return [
             'id' => $invoice->id,
+            'dining_session_id' => $invoice->dining_session_id,
             'invoice_no' => $invoice->invoice_no,
             'status' => $invoice->status,
             'date' => $invoice->created_at?->toDateString(),
@@ -301,6 +447,23 @@ class SaleInvoiceController extends Controller
                 ->values(),
             'invoice_created_by' => $invoice->issuer?->name ?? 'System',
             'receipt_created_by' => $latestPayment?->receiver?->name,
+            'payments' => $invoice->payments
+                ->sortByDesc('id')
+                ->map(fn (Payment $payment) => [
+                    'id' => $payment->id,
+                    'payment_no' => $payment->payment_no,
+                    'status' => $payment->status,
+                    'method' => $payment->paymentMethod?->name,
+                    'currency' => $payment->currency,
+                    'amount_paid' => (float) $payment->amount_paid,
+                    'received_amount' => (float) $payment->received_amount,
+                    'amount_usd_equivalent' => (float) $payment->amount_usd_equivalent,
+                    'change_usd_amount' => (float) $payment->change_usd_amount,
+                    'change_khr_amount' => (float) $payment->change_khr_amount,
+                    'paid_at' => $payment->paid_at?->format('Y-m-d H:i'),
+                    'received_by' => $payment->receiver?->name,
+                ])
+                ->values(),
             'lines' => $invoice->lines->map(fn ($line) => [
                 'id' => $line->id,
                 'menu_name' => $line->menu_name_snapshot,
@@ -339,6 +502,10 @@ class SaleInvoiceController extends Controller
             }
 
             foreach ($invoice->payments as $payment) {
+                if ($payment->status === 'cancelled') {
+                    continue;
+                }
+
                 $methodType = $payment->paymentMethod?->method_type;
                 $methodCode = strtoupper((string) $payment->paymentMethod?->code);
                 $currency = strtoupper((string) $payment->currency);
@@ -439,6 +606,56 @@ class SaleInvoiceController extends Controller
 
             $posSession->increment('total_ebanking_khr', $amountPaid);
         }
+    }
+
+    private function reversePosSessionPaymentTotals(PosSession $posSession, Payment $payment): void
+    {
+        $methodType = $payment->paymentMethod?->method_type;
+        $methodCode = strtoupper((string) $payment->paymentMethod?->code);
+        $currency = strtoupper((string) $payment->currency);
+
+        if ($methodType === 'cash' || str_contains($methodCode, 'CASH')) {
+            if ($currency === 'USD') {
+                $posSession->decrement('total_cash_usd', (float) $payment->received_amount - (float) $payment->change_usd_amount);
+                $posSession->increment('total_cash_khr', (float) $payment->change_khr_amount);
+
+                return;
+            }
+
+            $posSession->decrement('total_cash_khr', (float) $payment->received_amount - (float) $payment->change_khr_amount);
+            $posSession->increment('total_cash_usd', (float) $payment->change_usd_amount);
+
+            return;
+        }
+
+        if ($methodType === 'bank' || str_contains($methodCode, 'EBANK')) {
+            if ($currency === 'USD') {
+                $posSession->decrement('total_ebanking_usd', (float) $payment->amount_paid);
+
+                return;
+            }
+
+            $posSession->decrement('total_ebanking_khr', (float) $payment->amount_paid);
+        }
+    }
+
+    private function syncInvoicePaymentStatus(Invoice $invoice): void
+    {
+        $paidUsd = (float) $invoice->payments()
+            ->where('status', '!=', 'cancelled')
+            ->sum('amount_usd_equivalent');
+        $grandTotal = (float) $invoice->grand_total;
+        $paidUsd = round(min($paidUsd, $grandTotal), 2);
+        $balance = round(max(0, $grandTotal - $paidUsd), 2);
+
+        $invoice->update([
+            'status' => $balance <= 0.009
+                ? 'paid'
+                : ($paidUsd > 0 ? 'partially_paid' : 'pay_later'),
+            'paid_amount' => $paidUsd,
+            'balance_amount' => $balance,
+            'paid_at' => $balance <= 0.009 ? now() : null,
+        ]);
     }
 
     private function roundDownKhrChange(float $amount): float

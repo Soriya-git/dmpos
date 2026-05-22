@@ -11,7 +11,7 @@ import {
     Smartphone,
     X,
 } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import type { Component } from 'vue';
 
 type PaymentMethod = {
@@ -66,6 +66,16 @@ const changeUsdAmount = ref('');
 const changeKhrAmount = ref('');
 const activeChangeCurrency = ref<'USD' | 'KHR'>('KHR');
 const processing = ref(false);
+
+watch(
+    () => props.open,
+    (open) => {
+        if (open) {
+            receivedAmount.value = '';
+            clearChangeAmounts();
+        }
+    },
+);
 
 const methods: PaymentMethod[] = [
     {
@@ -172,6 +182,9 @@ const totalInSelectedCurrency = computed(() => {
 });
 
 const receivedNumeric = computed(() => Number(receivedAmount.value || 0));
+const payableAmountInSelectedCurrency = computed(() => {
+    return Math.min(receivedNumeric.value, totalInSelectedCurrency.value);
+});
 
 const changeDue = computed(() => {
     if (selectedMethod.value.type !== 'cash') return 0;
@@ -311,9 +324,12 @@ const quickAmounts = computed(() => {
 });
 
 const canSubmit = computed(() => {
-    if (selectedMethod.value.type !== 'cash') return true;
+    if (selectedMethod.value.type === 'pay_later') return true;
 
-    return receivedNumeric.value >= totalInSelectedCurrency.value;
+    return (
+        receivedNumeric.value > 0 &&
+        payableAmountInSelectedCurrency.value <= totalInSelectedCurrency.value
+    );
 });
 
 function moneyUsd(value: number) {
@@ -654,19 +670,50 @@ function confirmPayment() {
 
                 <div
                     v-else-if="selectedMethod.type === 'bank'"
-                    class="flex flex-1 flex-col items-center justify-center text-center"
+                    class="flex flex-1 flex-col justify-center"
                 >
                     <div
-                        class="mb-3 flex h-20 w-20 items-center justify-center rounded-2xl bg-white shadow-inner"
+                        class="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-2xl bg-white shadow-inner"
                     >
                         <QrCode class="h-10 w-10 text-[#23AA8F]" />
                     </div>
-                    <p class="text-sm font-bold text-[#2A4858]">
+                    <p class="text-center text-sm font-bold text-[#2A4858]">
                         Waiting for E-Banking Scan
                     </p>
-                    <p class="mt-1 text-xs text-gray-400">
+                    <p class="mt-1 text-center text-xs text-gray-400">
                         Status: Pending connection
                     </p>
+
+                    <div class="mt-5">
+                        <label
+                            class="mb-1.5 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                        >
+                            Receive Amount
+                        </label>
+                        <div class="relative">
+                            <span
+                                class="absolute top-1/2 left-3 -translate-y-1/2 text-base font-black text-[#2A4858]"
+                            >
+                                {{ selectedMethod.currency }}
+                            </span>
+                            <input
+                                v-model="receivedAmount"
+                                type="number"
+                                inputmode="decimal"
+                                placeholder="0.00"
+                                class="w-full rounded-xl border-2 border-gray-100 bg-white py-3 pr-3 pl-14 text-right text-xl font-black text-[#2A4858] transition-all outline-none focus:border-[#23AA8F]"
+                            />
+                        </div>
+                        <button
+                            type="button"
+                            class="mt-2 w-full rounded-lg border border-gray-100 bg-white py-2 text-xs font-bold text-[#2A4858] shadow-sm transition active:scale-95"
+                            @click="
+                                receivedAmount = String(totalInSelectedCurrency)
+                            "
+                        >
+                            Full Balance
+                        </button>
+                    </div>
                 </div>
 
                 <div

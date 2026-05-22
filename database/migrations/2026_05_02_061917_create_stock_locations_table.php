@@ -28,6 +28,7 @@ return new class extends Migration
                 'scrap',
                 'damage',
                 'obsolete',
+                'customer_stock',
                 'general',
             ])->default('putaway');
 

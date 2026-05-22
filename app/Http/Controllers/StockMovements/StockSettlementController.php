@@ -64,7 +64,7 @@ class StockSettlementController extends Controller
             'invoice_ids' => ['required', 'array', 'min:1'],
             'invoice_ids.*' => ['integer', Rule::exists('invoices', 'id')->where('company_id', $companyId)->whereIn('branch_id', $branchIds->all())],
             'quantities' => ['nullable', 'array'],
-            'quantities.*' => ['nullable', 'numeric', 'gt:0'],
+            'quantities.*' => ['nullable', 'numeric'],
             'allocations' => ['nullable', 'array'],
             'allocations.*' => ['nullable', 'array'],
             'allocations.*.*' => ['nullable', 'array'],
@@ -88,6 +88,33 @@ class StockSettlementController extends Controller
 
                 $saleQty = $this->posSaleQuantity($invoice);
                 $settleQty = (float) ($data['quantities'][$invoice->id] ?? $saleQty);
+
+                if ($settleQty < 0) {
+                    $this->restoreSettlement($request, $invoice, abs($settleQty), $data['note'] ?? null);
+
+                    $invoice->update([
+                        'stock_settlement_status' => 'approved',
+                        'stock_settled_quantity' => $settleQty,
+                        'stock_settled_at' => now(),
+                        'stock_settled_by' => $request->user()->id,
+                        'stock_settlement_note' => $data['note'] ?? 'Cancelled invoice stock reversal',
+                    ]);
+
+                    continue;
+                }
+
+                if ($settleQty == 0.0) {
+                    $invoice->update([
+                        'stock_settlement_status' => 'approved',
+                        'stock_settled_quantity' => 0,
+                        'stock_settled_at' => now(),
+                        'stock_settled_by' => $request->user()->id,
+                        'stock_settlement_note' => $data['note'] ?? 'No stock movement required.',
+                    ]);
+
+                    continue;
+                }
+
                 $scale = $saleQty > 0 ? $settleQty / $saleQty : 1;
                 $requirements = $this->requirementsForInvoice($invoice, $scale)
                     ->groupBy('item_id')
@@ -164,7 +191,6 @@ class StockSettlementController extends Controller
             ])
             ->where('company_id', $companyId)
             ->whereIn('branch_id', $branchIds)
-            ->whereNot('status', 'cancelled')
             ->whereHas('lines')
             ->when($filters['search'] ?? null, function ($query, string $search) {
                 $query->where(function ($inner) use ($search) {
@@ -193,6 +219,13 @@ class StockSettlementController extends Controller
     private function formatInvoice(Invoice $invoice, bool $withRequirements = false): array
     {
         $saleQty = $this->posSaleQuantity($invoice);
+
+        if ($invoice->status === 'cancelled') {
+            $saleQty = (float) $invoice->stock_settled_quantity > 0
+                ? -((float) $invoice->stock_settled_quantity)
+                : 0.0;
+        }
+
         $requirements = $this->requirementsForInvoice($invoice);
         $missingBomCount = $invoice->lines
             ->filter(fn (InvoiceLine $line) => ! $line->menu?->activeBom && ! $line->menu?->item)
@@ -392,6 +425,95 @@ class StockSettlementController extends Controller
             'performed_by' => $request->user()->id,
             'note' => $note,
         ]);
+    }
+
+    private function restoreSettlement(Request $request, Invoice $invoice, float $quantityToRestore, ?string $note): void
+    {
+        $movements = StockMovement::query()
+            ->where('reference_type', 'invoice')
+            ->where('reference_id', $invoice->id)
+            ->where('movement_type', 'pos_settlement')
+            ->where('quantity', '<', 0)
+            ->orderBy('id')
+            ->get();
+
+        $originalQuantity = (float) $movements->sum(fn (StockMovement $movement) => abs((float) $movement->quantity));
+        $scale = $originalQuantity > 0 ? min(1, $quantityToRestore / $originalQuantity) : 0;
+
+        foreach ($movements as $movement) {
+            $quantity = round(abs((float) $movement->quantity) * $scale, 4);
+
+            if ($quantity <= 0) {
+                continue;
+            }
+
+            $balance = StockBalance::query()
+                ->where('company_id', $movement->company_id)
+                ->where('branch_id', $movement->branch_id)
+                ->where('warehouse_id', $movement->warehouse_id)
+                ->where('stock_location_id', $movement->from_location_id)
+                ->where('item_id', $movement->item_id)
+                ->lockForUpdate()
+                ->first();
+
+            if (! $balance) {
+                $balance = StockBalance::create([
+                    'company_id' => $movement->company_id,
+                    'branch_id' => $movement->branch_id,
+                    'warehouse_id' => $movement->warehouse_id,
+                    'stock_location_id' => $movement->from_location_id,
+                    'item_id' => $movement->item_id,
+                    'unit_id' => $movement->unit_id,
+                    'quantity_on_hand' => 0,
+                    'quantity_reserved' => 0,
+                    'quantity_available' => 0,
+                    'average_cost' => $movement->unit_cost,
+                ]);
+            }
+
+            $before = (float) $balance->quantity_available;
+
+            $balance->update([
+                'quantity_on_hand' => (float) $balance->quantity_on_hand + $quantity,
+                'quantity_available' => $before + $quantity,
+            ]);
+
+            $reversal = StockMovement::create([
+                'company_id' => $invoice->company_id,
+                'branch_id' => $invoice->branch_id,
+                'warehouse_id' => $movement->warehouse_id,
+                'from_location_id' => null,
+                'to_location_id' => $movement->from_location_id,
+                'item_id' => $movement->item_id,
+                'unit_id' => $movement->unit_id,
+                'movement_type' => 'pos_settlement',
+                'quantity' => $quantity,
+                'unit_cost' => $movement->unit_cost,
+                'total_cost' => $quantity * (float) $movement->unit_cost,
+                'reference_type' => 'invoice',
+                'reference_id' => $invoice->id,
+                'reference_no' => $invoice->invoice_no,
+                'movement_date' => now(),
+                'created_by' => $request->user()->id,
+                'note' => $note ?: 'Cancelled invoice stock settlement reversal',
+            ]);
+
+            StockLog::create([
+                'company_id' => $invoice->company_id,
+                'branch_id' => $invoice->branch_id,
+                'stock_movement_id' => $reversal->id,
+                'item_id' => $movement->item_id,
+                'action' => 'pos_settlement',
+                'quantity_before' => $before,
+                'quantity_after' => $before + $quantity,
+                'quantity_changed' => $quantity,
+                'reference_type' => 'invoice',
+                'reference_id' => $invoice->id,
+                'reference_no' => $invoice->invoice_no,
+                'performed_by' => $request->user()->id,
+                'note' => $note,
+            ]);
+        }
     }
 
     private function balancesForItems(int $companyId, int $branchId, Collection $itemIds): array

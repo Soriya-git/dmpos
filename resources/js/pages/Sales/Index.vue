@@ -4,13 +4,17 @@ import {
     ArrowLeft,
     Calendar,
     ChevronDown,
+    CreditCard,
     Eye,
     Filter,
     MoreVertical,
     Printer,
+    ReceiptText,
     RotateCcw,
     Search,
+    ShieldAlert,
     X,
+    XCircle,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import TablePagination from '@/components/TablePagination.vue';
@@ -27,6 +31,7 @@ import { usePagination } from '@/composables/usePagination';
 import { usePosFormatting } from '@/composables/usePosFormatting';
 import AppLayout from '@/layouts/AppLayout.vue';
 import Payment from '@/pages/Seats/Payment.vue';
+import InvoiceView from '@/pages/Sales/view.vue';
 
 type InvoiceStatus =
     | 'draft'
@@ -37,6 +42,7 @@ type InvoiceStatus =
 
 type SaleInvoice = {
     id: number;
+    dining_session_id: number;
     invoice_no: string;
     status: InvoiceStatus;
     date?: string | null;
@@ -55,7 +61,23 @@ type SaleInvoice = {
     order_created_by: string[];
     invoice_created_by?: string | null;
     receipt_created_by?: string | null;
+    payments: InvoicePayment[];
     lines: SaleInvoiceLine[];
+};
+
+type InvoicePayment = {
+    id: number;
+    payment_no: string;
+    status: 'draft' | 'paid' | 'partial' | 'pay_later' | 'cancelled';
+    method?: string | null;
+    currency: 'USD' | 'KHR';
+    amount_paid: number;
+    received_amount: number;
+    amount_usd_equivalent: number;
+    change_usd_amount: number;
+    change_khr_amount: number;
+    paid_at?: string | null;
+    received_by?: string | null;
 };
 
 type SaleInvoiceLine = {
@@ -128,6 +150,8 @@ const collapsedGroups = ref<Record<'unpaid' | 'settled', boolean>>({
 const paymentOpen = ref(false);
 const selectedInvoice = ref<SaleInvoice | null>(null);
 const detailInvoice = ref<SaleInvoice | null>(null);
+const receiptToCancel = ref<InvoicePayment | null>(null);
+const invoiceReceiptsToCancel = ref<SaleInvoice | null>(null);
 const { money } = usePosFormatting();
 
 const {
@@ -250,8 +274,73 @@ function printInvoice(_invoice: SaleInvoice) {
     // Printing will be wired in a later pass.
 }
 
-function namesList(names: string[] | null | undefined) {
-    return names?.length ? names.join(', ') : '-';
+function printReceipt(invoice: SaleInvoice) {
+    if (!invoice.payments.some((payment) => payment.status !== 'cancelled')) {
+        return;
+    }
+
+    window.open(
+        `/orders/${invoice.dining_session_id}/invoices/${invoice.id}/print/receipt`,
+        '_blank',
+    );
+}
+
+function latestActivePayment(invoice: SaleInvoice) {
+    return invoice.payments.find((payment) => payment.status !== 'cancelled');
+}
+
+function cancelInvoice(invoice: SaleInvoice) {
+    if (!window.confirm(`Cancel invoice ${invoice.invoice_no}?`)) return;
+
+    router.patch(
+        `/sales/invoices/${invoice.id}/cancel`,
+        {},
+        { preserveScroll: true },
+    );
+}
+
+function cancelReceipt(payment: InvoicePayment) {
+    receiptToCancel.value = payment;
+}
+
+function cancelInvoiceReceipts(invoice: SaleInvoice) {
+    invoiceReceiptsToCancel.value = invoice;
+}
+
+function closeCancelReceiptConfirm() {
+    receiptToCancel.value = null;
+    invoiceReceiptsToCancel.value = null;
+}
+
+function confirmCancelReceipt() {
+    if (invoiceReceiptsToCancel.value) {
+        router.patch(
+            `/sales/invoices/${invoiceReceiptsToCancel.value.id}/receipts/cancel`,
+            {},
+            {
+                preserveScroll: true,
+                onSuccess: closeCancelReceiptConfirm,
+            },
+        );
+
+        return;
+    }
+
+    if (!receiptToCancel.value) return;
+
+    router.patch(
+        `/sales/payments/${receiptToCancel.value.id}/cancel`,
+        {},
+        {
+            preserveScroll: true,
+            onSuccess: closeCancelReceiptConfirm,
+        },
+    );
+}
+
+function activeReceiptCount(invoice: SaleInvoice) {
+    return invoice.payments.filter((payment) => payment.status !== 'cancelled')
+        .length;
 }
 
 function confirmPayment(payload: PaymentPayload) {
@@ -576,7 +665,12 @@ function statusLabel(status: InvoiceStatus) {
                                     <th
                                         class="px-4 py-4 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
                                     >
-                                        Amount
+                                        Total Amount
+                                    </th>
+                                    <th
+                                        class="px-4 py-4 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                                    >
+                                        Pending Amount
                                     </th>
                                     <th
                                         class="px-6 py-4 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
@@ -629,6 +723,25 @@ function statusLabel(status: InvoiceStatus) {
                                                     }}
                                                 </span>
                                             </div>
+                                        </td>
+                                        <td class="px-4 py-4 text-right">
+                                            <span
+                                                class="text-sm font-black text-[#2A4858]"
+                                            >
+                                                {{
+                                                    money(
+                                                        group.invoices.reduce(
+                                                            (total, invoice) =>
+                                                                total +
+                                                                Number(
+                                                                    invoice.grand_total ||
+                                                                        0,
+                                                                ),
+                                                            0,
+                                                        ),
+                                                    )
+                                                }}
+                                            </span>
                                         </td>
                                         <td class="px-4 py-4 text-right">
                                             <span
@@ -722,6 +835,11 @@ function statusLabel(status: InvoiceStatus) {
                                         </td>
                                         <td
                                             class="px-4 py-4 text-right text-sm font-black"
+                                        >
+                                            {{ money(invoice.grand_total) }}
+                                        </td>
+                                        <td
+                                            class="px-4 py-4 text-right text-sm font-black"
                                             :class="
                                                 invoice.status === 'paid'
                                                     ? 'text-gray-400'
@@ -800,17 +918,55 @@ function statusLabel(status: InvoiceStatus) {
                                                                 )
                                                             "
                                                         >
+                                                            <CreditCard
+                                                                class="h-4 w-4 text-emerald-600"
+                                                            />
                                                             Receive Payment
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem
-                                                            v-else
-                                                            disabled
-                                                        >
-                                                            {{
-                                                                statusLabel(
-                                                                    invoice.status,
+                                                            v-if="
+                                                                invoice.status ===
+                                                                'paid'
+                                                            "
+                                                            @select="
+                                                                printReceipt(
+                                                                    invoice,
                                                                 )
-                                                            }}
+                                                            "
+                                                        >
+                                                            <ReceiptText
+                                                                class="h-4 w-4 text-[#007882]"
+                                                            />
+                                                            View Receipt
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            v-if="
+                                                                latestActivePayment(
+                                                                    invoice,
+                                                                )
+                                                            "
+                                                            @select="
+                                                                cancelInvoiceReceipts(
+                                                                    invoice,
+                                                                )
+                                                            "
+                                                        >
+                                                            <XCircle
+                                                                class="h-4 w-4 text-rose-600"
+                                                            />
+                                                            Cancel Receipt
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            @select="
+                                                                cancelInvoice(
+                                                                    invoice,
+                                                                )
+                                                            "
+                                                        >
+                                                            <X
+                                                                class="h-4 w-4 text-rose-600"
+                                                            />
+                                                            Cancel Invoice
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
@@ -863,213 +1019,76 @@ function statusLabel(status: InvoiceStatus) {
                 @confirm="confirmPayment"
             />
 
-            <div
+            <InvoiceView
                 v-if="detailInvoice"
-                class="fixed inset-0 z-[75] flex items-center justify-center bg-[#2A4858]/20 p-4 backdrop-blur-sm"
-                @click.self="closeInvoiceDetail"
+                :invoice="detailInvoice"
+                @close="closeInvoiceDetail"
+                @cancel-receipt="cancelReceipt"
+            />
+
+            <div
+                v-if="receiptToCancel || invoiceReceiptsToCancel"
+                class="fixed inset-0 z-[90] flex items-center justify-center bg-[#2a4858]/25 p-4 backdrop-blur-sm"
+                @click.self="closeCancelReceiptConfirm"
             >
                 <section
-                    class="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
+                    class="w-full max-w-md overflow-hidden rounded-lg bg-white shadow-2xl"
                 >
-                    <header
-                        class="flex items-start justify-between gap-4 border-b border-gray-100 p-5"
-                    >
-                        <div>
-                            <p
-                                class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                    <header class="border-b border-slate-100 p-5">
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-700"
                             >
-                                Invoice Detail
-                            </p>
-                            <h2 class="mt-1 text-xl font-black text-[#2A4858]">
-                                #{{ detailInvoice.invoice_no }}
-                            </h2>
-                            <p class="mt-1 text-xs font-medium text-gray-400">
-                                {{ detailInvoice.display_date }} /
-                                {{
-                                    detailInvoice.customer_name ??
-                                    'Walk-in Customer'
-                                }}
-                            </p>
+                                <ShieldAlert class="size-5" />
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-[#2a4858]">
+                                    Cancel receipt?
+                                </h2>
+                                <p class="mt-1 text-sm text-slate-500">
+                                    <template v-if="invoiceReceiptsToCancel">
+                                        This will cancel
+                                        {{
+                                            activeReceiptCount(
+                                                invoiceReceiptsToCancel,
+                                            )
+                                        }}
+                                        receipt{{
+                                            activeReceiptCount(
+                                                invoiceReceiptsToCancel,
+                                            ) === 1
+                                                ? ''
+                                                : 's'
+                                        }}
+                                        for invoice
+                                        {{ invoiceReceiptsToCancel.invoice_no }}
+                                        and reopen it for payment.
+                                    </template>
+                                    <template v-else-if="receiptToCancel">
+                                        This will cancel receipt
+                                        {{ receiptToCancel.payment_no }} and
+                                        reopen the invoice for payment.
+                                    </template>
+                                </p>
+                            </div>
                         </div>
-
-                        <Button
-                            type="button"
-                            variant="outline"
-                            class="h-9 w-9 rounded-xl border-gray-100 p-0 text-gray-400 hover:bg-gray-50 hover:text-[#2A4858]"
-                            @click="closeInvoiceDetail"
-                        >
-                            <X class="h-4 w-4" />
-                        </Button>
                     </header>
 
-                    <div class="min-h-0 flex-1 overflow-y-auto p-5">
-                        <div class="mb-4 grid gap-3 text-sm sm:grid-cols-3">
-                            <div class="rounded-xl bg-gray-50 p-3">
-                                <p
-                                    class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                                >
-                                    Order Created By
-                                </p>
-                                <p class="mt-1 font-black text-[#2A4858]">
-                                    {{
-                                        namesList(
-                                            detailInvoice.order_created_by,
-                                        )
-                                    }}
-                                </p>
-                            </div>
-                            <div class="rounded-xl bg-gray-50 p-3">
-                                <p
-                                    class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                                >
-                                    Invoice Created By
-                                </p>
-                                <p class="mt-1 font-black text-[#2A4858]">
-                                    {{
-                                        detailInvoice.invoice_created_by ?? '-'
-                                    }}
-                                </p>
-                            </div>
-                            <div class="rounded-xl bg-gray-50 p-3">
-                                <p
-                                    class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                                >
-                                    Receipt Created By
-                                </p>
-                                <p class="mt-1 font-black text-[#2A4858]">
-                                    {{
-                                        detailInvoice.receipt_created_by ?? '-'
-                                    }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead>
-                                    <tr class="border-b border-gray-100">
-                                        <th
-                                            class="py-3 pr-4 text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                                        >
-                                            Item
-                                        </th>
-                                        <th
-                                            class="px-4 py-3 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                                        >
-                                            Qty
-                                        </th>
-                                        <th
-                                            class="px-4 py-3 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                                        >
-                                            Price
-                                        </th>
-                                        <th
-                                            class="px-4 py-3 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                                        >
-                                            Tax
-                                        </th>
-                                        <th
-                                            class="py-3 pl-4 text-right text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                                        >
-                                            Total
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr
-                                        v-for="line in detailInvoice.lines"
-                                        :key="line.id"
-                                        class="border-b border-gray-50"
-                                    >
-                                        <td class="py-4 pr-4">
-                                            <div
-                                                class="text-sm font-black text-[#2A4858]"
-                                            >
-                                                {{ line.menu_name }}
-                                            </div>
-                                            <p
-                                                v-if="line.note"
-                                                class="mt-1 text-[11px] font-medium text-[#007882]"
-                                            >
-                                                {{ line.note }}
-                                            </p>
-                                        </td>
-                                        <td
-                                            class="px-4 py-4 text-right text-sm font-bold text-[#2A4858]"
-                                        >
-                                            {{ line.quantity }}
-                                        </td>
-                                        <td
-                                            class="px-4 py-4 text-right text-sm font-bold text-[#2A4858]"
-                                        >
-                                            {{ money(line.unit_price) }}
-                                        </td>
-                                        <td
-                                            class="px-4 py-4 text-right text-sm font-bold text-[#2A4858]"
-                                        >
-                                            {{ money(line.tax_amount) }}
-                                        </td>
-                                        <td
-                                            class="py-4 pl-4 text-right text-sm font-black text-[#007882]"
-                                        >
-                                            {{ money(line.line_total) }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div
-                            v-if="detailInvoice.lines.length === 0"
-                            class="rounded-2xl border border-dashed border-gray-200 p-8 text-center text-sm font-medium text-gray-400"
+                    <footer class="grid grid-cols-2 gap-3 bg-slate-50 p-5">
+                        <button
+                            type="button"
+                            class="inline-flex h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                            @click="closeCancelReceiptConfirm"
                         >
-                            No items found for this invoice.
-                        </div>
-                    </div>
-
-                    <footer
-                        class="grid gap-2 border-t border-gray-100 bg-gray-50/60 p-5 text-sm sm:grid-cols-4"
-                    >
-                        <div>
-                            <p
-                                class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                            >
-                                Subtotal
-                            </p>
-                            <p class="font-black text-[#2A4858]">
-                                {{ money(detailInvoice.subtotal) }}
-                            </p>
-                        </div>
-                        <div>
-                            <p
-                                class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                            >
-                                Discount
-                            </p>
-                            <p class="font-black text-[#2A4858]">
-                                {{ money(detailInvoice.discount_amount) }}
-                            </p>
-                        </div>
-                        <div>
-                            <p
-                                class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                            >
-                                Tax
-                            </p>
-                            <p class="font-black text-[#2A4858]">
-                                {{ money(detailInvoice.tax_amount) }}
-                            </p>
-                        </div>
-                        <div class="sm:text-right">
-                            <p
-                                class="text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                            >
-                                Grand Total
-                            </p>
-                            <p class="text-lg font-black text-[#007882]">
-                                {{ money(detailInvoice.grand_total) }}
-                            </p>
-                        </div>
+                            No
+                        </button>
+                        <button
+                            type="button"
+                            class="inline-flex h-11 items-center justify-center rounded-lg bg-[#2a4858] px-4 text-sm font-bold text-white shadow-lg transition hover:bg-[#007882]"
+                            @click="confirmCancelReceipt"
+                        >
+                            Yes
+                        </button>
                     </footer>
                 </section>
             </div>

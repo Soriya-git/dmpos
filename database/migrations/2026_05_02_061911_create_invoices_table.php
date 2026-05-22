@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('branch_id')->constrained()->cascadeOnDelete();
             $table->foreignId('pos_terminal_id')->nullable()->constrained()->nullOnDelete();
+            $table->date('pos_open_date')->nullable();
 
             $table->foreignId('dining_session_id')->constrained()->cascadeOnDelete();
             $table->foreignId('customer_id')->nullable()->constrained()->nullOnDelete();
@@ -58,6 +59,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(['branch_id', 'status'], 'inv_branch_status_idx');
+            $table->index(['branch_id', 'pos_open_date'], 'inv_branch_pos_open_date_idx');
             $table->index(['dining_session_id'], 'inv_session_idx');
             $table->index(['customer_id'], 'inv_customer_idx');
         });

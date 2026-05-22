@@ -26,6 +26,8 @@ type BalanceItem = {
     minimumStockQty: number;
     quantityOnHand: number;
     quantityAvailable: number;
+    companyQuantityAvailable: number;
+    customerQuantityAvailable: number;
     quantityReserved: number;
     stockValue: number;
     locationsCount: number;
@@ -134,6 +136,14 @@ function statusClass(value: BalanceItem['status']) {
 
 function viewItem(item: BalanceItem) {
     router.visit(`/balance-on-hand/${item.id}`);
+}
+
+function viewCustomerStock(item: BalanceItem) {
+    if (Number(item.customerQuantityAvailable) <= 0) {
+        return;
+    }
+
+    router.visit(`/stock-customer/items/${item.id}`);
 }
 </script>
 
@@ -305,9 +315,26 @@ function viewItem(item: BalanceItem) {
                             </span>
                         </div>
                     </td>
-                    <td class="px-4 py-3 text-xs font-bold text-[#16836f]">
-                        {{ numberValue(row.quantityAvailable) }}
-                        {{ row.unit }}
+                    <td class="px-4 py-3 text-xs">
+                        <div class="font-bold text-[#16836f]">
+                            {{ numberValue(row.quantityAvailable) }}
+                            {{ row.unit }}
+                        </div>
+                        <div class="mt-1 text-slate-600">
+                            {{ numberValue(row.companyQuantityAvailable) }}
+                            {{ row.unit }} company stock
+                        </div>
+                        <button
+                            type="button"
+                            class="mt-1 text-left text-rose-600 italic underline-offset-2 hover:underline disabled:cursor-default disabled:text-rose-300 disabled:no-underline"
+                            :disabled="
+                                Number(row.customerQuantityAvailable) <= 0
+                            "
+                            @click="viewCustomerStock(row)"
+                        >
+                            {{ numberValue(row.customerQuantityAvailable) }}
+                            {{ row.unit }} customer keep stock
+                        </button>
                     </td>
                     <td class="px-4 py-3 text-xs font-bold text-slate-700">
                         {{ numberValue(row.quantityOnHand) }} {{ row.unit }}

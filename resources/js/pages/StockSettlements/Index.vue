@@ -440,6 +440,15 @@ function viewSettlement(row: Settlement) {
                                             {{ row.terminal }} /
                                             {{ money(row.grandTotal) }}
                                         </p>
+                                        <p
+                                            v-if="
+                                                row.invoiceStatus ===
+                                                'cancelled'
+                                            "
+                                            class="mt-1 text-xs font-bold text-rose-600"
+                                        >
+                                            Cancelled invoice
+                                        </p>
                                     </td>
                                     <td class="px-6 py-4 text-slate-600">
                                         {{ row.displayDate ?? '-' }}
@@ -453,7 +462,6 @@ function viewSettlement(row: Settlement) {
                                         <Input
                                             v-model="qtyToSettle[row.id]"
                                             type="number"
-                                            min="0"
                                             step="0.0001"
                                             class="ml-auto h-9 w-28 rounded-lg border-slate-200 bg-slate-50 text-right text-sm"
                                             :disabled="row.status !== 'pending'"

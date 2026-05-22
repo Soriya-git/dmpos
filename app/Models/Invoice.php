@@ -26,6 +26,7 @@ class Invoice extends Model
         'paid_amount' => 'decimal:2',
         'balance_amount' => 'decimal:2',
         'stock_settled_quantity' => 'decimal:4',
+        'pos_open_date' => 'date',
         'issued_at' => 'datetime',
         'paid_at' => 'datetime',
         'cancelled_at' => 'datetime',

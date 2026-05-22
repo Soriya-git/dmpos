@@ -26,6 +26,11 @@ class StockTransfer extends Model
         return $this->belongsTo(GoodsReceipt::class);
     }
 
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
     public function fromBranch()
     {
         return $this->belongsTo(Branch::class, 'from_branch_id');

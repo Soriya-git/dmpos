@@ -785,14 +785,21 @@ class SeatOrderController extends Controller
             $discountAmount = min($subtotal, (float) ($data['discount_amount'] ?? 0));
             $grandTotal = max(0, $subtotal - $discountAmount) + $taxAmount;
             $isPayLater = $data['operation_status'] === 'invoice';
-            $invoiceStatus = $isPayLater ? 'pay_later' : 'paid';
-            $paidAmount = $isPayLater ? 0 : $grandTotal;
             $exchangeRate = $this->latestExchangeRate($activePosSession);
+            $paidAmount = 0;
+            $invoiceStatus = 'pay_later';
+            $paymentAmount = 0;
+            $receivedAmount = 0;
+            $changeUsdAmount = 0;
+            $changeKhrAmount = 0;
 
             $invoice = new Invoice([
                 'company_id' => $diningSession->company_id,
                 'branch_id' => $diningSession->branch_id,
                 'pos_terminal_id' => $diningSession->pos_terminal_id,
+                'pos_open_date' => $diningSession->pos_open_date
+                    ?? $activePosSession->opened_at?->toDateString()
+                    ?? now()->toDateString(),
                 'dining_session_id' => $diningSession->id,
                 'customer_id' => $diningSession->customer_id,
                 'invoice_no' => DocumentNumber::make(Invoice::class, 'invoice_no', 'IN'),
@@ -802,6 +809,49 @@ class SeatOrderController extends Controller
                 'issued_by' => $request->user()->id,
             ]);
 
+            if (! $isPayLater) {
+                $method = $this->paymentMethodFor(
+                    $data['method'],
+                    $data['currency'],
+                    $activePosSession,
+                    $data['payment_method_id'] ?? null,
+                );
+
+                abort_if(! $method, 422, 'Please select a valid payment method.');
+
+                $isCash = str_starts_with($data['method'], 'cash-');
+                $targetAmount = $data['currency'] === 'KHR' ? $grandTotal * $exchangeRate : $grandTotal;
+                $receivedAmount = (float) ($data['received_amount'] ?? $targetAmount);
+                $changeUsdAmount = $isCash ? (float) floor((float) ($data['change_usd_amount'] ?? 0)) : 0;
+                $changeKhrAmount = $isCash ? $this->roundDownKhrChange((float) ($data['change_khr_amount'] ?? 0)) : 0;
+
+                abort_if($receivedAmount <= 0, 422, 'Payment amount must be greater than zero.');
+
+                if ($isCash) {
+                    $overpaidUsd = $data['currency'] === 'USD'
+                        ? max(0, $receivedAmount - $targetAmount)
+                        : max(0, ($receivedAmount - $targetAmount) / $exchangeRate);
+                    $changeUsdEquivalent = $changeUsdAmount + ($changeKhrAmount / $exchangeRate);
+                    $roundingToleranceUsd = 99 / $exchangeRate;
+
+                    abort_if(
+                        $changeUsdEquivalent > $overpaidUsd + $roundingToleranceUsd + 0.01,
+                        422,
+                        'Change amount cannot be greater than the overpaid amount.'
+                    );
+                }
+
+                $netReceivedUsd = $data['currency'] === 'KHR'
+                    ? ($receivedAmount - $changeKhrAmount - ($changeUsdAmount * $exchangeRate)) / $exchangeRate
+                    : $receivedAmount - $changeUsdAmount - ($changeKhrAmount / $exchangeRate);
+                $paidAmount = round(min($grandTotal, max(0, $netReceivedUsd)), 2);
+
+                abort_if($paidAmount <= 0, 422, 'Payment amount must be greater than zero.');
+
+                $paymentAmount = $data['currency'] === 'KHR' ? $paidAmount * $exchangeRate : $paidAmount;
+                $invoiceStatus = $paidAmount >= $grandTotal ? 'paid' : 'partially_paid';
+            }
+
             $invoice->fill([
                 'status' => $invoiceStatus,
                 'subtotal' => $subtotal,
@@ -809,8 +859,8 @@ class SeatOrderController extends Controller
                 'tax_amount' => $taxAmount,
                 'grand_total' => $grandTotal,
                 'paid_amount' => $paidAmount,
-                'balance_amount' => $grandTotal - $paidAmount,
-                'paid_at' => $isPayLater ? null : now(),
+                'balance_amount' => max(0, $grandTotal - $paidAmount),
+                'paid_at' => $invoiceStatus === 'paid' ? now() : null,
             ])->save();
 
             foreach ($orders as $order) {
@@ -837,56 +887,21 @@ class SeatOrderController extends Controller
             }
 
             if (! $isPayLater) {
-                $method = $this->paymentMethodFor(
-                    $data['method'],
-                    $data['currency'],
-                    $activePosSession,
-                    $data['payment_method_id'] ?? null,
-                );
-
-                abort_if(! $method, 422, 'Please select a valid payment method.');
-
-                $isCash = str_starts_with($data['method'], 'cash-');
-                $amountPaid = $data['currency'] === 'KHR' ? $grandTotal * $exchangeRate : $grandTotal;
-                $receivedAmount = $isCash ? (float) ($data['received_amount'] ?? $amountPaid) : $amountPaid;
-                $changeUsdAmount = $isCash ? (float) floor((float) ($data['change_usd_amount'] ?? 0)) : 0;
-                $changeKhrAmount = $isCash ? $this->roundDownKhrChange((float) ($data['change_khr_amount'] ?? 0)) : 0;
-
-                if ($isCash) {
-                    abort_if(
-                        $receivedAmount < $amountPaid,
-                        422,
-                        'Received cash must be enough to cover the invoice total.'
-                    );
-
-                    $overpaidUsd = $data['currency'] === 'USD'
-                        ? $receivedAmount - $amountPaid
-                        : ($receivedAmount - $amountPaid) / $exchangeRate;
-                    $changeUsdEquivalent = $changeUsdAmount + ($changeKhrAmount / $exchangeRate);
-                    $roundingToleranceUsd = 99 / $exchangeRate;
-
-                    abort_if(
-                        $changeUsdEquivalent > $overpaidUsd + $roundingToleranceUsd + 0.01,
-                        422,
-                        'Change amount cannot be greater than the overpaid amount.'
-                    );
-                }
-
                 Payment::create([
                     'company_id' => $diningSession->company_id,
                     'branch_id' => $diningSession->branch_id,
                     'invoice_id' => $invoice->id,
                     'payment_method_id' => $method?->id,
                     'payment_no' => DocumentNumber::make(Payment::class, 'payment_no', 'PY'),
-                    'status' => 'paid',
+                    'status' => $invoiceStatus === 'paid' ? 'paid' : 'partial',
                     'currency' => $data['currency'],
-                    'amount_paid' => $amountPaid,
+                    'amount_paid' => $paymentAmount,
                     'received_amount' => $receivedAmount,
                     'change_usd_amount' => floor($changeUsdAmount),
                     'change_khr_amount' => $changeKhrAmount,
                     'exchange_rate_snapshot' => $exchangeRate,
-                    'amount_usd_equivalent' => $grandTotal,
-                    'amount_khr_equivalent' => $grandTotal * $exchangeRate,
+                    'amount_usd_equivalent' => $paidAmount,
+                    'amount_khr_equivalent' => $paidAmount * $exchangeRate,
                     'paid_at' => now(),
                     'received_by' => $request->user()->id,
                 ]);
@@ -896,7 +911,7 @@ class SeatOrderController extends Controller
                     $data['method'],
                     $data['currency'],
                     $grandTotal,
-                    $amountPaid,
+                    $paymentAmount,
                     $receivedAmount,
                     $changeUsdAmount,
                     $changeKhrAmount,
@@ -915,7 +930,7 @@ class SeatOrderController extends Controller
                 ->exists();
 
             $diningSession->update([
-                'status' => $hasRemainingBillableLines ? 'open' : ($isPayLater ? 'invoiced' : 'paid'),
+                'status' => $hasRemainingBillableLines ? 'open' : ($invoiceStatus === 'paid' ? 'paid' : 'invoiced'),
                 'closed_at' => null,
                 'closed_by' => null,
             ]);
@@ -1023,6 +1038,9 @@ class SeatOrderController extends Controller
             [
                 'company_id' => $diningSession->company_id,
                 'branch_id' => $diningSession->branch_id,
+                'pos_open_date' => $diningSession->pos_open_date
+                    ?? $diningSession->opened_at?->toDateString()
+                    ?? now()->toDateString(),
                 'menu_price_list_id' => $diningSession->menu_price_list_id,
                 'order_no' => $this->makeDiningSessionOrderNumber($diningSession),
                 'created_by' => auth()->id(),
@@ -1080,6 +1098,7 @@ class SeatOrderController extends Controller
             'company_id' => $activePosSession->company_id,
             'branch_id' => $activePosSession->branch_id,
             'pos_terminal_id' => $activePosSession->pos_terminal_id,
+            'pos_open_date' => $activePosSession->opened_at?->toDateString() ?? now()->toDateString(),
             'customer_id' => $sourceSession->customer_id,
             'dining_resource_id' => $resource->id,
             'menu_price_list_id' => $sourceSession->menu_price_list_id,
@@ -1112,6 +1131,9 @@ class SeatOrderController extends Controller
                 'company_id' => $targetSession->company_id,
                 'branch_id' => $targetSession->branch_id,
                 'dining_session_id' => $targetSession->id,
+                'pos_open_date' => $targetSession->pos_open_date
+                    ?? $targetSession->opened_at?->toDateString()
+                    ?? now()->toDateString(),
                 'menu_price_list_id' => $targetSession->menu_price_list_id,
                 'order_no' => $this->makeDiningSessionOrderNumber($targetSession),
                 'status' => $sourceOrder->status,

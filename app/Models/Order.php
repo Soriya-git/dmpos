@@ -15,6 +15,7 @@ class Order extends Model
     protected $guarded = [];
 
     protected $casts = [
+        'pos_open_date' => 'date',
         'sent_to_kitchen_at' => 'datetime',
     ];
 

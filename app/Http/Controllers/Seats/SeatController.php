@@ -214,6 +214,7 @@ class SeatController extends Controller
                 'company_id' => $activePosSession->company_id,
                 'branch_id' => $activePosSession->branch_id,
                 'pos_terminal_id' => $activePosSession->pos_terminal_id,
+                'pos_open_date' => $activePosSession->opened_at?->toDateString() ?? now()->toDateString(),
                 'customer_id' => $customerId,
                 'dining_resource_id' => $resource->id,
                 'menu_price_list_id' => $data['menu_price_list_id'] ?? $this->defaultPriceListId($activePosSession),

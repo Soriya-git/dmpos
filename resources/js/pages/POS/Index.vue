@@ -6,8 +6,9 @@ import {
     LogOut,
     Monitor,
     PlayCircle,
+    ShieldAlert,
 } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -104,6 +105,8 @@ const closeForm = useForm({
     closing_note: '',
 });
 
+const closeConfirmOpen = ref(false);
+
 const banknotesByCurrency = computed(() => {
     return props.banknotes.reduce<Record<string, BanknoteOption[]>>(
         (groups, banknote) => {
@@ -189,10 +192,19 @@ const submitClose = (session: Session) => {
     closeForm.post(`/pos-sessions/${session.id}/close`, {
         preserveScroll: true,
         onSuccess: () => {
+            closeConfirmOpen.value = false;
             closeForm.reset();
             resetClosingBanknotes();
         },
     });
+};
+
+const requestClose = () => {
+    closeConfirmOpen.value = true;
+};
+
+const returnToCloseForm = () => {
+    closeConfirmOpen.value = false;
 };
 
 const closePopup = () => {
@@ -1078,7 +1090,7 @@ const closingBanknotesError = computed(() => {
                                     type="button"
                                     class="inline-flex h-11 items-center justify-center rounded-lg bg-[#2a4858] px-4 text-sm font-bold text-white shadow-lg transition hover:bg-[#007882] disabled:pointer-events-none disabled:opacity-50"
                                     :disabled="closeForm.processing"
-                                    @click="submitClose(selectedSession)"
+                                    @click="requestClose"
                                 >
                                     Close POS
                                 </button>
@@ -1086,6 +1098,53 @@ const closingBanknotesError = computed(() => {
                         </div>
                     </form>
                 </div>
+            </div>
+
+            <div
+                v-if="closeConfirmOpen && selectedSession"
+                class="fixed inset-0 z-[90] flex items-center justify-center bg-[#2a4858]/25 p-4 backdrop-blur-sm"
+                @click.self="returnToCloseForm"
+            >
+                <section
+                    class="w-full max-w-md overflow-hidden rounded-lg bg-white shadow-2xl"
+                >
+                    <header class="border-b border-slate-100 p-5">
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-700"
+                            >
+                                <ShieldAlert class="size-5" />
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-[#2a4858]">
+                                    Close POS?
+                                </h2>
+                                <p class="mt-1 text-sm text-slate-500">
+                                    This will close the current POS session.
+                                </p>
+                            </div>
+                        </div>
+                    </header>
+
+                    <footer class="grid grid-cols-2 gap-3 bg-slate-50 p-5">
+                        <button
+                            type="button"
+                            class="inline-flex h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-50"
+                            :disabled="closeForm.processing"
+                            @click="returnToCloseForm"
+                        >
+                            No
+                        </button>
+                        <button
+                            type="button"
+                            class="inline-flex h-11 items-center justify-center rounded-lg bg-[#2a4858] px-4 text-sm font-bold text-white shadow-lg transition hover:bg-[#007882] disabled:pointer-events-none disabled:opacity-50"
+                            :disabled="closeForm.processing"
+                            @click="submitClose(selectedSession)"
+                        >
+                            Yes
+                        </button>
+                    </footer>
+                </section>
             </div>
         </div>
     </AppLayout>

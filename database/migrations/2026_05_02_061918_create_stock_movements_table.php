@@ -41,6 +41,7 @@ return new class extends Migration
                 'scrap_transfer',
                 'damage_transfer',
                 'obsolete_transfer',
+                'customer_stock_keep',
                 'write_off',
             ]);
 

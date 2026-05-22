@@ -109,6 +109,10 @@ const stockSection: NavSectionType = {
                     href: '/stock-movements/internal-transfer',
                 },
                 {
+                    title: 'Customer Keep Stock',
+                    href: '/stock-customer',
+                },
+                {
                     title: 'Stock Write-off',
                     href: '/stock-movements/write-off',
                 },
