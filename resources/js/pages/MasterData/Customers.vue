@@ -987,9 +987,9 @@ function canAct(status: ApprovalStatus) {
                             <p class="mt-3 text-sm font-bold text-slate-500">
                                 No card selected
                             </p>
-                            <p class="mt-1 text-xs text-slate-400">
+                            <!-- <p class="mt-1 text-xs text-slate-400">
                                 Select a card from the list to view its details.
-                            </p>
+                            </p> -->
                         </div>
                     </div>
                 </div>
