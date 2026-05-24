@@ -1,10 +1,32 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
-import { Building2, Plus, Save, Search, Users, X } from 'lucide-vue-next';
+import { Head, router } from '@inertiajs/vue3';
+import {
+    Ban,
+    Building2,
+    CheckCircle2,
+    CreditCard,
+    Eye,
+    MoreVertical,
+    Pencil,
+    Plus,
+    Save,
+    Search,
+    Users,
+    X,
+    XCircle,
+} from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import ApprovalActionMenu from '@/components/master-data/ApprovalActionMenu.vue';
 import MasterDataTable from '@/components/master-data/MasterDataTable.vue';
+import MembershipCardPreview from '@/components/master-data/MembershipCardPreview.vue';
 import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import {
     Sheet,
@@ -25,6 +47,8 @@ type ApprovalStatus =
 
 type CustomerView = 'customers' | 'groups';
 
+type CardStatus = 'active' | 'inactive' | 'blocked' | 'expired' | 'cancelled';
+
 type CustomerRecord = {
     id: number;
     code: string;
@@ -34,6 +58,8 @@ type CustomerRecord = {
     address: string | null;
     group: string;
     status: ApprovalStatus;
+    membership_cards: CustomerMembershipCard[];
+    membership_card_count: number;
 };
 
 type CustomerGroupRecord = {
@@ -46,6 +72,21 @@ type CustomerGroupRecord = {
 };
 
 type CustomerPanelRecord = CustomerRecord | CustomerGroupRecord;
+
+type CustomerMembershipCard = {
+    id: number;
+    customerId: number;
+    cardNo: string;
+    cardName: string;
+    status: CardStatus;
+    issuedDate: string;
+    expiredDate: string;
+    remark: string;
+    balances: {
+        currency: string;
+        balance: number;
+    }[];
+};
 
 const props = defineProps<{
     customers: CustomerRecord[];
@@ -62,9 +103,32 @@ const search = ref('');
 const panelOpen = ref(false);
 const panelKind = ref<CustomerView>('customers');
 const selectedRecord = ref<CustomerPanelRecord | null>(null);
+const cardPanelOpen = ref(false);
+const selectedCustomer = ref<CustomerRecord | null>(null);
+const selectedCardId = ref<number | null>(null);
 
 const customers = ref<CustomerRecord[]>([...props.customers]);
 const groups = ref<CustomerGroupRecord[]>([...props.groups]);
+const customerCards = ref<Record<number, CustomerMembershipCard[]>>(
+    Object.fromEntries(
+        props.customers.map((customer) => [
+            customer.id,
+            customer.membership_cards ?? [],
+        ]),
+    ),
+);
+
+const cardForm = ref<CustomerMembershipCard>({
+    id: 0,
+    customerId: 0,
+    cardNo: '',
+    cardName: '',
+    status: 'active',
+    issuedDate: '',
+    expiredDate: '',
+    remark: '',
+    balances: [{ currency: 'USD', balance: 0 }],
+});
 
 const tabs: {
     key: CustomerView;
@@ -79,6 +143,11 @@ const normalizedSearch = computed(() => search.value.trim().toLowerCase());
 
 const filteredCustomers = computed(() => filterRows(customers.value));
 const filteredGroups = computed(() => filterRows(groups.value));
+const selectedCustomerCards = computed(() =>
+    selectedCustomer.value
+        ? (customerCards.value[selectedCustomer.value.id] ?? [])
+        : [],
+);
 
 const panelTitle = computed(() =>
     selectedRecord.value
@@ -147,6 +216,73 @@ function setCustomerStatus(record: CustomerRecord, status: ApprovalStatus) {
 
 function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
     record.status = status;
+}
+
+function cardsForCustomer(customerId: number) {
+    return customerCards.value[customerId] ?? [];
+}
+
+function hasCustomerCards(customerId: number) {
+    return cardsForCustomer(customerId).length > 0;
+}
+
+function copyCard(card: CustomerMembershipCard) {
+    return {
+        ...card,
+        balances: card.balances.map((balance) => ({ ...balance })),
+    };
+}
+
+function openCardPanel(customer: CustomerRecord) {
+    selectedCustomer.value = customer;
+    cardPanelOpen.value = true;
+
+    const firstCard = cardsForCustomer(customer.id)[0];
+    if (firstCard) {
+        selectedCardId.value = firstCard.id;
+        cardForm.value = copyCard(firstCard);
+    } else {
+        selectedCardId.value = null;
+        cardForm.value = {
+            id: 0,
+            customerId: customer.id,
+            cardNo: '',
+            cardName: '',
+            status: 'inactive',
+            issuedDate: '',
+            expiredDate: '',
+            remark: '',
+            balances: [],
+        };
+    }
+}
+
+function closeCardPanel() {
+    cardPanelOpen.value = false;
+    selectedCustomer.value = null;
+    selectedCardId.value = null;
+}
+
+function selectCustomerCard(card: CustomerMembershipCard) {
+    selectedCardId.value = card.id;
+    cardForm.value = copyCard(card);
+}
+
+function viewCustomerCard(card: CustomerMembershipCard) {
+    router.get('/membership-cards', { card: card.id });
+}
+
+function cardBalanceSummary(card: CustomerMembershipCard) {
+    return card.balances
+        .map(
+            (balance) =>
+                `${balance.currency} ${balance.balance.toLocaleString()}`,
+        )
+        .join(' / ');
+}
+
+function canAct(status: ApprovalStatus) {
+    return ['draft', 'pending'].includes(status);
 }
 </script>
 
@@ -268,8 +404,19 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                     >
                         {{ row.code }}
                     </td>
-                    <td class="px-4 py-3 text-sm font-bold text-slate-700">
-                        {{ row.name }}
+                    <td class="px-4 py-3">
+                        <div class="text-sm font-bold text-slate-700">
+                            {{ row.name }}
+                        </div>
+                        <button
+                            v-if="hasCustomerCards(row.id)"
+                            type="button"
+                            class="mt-1 inline-flex items-center gap-1 rounded border border-[#23AA8F]/20 bg-[#23AA8F]/10 px-1.5 py-0.5 text-[10px] font-bold text-[#16836f] hover:border-[#23AA8F]/40 hover:bg-[#23AA8F]/15"
+                            @click="openCardPanel(row)"
+                        >
+                            <CreditCard class="size-3" />
+                            {{ row.membership_card_count }} card
+                        </button>
                     </td>
                     <td class="px-4 py-3 text-sm text-slate-500">
                         {{ row.phone }}
@@ -293,13 +440,66 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         </span>
                     </td>
                     <td class="px-4 py-3 text-center">
-                        <ApprovalActionMenu
-                            :status="row.status"
-                            @view="openPanel('customers', row)"
-                            @approve="setCustomerStatus(row, 'approved')"
-                            @reject="setCustomerStatus(row, 'rejected')"
-                            @cancel="setCustomerStatus(row, 'cancelled')"
-                        />
+                        <DropdownMenu :modal="false">
+                            <DropdownMenuTrigger as-child>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    class="mx-auto flex size-8 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-[#007882]"
+                                    title="Actions"
+                                >
+                                    <MoreVertical class="size-4" />
+                                    <span class="sr-only">Open actions</span>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                                align="end"
+                                class="z-[80] w-44"
+                            >
+                                <DropdownMenuItem
+                                    @select="openPanel('customers', row)"
+                                >
+                                    <Pencil
+                                        v-if="canAct(row.status)"
+                                        class="size-4 text-[#007882]"
+                                    />
+                                    <Eye v-else class="size-4 text-[#007882]" />
+                                    {{ canAct(row.status) ? 'Edit' : 'View' }}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem @select="openCardPanel(row)">
+                                    <CreditCard class="size-4 text-[#007882]" />
+                                    Manage Card
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    :disabled="!canAct(row.status)"
+                                    @select="setCustomerStatus(row, 'approved')"
+                                >
+                                    <CheckCircle2
+                                        class="size-4 text-emerald-600"
+                                    />
+                                    Approve
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    :disabled="!canAct(row.status)"
+                                    @select="setCustomerStatus(row, 'rejected')"
+                                >
+                                    <XCircle class="size-4 text-rose-600" />
+                                    Reject
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    :disabled="!canAct(row.status)"
+                                    variant="destructive"
+                                    @select="
+                                        setCustomerStatus(row, 'cancelled')
+                                    "
+                                >
+                                    <Ban class="size-4" />
+                                    Cancel
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </td>
                 </template>
             </MasterDataTable>
@@ -550,6 +750,249 @@ function setGroupStatus(record: CustomerGroupRecord, status: ApprovalStatus) {
                         Save Changes
                     </Button>
                 </SheetFooter>
+            </SheetContent>
+        </Sheet>
+
+        <Sheet
+            :open="cardPanelOpen"
+            @update:open="(open) => !open && closeCardPanel()"
+        >
+            <SheetContent class="w-full gap-0 p-0 sm:max-w-[760px]">
+                <SheetHeader class="bg-[#2A4858] p-6 text-white">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <SheetTitle class="text-lg font-bold text-white">
+                                Manage Card
+                            </SheetTitle>
+                            <p
+                                class="mt-1 text-[10px] tracking-widest text-white/50 uppercase"
+                            >
+                                {{ selectedCustomer?.name ?? 'Customer' }}
+                            </p>
+                        </div>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            class="size-7 rounded-full bg-white/10 text-white hover:bg-white/20 hover:text-white"
+                            @click="closeCardPanel"
+                        >
+                            <X class="size-4" />
+                            <span class="sr-only">Close card panel</span>
+                        </Button>
+                    </div>
+                </SheetHeader>
+
+                <div
+                    class="grid min-h-0 flex-1 gap-0 overflow-y-auto lg:grid-cols-[280px_minmax(0,1fr)]"
+                >
+                    <div
+                        class="border-b border-slate-200 p-5 lg:border-r lg:border-b-0"
+                    >
+                        <div class="mb-4 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-black text-[#2A4858]">
+                                    Cards
+                                </h3>
+                                <p class="text-xs text-slate-500">
+                                    {{ selectedCustomerCards.length }} card
+                                    record
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div
+                                v-for="card in selectedCustomerCards"
+                                :key="card.id"
+                                class="flex items-start gap-2 rounded-lg border p-3 transition"
+                                :class="
+                                    selectedCardId === card.id
+                                        ? 'border-[#23AA8F]/40 bg-[#23AA8F]/10'
+                                        : 'border-slate-200 bg-white hover:border-[#23AA8F]/30'
+                                "
+                            >
+                                <button
+                                    type="button"
+                                    class="min-w-0 flex-1 text-left"
+                                    @click="selectCustomerCard(card)"
+                                >
+                                    <div
+                                        class="truncate font-mono text-xs font-bold text-[#007882]"
+                                    >
+                                        {{ card.cardNo }}
+                                    </div>
+                                    <div
+                                        class="mt-1 truncate text-xs font-bold text-slate-700"
+                                    >
+                                        {{ card.cardName }}
+                                    </div>
+                                    <div
+                                        class="mt-1 truncate text-[10px] text-slate-500"
+                                    >
+                                        {{
+                                            cardBalanceSummary(card) ||
+                                            'No balance'
+                                        }}
+                                    </div>
+                                </button>
+
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    class="size-8 shrink-0 rounded-lg text-slate-400 hover:bg-white hover:text-[#007882]"
+                                    title="View card"
+                                    @click.stop="viewCustomerCard(card)"
+                                >
+                                    <Eye class="size-4" />
+                                    <span class="sr-only">View card</span>
+                                </Button>
+                            </div>
+
+                            <div
+                                v-if="selectedCustomerCards.length === 0"
+                                class="rounded-lg border border-dashed border-slate-200 p-4 text-center text-xs text-slate-400"
+                            >
+                                No cards found for this customer.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="cardForm.id > 0" class="space-y-5 p-5">
+                        <MembershipCardPreview
+                            :card-no="cardForm.cardNo"
+                            :card-name="cardForm.cardName"
+                            :customer-name="selectedCustomer?.name"
+                            company-branch="DM Group / Central Branch"
+                            :issued-date="cardForm.issuedDate"
+                            :expired-date="cardForm.expiredDate"
+                            :remark="cardForm.remark"
+                            :status="cardForm.status"
+                        />
+
+                        <div class="space-y-4 rounded-xl bg-slate-50 p-4">
+                            <div class="grid gap-3 md:grid-cols-2">
+                                <div>
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase"
+                                    >
+                                        Card Number
+                                    </span>
+                                    <div
+                                        class="mt-1 rounded-md border border-slate-200 bg-white px-3 py-2 font-mono text-sm font-bold text-[#007882]"
+                                    >
+                                        {{ cardForm.cardNo || '-' }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase"
+                                    >
+                                        Card Name
+                                    </span>
+                                    <div
+                                        class="mt-1 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-700"
+                                    >
+                                        {{ cardForm.cardName || '-' }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid gap-3 md:grid-cols-3">
+                                <div>
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase"
+                                    >
+                                        Issued Date
+                                    </span>
+                                    <div
+                                        class="mt-1 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700"
+                                    >
+                                        {{ cardForm.issuedDate || '-' }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase"
+                                    >
+                                        Expiry Date
+                                    </span>
+                                    <div
+                                        class="mt-1 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700"
+                                    >
+                                        {{ cardForm.expiredDate || '-' }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase"
+                                    >
+                                        Status
+                                    </span>
+                                    <div
+                                        class="mt-1 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 uppercase"
+                                    >
+                                        {{ cardForm.status }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="rounded-lg border border-slate-200 bg-white p-3"
+                            >
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Balance
+                                </span>
+                                <p
+                                    class="mt-1 text-xs font-semibold text-slate-500"
+                                >
+                                    Card balance is managed from the membership
+                                    card balance page.
+                                </p>
+                            </div>
+
+                            <div>
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                >
+                                    Remark
+                                </span>
+                                <div
+                                    class="mt-1 min-h-20 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs leading-relaxed text-slate-600"
+                                >
+                                    {{ cardForm.remark || '-' }}
+                                </div>
+                            </div>
+
+                            <Button
+                                type="button"
+                                class="w-full rounded-lg bg-[#007882] text-xs font-bold text-white hover:bg-[#006871]"
+                                @click="viewCustomerCard(cardForm)"
+                            >
+                                <Eye class="size-4" />
+                                View Full Card
+                            </Button>
+                        </div>
+                    </div>
+                    <div
+                        v-else
+                        class="flex min-h-[360px] items-center justify-center p-5 text-center"
+                    >
+                        <div>
+                            <CreditCard
+                                class="mx-auto size-10 text-slate-300"
+                            />
+                            <p class="mt-3 text-sm font-bold text-slate-500">
+                                No card selected
+                            </p>
+                            <p class="mt-1 text-xs text-slate-400">
+                                Select a card from the list to view its details.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </SheetContent>
         </Sheet>
     </AppLayout>

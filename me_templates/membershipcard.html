@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Membership Card Master</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --primary-dark: #2a4858;
+                --primary-teal: #007882;
+                --accent-green: #23aa8f;
+                --light-green: #86d780;
+                --accent-yellow: #fafa6e;
+            }
+            body {
+                background-color: #f1f5f9;
+                font-family: 'Inter', sans-serif;
+            }
+
+            /* Interactive Card Flip Styling */
+            .card-container {
+                perspective: 1000px;
+                width: 100%;
+                max-width: 420px;
+                height: 250px;
+            }
+            .card-inner {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+                transform-style: preserve-3d;
+                cursor: pointer;
+            }
+            .card-container.flipped .card-inner {
+                transform: rotateY(180deg);
+            }
+            .card-front,
+            .card-back {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                backface-visibility: hidden;
+                border-radius: 20px;
+                padding: 24px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                box-shadow: 0 15px 35px rgba(42, 72, 88, 0.2);
+                overflow: hidden;
+            }
+            .card-back {
+                transform: rotateY(180deg);
+            }
+
+            /* Shimmer effect for premium card look */
+            .shimmer-bg {
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                right: -50%;
+                bottom: -50%;
+                background: linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0) 30%,
+                    rgba(255, 255, 255, 0.15) 50%,
+                    rgba(255, 255, 255, 0) 70%
+                );
+                transform: rotate(30deg);
+                transition: all 0.5s ease;
+            }
+            .card-container:hover .shimmer-bg {
+                transform: rotate(30deg) translate(20%, 20%);
+            }
+
+            /* Status colors */
+            .status-pill {
+                font-size: 0.65rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+                border-width: 1px;
+            }
+        </style>
+    </head>
+    <body class="flex min-h-screen items-center justify-center p-4 md:p-8">
+        <div
+            class="grid w-full max-w-5xl grid-cols-1 items-center gap-8 rounded-3xl border border-slate-100 bg-white p-6 shadow-xl md:p-10 lg:grid-cols-12"
+        >
+            <!-- LEFT: Interactive Digital Card Preview (5 Cols) -->
+            <div class="flex flex-col items-center gap-6 lg:col-span-5">
+                <div>
+                    <span
+                        class="mb-1 block text-center text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                        >Interactive Pass Preview</span
+                    >
+                    <p class="text-center text-xs font-medium text-slate-500">
+                        Click the card to flip and view reverse information
+                    </p>
+                </div>
+
+                <!-- Virtual Card -->
+                <div
+                    class="card-container"
+                    id="memberCard"
+                    onclick="flipCard()"
+                >
+                    <div class="card-inner">
+                        <!-- FRONT OF CARD -->
+                        <div
+                            class="card-front bg-gradient-to-br from-[#2A4858] via-[#1F3643] to-[#12222B] text-white"
+                        >
+                            <div class="shimmer-bg"></div>
+
+                            <!-- Header -->
+                            <div
+                                class="relative z-10 flex items-start justify-between"
+                            >
+                                <div>
+                                    <h4
+                                        class="text-xs font-black tracking-widest text-[#FAFA6E] uppercase"
+                                        id="cardTierDisplay"
+                                    >
+                                        VIP Platinum Member
+                                    </h4>
+                                    <p
+                                        class="text-[9px] font-bold tracking-wider text-white/50"
+                                        id="companyBranchDisplay"
+                                    >
+                                        DM Group • Central Branch
+                                    </p>
+                                </div>
+                                <div class="text-[#FAFA6E]">
+                                    <i class="fas fa-crown text-xl"></i>
+                                </div>
+                            </div>
+
+                            <!-- Card Number -->
+                            <div class="relative z-10 my-auto">
+                                <p
+                                    class="font-mono text-2xl font-black tracking-widest text-white"
+                                    id="cardNoDisplay"
+                                >
+                                    MC-8820-9921
+                                </p>
+                            </div>
+
+                            <!-- Card Footer -->
+                            <div
+                                class="relative z-10 flex items-end justify-between"
+                            >
+                                <div>
+                                    <span
+                                        class="block text-[8px] font-bold text-white/40 uppercase"
+                                        >Card Holder</span
+                                    >
+                                    <h3
+                                        class="text-sm font-black tracking-tight"
+                                        id="customerNameDisplay"
+                                    >
+                                        Sok Phalla
+                                    </h3>
+                                </div>
+                                <!-- Inline Custom Barcode -->
+                                <div
+                                    class="flex flex-col items-center rounded-lg bg-white/90 p-1.5"
+                                >
+                                    <svg
+                                        class="h-6 w-20"
+                                        viewBox="0 0 100 30"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <!-- Dynamic simulated barcode segments -->
+                                        <rect
+                                            x="2"
+                                            width="4"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="8"
+                                            width="2"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="12"
+                                            width="6"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="20"
+                                            width="2"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="24"
+                                            width="4"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="30"
+                                            width="8"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="40"
+                                            width="2"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="44"
+                                            width="6"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="52"
+                                            width="2"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="56"
+                                            width="8"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="66"
+                                            width="4"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="72"
+                                            width="2"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="76"
+                                            width="6"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="84"
+                                            width="4"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="90"
+                                            width="8"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                    </svg>
+                                    <span
+                                        class="mt-0.5 font-mono text-[7px] tracking-widest text-slate-700"
+                                        id="barcodeLabel"
+                                        >MC88209921</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BACK OF CARD -->
+                        <div
+                            class="card-back bg-gradient-to-br from-[#1F2E37] to-[#0E171C] text-white"
+                        >
+                            <!-- Magnetic strip style decoration -->
+                            <div
+                                class="absolute top-6 right-0 left-0 h-10 bg-slate-950/80"
+                            ></div>
+
+                            <!-- Reverse metadata -->
+                            <div
+                                class="relative z-10 mt-10 flex flex-1 flex-col justify-between pt-4"
+                            >
+                                <div
+                                    class="grid grid-cols-2 gap-4 border-b border-white/5 pb-3"
+                                >
+                                    <div>
+                                        <span
+                                            class="block text-[8px] font-bold text-white/40 uppercase"
+                                            >Issued Date</span
+                                        >
+                                        <span
+                                            class="font-mono text-xs font-bold"
+                                            id="issuedDateDisplay"
+                                            >2026-05-23</span
+                                        >
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="block text-[8px] font-bold text-white/40 uppercase"
+                                            >Expiry Date</span
+                                        >
+                                        <span
+                                            class="font-mono text-xs font-bold text-amber-300"
+                                            id="expiredDateDisplay"
+                                            >2028-05-23</span
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="flex-1 py-2">
+                                    <span
+                                        class="mb-0.5 block text-[8px] font-bold text-white/40 uppercase"
+                                        >Remarks / Rules</span
+                                    >
+                                    <p
+                                        class="text-[9px] leading-normal text-white/60"
+                                        id="remarkDisplay"
+                                    >
+                                        Non-transferable. Present at checkout to
+                                        redeem VIP point multipliers. Subject to
+                                        terms & conditions.
+                                    </p>
+                                </div>
+
+                                <div
+                                    class="flex items-center justify-between border-t border-white/5 pt-2"
+                                >
+                                    <span
+                                        class="font-mono text-[8px] text-white/30 uppercase"
+                                        >System Ver. 1.2</span
+                                    >
+                                    <span
+                                        id="statusBadgeDisplay"
+                                        class="status-badge rounded border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[9px] font-black text-emerald-400"
+                                        >Active</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button
+                    onclick="flipCard()"
+                    class="text-primary-teal text-xs font-bold hover:underline"
+                >
+                    <i class="fas fa-arrows-spin mr-1"></i> Flip Card View
+                </button>
+            </div>
+
+            <!-- RIGHT: Card Property Configuration Forms (7 Cols) -->
+            <div
+                class="flex flex-col border-t border-slate-100 pt-6 lg:col-span-7 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10"
+            >
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-black text-[#2A4858]">
+                            Card Properties
+                        </h2>
+                        <p class="text-xs font-semibold text-slate-400">
+                            Table: membership_cards properties
+                        </p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button
+                            class="rounded-xl border p-2 text-slate-400 transition hover:bg-slate-50 hover:text-slate-600"
+                            title="Print/Export Pass"
+                        >
+                            <i class="fas fa-print"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form
+                    id="memberCardForm"
+                    class="space-y-4 text-sm"
+                    oninput="updateCardUI()"
+                >
+                    <!-- Main Identifier Segment -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label
+                                class="mb-1.5 block text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                                >Card Number (card_no)</label
+                            >
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    id="cardNo"
+                                    value="MC-8820-9921"
+                                    required
+                                    class="w-full rounded-xl border bg-slate-50 py-2 pr-3 pl-9 font-mono text-sm font-bold"
+                                />
+                                <i
+                                    class="fas fa-barcode absolute top-3 left-3 text-xs text-slate-400"
+                                ></i>
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                class="mb-1.5 block text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                                >Card Tier Name (card_name)</label
+                            >
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    id="cardName"
+                                    value="VIP Gold Pass"
+                                    required
+                                    class="w-full rounded-xl border bg-slate-50 py-2 pr-3 pl-9 text-sm font-bold"
+                                />
+                                <i
+                                    class="fas fa-tag absolute top-3 left-3 text-xs text-slate-400"
+                                ></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Info -->
+                    <div
+                        class="rounded-2xl border border-dashed bg-slate-50 p-4"
+                    >
+                        <span
+                            class="mb-3 block text-[9px] font-black tracking-widest text-slate-400 uppercase"
+                            >Customer Relation (customer_id)</span
+                        >
+                        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    id="custName"
+                                    value="Sok Phalla"
+                                    class="w-full rounded-xl border bg-white py-2 pr-3 pl-9 text-xs font-bold"
+                                />
+                                <i
+                                    class="fas fa-user absolute top-2.5 left-3 text-xs text-slate-400"
+                                ></i>
+                            </div>
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    id="custPhone"
+                                    value="012 555 999"
+                                    class="w-full rounded-xl border bg-white py-2 pr-3 pl-9 font-mono text-xs"
+                                    placeholder="Phone Number"
+                                />
+                                <i
+                                    class="fas fa-phone absolute top-2.5 left-3 text-xs text-slate-400"
+                                ></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dates & Status -->
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                        <div>
+                            <label
+                                class="mb-1.5 block text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                                >Issued Date</label
+                            >
+                            <input
+                                type="date"
+                                id="issuedDate"
+                                value="2026-05-23"
+                                class="w-full rounded-xl border bg-slate-50 px-3 py-2 text-xs font-bold"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="mb-1.5 block text-[10px] font-black tracking-widest text-[#007882] uppercase"
+                                >Expiry Date</label
+                            >
+                            <input
+                                type="date"
+                                id="expiredDate"
+                                value="2028-05-23"
+                                class="w-full rounded-xl border border-[#007882]/20 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="mb-1.5 block text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                                >Status (status)</label
+                            >
+                            <select
+                                id="cardStatus"
+                                class="w-full rounded-xl border bg-slate-50 px-3 py-2 text-xs font-bold outline-none"
+                            >
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="blocked">Blocked</option>
+                                <option value="expired">Expired</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Remarks -->
+                    <div>
+                        <label
+                            class="mb-1.5 block text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                            >Remarks / Expiry Policies</label
+                        >
+                        <textarea
+                            id="cardRemarks"
+                            rows="2"
+                            class="w-full rounded-xl border bg-slate-50 px-3 py-2 text-xs outline-none"
+                            placeholder="Card terms of use..."
+                        ></textarea>
+                    </div>
+
+                    <!-- Footer Operations -->
+                    <div class="flex justify-end gap-3 border-t pt-4">
+                        <button
+                            type="button"
+                            onclick="resetForm()"
+                            class="rounded-xl bg-slate-100 px-6 py-2.5 text-xs font-bold text-slate-500 transition hover:bg-slate-200"
+                        >
+                            Reset
+                        </button>
+                        <button
+                            type="submit"
+                            class="rounded-xl bg-[#007882] px-8 py-2.5 text-xs font-black text-white shadow-lg shadow-[#007882]/20 transition-transform hover:scale-[1.01]"
+                        >
+                            UPDATE DATABASE
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            // Flip Card Action
+            function flipCard() {
+                const card = document.getElementById('memberCard');
+                card.classList.toggle('flipped');
+            }
+
+            // Live card update logic based on user input
+            function updateCardUI() {
+                const cardNo = document.getElementById('cardNo').value;
+                const cardName = document.getElementById('cardName').value;
+                const custName = document.getElementById('custName').value;
+                const issuedDate = document.getElementById('issuedDate').value;
+                const expiredDate =
+                    document.getElementById('expiredDate').value;
+                const cardRemarks =
+                    document.getElementById('cardRemarks').value;
+                const status = document.getElementById('cardStatus').value;
+
+                // Updates Front Card Values
+                document.getElementById('cardNoDisplay').innerText =
+                    cardNo || 'MC-XXXX-XXXX';
+                document.getElementById('cardTierDisplay').innerText =
+                    cardName || 'MEMBER PRIVILEGE';
+                document.getElementById('customerNameDisplay').innerText =
+                    custName || 'GUEST MEMBER';
+                document.getElementById('barcodeLabel').innerText = (
+                    cardNo || 'MCXXXX'
+                ).replace(/[^a-zA-Z0-9]/g, '');
+
+                // Updates Back Card Values
+                document.getElementById('issuedDateDisplay').innerText =
+                    issuedDate || 'YYYY-MM-DD';
+                document.getElementById('expiredDateDisplay').innerText =
+                    expiredDate || 'YYYY-MM-DD';
+                document.getElementById('remarkDisplay').innerText =
+                    cardRemarks || 'Insert custom card terms and privileges...';
+
+                // Status Badge Formatting
+                const badge = document.getElementById('statusBadgeDisplay');
+                badge.innerText = status;
+                badge.className =
+                    'status-badge text-[9px] px-2.5 py-0.5 rounded font-black border uppercase ';
+
+                if (status === 'active') {
+                    badge.classList.add(
+                        'bg-emerald-500/10',
+                        'text-emerald-400',
+                        'border-emerald-500/20',
+                    );
+                } else if (status === 'inactive') {
+                    badge.classList.add(
+                        'bg-slate-500/10',
+                        'text-slate-400',
+                        'border-slate-500/20',
+                    );
+                } else if (status === 'blocked') {
+                    badge.classList.add(
+                        'bg-red-500/10',
+                        'text-red-400',
+                        'border-red-500/20',
+                    );
+                } else if (status === 'expired') {
+                    badge.classList.add(
+                        'bg-amber-500/10',
+                        'text-amber-400',
+                        'border-amber-500/20',
+                    );
+                } else {
+                    badge.classList.add(
+                        'bg-slate-600/15',
+                        'text-slate-500',
+                        'border-slate-600/20',
+                    );
+                }
+            }
+
+            function resetForm() {
+                document.getElementById('memberCardForm').reset();
+                updateCardUI();
+            }
+
+            // Initialize values
+            window.onload = () => {
+                document.getElementById('cardRemarks').value =
+                    'Non-transferable. Present at checkout to redeem VIP point multipliers. Subject to terms & conditions.';
+                updateCardUI();
+            };
+
+            // Form Submit Handler
+            document.getElementById('memberCardForm').onsubmit = (e) => {
+                e.preventDefault();
+                alert('Success: Membership card updated in system database!');
+            };
+        </script>
+    </body>
+</html>

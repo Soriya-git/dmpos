@@ -15,6 +15,7 @@ use App\Http\Controllers\MasterData\ProductController;
 use App\Http\Controllers\MasterData\SupplierController;
 use App\Http\Controllers\MasterData\TaxController;
 use App\Http\Controllers\MasterData\WarehouseLocationController;
+use App\Http\Controllers\MembershipCard\CustomerCardController;
 use App\Http\Controllers\POS\PosSessionController;
 use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\Purchase\PurchaseOrderController;
@@ -165,6 +166,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/master-data/company-branches', [CompanyBranchController::class, 'index'])->name('master-data.company-branches');
     Route::post('/master-data/company-branches/branches/{branch}', [CompanyBranchController::class, 'updateBranch'])->name('master-data.company-branches.branches.update');
     Route::get('/master-data/customers', [CustomerController::class, 'index'])->name('master-data.customers');
+    Route::post('/master-data/customers/{customer}/membership-cards', [CustomerController::class, 'storeMembershipCard'])
+        ->name('master-data.customers.membership-cards.store');
+    Route::patch('/master-data/customers/{customer}/membership-cards/{membershipCard}', [CustomerController::class, 'updateMembershipCard'])
+        ->name('master-data.customers.membership-cards.update');
+    Route::get('/membership-cards', [CustomerCardController::class, 'index'])->name('membership-cards.index');
+    Route::get('/membership-cards/create', [CustomerCardController::class, 'create'])->name('membership-cards.create');
+    Route::post('/membership-cards', [CustomerCardController::class, 'store'])->name('membership-cards.store');
+    Route::get('/membership-cards/{membershipCard}/transactions', [CustomerCardController::class, 'transactions'])->name('membership-cards.transactions');
+    Route::get('/membership-cards/{membershipCard}/topup', [CustomerCardController::class, 'topup'])->name('membership-cards.topup');
+    Route::post('/membership-cards/{membershipCard}/topup', [CustomerCardController::class, 'storeTopup'])->name('membership-cards.topup.store');
     Route::get('/master-data/exchange-rates', [ExchangeRateController::class, 'index'])->name('master-data.exchange-rates');
     Route::get('/master-data/menu', [MenuController::class, 'index'])->name('master-data.menu');
     Route::post('/master-data/menu/menus', [MenuController::class, 'storeMenu'])->name('master-data.menu.menus.store');

@@ -129,8 +129,12 @@ const masterDataSection: NavSectionType = {
             icon: Building2,
             items: [
                 { title: 'Our Company', href: '/master-data/company-branches' },
-                { title: 'Customers', href: '/master-data/customers' },
                 { title: 'Suppliers', href: '/master-data/suppliers' },
+                { title: 'Customers', href: '/master-data/customers' },
+                {
+                    title: 'Membership Cards',
+                    href: '/membership-cards',
+                },
             ],
         },
         {

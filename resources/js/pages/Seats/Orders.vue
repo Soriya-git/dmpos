@@ -122,8 +122,26 @@ type PaymentMethodOption = {
     id: number;
     code?: string | null;
     label: string;
-    type: 'cash' | 'bank';
+    type: 'cash' | 'bank' | 'card';
     currency: 'USD' | 'KHR';
+};
+
+type CustomerOption = {
+    id: number;
+    name: string;
+    phone: string;
+    cardCount: number;
+};
+
+type MembershipCardOption = {
+    id: number;
+    customerId: number;
+    cardNo: string;
+    cardName?: string | null;
+    balances: {
+        currency: string;
+        balance: number;
+    }[];
 };
 
 const props = defineProps<{
@@ -134,6 +152,7 @@ const props = defineProps<{
     diningSession: {
         id: number;
         session_no: string;
+        customer_id?: number | null;
         status?: string | null;
         seat_name?: string | null;
         seat_type?: string | null;
@@ -148,6 +167,8 @@ const props = defineProps<{
     cart: OrderData;
     exchangeRate: number;
     paymentMethods: PaymentMethodOption[];
+    membershipCards?: MembershipCardOption[];
+    customers?: CustomerOption[];
     historyOrders: OrderData[];
     printOrders: PrintOrderData[];
     invoices: InvoiceData[];
@@ -182,15 +203,18 @@ type PaymentPayload = {
     changeUsdAmount: number;
     method: string;
     paymentMethodId?: number | null;
+    membershipCardId?: number | null;
     currency: 'USD' | 'KHR';
     receivedAmount: number;
     operationStatus: 'invoice' | 'invoice_receipt_done';
 };
 
 const customerForm = useForm({
+    customer_id: props.diningSession.customer_id ?? null,
     customer_phone: props.diningSession.customer_phone ?? '',
     customer_name: props.diningSession.customer_name ?? '',
 });
+const customerSearch = ref('');
 
 const localLineId = ref(-1);
 const draftLines = ref<CartLine[]>(cloneCartLines(props.cart.lines));
@@ -214,6 +238,21 @@ const cart = computed<OrderData>(() => {
         tax_amount: taxAmount,
         total_amount: totalAmount,
     };
+});
+
+const filteredCustomerOptions = computed(() => {
+    const term = customerSearch.value.trim().toLowerCase();
+    const options = props.customers ?? [];
+
+    if (!term) {
+        return options.slice(0, 12);
+    }
+
+    return options
+        .filter((customer) =>
+            `${customer.phone} ${customer.name}`.toLowerCase().includes(term),
+        )
+        .slice(0, 12);
 });
 
 const cartLineCount = computed(() => cart.value.lines.length);
@@ -526,6 +565,7 @@ function confirmPayment(payload: PaymentPayload) {
         {
             method: payload.method,
             payment_method_id: payload.paymentMethodId,
+            membership_card_id: payload.membershipCardId,
             currency: payload.currency,
             received_amount: payload.receivedAmount,
             operation_status: payload.operationStatus,
@@ -579,9 +619,31 @@ function previewInvoiceDocument(
 }
 
 function openEditCustomer() {
+    customerForm.customer_id = props.diningSession.customer_id ?? null;
     customerForm.customer_phone = props.diningSession.customer_phone ?? '';
     customerForm.customer_name = props.diningSession.customer_name ?? '';
+    customerSearch.value = '';
     editCustomerOpen.value = true;
+}
+
+function selectCustomerOption(customer: CustomerOption) {
+    customerForm.customer_id = customer.id;
+    customerForm.customer_phone = customer.phone;
+    customerForm.customer_name = customer.name;
+    customerSearch.value = `${customer.phone} ${customer.name}`;
+}
+
+function useTypedCustomerPhone() {
+    const exact = (props.customers ?? []).find(
+        (customer) => customer.phone === customerForm.customer_phone,
+    );
+
+    if (exact) {
+        selectCustomerOption(exact);
+        return;
+    }
+
+    customerForm.customer_id = null;
 }
 
 function saveCustomer() {
@@ -1805,6 +1867,7 @@ onBeforeUnmount(() => {
                 :exchange-rate="exchangeRate"
                 :allow-pay-later="true"
                 :payment-methods="paymentMethods"
+                :membership-cards="membershipCards ?? []"
                 @close="paymentOpen = false"
                 @confirm="confirmPayment"
                 @print-invoice="previewCurrentInvoice"
@@ -1841,6 +1904,57 @@ onBeforeUnmount(() => {
                             <label
                                 class="mb-1 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
                             >
+                                Search Customer Phone
+                            </label>
+                            <input
+                                v-model="customerSearch"
+                                type="search"
+                                class="h-10 w-full rounded-xl border border-gray-100 bg-gray-50 px-3 text-sm font-bold text-[#2A4858] outline-none focus:border-[#23AA8F]/60"
+                                placeholder="Search by phone or name"
+                            />
+                            <div
+                                class="mt-2 max-h-44 overflow-y-auto rounded-xl border border-gray-100 bg-white shadow-sm"
+                            >
+                                <button
+                                    v-for="customer in filteredCustomerOptions"
+                                    :key="customer.id"
+                                    type="button"
+                                    class="flex w-full items-center justify-between gap-3 border-b border-gray-50 px-3 py-2 text-left last:border-b-0 hover:bg-[#23AA8F]/10"
+                                    @click="selectCustomerOption(customer)"
+                                >
+                                    <span class="min-w-0">
+                                        <span
+                                            class="block truncate text-xs font-black text-[#2A4858]"
+                                        >
+                                            {{ customer.phone }}
+                                        </span>
+                                        <span
+                                            class="block truncate text-[11px] text-gray-500"
+                                        >
+                                            {{ customer.name }}
+                                        </span>
+                                    </span>
+                                    <span
+                                        v-if="customer.cardCount > 0"
+                                        class="shrink-0 rounded bg-[#23AA8F]/10 px-2 py-0.5 text-[10px] font-black text-[#007882]"
+                                    >
+                                        {{ customer.cardCount }} card
+                                    </span>
+                                </button>
+                                <p
+                                    v-if="filteredCustomerOptions.length === 0"
+                                    class="px-3 py-4 text-center text-xs text-gray-400"
+                                >
+                                    No matching customer. Enter phone and name
+                                    below to create one.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="mb-1 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
+                            >
                                 Phone Number
                             </label>
                             <input
@@ -1848,6 +1962,7 @@ onBeforeUnmount(() => {
                                 type="tel"
                                 class="h-10 w-full rounded-xl border border-gray-100 bg-gray-50 px-3 text-sm font-bold text-[#2A4858] outline-none focus:border-[#23AA8F]/60"
                                 placeholder="Customer phone"
+                                @input="useTypedCustomerPhone"
                             />
                         </div>
 

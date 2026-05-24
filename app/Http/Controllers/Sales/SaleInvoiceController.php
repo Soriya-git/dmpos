@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Sales;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Invoice;
+use App\Models\MembershipCard;
+use App\Models\MembershipCardBalance;
+use App\Models\MembershipCardTransaction;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Models\PosSession;
 use App\Models\PosTerminal;
+use App\Services\MembershipCardLedger;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +47,7 @@ class SaleInvoiceController extends Controller
                 'lines.order.creator:id,name',
                 'payments.paymentMethod',
                 'payments.receiver:id,name',
+                'membershipCardTransactions.membershipCard',
                 'posTerminal',
                 'diningSession.diningResource',
             ])
@@ -75,6 +80,7 @@ class SaleInvoiceController extends Controller
             ],
             'invoices' => $invoices,
             'paymentMethods' => $this->paymentMethodsFor($activePosSession),
+            'membershipCards' => $this->membershipCardsForInvoices($invoiceModels, $activePosSession),
             'paymentSummary' => $this->paymentSummary($invoiceModels, $activePosSession),
             'filters' => [
                 'start_date' => $filters['start_date'] ?? null,
@@ -89,6 +95,7 @@ class SaleInvoiceController extends Controller
         $data = $request->validate([
             'method' => ['required', 'string', 'max:50'],
             'payment_method_id' => ['nullable', 'exists:payment_methods,id'],
+            'membership_card_id' => ['nullable', 'exists:membership_cards,id'],
             'currency' => ['required', 'in:USD,KHR'],
             'received_amount' => ['nullable', 'numeric', 'min:0'],
             'operation_status' => ['required', 'in:invoice_receipt_done'],
@@ -121,6 +128,7 @@ class SaleInvoiceController extends Controller
 
             abort_if(! $method, 422, 'Please select a valid payment method.');
 
+            $isMembershipCard = $method->method_type === 'card' || str_starts_with($data['method'], 'member-card-');
             $isCash = str_starts_with($data['method'], 'cash-');
             $targetAmount = $data['currency'] === 'KHR' ? $balanceUsd * $exchangeRate : $balanceUsd;
             $receivedAmount = (float) ($data['received_amount'] ?? $targetAmount);
@@ -128,6 +136,21 @@ class SaleInvoiceController extends Controller
             $changeKhrAmount = $isCash ? $this->roundDownKhrChange((float) ($data['change_khr_amount'] ?? 0)) : 0;
 
             abort_if($receivedAmount <= 0, 422, 'Payment amount must be greater than zero.');
+
+            $cardBalance = null;
+            if ($isMembershipCard) {
+                abort_if(! $invoice->customer_id, 422, 'Please assign a customer before using membership card payment.');
+                $cardBalance = $this->membershipCardBalanceForPayment(
+                    (int) ($data['membership_card_id'] ?? 0),
+                    (int) $invoice->customer_id,
+                    $invoice->company_id,
+                    $invoice->branch_id,
+                    $data['currency'],
+                );
+                abort_if(! $cardBalance, 422, 'Please select a valid active membership card.');
+                abort_if($receivedAmount > $targetAmount + 0.01, 422, 'Membership card payment cannot be greater than the invoice balance.');
+                abort_if((float) $cardBalance->balance + 0.0001 < $receivedAmount, 422, 'Membership card balance is not enough for this payment.');
+            }
 
             if ($isCash) {
                 $overpaidUsd = $data['currency'] === 'USD'
@@ -152,7 +175,7 @@ class SaleInvoiceController extends Controller
 
             $amountPaid = $data['currency'] === 'KHR' ? $paidUsd * $exchangeRate : $paidUsd;
 
-            Payment::create([
+            $payment = Payment::create([
                 'company_id' => $invoice->company_id,
                 'branch_id' => $invoice->branch_id,
                 'invoice_id' => $invoice->id,
@@ -170,6 +193,19 @@ class SaleInvoiceController extends Controller
                 'paid_at' => now(),
                 'received_by' => $request->user()->id,
             ]);
+
+            if ($isMembershipCard && $cardBalance) {
+                $this->recordMembershipCardPayment(
+                    $cardBalance,
+                    $payment,
+                    $invoice,
+                    $data['currency'],
+                    $amountPaid,
+                    $paidUsd,
+                    $exchangeRate,
+                    $request->user()->id,
+                );
+            }
 
             $this->syncInvoicePaymentStatus($invoice);
 
@@ -212,6 +248,7 @@ class SaleInvoiceController extends Controller
 
             foreach ($invoice->payments->where('status', '!=', 'cancelled') as $payment) {
                 $this->reversePosSessionPaymentTotals($activePosSession, $payment);
+                $this->reverseMembershipCardPayment($payment, $request->user()->id, 'Invoice cancelled.');
                 $payment->update([
                     'status' => 'cancelled',
                     'cancelled_by' => $request->user()->id,
@@ -268,6 +305,7 @@ class SaleInvoiceController extends Controller
 
         DB::transaction(function () use ($request, $payment, $activePosSession) {
             $this->reversePosSessionPaymentTotals($activePosSession, $payment);
+            $this->reverseMembershipCardPayment($payment, $request->user()->id, 'Receipt cancelled from invoice management.');
 
             $payment->update([
                 'status' => 'cancelled',
@@ -313,6 +351,7 @@ class SaleInvoiceController extends Controller
 
             foreach ($payments as $payment) {
                 $this->reversePosSessionPaymentTotals($activePosSession, $payment);
+                $this->reverseMembershipCardPayment($payment, $request->user()->id, 'All invoice receipts cancelled from invoice management.');
 
                 $payment->update([
                     'status' => 'cancelled',
@@ -372,15 +411,19 @@ class SaleInvoiceController extends Controller
             }
         }
 
-        $code = match ($method) {
-            'cash-usd' => 'CASH_USD',
-            'cash-khr' => 'CASH_KHR',
-            'ebanking-usd' => 'EBANK_USD',
-            'ebanking-khr' => 'EBANK_KHR',
-            'ebank-usd' => 'EBANK_USD',
-            'ebank-khr' => 'EBANK_KHR',
-            default => null,
-        };
+        $code = $method === 'membership-card'
+            ? ($currency === 'KHR' ? 'MEMBER_CARD_KHR' : 'MEMBER_CARD_USD')
+            : match ($method) {
+                'cash-usd' => 'CASH_USD',
+                'cash-khr' => 'CASH_KHR',
+                'ebanking-usd' => 'EBANK_USD',
+                'ebanking-khr' => 'EBANK_KHR',
+                'ebank-usd' => 'EBANK_USD',
+                'ebank-khr' => 'EBANK_KHR',
+                'member-card-usd' => 'MEMBER_CARD_USD',
+                'member-card-khr' => 'MEMBER_CARD_KHR',
+                default => null,
+            };
 
         return PaymentMethod::query()
             ->where('company_id', $posSession->company_id)
@@ -424,6 +467,7 @@ class SaleInvoiceController extends Controller
 
         return [
             'id' => $invoice->id,
+            'customer_id' => $invoice->customer_id,
             'dining_session_id' => $invoice->dining_session_id,
             'invoice_no' => $invoice->invoice_no,
             'status' => $invoice->status,
@@ -489,6 +533,8 @@ class SaleInvoiceController extends Controller
             'ebanking_khr' => 0,
             'pay_later_usd' => 0,
             'pay_later_khr' => 0,
+            'membership_card_usd' => 0,
+            'membership_card_khr' => 0,
         ];
 
         foreach ($invoices as $invoice) {
@@ -529,6 +575,16 @@ class SaleInvoiceController extends Controller
                     } else {
                         $summary['ebanking_usd'] += (float) $payment->amount_paid;
                     }
+
+                    continue;
+                }
+
+                if ($methodType === 'card' || str_contains($methodCode, 'MEMBER_CARD')) {
+                    if ($currency === 'KHR') {
+                        $summary['membership_card_khr'] += (float) $payment->amount_paid;
+                    } else {
+                        $summary['membership_card_usd'] += (float) $payment->amount_paid;
+                    }
                 }
             }
         }
@@ -546,12 +602,12 @@ class SaleInvoiceController extends Controller
             ->where('company_id', $posSession->company_id)
             ->where('is_active', true)
             ->whereIn('currency', ['USD', 'KHR'])
-            ->whereIn('method_type', ['cash', 'bank'])
+            ->whereIn('method_type', ['cash', 'bank', 'card'])
             ->where(function ($query) use ($posSession) {
                 $query->whereNull('branch_id')
                     ->orWhere('branch_id', $posSession->branch_id);
             })
-            ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 else 2 end")
+            ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 when 'card' then 2 else 3 end")
             ->orderBy('currency')
             ->get();
 
@@ -560,8 +616,8 @@ class SaleInvoiceController extends Controller
                 ->where('company_id', $posSession->company_id)
                 ->where('is_active', true)
                 ->whereIn('currency', ['USD', 'KHR'])
-                ->whereIn('method_type', ['cash', 'bank'])
-                ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 else 2 end")
+                ->whereIn('method_type', ['cash', 'bank', 'card'])
+                ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 when 'card' then 2 else 3 end")
                 ->orderBy('currency')
                 ->get();
         }
@@ -605,6 +661,177 @@ class SaleInvoiceController extends Controller
             }
 
             $posSession->increment('total_ebanking_khr', $amountPaid);
+        }
+    }
+
+    private function membershipCardsForInvoices($invoices, PosSession $posSession): array
+    {
+        $customerIds = $invoices
+            ->pluck('customer_id')
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($customerIds->isEmpty()) {
+            return [];
+        }
+
+        return MembershipCard::query()
+            ->with('balances')
+            ->whereIn('customer_id', $customerIds)
+            ->where('company_id', $posSession->company_id)
+            ->where('status', 'active')
+            ->get()
+            ->groupBy('customer_id')
+            ->map(fn ($cards) => $cards->map(fn (MembershipCard $card) => $this->formatMembershipCard($card))->values()->all())
+            ->all();
+    }
+
+    private function formatMembershipCard(MembershipCard $card): array
+    {
+        return [
+            'id' => $card->id,
+            'customerId' => $card->customer_id,
+            'cardNo' => $card->card_no,
+            'cardName' => $card->card_name,
+            'balances' => $card->balances
+                ->map(fn (MembershipCardBalance $balance) => [
+                    'currency' => $balance->currency,
+                    'balance' => (float) $balance->balance,
+                ])
+                ->values()
+                ->all(),
+        ];
+    }
+
+    private function membershipCardBalanceForPayment(
+        int $membershipCardId,
+        int $customerId,
+        int $companyId,
+        int $branchId,
+        string $currency,
+    ): ?MembershipCardBalance {
+        if ($membershipCardId <= 0) {
+            return null;
+        }
+
+        $balance = MembershipCardBalance::query()
+            ->with('membershipCard')
+            ->where('currency', $currency)
+            ->whereHas('membershipCard', function ($query) use ($membershipCardId, $customerId, $companyId, $branchId) {
+                $query->where('id', $membershipCardId)
+                    ->where('customer_id', $customerId)
+                    ->where('company_id', $companyId)
+                    ->where('status', 'active')
+                    ->where(function ($branchQuery) use ($branchId) {
+                        $branchQuery->whereNull('branch_id')
+                            ->orWhere('branch_id', $branchId);
+                    });
+            })
+            ->lockForUpdate()
+            ->first();
+
+        if ($balance) {
+            try {
+                app(MembershipCardLedger::class)->assertBalanceIsVerified($balance);
+            } catch (\RuntimeException $exception) {
+                abort(422, $exception->getMessage());
+            }
+        }
+
+        return $balance;
+    }
+
+    private function recordMembershipCardPayment(
+        MembershipCardBalance $cardBalance,
+        Payment $payment,
+        Invoice $invoice,
+        string $currency,
+        float $amount,
+        float $amountUsd,
+        float $exchangeRate,
+        ?int $performedBy,
+    ): void {
+        try {
+            app(MembershipCardLedger::class)->assertBalanceIsVerified($cardBalance);
+
+            app(MembershipCardLedger::class)->debit($cardBalance->membershipCard, [
+                'branch_id' => $invoice->branch_id,
+                'invoice_id' => $invoice->id,
+                'payment_id' => $payment->id,
+                'transaction_type' => 'payment',
+                'currency' => $currency,
+                'amount' => $amount,
+                'exchange_rate_snapshot' => $exchangeRate,
+                'amount_usd_equivalent' => $amountUsd,
+                'amount_khr_equivalent' => $amountUsd * $exchangeRate,
+                'transacted_at' => now(),
+                'performed_by' => $performedBy,
+                'payload' => [
+                    'invoice_no' => $invoice->invoice_no,
+                    'payment_no' => $payment->payment_no,
+                ],
+            ]);
+        } catch (\RuntimeException $exception) {
+            abort(422, $exception->getMessage());
+        }
+    }
+
+    private function reverseMembershipCardPayment(Payment $payment, ?int $performedBy, string $note): void
+    {
+        $transactions = MembershipCardTransaction::query()
+            ->where('payment_id', $payment->id)
+            ->where('transaction_type', 'payment')
+            ->where('direction', 'debit')
+            ->get();
+
+        foreach ($transactions as $transaction) {
+            $alreadyVoided = MembershipCardTransaction::query()
+                ->where('payment_id', $payment->id)
+                ->where('transaction_type', 'void')
+                ->where('direction', 'credit')
+                ->where('currency', $transaction->currency)
+                ->exists();
+
+            if ($alreadyVoided) {
+                continue;
+            }
+
+            $cardBalance = MembershipCardBalance::query()
+                ->with('membershipCard')
+                ->where('membership_card_id', $transaction->membership_card_id)
+                ->where('currency', $transaction->currency)
+                ->lockForUpdate()
+                ->first();
+
+            if (! $cardBalance) {
+                continue;
+            }
+
+            try {
+                app(MembershipCardLedger::class)->assertBalanceIsVerified($cardBalance);
+
+                app(MembershipCardLedger::class)->credit($cardBalance->membershipCard, [
+                    'branch_id' => $transaction->branch_id,
+                    'invoice_id' => $transaction->invoice_id,
+                    'payment_id' => $payment->id,
+                    'transaction_type' => 'void',
+                    'currency' => $transaction->currency,
+                    'amount' => (float) $transaction->amount,
+                    'exchange_rate_snapshot' => (float) $transaction->exchange_rate_snapshot,
+                    'amount_usd_equivalent' => (float) $transaction->amount_usd_equivalent,
+                    'amount_khr_equivalent' => (float) $transaction->amount_khr_equivalent,
+                    'transacted_at' => now(),
+                    'performed_by' => $performedBy,
+                    'note' => $note,
+                    'payload' => [
+                        'void_of_transaction_no' => $transaction->transaction_no,
+                        'payment_no' => $payment->payment_no,
+                    ],
+                ]);
+            } catch (\RuntimeException $exception) {
+                abort(422, $exception->getMessage());
+            }
         }
     }
 

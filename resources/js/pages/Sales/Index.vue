@@ -42,6 +42,7 @@ type InvoiceStatus =
 
 type SaleInvoice = {
     id: number;
+    customer_id?: number | null;
     dining_session_id: number;
     invoice_no: string;
     status: InvoiceStatus;
@@ -96,8 +97,19 @@ type PaymentMethodOption = {
     id: number;
     code?: string | null;
     label: string;
-    type: 'cash' | 'bank';
+    type: 'cash' | 'bank' | 'card';
     currency: 'USD' | 'KHR';
+};
+
+type MembershipCardOption = {
+    id: number;
+    customerId: number;
+    cardNo: string;
+    cardName?: string | null;
+    balances: {
+        currency: string;
+        balance: number;
+    }[];
 };
 
 type PaymentPayload = {
@@ -105,6 +117,7 @@ type PaymentPayload = {
     changeUsdAmount: number;
     method: string;
     paymentMethodId?: number | null;
+    membershipCardId?: number | null;
     currency: 'USD' | 'KHR';
     receivedAmount: number;
     operationStatus: 'invoice' | 'invoice_receipt_done';
@@ -132,6 +145,7 @@ const props = defineProps<{
     };
     invoices: SaleInvoice[];
     paymentMethods: PaymentMethodOption[];
+    membershipCards?: Record<number, MembershipCardOption[]>;
     paymentSummary: PaymentSummary;
     filters: {
         start_date?: string | null;
@@ -351,6 +365,7 @@ function confirmPayment(payload: PaymentPayload) {
         {
             method: payload.method,
             payment_method_id: payload.paymentMethodId,
+            membership_card_id: payload.membershipCardId,
             currency: payload.currency,
             received_amount: payload.receivedAmount,
             operation_status: payload.operationStatus,
@@ -1015,6 +1030,11 @@ function statusLabel(status: InvoiceStatus) {
                 :exchange-rate="selectedInvoice.exchange_rate ?? 4100"
                 :allow-pay-later="false"
                 :payment-methods="paymentMethods"
+                :membership-cards="
+                    selectedInvoice.customer_id
+                        ? (membershipCards?.[selectedInvoice.customer_id] ?? [])
+                        : []
+                "
                 @close="closePayment"
                 @confirm="confirmPayment"
             />

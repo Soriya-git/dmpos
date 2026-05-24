@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Membership Card - Solo View</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --primary-dark: #2a4858;
+                --primary-teal: #007882;
+                --accent-green: #23aa8f;
+                --light-green: #86d780;
+                --accent-yellow: #fafa6e;
+            }
+            body {
+                background-color: #f1f5f9;
+                font-family: 'Inter', sans-serif;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* Interactive Card Flip Styling */
+            .card-container {
+                perspective: 1000px;
+                width: 100%;
+                max-width: 420px;
+                height: 250px;
+            }
+            .card-inner {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+                transform-style: preserve-3d;
+                cursor: pointer;
+            }
+            .card-container.flipped .card-inner {
+                transform: rotateY(180deg);
+            }
+            .card-front,
+            .card-back {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                backface-visibility: hidden;
+                border-radius: 20px;
+                padding: 24px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                box-shadow: 0 20px 40px rgba(42, 72, 88, 0.15);
+                overflow: hidden;
+            }
+            .card-back {
+                transform: rotateY(180deg);
+            }
+
+            /* Shimmer effect for premium metallic pass look */
+            .shimmer-bg {
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                right: -50%;
+                bottom: -50%;
+                background: linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0) 30%,
+                    rgba(255, 255, 255, 0.18) 50%,
+                    rgba(255, 255, 255, 0) 70%
+                );
+                transform: rotate(30deg);
+                transition: all 0.6s ease;
+            }
+            .card-container:hover .shimmer-bg {
+                transform: rotate(30deg) translate(20%, 20%);
+            }
+
+            /* Subtle glowing orbit backdrops for visual depth */
+            .glow-sphere {
+                position: absolute;
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                background: radial-gradient(
+                    circle,
+                    rgba(35, 170, 143, 0.15) 0%,
+                    rgba(255, 255, 255, 0) 70%
+                );
+                filter: blur(20px);
+                z-index: 1;
+            }
+
+            .status-badge {
+                font-size: 0.65rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+                border-width: 1px;
+            }
+        </style>
+    </head>
+    <body class="p-6">
+        <div class="flex w-full max-w-md flex-col items-center gap-8">
+            <!-- Interactive Digital Card Preview -->
+            <div class="flex w-full flex-col items-center gap-6">
+                <div class="text-center">
+                    <span
+                        class="mb-1 block text-[10px] font-black tracking-widest text-slate-400 uppercase"
+                        >Digital Membership Pass</span
+                    >
+                    <p class="text-xs font-medium text-slate-500">
+                        Click or tap card to flip
+                    </p>
+                </div>
+
+                <!-- Virtual Card -->
+                <div
+                    class="card-container relative"
+                    id="memberCard"
+                    onclick="flipCard()"
+                >
+                    <!-- Sphere highlights for background visual depth -->
+                    <div class="glow-sphere -top-10 -left-10"></div>
+                    <div class="glow-sphere -right-10 -bottom-10"></div>
+
+                    <div class="card-inner">
+                        <!-- FRONT OF CARD -->
+                        <div
+                            class="card-front border border-white/10 bg-gradient-to-br from-[#2A4858] via-[#1F3643] to-[#12222B] text-white"
+                        >
+                            <div class="shimmer-bg"></div>
+
+                            <!-- Header -->
+                            <div
+                                class="relative z-10 flex items-start justify-between"
+                            >
+                                <div>
+                                    <h4
+                                        class="text-xs font-black tracking-widest text-[#FAFA6E] uppercase"
+                                        id="cardTierDisplay"
+                                    >
+                                        VIP Platinum Member
+                                    </h4>
+                                    <p
+                                        class="text-[9px] font-bold tracking-wider text-white/50"
+                                        id="companyBranchDisplay"
+                                    >
+                                        DM Group • Central Branch
+                                    </p>
+                                </div>
+                                <div class="text-[#FAFA6E] drop-shadow filter">
+                                    <i class="fas fa-crown text-xl"></i>
+                                </div>
+                            </div>
+
+                            <!-- Card Number -->
+                            <div class="relative z-10 my-auto">
+                                <p
+                                    class="font-mono text-2xl font-black tracking-widest text-white drop-shadow-sm"
+                                    id="cardNoDisplay"
+                                >
+                                    MC-8820-9921
+                                </p>
+                            </div>
+
+                            <!-- Card Footer -->
+                            <div
+                                class="relative z-10 flex items-end justify-between"
+                            >
+                                <div>
+                                    <span
+                                        class="block text-[8px] font-bold text-white/40 uppercase"
+                                        >Card Holder</span
+                                    >
+                                    <h3
+                                        class="text-sm font-black tracking-tight"
+                                        id="customerNameDisplay"
+                                    >
+                                        Sok Phalla
+                                    </h3>
+                                </div>
+                                <!-- Inline Custom Barcode -->
+                                <div
+                                    class="flex flex-col items-center rounded-lg bg-white/95 p-1.5 shadow-inner"
+                                >
+                                    <svg
+                                        class="h-6 w-20"
+                                        viewBox="0 0 100 30"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <rect
+                                            x="2"
+                                            width="4"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="8"
+                                            width="2"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="12"
+                                            width="6"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="20"
+                                            width="2"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="24"
+                                            width="4"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="30"
+                                            width="8"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="40"
+                                            width="2"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="44"
+                                            width="6"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="52"
+                                            width="2"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="56"
+                                            width="8"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="66"
+                                            width="4"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="72"
+                                            width="2"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="76"
+                                            width="6"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="84"
+                                            width="4"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                        <rect
+                                            x="90"
+                                            width="8"
+                                            height="30"
+                                            fill="black"
+                                        />
+                                    </svg>
+                                    <span
+                                        class="mt-0.5 font-mono text-[7px] tracking-widest text-slate-700"
+                                        id="barcodeLabel"
+                                        >MC88209921</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BACK OF CARD -->
+                        <div
+                            class="card-back border border-white/5 bg-gradient-to-br from-[#1F2E37] to-[#0E171C] text-white"
+                        >
+                            <!-- Magnetic strip style decoration -->
+                            <div
+                                class="absolute top-6 right-0 left-0 h-10 bg-slate-950/90 shadow-inner"
+                            ></div>
+
+                            <!-- Reverse metadata -->
+                            <div
+                                class="relative z-10 mt-10 flex flex-1 flex-col justify-between pt-4"
+                            >
+                                <div
+                                    class="grid grid-cols-2 gap-4 border-b border-white/5 pb-3"
+                                >
+                                    <div>
+                                        <span
+                                            class="block text-[8px] font-bold text-white/40 uppercase"
+                                            >Issued Date</span
+                                        >
+                                        <span
+                                            class="font-mono text-xs font-bold"
+                                            id="issuedDateDisplay"
+                                            >2026-05-23</span
+                                        >
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="block text-[8px] font-bold text-white/40 uppercase"
+                                            >Expiry Date</span
+                                        >
+                                        <span
+                                            class="font-mono text-xs font-bold text-amber-300"
+                                            id="expiredDateDisplay"
+                                            >2028-05-23</span
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="flex-1 py-2">
+                                    <span
+                                        class="mb-0.5 block text-[8px] font-bold text-white/40 uppercase"
+                                        >Remarks / Rules</span
+                                    >
+                                    <p
+                                        class="text-[9px] leading-normal text-white/60"
+                                        id="remarkDisplay"
+                                    >
+                                        Non-transferable. Present at checkout to
+                                        redeem VIP point multipliers. Subject to
+                                        terms & conditions.
+                                    </p>
+                                </div>
+
+                                <div
+                                    class="flex items-center justify-between border-t border-white/5 pt-2"
+                                >
+                                    <span
+                                        class="font-mono text-[8px] text-white/30 uppercase"
+                                        >System Ver. 1.2</span
+                                    >
+                                    <span
+                                        id="statusBadgeDisplay"
+                                        class="status-badge rounded border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[9px] font-black text-emerald-400"
+                                        >Active</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick flip button helper -->
+                <button
+                    onclick="flipCard()"
+                    class="flex items-center gap-2 rounded-xl border border-slate-100 bg-white px-4 py-2 text-xs font-bold text-slate-500 shadow-sm transition-colors hover:text-[#007882] hover:shadow-md"
+                >
+                    <i class="fas fa-arrows-spin text-xs"></i>
+                    <span>Flip Card View</span>
+                </button>
+            </div>
+        </div>
+
+        <script>
+            // Flip Card Action
+            function flipCard() {
+                const card = document.getElementById('memberCard');
+                card.classList.toggle('flipped');
+            }
+        </script>
+    </body>
+</html>

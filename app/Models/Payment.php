@@ -48,4 +48,9 @@ class Payment extends Model
     {
         return $this->belongsTo(User::class, 'cancelled_by');
     }
+
+    public function membershipCardTransactions()
+    {
+        return $this->hasMany(MembershipCardTransaction::class);
+    }
 }

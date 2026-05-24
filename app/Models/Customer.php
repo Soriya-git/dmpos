@@ -77,4 +77,10 @@ class Customer extends Model
     {
         return $this->hasMany(Invoice::class);
     }
+
+    /** @return HasMany<MembershipCard, $this> */
+    public function membershipCards(): HasMany
+    {
+        return $this->hasMany(MembershipCard::class);
+    }
 }

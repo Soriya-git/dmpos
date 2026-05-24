@@ -76,6 +76,12 @@ class Invoice extends Model
         return $this->hasMany(Payment::class);
     }
 
+    /** @return HasMany<MembershipCardTransaction, $this> */
+    public function membershipCardTransactions(): HasMany
+    {
+        return $this->hasMany(MembershipCardTransaction::class);
+    }
+
     /** @return BelongsTo<User, $this> */
     public function issuer(): BelongsTo
     {

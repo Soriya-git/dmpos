@@ -10,6 +10,8 @@ use App\Models\DiningSession;
 use App\Models\ExchangeRate;
 use App\Models\Invoice;
 use App\Models\InvoiceLine;
+use App\Models\MembershipCard;
+use App\Models\MembershipCardBalance;
 use App\Models\Menu;
 use App\Models\MenuCategory;
 use App\Models\MenuPrice;
@@ -22,6 +24,7 @@ use App\Models\PosSession;
 use App\Models\Printer;
 use App\Models\PrintJob;
 use App\Models\PrintTemplate;
+use App\Services\MembershipCardLedger;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -129,6 +132,7 @@ class SeatOrderController extends Controller
             'diningSession' => [
                 'id' => $diningSession->id,
                 'session_no' => $diningSession->session_no,
+                'customer_id' => $diningSession->customer_id,
                 'status' => $diningSession->status,
                 'invoice_no' => $latestInvoice?->invoice_no,
                 'invoice_status' => $latestInvoice?->status,
@@ -144,6 +148,8 @@ class SeatOrderController extends Controller
             'cart' => $this->formatOrder($cartOrder),
             'exchangeRate' => $this->latestExchangeRate($activePosSession),
             'paymentMethods' => $this->paymentMethodsFor($activePosSession),
+            'membershipCards' => $this->membershipCardsForCustomer($diningSession->customer_id, $activePosSession),
+            'customers' => $this->customerOptions($activePosSession),
             'historyOrders' => $diningSession->orders()
                 ->with(['orderLines.menu', 'orderLines.invoiceLines'])
                 ->where('id', '!=', $cartOrder->id)
@@ -744,6 +750,7 @@ class SeatOrderController extends Controller
         $data = $request->validate([
             'method' => ['required', 'string', 'max:50'],
             'payment_method_id' => ['nullable', 'exists:payment_methods,id'],
+            'membership_card_id' => ['nullable', 'exists:membership_cards,id'],
             'currency' => ['required', 'in:USD,KHR'],
             'received_amount' => ['nullable', 'numeric', 'min:0'],
             'operation_status' => ['required', 'in:invoice,invoice_receipt_done'],
@@ -819,6 +826,7 @@ class SeatOrderController extends Controller
 
                 abort_if(! $method, 422, 'Please select a valid payment method.');
 
+                $isMembershipCard = $method->method_type === 'card' || str_starts_with($data['method'], 'member-card-');
                 $isCash = str_starts_with($data['method'], 'cash-');
                 $targetAmount = $data['currency'] === 'KHR' ? $grandTotal * $exchangeRate : $grandTotal;
                 $receivedAmount = (float) ($data['received_amount'] ?? $targetAmount);
@@ -826,6 +834,20 @@ class SeatOrderController extends Controller
                 $changeKhrAmount = $isCash ? $this->roundDownKhrChange((float) ($data['change_khr_amount'] ?? 0)) : 0;
 
                 abort_if($receivedAmount <= 0, 422, 'Payment amount must be greater than zero.');
+
+                $cardBalance = null;
+                if ($isMembershipCard) {
+                    abort_if(! $diningSession->customer_id, 422, 'Please assign a customer before using membership card payment.');
+                    $cardBalance = $this->membershipCardBalanceForPayment(
+                        (int) ($data['membership_card_id'] ?? 0),
+                        (int) $diningSession->customer_id,
+                        $diningSession->company_id,
+                        $data['currency'],
+                    );
+                    abort_if(! $cardBalance, 422, 'Please select a valid active membership card.');
+                    abort_if($receivedAmount > $targetAmount + 0.01, 422, 'Membership card payment cannot be greater than the invoice balance.');
+                    abort_if((float) $cardBalance->balance + 0.0001 < $receivedAmount, 422, 'Membership card balance is not enough for this payment.');
+                }
 
                 if ($isCash) {
                     $overpaidUsd = $data['currency'] === 'USD'
@@ -887,7 +909,7 @@ class SeatOrderController extends Controller
             }
 
             if (! $isPayLater) {
-                Payment::create([
+                $payment = Payment::create([
                     'company_id' => $diningSession->company_id,
                     'branch_id' => $diningSession->branch_id,
                     'invoice_id' => $invoice->id,
@@ -905,6 +927,19 @@ class SeatOrderController extends Controller
                     'paid_at' => now(),
                     'received_by' => $request->user()->id,
                 ]);
+
+                if ($isMembershipCard && $cardBalance) {
+                    $this->recordMembershipCardPayment(
+                        $cardBalance,
+                        $payment,
+                        $invoice,
+                        $data['currency'],
+                        $paymentAmount,
+                        $paidAmount,
+                        $exchangeRate,
+                        $request->user()->id,
+                    );
+                }
 
                 $this->recordPosSessionPaymentTotals(
                     $activePosSession,
@@ -950,6 +985,7 @@ class SeatOrderController extends Controller
         }
 
         $data = $request->validate([
+            'customer_id' => ['nullable', 'integer', 'exists:customers,id'],
             'customer_phone' => ['nullable', 'string', 'max:50'],
             'customer_name' => ['nullable', 'string', 'max:255'],
         ]);
@@ -959,7 +995,17 @@ class SeatOrderController extends Controller
             $customerName = trim((string) ($data['customer_name'] ?? ''));
             $customerId = null;
 
-            if ($phoneNumber !== '') {
+            if (! empty($data['customer_id'])) {
+                $customer = Customer::query()
+                    ->where('id', $data['customer_id'])
+                    ->where('company_id', $activePosSession->company_id)
+                    ->where('is_active', true)
+                    ->first();
+
+                abort_if(! $customer, 422, 'Please select a valid customer.');
+
+                $customerId = $customer->id;
+            } elseif ($phoneNumber !== '') {
                 $customer = Customer::updateOrCreate(
                     [
                         'company_id' => $activePosSession->company_id,
@@ -1520,13 +1566,17 @@ class SeatOrderController extends Controller
             }
         }
 
-        $code = match ($method) {
-            'cash-usd' => 'CASH_USD',
-            'cash-khr' => 'CASH_KHR',
-            'ebanking-usd' => 'EBANK_USD',
-            'ebanking-khr' => 'EBANK_KHR',
-            default => null,
-        };
+        $code = $method === 'membership-card'
+            ? ($currency === 'KHR' ? 'MEMBER_CARD_KHR' : 'MEMBER_CARD_USD')
+            : match ($method) {
+                'cash-usd' => 'CASH_USD',
+                'cash-khr' => 'CASH_KHR',
+                'ebanking-usd' => 'EBANK_USD',
+                'ebanking-khr' => 'EBANK_KHR',
+                'member-card-usd' => 'MEMBER_CARD_USD',
+                'member-card-khr' => 'MEMBER_CARD_KHR',
+                default => null,
+            };
 
         return PaymentMethod::query()
             ->where('company_id', $posSession->company_id)
@@ -1593,20 +1643,138 @@ class SeatOrderController extends Controller
         return trim(($payment->currency ?? '').' Payment') ?: null;
     }
 
+    private function membershipCardsForCustomer(?int $customerId, PosSession $posSession): array
+    {
+        if (! $customerId) {
+            return [];
+        }
+
+        return MembershipCard::query()
+            ->with('balances')
+            ->where('customer_id', $customerId)
+            ->where('company_id', $posSession->company_id)
+            ->where('status', 'active')
+            ->get()
+            ->map(fn (MembershipCard $card) => [
+                'id' => $card->id,
+                'customerId' => $card->customer_id,
+                'cardNo' => $card->card_no,
+                'cardName' => $card->card_name,
+                'balances' => $card->balances
+                    ->map(fn (MembershipCardBalance $balance) => [
+                        'currency' => $balance->currency,
+                        'balance' => (float) $balance->balance,
+                    ])
+                    ->values()
+                    ->all(),
+            ])
+            ->values()
+            ->all();
+    }
+
+    private function customerOptions(PosSession $posSession): array
+    {
+        return Customer::query()
+            ->withCount(['membershipCards' => fn ($query) => $query
+                ->where('status', 'active')])
+            ->where('company_id', $posSession->company_id)
+            ->where('is_active', true)
+            ->orderByDesc('membership_cards_count')
+            ->orderBy('name')
+            ->limit(300)
+            ->get()
+            ->map(fn (Customer $customer) => [
+                'id' => $customer->id,
+                'name' => $customer->name ?: 'Unnamed Customer',
+                'phone' => $customer->phone_number,
+                'cardCount' => (int) $customer->membership_cards_count,
+            ])
+            ->values()
+            ->all();
+    }
+
+    private function membershipCardBalanceForPayment(
+        int $membershipCardId,
+        int $customerId,
+        int $companyId,
+        string $currency,
+    ): ?MembershipCardBalance {
+        if ($membershipCardId <= 0) {
+            return null;
+        }
+
+        $balance = MembershipCardBalance::query()
+            ->with('membershipCard')
+            ->where('currency', $currency)
+            ->whereHas('membershipCard', function ($query) use ($membershipCardId, $customerId, $companyId) {
+                $query->where('id', $membershipCardId)
+                    ->where('customer_id', $customerId)
+                    ->where('company_id', $companyId)
+                    ->where('status', 'active');
+            })
+            ->lockForUpdate()
+            ->first();
+
+        if ($balance) {
+            try {
+                app(MembershipCardLedger::class)->assertBalanceIsVerified($balance);
+            } catch (\RuntimeException $exception) {
+                abort(422, $exception->getMessage());
+            }
+        }
+
+        return $balance;
+    }
+
+    private function recordMembershipCardPayment(
+        MembershipCardBalance $cardBalance,
+        Payment $payment,
+        Invoice $invoice,
+        string $currency,
+        float $amount,
+        float $amountUsd,
+        float $exchangeRate,
+        ?int $performedBy,
+    ): void {
+        try {
+            app(MembershipCardLedger::class)->assertBalanceIsVerified($cardBalance);
+
+            app(MembershipCardLedger::class)->debit($cardBalance->membershipCard, [
+                'branch_id' => $invoice->branch_id,
+                'invoice_id' => $invoice->id,
+                'payment_id' => $payment->id,
+                'transaction_type' => 'payment',
+                'currency' => $currency,
+                'amount' => $amount,
+                'exchange_rate_snapshot' => $exchangeRate,
+                'amount_usd_equivalent' => $amountUsd,
+                'amount_khr_equivalent' => $amountUsd * $exchangeRate,
+                'transacted_at' => now(),
+                'performed_by' => $performedBy,
+                'payload' => [
+                    'invoice_no' => $invoice->invoice_no,
+                    'payment_no' => $payment->payment_no,
+                ],
+            ]);
+        } catch (\RuntimeException $exception) {
+            abort(422, $exception->getMessage());
+        }
+    }
+
     private function paymentMethodsFor(PosSession $posSession): array
     {
         $query = PaymentMethod::query()
             ->where('company_id', $posSession->company_id)
             ->where('is_active', true)
             ->whereIn('currency', ['USD', 'KHR'])
-            ->whereIn('method_type', ['cash', 'bank'])
+            ->whereIn('method_type', ['cash', 'bank', 'card'])
             ->where(function ($query) use ($posSession) {
                 $query->whereNull('branch_id')
                     ->orWhere('branch_id', $posSession->branch_id);
             });
 
         $paymentMethods = (clone $query)
-            ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 else 2 end")
+            ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 when 'card' then 2 else 3 end")
             ->orderBy('currency')
             ->get();
 
@@ -1615,8 +1783,8 @@ class SeatOrderController extends Controller
                 ->where('company_id', $posSession->company_id)
                 ->where('is_active', true)
                 ->whereIn('currency', ['USD', 'KHR'])
-                ->whereIn('method_type', ['cash', 'bank'])
-                ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 else 2 end")
+                ->whereIn('method_type', ['cash', 'bank', 'card'])
+                ->orderByRaw("case method_type when 'cash' then 0 when 'bank' then 1 when 'card' then 2 else 3 end")
                 ->orderBy('currency')
                 ->get();
         }
