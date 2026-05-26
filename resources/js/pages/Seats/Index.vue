@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { Head, router, useForm } from '@inertiajs/vue3';
-import { Maximize2, Minimize2, Search } from 'lucide-vue-next';
+import {
+    ChevronDown,
+    Maximize2,
+    Minimize2,
+    MonitorCog,
+    Power,
+    Search,
+} from 'lucide-vue-next';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import DiningResourceCard, {
     type DiningCustomerOption,
@@ -23,8 +30,25 @@ const props = defineProps<{
         branch_name?: string | null;
         terminal_name?: string | null;
         opened_by?: string | null;
+        can_close?: boolean;
         opened_at?: string | null;
-    };
+    } | null;
+    openPosSessions: {
+        id: number;
+        session_no: string;
+        branch_name?: string | null;
+        terminal_name?: string | null;
+        opened_by?: string | null;
+        can_close?: boolean;
+        opened_at?: string | null;
+    }[];
+    availablePosTerminals: {
+        id: number;
+        name: string;
+        code?: string | null;
+        branch_name?: string | null;
+    }[];
+    requiresPosSessionSelection: boolean;
     resources: DiningResourceCardItem[];
     types: TypeItem[];
     customers: DiningCustomerOption[];
@@ -42,8 +66,11 @@ const typeId = ref(props.filters.type_id ?? '');
 const pageRoot = ref<HTMLElement | null>(null);
 const isFullscreen = ref(false);
 const closeProcessingSessionId = ref<number | null>(null);
+const selectedPosSessionId = ref<number | string>(props.posSession?.id ?? '');
+const sessionSelectorOpen = ref(false);
 
 const checkInForm = useForm({
+    pos_session_id: null as number | null,
     guest_count: null as number | null,
     customer_id: null as number | null,
     customer_phone: '',
@@ -60,6 +87,21 @@ const statusOptions = [
 ];
 
 const filteredCount = computed(() => props.resources.length);
+const posIsOpen = computed(() => Boolean(props.posSession));
+const hasOpenPosSessions = computed(() => props.openPosSessions.length > 0);
+const hasAvailablePosTerminal = computed(
+    () => props.availablePosTerminals.length > 0,
+);
+const canCloseSelectedPosSession = computed(
+    () => props.posSession?.can_close === true,
+);
+const posActionLabel = computed(() => {
+    if (canCloseSelectedPosSession.value) return 'CLOSE NOW';
+    if (hasAvailablePosTerminal.value) return 'OPEN ANOTHER';
+    if (posIsOpen.value) return 'POS SESSION';
+
+    return 'OPEN NOW';
+});
 
 const summary = computed(() => {
     return {
@@ -76,6 +118,7 @@ function applyFilters() {
     router.get(
         '/orders',
         {
+            pos_session_id: selectedPosSessionId.value || undefined,
             search: search.value || undefined,
             status: status.value || undefined,
             type_id: typeId.value || undefined,
@@ -86,6 +129,29 @@ function applyFilters() {
             replace: true,
         },
     );
+}
+
+function selectPosSession() {
+    sessionSelectorOpen.value = false;
+
+    router.get(
+        '/orders',
+        {
+            pos_session_id: selectedPosSessionId.value || undefined,
+            search: search.value || undefined,
+            status: status.value || undefined,
+            type_id: typeId.value || undefined,
+        },
+        {
+            preserveScroll: true,
+            replace: true,
+        },
+    );
+}
+
+function choosePosSession(sessionId: number) {
+    selectedPosSessionId.value = sessionId;
+    selectPosSession();
 }
 
 function selectZone(value: number | string) {
@@ -113,10 +179,12 @@ function checkIn(
     checkInForm.customer_phone = payload.customerPhone;
     checkInForm.customer_name = payload.customerName;
     checkInForm.menu_price_list_id = payload.priceListId;
+    checkInForm.pos_session_id = props.posSession?.id ?? null;
 
     checkInForm.post(`/orders/${resource.id}/check-in`, {
         preserveScroll: true,
         onFinish: () => {
+            checkInForm.pos_session_id = null;
             checkInForm.guest_count = null;
             checkInForm.customer_id = null;
             checkInForm.customer_phone = '';
@@ -129,7 +197,11 @@ function checkIn(
 function openOrder(resource: DiningResourceCardItem) {
     if (!resource.active_session) return;
 
-    router.visit(`/orders/${resource.active_session.id}/menu`);
+    router.visit(
+        `/orders/${resource.active_session.id}/menu${
+            props.posSession?.id ? `?pos_session_id=${props.posSession.id}` : ''
+        }`,
+    );
 }
 
 function closeOrder(resource: DiningResourceCardItem) {
@@ -147,6 +219,10 @@ function closeOrder(resource: DiningResourceCardItem) {
             },
         },
     );
+}
+
+function openPosSessionPage() {
+    router.visit('/pos-sessions');
 }
 
 async function toggleFullscreen() {
@@ -196,11 +272,27 @@ onBeforeUnmount(() => {
                 >
                     <div>
                         <div class="flex flex-wrap items-center gap-3">
-                            <h1
-                                class="text-2xl font-black tracking-tight text-[#2A4858]"
+                            <Button
+                                type="button"
+                                class="h-10 rounded-lg px-4 text-xs font-black tracking-wide text-white shadow-lg transition"
+                                :class="
+                                    canCloseSelectedPosSession
+                                        ? 'bg-red-600 shadow-red-600/20 hover:bg-red-700'
+                                        : 'bg-[#23AA8F] shadow-[#23AA8F]/25 hover:bg-[#007882] disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 disabled:shadow-none'
+                                "
+                                :disabled="
+                                    Boolean(posSession) &&
+                                    !canCloseSelectedPosSession
+                                "
+                                @click="openPosSessionPage"
                             >
-                                Dinning Resource
-                            </h1>
+                                <Power
+                                    v-if="canCloseSelectedPosSession"
+                                    class="h-4 w-4"
+                                />
+                                <MonitorCog v-else class="h-4 w-4" />
+                                {{ posActionLabel }}
+                            </Button>
                             <Button
                                 type="button"
                                 variant="outline"
@@ -219,23 +311,115 @@ onBeforeUnmount(() => {
                                 }}
                             </Button>
                         </div>
-                        <div class="mt-3 flex flex-wrap gap-2 text-xs">
+                        <div
+                            class="mt-3 flex flex-wrap items-center gap-2 text-xs"
+                        >
                             <span
-                                class="rounded-full bg-white px-3 py-1 font-bold text-[#2A4858] shadow-sm"
+                                v-if="hasOpenPosSessions && !posSession"
+                                class="rounded-full border border-amber-100 bg-amber-50 px-3 py-1 font-bold text-amber-700 shadow-sm"
                             >
-                                Session: {{ posSession.session_no }}
+                                Select a POS session before opening a resource.
                             </span>
+                            <div
+                                v-if="posSession"
+                                class="relative inline-flex items-center overflow-visible rounded-full border border-[#23AA8F]/20 bg-white shadow-md ring-1 shadow-slate-200/70 ring-white"
+                            >
+                                <button
+                                    v-if="hasAvailablePosTerminal"
+                                    type="button"
+                                    class="rounded-l-full bg-[#23AA8F] px-3 py-1.5 text-[10px] font-black tracking-wide text-white transition hover:bg-[#007882] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500"
+                                    :disabled="!canCloseSelectedPosSession"
+                                    @click="openPosSessionPage"
+                                >
+                                    Open Another Terminal
+                                </button>
+                                <button
+                                    type="button"
+                                    class="inline-flex items-center gap-1 px-3 py-1.5 font-bold text-[#2A4858] transition hover:bg-[#23AA8F]/10"
+                                    :class="
+                                        hasAvailablePosTerminal
+                                            ? 'rounded-r-full'
+                                            : 'rounded-full'
+                                    "
+                                    @click="
+                                        sessionSelectorOpen =
+                                            !sessionSelectorOpen
+                                    "
+                                >
+                                    <span class="text-slate-500">
+                                        Session:
+                                    </span>
+                                    <span
+                                        class="text-[#007882] underline decoration-[#23AA8F]/40 underline-offset-2"
+                                    >
+                                        {{ posSession.session_no }}
+                                    </span>
+                                    <ChevronDown
+                                        class="h-3.5 w-3.5 text-slate-400 transition"
+                                        :class="
+                                            sessionSelectorOpen
+                                                ? 'rotate-180'
+                                                : 'rotate-0'
+                                        "
+                                    />
+                                </button>
+
+                                <div
+                                    v-if="sessionSelectorOpen"
+                                    class="absolute top-9 left-0 z-40 w-72 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl shadow-slate-300/60"
+                                >
+                                    <button
+                                        v-for="session in openPosSessions"
+                                        :key="session.id"
+                                        type="button"
+                                        class="flex w-full flex-col border-b border-slate-100 px-3 py-2 text-left last:border-b-0 hover:bg-[#23AA8F]/10"
+                                        :class="
+                                            posSession.id === session.id
+                                                ? 'bg-[#23AA8F]/10'
+                                                : ''
+                                        "
+                                        @click="choosePosSession(session.id)"
+                                    >
+                                        <span
+                                            class="text-xs font-black text-[#2A4858]"
+                                        >
+                                            {{ session.session_no }}
+                                            <span
+                                                v-if="
+                                                    posSession.id === session.id
+                                                "
+                                                class="text-[#007882]"
+                                            >
+                                                Current
+                                            </span>
+                                        </span>
+                                        <span
+                                            class="mt-0.5 text-[10px] font-medium text-slate-500"
+                                        >
+                                            {{ session.terminal_name }} /
+                                            {{ session.opened_by }}
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
                             <span
-                                v-if="posSession.branch_name"
-                                class="rounded-full bg-white px-3 py-1 font-bold text-[#2A4858] shadow-sm"
+                                v-if="posSession?.branch_name"
+                                class="rounded-full border border-white bg-white px-3 py-1 font-bold text-[#2A4858] shadow-md shadow-slate-200/60"
                             >
                                 Branch: {{ posSession.branch_name }}
                             </span>
                             <span
-                                v-if="posSession.terminal_name"
-                                class="rounded-full bg-white px-3 py-1 font-bold text-[#2A4858] shadow-sm"
+                                v-if="posSession?.terminal_name"
+                                class="rounded-full border border-white bg-white px-3 py-1 font-bold text-[#2A4858] shadow-md shadow-slate-200/60"
                             >
                                 Terminal: {{ posSession.terminal_name }}
+                            </span>
+                            <span
+                                v-if="!posSession && !hasOpenPosSessions"
+                                class="rounded-full border border-red-100 bg-red-50 px-3 py-1 font-bold text-red-600 shadow-sm"
+                            >
+                                POS is closed. Open a POS session before opening
+                                a resource.
                             </span>
                         </div>
                     </div>
@@ -347,6 +531,7 @@ onBeforeUnmount(() => {
                         :customers="customers"
                         :price-lists="priceLists"
                         :processing="checkInForm.processing"
+                        :pos-open="posIsOpen"
                         :close-processing="
                             closeProcessingSessionId ===
                             resource.active_session?.id

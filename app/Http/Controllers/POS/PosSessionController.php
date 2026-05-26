@@ -4,6 +4,7 @@ namespace App\Http\Controllers\POS;
 
 use App\Http\Controllers\Controller;
 use App\Models\Banknote;
+use App\Models\DiningSession;
 use App\Models\PosSession;
 use App\Models\PosTerminal;
 use App\Support\DocumentNumber;
@@ -32,7 +33,7 @@ class PosSessionController extends Controller
                 ->orderBy('name')
                 ->get(),
 
-            'currentSession' => $currentSession,
+            'currentSession' => $currentSession ? $this->formatCurrentSession($currentSession) : null,
             'banknotes' => Banknote::query()
                 ->where('is_active', true)
                 ->orderBy('currency_type')
@@ -135,6 +136,14 @@ class PosSessionController extends Controller
             ]);
         }
 
+        $openDiningSessionsCount = $this->openDiningSessionsFor($posSession)->count();
+
+        if ($openDiningSessionsCount > 0) {
+            return back()->withErrors([
+                'session' => "Please close all dining resources before closing POS. {$openDiningSessionsCount} dining resource(s) are still open.",
+            ]);
+        }
+
         $expectedUsd = $posSession->opening_cash_usd + $posSession->total_cash_usd;
         $expectedKhr = $posSession->opening_cash_khr + $posSession->total_cash_khr;
         $actualCash = $this->cashFromBanknotes($data['actual_banknotes']);
@@ -166,6 +175,43 @@ class PosSessionController extends Controller
             ->where('status', 'open')
             ->latest()
             ->first();
+    }
+
+    private function formatCurrentSession(PosSession $session): array
+    {
+        $openDiningSessions = $this->openDiningSessionsFor($session)
+            ->with('diningResource:id,name')
+            ->orderBy('opened_at')
+            ->get(['id', 'dining_resource_id', 'session_no', 'status', 'opened_at'])
+            ->map(fn (DiningSession $diningSession): array => [
+                'id' => $diningSession->id,
+                'session_no' => $diningSession->session_no,
+                'status' => $diningSession->status,
+                'resource_name' => $diningSession->diningResource?->name ?? 'Dining Resource',
+            ]);
+
+        return array_merge($session->toArray(), [
+            'open_dining_sessions_count' => $openDiningSessions->count(),
+            'open_dining_sessions' => $openDiningSessions->values()->all(),
+        ]);
+    }
+
+    private function openDiningSessionsFor(PosSession $posSession)
+    {
+        $posOpenDate = $posSession->opened_at?->toDateString();
+
+        return DiningSession::query()
+            ->where('company_id', $posSession->company_id)
+            ->where('branch_id', $posSession->branch_id)
+            ->whereNotIn('status', ['closed', 'cancelled'])
+            ->where(function ($query) use ($posSession, $posOpenDate): void {
+                $query->where('pos_session_id', $posSession->id)
+                    ->orWhere(function ($fallback) use ($posSession, $posOpenDate): void {
+                        $fallback->whereNull('pos_session_id')
+                            ->where('pos_terminal_id', $posSession->pos_terminal_id)
+                            ->when($posOpenDate, fn ($q) => $q->whereDate('pos_open_date', $posOpenDate));
+                    });
+            });
     }
 
     private function workableBranchIds($user)

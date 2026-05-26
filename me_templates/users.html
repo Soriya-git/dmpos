@@ -1,0 +1,1179 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Access Control & User Permissions</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --primary-dark: #2a4858;
+                --primary-teal: #007882;
+                --accent-green: #23aa8f;
+                --light-green: #86d780;
+                --accent-yellow: #fafa6e;
+            }
+            body {
+                background-color: transparent;
+                font-family: 'Inter', sans-serif;
+                margin: 0;
+            }
+            .text-primary-dark {
+                color: var(--primary-dark);
+            }
+            .text-primary-teal {
+                color: var(--primary-teal);
+            }
+            .bg-primary-dark {
+                background-color: var(--primary-dark);
+            }
+            .bg-primary-teal {
+                background-color: var(--primary-teal);
+            }
+            .border-primary-teal {
+                border-color: var(--primary-teal);
+            }
+
+            /* Custom high-density table scroll */
+            .table-container {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+                border: 1px solid #e2e8f0;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            thead {
+                background-color: #f8fafc;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
+            th {
+                text-align: left;
+                padding: 12px 16px;
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                font-weight: 800;
+                color: #64748b;
+                border-bottom: 2px solid #e2e8f0;
+            }
+            td {
+                padding: 12px 16px;
+                font-size: 13px;
+                color: #334155;
+                border-bottom: 1px solid #f1f5f9;
+            }
+            tr:hover td {
+                background-color: #f8fafc;
+            }
+
+            /* Underline navigation tabs style */
+            .tab-btn {
+                border-bottom: 3px solid transparent;
+                transition: all 0.2s ease;
+                color: #64748b;
+            }
+            .tab-btn.active {
+                color: var(--primary-teal);
+                border-bottom-color: var(--accent-green);
+                font-weight: 800;
+            }
+
+            /* Slide-out Sidebar config */
+            .config-panel {
+                width: 450px;
+                height: 100vh;
+                position: fixed;
+                right: -450px;
+                top: 0;
+                background: white;
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+                transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 50;
+            }
+            .config-panel.open {
+                right: 0;
+            }
+
+            .overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(42, 72, 88, 0.3);
+                backdrop-filter: blur(2px);
+                z-index: 40;
+                display: none;
+            }
+            .overlay.active {
+                display: block;
+            }
+
+            /* Custom toggle switch styling matching POS palette */
+            .toggle-checkbox:checked {
+                right: 0;
+                background-color: var(--accent-green);
+            }
+            .toggle-checkbox:checked + .toggle-label {
+                background-color: rgba(35, 170, 143, 0.2);
+            }
+        </style>
+    </head>
+    <body class="text-slate-700">
+        <!-- Toast Updates -->
+        <div
+            id="toastNotification"
+            class="fixed right-6 bottom-6 z-50 flex translate-y-24 transform items-center gap-3 rounded-2xl bg-slate-900 px-6 py-4 text-white opacity-0 shadow-2xl transition-all duration-300"
+        >
+            <div
+                class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400"
+            >
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <div>
+                <p
+                    class="text-xs font-bold tracking-wider text-slate-400 uppercase"
+                >
+                    Security Engine
+                </p>
+                <p id="toastMessage" class="text-sm font-semibold">
+                    Permissions compiled successfully
+                </p>
+            </div>
+        </div>
+
+        <div class="p-4 lg:p-6">
+            <!-- SUB-NAV, SEARCH & ACTION MODULE -->
+            <div
+                class="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
+            >
+                <div
+                    class="flex gap-4 overflow-x-auto border-b border-slate-200 pb-1 whitespace-nowrap lg:border-none"
+                >
+                    <button
+                        onclick="switchView('user-permission')"
+                        id="btn-user-permission"
+                        class="tab-btn active px-2 py-2 text-xs tracking-wider uppercase hover:text-[#007882]"
+                    >
+                        User-Permission
+                    </button>
+                    <button
+                        onclick="switchView('permission')"
+                        id="btn-permission"
+                        class="tab-btn px-2 py-2 text-xs tracking-wider uppercase hover:text-[#007882]"
+                    >
+                        Permission
+                    </button>
+                    <button
+                        onclick="switchView('users')"
+                        id="btn-users"
+                        class="tab-btn px-2 py-2 text-xs tracking-wider uppercase hover:text-[#007882]"
+                    >
+                        Users
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <div class="relative">
+                        <i
+                            class="fas fa-search absolute top-1/2 left-3 -translate-y-1/2 text-xs text-slate-400"
+                        ></i>
+                        <input
+                            id="globalSearch"
+                            oninput="filterTables()"
+                            type="text"
+                            placeholder="Search Master Directory..."
+                            class="w-48 rounded-lg border border-slate-200 bg-white py-2 pr-4 pl-9 text-xs transition-all outline-none focus:ring-2 focus:ring-[#007882] lg:w-64"
+                        />
+                    </div>
+                    <button
+                        onclick="handleCreateNew()"
+                        class="flex items-center gap-2 rounded-lg bg-[#007882] px-4 py-2 text-xs font-bold text-white shadow-sm hover:brightness-110"
+                    >
+                        <i class="fas fa-plus"></i> New Record
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 1: USER-PERMISSION (Permission Grid Matrix) -->
+            <div id="view-user-permission" class="view-content">
+                <div class="table-container">
+                    <table id="userPermTable">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="w-12 text-center">#</th>
+                                <th>User Name</th>
+                                <th>Designated Role</th>
+                                <th class="w-28 text-center">View</th>
+                                <th class="w-28 text-center">Create</th>
+                                <th class="w-28 text-center">Update</th>
+                                <th class="w-28 text-center">Delete</th>
+                                <th class="w-28 text-center">Manage</th>
+                                <th class="w-20 text-center">Audits</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <!-- User Row 1 -->
+                            <tr class="hover:bg-slate-50">
+                                <td
+                                    class="text-center text-[10px] font-bold text-slate-400"
+                                >
+                                    01
+                                </td>
+                                <td>
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex h-8 w-8 items-center justify-center rounded-full bg-[#2A4858]/10 text-xs font-bold text-[#2A4858]"
+                                        >
+                                            SV
+                                        </div>
+                                        <div>
+                                            <div
+                                                class="font-black text-slate-800"
+                                            >
+                                                Sok Vichea
+                                            </div>
+                                            <p
+                                                class="text-[10px] font-bold text-slate-400"
+                                            >
+                                                sok.vichea@dmpos.com
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span
+                                        class="rounded bg-teal-50 px-2 py-1 text-xs font-bold text-[#007882]"
+                                        >POS Administrator</span
+                                    >
+                                </td>
+                                <!-- VIEW -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            onchange="
+                                                notifyChange(
+                                                    'Sok Vichea',
+                                                    'View',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- CREATE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            onchange="
+                                                notifyChange(
+                                                    'Sok Vichea',
+                                                    'Create',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- UPDATE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            onchange="
+                                                notifyChange(
+                                                    'Sok Vichea',
+                                                    'Update',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- DELETE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            onchange="
+                                                notifyChange(
+                                                    'Sok Vichea',
+                                                    'Delete',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- MANAGE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            onchange="
+                                                notifyChange(
+                                                    'Sok Vichea',
+                                                    'Manage',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <td
+                                    class="cursor-pointer text-center text-slate-300 hover:text-slate-600"
+                                    onclick="
+                                        openPanel(
+                                            'user-permission',
+                                            'Sok Vichea',
+                                        )
+                                    "
+                                >
+                                    <i class="fas fa-shield-halved text-xs"></i>
+                                </td>
+                            </tr>
+
+                            <!-- User Row 2 -->
+                            <tr class="hover:bg-slate-50">
+                                <td
+                                    class="text-center text-[10px] font-bold text-slate-400"
+                                >
+                                    02
+                                </td>
+                                <td>
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex h-8 w-8 items-center justify-center rounded-full bg-[#007882]/10 text-xs font-bold text-[#007882]"
+                                        >
+                                            VK
+                                        </div>
+                                        <div>
+                                            <div
+                                                class="font-black text-slate-800"
+                                            >
+                                                Vicheka Admin
+                                            </div>
+                                            <p
+                                                class="text-[10px] font-bold text-slate-400"
+                                            >
+                                                vicheka.adm@dmpos.com
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span
+                                        class="rounded bg-teal-50 px-2 py-1 text-xs font-bold text-[#007882]"
+                                        >Shift Supervisor</span
+                                    >
+                                </td>
+                                <!-- VIEW -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            onchange="
+                                                notifyChange(
+                                                    'Vicheka Admin',
+                                                    'View',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- CREATE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            onchange="
+                                                notifyChange(
+                                                    'Vicheka Admin',
+                                                    'Create',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- UPDATE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            onchange="
+                                                notifyChange(
+                                                    'Vicheka Admin',
+                                                    'Update',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- DELETE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onchange="
+                                                notifyChange(
+                                                    'Vicheka Admin',
+                                                    'Delete',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- MANAGE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onchange="
+                                                notifyChange(
+                                                    'Vicheka Admin',
+                                                    'Manage',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <td
+                                    class="cursor-pointer text-center text-slate-300 hover:text-slate-600"
+                                    onclick="
+                                        openPanel(
+                                            'user-permission',
+                                            'Vicheka Admin',
+                                        )
+                                    "
+                                >
+                                    <i class="fas fa-shield-halved text-xs"></i>
+                                </td>
+                            </tr>
+
+                            <!-- User Row 3 -->
+                            <tr class="hover:bg-slate-50">
+                                <td
+                                    class="text-center text-[10px] font-bold text-slate-400"
+                                >
+                                    03
+                                </td>
+                                <td>
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500"
+                                        >
+                                            CH
+                                        </div>
+                                        <div>
+                                            <div
+                                                class="font-black text-slate-800"
+                                            >
+                                                Chan Han
+                                            </div>
+                                            <p
+                                                class="text-[10px] font-bold text-slate-400"
+                                            >
+                                                chan.han@dmpos.com
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span
+                                        class="rounded bg-slate-50 px-2 py-1 text-xs font-bold text-[#64748b]"
+                                        >Kitchen Chef</span
+                                    >
+                                </td>
+                                <!-- VIEW -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            onchange="
+                                                notifyChange('Chan Han', 'View')
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- CREATE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onchange="
+                                                notifyChange(
+                                                    'Chan Han',
+                                                    'Create',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- UPDATE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onchange="
+                                                notifyChange(
+                                                    'Chan Han',
+                                                    'Update',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- DELETE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onchange="
+                                                notifyChange(
+                                                    'Chan Han',
+                                                    'Delete',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <!-- MANAGE -->
+                                <td class="text-center">
+                                    <label
+                                        class="inline-flex cursor-pointer items-center"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onchange="
+                                                notifyChange(
+                                                    'Chan Han',
+                                                    'Manage',
+                                                )
+                                            "
+                                            class="peer sr-only"
+                                        />
+                                        <div
+                                            class="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-[#23AA8F] peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"
+                                        ></div>
+                                    </label>
+                                </td>
+                                <td
+                                    class="cursor-pointer text-center text-slate-300 hover:text-slate-600"
+                                    onclick="
+                                        openPanel('user-permission', 'Chan Han')
+                                    "
+                                >
+                                    <i class="fas fa-shield-halved text-xs"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 2: PERMISSION (Global Rules / Scopes) -->
+            <div id="view-permission" class="view-content hidden">
+                <div class="table-container">
+                    <table id="permissionTable">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="w-12 text-center">#</th>
+                                <th>Permission Identifier</th>
+                                <th>Module Category</th>
+                                <th>Subscribers</th>
+                                <th>Status</th>
+                                <th class="w-20 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-slate-50">
+                                <td
+                                    class="text-center text-[10px] font-bold text-slate-400"
+                                >
+                                    01
+                                </td>
+                                <td
+                                    class="font-mono text-xs font-bold text-[#007882]"
+                                >
+                                    POS_TERMINAL_ACCESS
+                                </td>
+                                <td class="font-medium text-slate-500">
+                                    POS Register Module
+                                </td>
+                                <td class="font-bold">14 Users</td>
+                                <td>
+                                    <span
+                                        class="rounded border border-[#23AA8F]/20 bg-[#23AA8F]/10 px-2 py-0.5 text-[10px] font-bold text-[#23AA8F]"
+                                        >Active</span
+                                    >
+                                </td>
+                                <td
+                                    class="cursor-pointer text-center text-slate-300 hover:text-slate-600"
+                                    onclick="
+                                        openPanel(
+                                            'permission',
+                                            'POS_TERMINAL_ACCESS',
+                                        )
+                                    "
+                                >
+                                    <i class="fas fa-cog text-xs"></i>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td
+                                    class="text-center text-[10px] font-bold text-slate-400"
+                                >
+                                    02
+                                </td>
+                                <td
+                                    class="font-mono text-xs font-bold text-[#007882]"
+                                >
+                                    DINING_RESOURCES_CONFIG
+                                </td>
+                                <td class="font-medium text-slate-500">
+                                    Floor Layout / Seats
+                                </td>
+                                <td class="font-bold">3 Users</td>
+                                <td>
+                                    <span
+                                        class="rounded border border-[#23AA8F]/20 bg-[#23AA8F]/10 px-2 py-0.5 text-[10px] font-bold text-[#23AA8F]"
+                                        >Active</span
+                                    >
+                                </td>
+                                <td
+                                    class="cursor-pointer text-center text-slate-300 hover:text-slate-600"
+                                    onclick="
+                                        openPanel(
+                                            'permission',
+                                            'DINING_RESOURCES_CONFIG',
+                                        )
+                                    "
+                                >
+                                    <i class="fas fa-cog text-xs"></i>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td
+                                    class="text-center text-[10px] font-bold text-slate-400"
+                                >
+                                    03
+                                </td>
+                                <td
+                                    class="font-mono text-xs font-bold text-[#007882]"
+                                >
+                                    INVENTORY_STAGING_PUTAWAY
+                                </td>
+                                <td class="font-medium text-slate-500">
+                                    WMS Procurement
+                                </td>
+                                <td class="font-bold">5 Users</td>
+                                <td>
+                                    <span
+                                        class="rounded border border-[#23AA8F]/20 bg-[#23AA8F]/10 px-2 py-0.5 text-[10px] font-bold text-[#23AA8F]"
+                                        >Active</span
+                                    >
+                                </td>
+                                <td
+                                    class="cursor-pointer text-center text-slate-300 hover:text-slate-600"
+                                    onclick="
+                                        openPanel(
+                                            'permission',
+                                            'INVENTORY_STAGING_PUTAWAY',
+                                        )
+                                    "
+                                >
+                                    <i class="fas fa-cog text-xs"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 3: USERS (User Registry / Profiles) -->
+            <div id="view-users" class="view-content hidden">
+                <div class="table-container">
+                    <table id="usersTable">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="w-12 text-center">#</th>
+                                <th>Full Profile</th>
+                                <th>Security Level</th>
+                                <th>Main Store / Branch</th>
+                                <th>Status</th>
+                                <th class="w-20 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-slate-50">
+                                <td
+                                    class="text-center text-[10px] font-bold text-slate-400"
+                                >
+                                    01
+                                </td>
+                                <td>
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex h-8 w-8 items-center justify-center rounded-full bg-[#2A4858]/10 text-xs font-bold text-[#2A4858]"
+                                        >
+                                            SV
+                                        </div>
+                                        <div>
+                                            <div
+                                                class="font-black text-slate-800"
+                                            >
+                                                Sok Vichea
+                                            </div>
+                                            <p
+                                                class="text-[10px] font-bold text-slate-400"
+                                            >
+                                                sok.vichea@dmpos.com
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="font-medium text-slate-600">
+                                    POS Administrator
+                                </td>
+                                <td class="text-slate-500">Central Kitchen</td>
+                                <td>
+                                    <span
+                                        class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-[#23AA8F]"
+                                        >Active</span
+                                    >
+                                </td>
+                                <td
+                                    class="cursor-pointer text-center text-slate-300 hover:text-slate-600"
+                                    onclick="openPanel('user', 'Sok Vichea')"
+                                >
+                                    <i class="fas fa-user-edit text-xs"></i>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td
+                                    class="text-center text-[10px] font-bold text-slate-400"
+                                >
+                                    02
+                                </td>
+                                <td>
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex h-8 w-8 items-center justify-center rounded-full bg-[#007882]/10 text-xs font-bold text-[#007882]"
+                                        >
+                                            VK
+                                        </div>
+                                        <div>
+                                            <div
+                                                class="font-black text-slate-800"
+                                            >
+                                                Vicheka Admin
+                                            </div>
+                                            <p
+                                                class="text-[10px] font-bold text-slate-400"
+                                            >
+                                                vicheka.adm@dmpos.com
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="font-medium text-slate-600">
+                                    Shift Supervisor
+                                </td>
+                                <td class="text-slate-500">Phnom Penh HQ</td>
+                                <td>
+                                    <span
+                                        class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-[#23AA8F]"
+                                        >Active</span
+                                    >
+                                </td>
+                                <td
+                                    class="cursor-pointer text-center text-slate-300 hover:text-slate-600"
+                                    onclick="openPanel('user', 'Vicheka Admin')"
+                                >
+                                    <i class="fas fa-user-edit text-xs"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONFIGURATION SLIDE PANEL -->
+        <div id="overlay" class="overlay" onclick="closePanel()"></div>
+        <div id="side-panel" class="config-panel flex flex-col shadow-2xl">
+            <!-- Panel Header -->
+            <div class="bg-[#2A4858] p-6 text-white">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 id="panel-title" class="text-lg font-bold">
+                            User Configuration
+                        </h2>
+                        <p
+                            id="panel-subtitle"
+                            class="mt-1 text-[10px] tracking-widest text-white/50 uppercase"
+                        >
+                            Audit Security Registry
+                        </p>
+                    </div>
+                    <button
+                        onclick="closePanel()"
+                        class="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
+                    >
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dynamic Form Fields inside Sidebar -->
+            <div
+                class="flex-1 space-y-4 overflow-y-auto p-6"
+                id="panel-form-container"
+            >
+                <!-- Dynamic forms loaded here -->
+            </div>
+
+            <!-- Action Footer -->
+            <div class="flex gap-3 border-t bg-slate-50 p-6">
+                <button
+                    onclick="closePanel()"
+                    class="flex-1 rounded-lg border border-slate-200 bg-white py-2.5 text-xs font-bold text-slate-500"
+                >
+                    Cancel
+                </button>
+                <button
+                    onclick="savePanelChanges()"
+                    class="flex-1 rounded-lg bg-[#007882] py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-[#2A4858]"
+                >
+                    Save Changes
+                </button>
+            </div>
+        </div>
+
+        <!-- JAVASCRIPT SYSTEM ENGINE -->
+        <script>
+            let currentActiveView = 'user-permission';
+
+            // Tab Switcher
+            function switchView(view) {
+                currentActiveView = view;
+
+                // Toggle Tab Highlights
+                document
+                    .querySelectorAll('.tab-btn')
+                    .forEach((btn) => btn.classList.remove('active'));
+                document.getElementById(`btn-${view}`).classList.add('active');
+
+                // Toggle Content Grid
+                document
+                    .querySelectorAll('.view-content')
+                    .forEach((el) => el.classList.add('hidden'));
+                document
+                    .getElementById(`view-${view}`)
+                    .classList.remove('hidden');
+            }
+
+            // Live Table Search / Filtering
+            function filterTables() {
+                const query = document
+                    .getElementById('globalSearch')
+                    .value.toUpperCase();
+
+                if (currentActiveView === 'user-permission') {
+                    const rows = document.querySelectorAll(
+                        '#userPermTable tbody tr',
+                    );
+                    rows.forEach((row) => {
+                        const userName = row
+                            .querySelector('.font-black')
+                            .innerText.toUpperCase();
+                        const userEmail = row
+                            .querySelector('.text-\\[10px\\]')
+                            .innerText.toUpperCase();
+                        const role = row
+                            .querySelector('.text-xs')
+                            .innerText.toUpperCase();
+                        if (
+                            userName.includes(query) ||
+                            userEmail.includes(query) ||
+                            role.includes(query)
+                        ) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                } else if (currentActiveView === 'permission') {
+                    const rows = document.querySelectorAll(
+                        '#permissionTable tbody tr',
+                    );
+                    rows.forEach((row) => {
+                        const identifier = row
+                            .querySelector('.font-mono')
+                            .innerText.toUpperCase();
+                        const category = row
+                            .querySelector('.text-slate-500')
+                            .innerText.toUpperCase();
+                        if (
+                            identifier.includes(query) ||
+                            category.includes(query)
+                        ) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                } else if (currentActiveView === 'users') {
+                    const rows = document.querySelectorAll(
+                        '#usersTable tbody tr',
+                    );
+                    rows.forEach((row) => {
+                        const name = row
+                            .querySelector('.font-black')
+                            .innerText.toUpperCase();
+                        const role = row
+                            .querySelector('.text-slate-600')
+                            .innerText.toUpperCase();
+                        const branch = row
+                            .querySelector('.text-slate-500')
+                            .innerText.toUpperCase();
+                        if (
+                            name.includes(query) ||
+                            role.includes(query) ||
+                            branch.includes(query)
+                        ) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                }
+            }
+
+            // Open Side config drawer dynamically depending on category
+            function openPanel(type, targetName) {
+                const panel = document.getElementById('side-panel');
+                const overlay = document.getElementById('overlay');
+                const title = document.getElementById('panel-title');
+                const subtitle = document.getElementById('panel-subtitle');
+                const container = document.getElementById(
+                    'panel-form-container',
+                );
+
+                container.innerHTML = ''; // reset
+
+                if (type === 'user-permission') {
+                    title.innerText = 'User Permissions';
+                    subtitle.innerText = 'Direct access mapping overrides';
+                    container.innerHTML = `
+                    <div class="bg-slate-50 p-4 rounded-xl space-y-4">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-slate-400">Target User</span>
+                            <p class="font-bold text-slate-800 text-sm mt-1">${targetName}</p>
+                        </div>
+                        <div class="border-t pt-3">
+                            <span class="text-[10px] uppercase font-bold text-slate-400">Inherit Role Rules</span>
+                            <div class="flex items-center gap-2 mt-2">
+                                <input type="checkbox" checked class="rounded border-gray-300 text-primary-teal focus:ring-primary-teal">
+                                <span class="text-xs text-slate-600 font-medium">Override standard security template for this user session</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Access Expiration</label>
+                            <input type="date" class="w-full px-3 py-2 border rounded-lg text-xs font-bold outline-none focus:border-primary-teal">
+                        </div>
+                    </div>
+                `;
+                } else if (type === 'permission') {
+                    title.innerText = 'Permission Scheme';
+                    subtitle.innerText = 'Module control setup';
+                    container.innerHTML = `
+                    <div class="bg-slate-50 p-4 rounded-xl space-y-4">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400">Identifier</label>
+                            <input type="text" class="w-full mt-1 px-3 py-2 border rounded-lg text-sm outline-none focus:border-primary-teal font-mono text-xs font-bold" value="${targetName}">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400">Security Category</label>
+                            <select class="w-full mt-1 px-3 py-2 border rounded-lg text-sm bg-white outline-none">
+                                <option>POS Register Module</option>
+                                <option>Floor Layout / Seats</option>
+                                <option>WMS Procurement</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                } else if (type === 'user') {
+                    title.innerText = 'User Registry Edit';
+                    subtitle.innerText = 'Manage corporate employee profile';
+                    container.innerHTML = `
+                    <div class="bg-slate-50 p-4 rounded-xl space-y-4">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400">Full Name</label>
+                            <input type="text" class="w-full mt-1 px-3 py-2 border rounded-lg text-sm outline-none focus:border-primary-teal" value="${targetName}">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400">Workstation Branch</label>
+                            <select class="w-full mt-1 px-3 py-2 border rounded-lg text-sm bg-white outline-none">
+                                <option>Central Kitchen</option>
+                                <option>Phnom Penh HQ</option>
+                                <option>Tuol Kork Branch</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400">Security Level / Role</label>
+                            <select class="w-full mt-1 px-3 py-2 border rounded-lg text-sm bg-white outline-none">
+                                <option>POS Administrator</option>
+                                <option>Shift Supervisor</option>
+                                <option>Kitchen Chef</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                }
+
+                panel.classList.add('open');
+                overlay.classList.add('active');
+            }
+
+            function closePanel() {
+                document.getElementById('side-panel').classList.remove('open');
+                document.getElementById('overlay').classList.remove('active');
+            }
+
+            // Logic for Global New Button depending on view context
+            function handleCreateNew() {
+                if (currentActiveView === 'user-permission') {
+                    openPanel('user-permission', 'New Custom Member');
+                } else if (currentActiveView === 'permission') {
+                    openPanel('permission', 'NEW_SECURITY_SCOPE');
+                } else if (currentActiveView === 'users') {
+                    openPanel('user', 'New User Employee');
+                }
+            }
+
+            // Simulated updates confirmation
+            function savePanelChanges() {
+                closePanel();
+                showToast('Master Records compiled successfully!', 'active');
+            }
+
+            // Interactive Matrix toggle change alerts
+            function notifyChange(userName, permissionName) {
+                showToast(
+                    `Updated ${userName}'s ${permissionName} permission`,
+                    'active',
+                );
+            }
+
+            // Toast handler
+            function showToast(message) {
+                const toast = document.getElementById('toastNotification');
+                document.getElementById('toastMessage').innerText = message;
+
+                toast.classList.remove('translate-y-24', 'opacity-0');
+
+                setTimeout(() => {
+                    toast.classList.add('translate-y-24', 'opacity-0');
+                }, 2500);
+            }
+        </script>
+    </body>
+</html>

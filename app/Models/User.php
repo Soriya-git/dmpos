@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -101,6 +103,46 @@ class User extends Authenticatable
     public function branches(): BelongsToMany
     {
         return $this->belongsToMany(Branch::class)->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany<Permission, $this>
+     */
+    public function permissionOverrides(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class, 'user_permission_overrides')
+            ->withPivot('allowed')
+            ->withTimestamps();
+    }
+
+    /**
+     * @return Collection<int, string>
+     */
+    public function effectivePermissionNames(): Collection
+    {
+        if ($this->hasRole('System Admin')) {
+            return Permission::query()->orderBy('name')->pluck('name');
+        }
+
+        $basePermissions = $this->getAllPermissions()->pluck('name');
+        $overrides = $this->permissionOverrides()
+            ->get(['permissions.id', 'permissions.name'])
+            ->groupBy(fn (Permission $permission): string => $permission->pivot->allowed ? 'allowed' : 'denied');
+
+        return $basePermissions
+            ->merge($overrides->get('allowed', collect())->pluck('name'))
+            ->diff($overrides->get('denied', collect())->pluck('name'))
+            ->unique()
+            ->values();
+    }
+
+    public function permissionOverrideFor(string $permission): ?bool
+    {
+        $override = $this->permissionOverrides()
+            ->where('permissions.name', $permission)
+            ->first();
+
+        return $override ? (bool) $override->pivot->allowed : null;
     }
 
     public function canWorkAtBranch(Branch|int $branch): bool

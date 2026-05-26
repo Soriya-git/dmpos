@@ -16,6 +16,8 @@ use App\Http\Controllers\MasterData\SupplierController;
 use App\Http\Controllers\MasterData\TaxController;
 use App\Http\Controllers\MasterData\WarehouseLocationController;
 use App\Http\Controllers\MembershipCard\CustomerCardController;
+use App\Http\Controllers\OperationsReport\DailySessionMenuController;
+use App\Http\Controllers\OperationsReport\DailySessionStockController;
 use App\Http\Controllers\POS\PosSessionController;
 use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\Purchase\PurchaseOrderController;
@@ -28,6 +30,7 @@ use App\Http\Controllers\StockMovements\InternalTransferController;
 use App\Http\Controllers\StockMovements\StockAdjustmentController;
 use App\Http\Controllers\StockMovements\StockSettlementController;
 use App\Http\Controllers\StockMovements\StockWriteOffController;
+use App\Http\Controllers\Users\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login')->name('home');
@@ -37,6 +40,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/profile/picture', [ProfilePictureController::class, 'update'])
         ->name('profile.picture.update');
+
+    Route::get('/users', UserController::class)->name('users.index');
+    Route::post('/users/roles', [UserController::class, 'storeRole'])->name('users.roles.store');
+    Route::patch('/users/{user}/permissions', [UserController::class, 'updatePermissions'])->name('users.permissions.update');
 
     // POS session routes
     Route::get('/pos-sessions', [PosSessionController::class, 'index'])
@@ -112,6 +119,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('balance-on-hand.index');
     Route::get('/balance-on-hand/{item}', [BalanceOnHandController::class, 'show'])
         ->name('balance-on-hand.show');
+
+    // Operations report routes
+    Route::get('/operations-report/daily-session-stock', DailySessionStockController::class)
+        ->name('operations-report.daily-session-stock');
+    Route::get('/operations-report/daily-session-menu', DailySessionMenuController::class)
+        ->name('operations-report.daily-session-menu');
 
     // Stock movement routes
     Route::get('/stock-movements/internal-transfer', [InternalTransferController::class, 'index'])

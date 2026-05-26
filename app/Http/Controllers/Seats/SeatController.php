@@ -9,6 +9,7 @@ use App\Models\DiningResourceType;
 use App\Models\DiningSession;
 use App\Models\MenuPriceList;
 use App\Models\PosSession;
+use App\Models\PosTerminal;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,18 +21,34 @@ class SeatController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        $branchIds = $user->branches()
+            ->where('branches.company_id', $user->company_id)
+            ->pluck('branches.id')
+            ->push($user->branch_id)
+            ->filter()
+            ->unique()
+            ->values();
 
-        $activePosSession = PosSession::with(['branch', 'posTerminal', 'opener'])
-            ->where('opened_by', $user->id)
+        $openPosSessions = PosSession::with(['branch', 'posTerminal', 'opener'])
+            ->whereIn('branch_id', $branchIds)
+            ->where('status', 'open')
             ->whereNull('closed_at')
             ->latest()
-            ->first();
+            ->get();
 
-        if (! $activePosSession) {
-            return redirect()
-                ->route('pos-sessions.index')
-                ->with('error', 'Please open POS session first before accessing orders.');
-        }
+        $selectedPosSessionId = $request->integer('pos_session_id') ?: null;
+        $activePosSession = $this->selectedPosSession($openPosSessions, $user->id, $selectedPosSessionId);
+        $availablePosTerminals = PosTerminal::with('branch')
+            ->whereIn('branch_id', $branchIds)
+            ->where('is_active', true)
+            ->whereDoesntHave('posSessions', function ($query): void {
+                $query->where('status', 'open')
+                    ->whereNull('closed_at');
+            })
+            ->orderBy('name')
+            ->get();
+
+        $branchId = $activePosSession?->branch_id ?? $user->branch_id ?? $branchIds->first();
 
         $status = $request->query('status');
         $typeId = $request->query('type_id');
@@ -46,7 +63,9 @@ class SeatController extends Controller
                 'activeSession.orders.orderLines.invoiceLines',
                 'activeSession.resourceBooking.customer',
             ])
-            ->where('branch_id', $activePosSession->branch_id)
+            ->where('company_id', $activePosSession?->company_id ?? $user->company_id)
+            ->when($branchId, fn ($q) => $q->where('branch_id', $branchId))
+            ->when(! $branchId && $branchIds->isNotEmpty(), fn ($q) => $q->whereIn('branch_id', $branchIds))
             ->where('is_active', true)
             ->when($status, fn ($q) => $q->where('status', $status))
             ->when($typeId, fn ($q) => $q->where('dining_resource_type_id', $typeId))
@@ -99,13 +118,13 @@ class SeatController extends Controller
             });
 
         $types = DiningResourceType::query()
-            ->where('company_id', $activePosSession->company_id)
+            ->where('company_id', $activePosSession?->company_id ?? $user->company_id)
             ->where('is_active', true)
             ->orderBy('name')
             ->get(['id', 'name']);
 
         $customers = Customer::query()
-            ->where('company_id', $activePosSession->company_id)
+            ->where('company_id', $activePosSession?->company_id ?? $user->company_id)
             ->where('is_active', true)
             ->orderBy('name')
             ->orderBy('phone_number')
@@ -113,11 +132,11 @@ class SeatController extends Controller
             ->get(['id', 'name', 'phone_number']);
 
         $priceLists = MenuPriceList::query()
-            ->where('company_id', $activePosSession->company_id)
+            ->where('company_id', $activePosSession?->company_id ?? $user->company_id)
             ->where('is_active', true)
             ->where(function ($query) use ($activePosSession): void {
                 $query->whereNull('branch_id')
-                    ->orWhere('branch_id', $activePosSession->branch_id);
+                    ->when($activePosSession, fn ($q) => $q->orWhere('branch_id', $activePosSession->branch_id));
             })
             ->orderByDesc('is_default')
             ->orderBy('name')
@@ -130,14 +149,15 @@ class SeatController extends Controller
             ]);
 
         return Inertia::render('Seats/Index', [
-            'posSession' => [
-                'id' => $activePosSession->id,
-                'session_no' => $activePosSession->session_no ?? $activePosSession->session_number ?? ('POS-'.$activePosSession->id),
-                'branch_name' => $activePosSession->branch?->name,
-                'terminal_name' => $activePosSession->posTerminal?->name,
-                'opened_by' => $activePosSession->opener?->name,
-                'opened_at' => $activePosSession->opened_at?->format('Y-m-d H:i'),
-            ],
+            'posSession' => $activePosSession ? $this->formatPosSession($activePosSession) : null,
+            'openPosSessions' => $openPosSessions->map(fn (PosSession $session): array => $this->formatPosSession($session))->values(),
+            'availablePosTerminals' => $availablePosTerminals->map(fn (PosTerminal $terminal): array => [
+                'id' => $terminal->id,
+                'name' => $terminal->name,
+                'code' => $terminal->code,
+                'branch_name' => $terminal->branch?->name,
+            ])->values(),
+            'requiresPosSessionSelection' => ! $activePosSession && $openPosSessions->count() > 1,
             'resources' => $resources,
             'types' => $types,
             'customers' => $customers,
@@ -153,16 +173,28 @@ class SeatController extends Controller
     public function checkIn(Request $request, DiningResource $resource)
     {
         $user = $request->user();
+        $branchIds = $user->branches()
+            ->where('branches.company_id', $user->company_id)
+            ->pluck('branches.id')
+            ->push($user->branch_id)
+            ->filter()
+            ->unique()
+            ->values();
 
-        $activePosSession = PosSession::where('opened_by', $user->id)
+        $openPosSessions = PosSession::query()
+            ->whereIn('branch_id', $branchIds)
+            ->where('status', 'open')
             ->whereNull('closed_at')
             ->latest()
-            ->first();
+            ->get();
+
+        $selectedPosSessionId = $request->integer('pos_session_id') ?: null;
+        $activePosSession = $this->selectedPosSession($openPosSessions, $user->id, $selectedPosSessionId);
 
         if (! $activePosSession) {
             return redirect()
-                ->route('pos-sessions.index')
-                ->with('error', 'Please open POS session first.');
+                ->route('seats.index')
+                ->with('error', $openPosSessions->count() > 1 ? 'Please select a POS session first.' : 'Please open POS session first.');
         }
 
         $data = $request->validate([
@@ -184,6 +216,10 @@ class SeatController extends Controller
 
         if ($resource->status === 'occupied') {
             return back()->with('error', 'This seat is already occupied.');
+        }
+
+        if ((int) $resource->branch_id !== (int) $activePosSession->branch_id) {
+            return back()->with('error', 'This resource is not in the selected POS session branch.');
         }
 
         DB::transaction(function () use ($resource, $activePosSession, $data, $user) {
@@ -214,6 +250,7 @@ class SeatController extends Controller
                 'company_id' => $activePosSession->company_id,
                 'branch_id' => $activePosSession->branch_id,
                 'pos_terminal_id' => $activePosSession->pos_terminal_id,
+                'pos_session_id' => $activePosSession->id,
                 'pos_open_date' => $activePosSession->opened_at?->toDateString() ?? now()->toDateString(),
                 'customer_id' => $customerId,
                 'dining_resource_id' => $resource->id,
@@ -278,5 +315,34 @@ class SeatController extends Controller
             })
             ->orderByRaw('case when branch_id = ? then 0 when branch_id is null then 1 else 2 end', [$posSession->branch_id])
             ->value('id');
+    }
+
+    private function selectedPosSession($openPosSessions, int $userId, ?int $selectedPosSessionId): ?PosSession
+    {
+        if ($selectedPosSessionId) {
+            return $openPosSessions->firstWhere('id', $selectedPosSessionId);
+        }
+
+        $ownSession = $openPosSessions->firstWhere('opened_by', $userId);
+
+        if ($ownSession) {
+            return $ownSession;
+        }
+
+        return $openPosSessions->count() === 1 ? $openPosSessions->first() : null;
+    }
+
+    private function formatPosSession(PosSession $session): array
+    {
+        return [
+            'id' => $session->id,
+            'session_no' => $session->session_no ?? $session->session_number ?? ('POS-'.$session->id),
+            'branch_name' => $session->branch?->name,
+            'terminal_name' => $session->posTerminal?->name,
+            'opened_by' => $session->opener?->name,
+            'opened_by_id' => $session->opened_by,
+            'can_close' => (int) $session->opened_by === (int) request()->user()?->id,
+            'opened_at' => $session->opened_at?->format('Y-m-d H:i'),
+        ];
     }
 }

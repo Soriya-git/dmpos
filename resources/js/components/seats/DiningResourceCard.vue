@@ -58,6 +58,7 @@ const props = defineProps<{
     priceLists: DiningPriceListOption[];
     processing?: boolean;
     closeProcessing?: boolean;
+    posOpen?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -335,7 +336,7 @@ function checkIn() {
                 <Button
                     type="button"
                     class="mt-2 h-8 w-full rounded-lg bg-[#2A4858] text-xs font-bold text-white hover:bg-[#203946]"
-                    :disabled="processing"
+                    :disabled="processing || !posOpen"
                     @click="checkIn"
                 >
                     <LogIn class="h-4 w-4" />
@@ -426,7 +427,7 @@ function checkIn() {
                     <Button
                         type="button"
                         class="h-8 w-full rounded-lg bg-[#007882] text-xs font-bold text-white shadow-md hover:bg-[#2A4858] active:scale-95"
-                        :disabled="processing"
+                        :disabled="processing || !posOpen"
                         @click="checkIn"
                     >
                         OPEN

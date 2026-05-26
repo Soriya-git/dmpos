@@ -35,7 +35,7 @@ class SeatOrderController extends Controller
 {
     public function show(Request $request, DiningSession $diningSession)
     {
-        $activePosSession = $this->activePosSession($request);
+        $activePosSession = $this->activePosSession($request, $diningSession);
 
         if (! $activePosSession) {
             return redirect()
@@ -227,7 +227,7 @@ class SeatOrderController extends Controller
 
     public function manage(Request $request, DiningSession $diningSession)
     {
-        $activePosSession = $this->activePosSession($request);
+        $activePosSession = $this->activePosSession($request, $diningSession);
 
         if (! $activePosSession) {
             return redirect()
@@ -286,7 +286,7 @@ class SeatOrderController extends Controller
 
     public function saveManage(Request $request, DiningSession $diningSession)
     {
-        $activePosSession = $this->activePosSession($request);
+        $activePosSession = $this->activePosSession($request, $diningSession);
 
         abort_if(! $activePosSession, 422, 'Please open POS session first.');
         abort_if($diningSession->invoices()->where('status', '!=', 'cancelled')->exists(), 422, 'Orders cannot be managed after check bill.');
@@ -760,7 +760,7 @@ class SeatOrderController extends Controller
             'bill_group' => ['nullable', 'string', 'max:50'],
         ]);
 
-        $activePosSession = $this->activePosSession($request);
+        $activePosSession = $this->activePosSession($request, $diningSession);
 
         if (! $activePosSession) {
             return redirect()
@@ -783,6 +783,12 @@ class SeatOrderController extends Controller
             $orderLines = $orders->flatMap->orderLines;
 
             if ($orderLines->isEmpty()) {
+                if ($data['operation_status'] === 'invoice_receipt_done') {
+                    $this->receiveExistingDiningInvoice($request, $diningSession, $activePosSession, $data);
+
+                    return;
+                }
+
                 abort(422, 'Please confirm at least one order before checking bill.');
             }
 
@@ -976,7 +982,7 @@ class SeatOrderController extends Controller
 
     public function updateCustomer(Request $request, DiningSession $diningSession)
     {
-        $activePosSession = $this->activePosSession($request);
+        $activePosSession = $this->activePosSession($request, $diningSession);
 
         if (! $activePosSession) {
             return redirect()
@@ -1066,9 +1072,41 @@ class SeatOrderController extends Controller
             ->with('success', 'Order closed and dining resource is available.');
     }
 
-    private function activePosSession(Request $request): ?PosSession
+    private function activePosSession(Request $request, ?DiningSession $diningSession = null): ?PosSession
     {
-        return PosSession::where('opened_by', $request->user()->id)
+        $user = $request->user();
+        $branchIds = $user->branches()
+            ->where('branches.company_id', $user->company_id)
+            ->pluck('branches.id')
+            ->push($user->branch_id)
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($diningSession?->pos_session_id) {
+            return PosSession::query()
+                ->whereKey($diningSession->pos_session_id)
+                ->whereIn('branch_id', $branchIds)
+                ->where('status', 'open')
+                ->whereNull('closed_at')
+                ->first();
+        }
+
+        $selectedPosSessionId = $request->integer('pos_session_id') ?: null;
+
+        if ($selectedPosSessionId) {
+            return PosSession::query()
+                ->whereKey($selectedPosSessionId)
+                ->whereIn('branch_id', $branchIds)
+                ->where('status', 'open')
+                ->whereNull('closed_at')
+                ->first();
+        }
+
+        return PosSession::query()
+            ->whereIn('branch_id', $branchIds)
+            ->where('opened_by', $user->id)
+            ->where('status', 'open')
             ->whereNull('closed_at')
             ->latest()
             ->first();
@@ -1144,6 +1182,7 @@ class SeatOrderController extends Controller
             'company_id' => $activePosSession->company_id,
             'branch_id' => $activePosSession->branch_id,
             'pos_terminal_id' => $activePosSession->pos_terminal_id,
+            'pos_session_id' => $activePosSession->id,
             'pos_open_date' => $activePosSession->opened_at?->toDateString() ?? now()->toDateString(),
             'customer_id' => $sourceSession->customer_id,
             'dining_resource_id' => $resource->id,
@@ -1759,6 +1798,150 @@ class SeatOrderController extends Controller
         } catch (\RuntimeException $exception) {
             abort(422, $exception->getMessage());
         }
+    }
+
+    private function receiveExistingDiningInvoice(
+        Request $request,
+        DiningSession $diningSession,
+        PosSession $activePosSession,
+        array $data
+    ): void {
+        $invoice = $diningSession->invoices()
+            ->whereNotIn('status', ['cancelled', 'paid'])
+            ->where('balance_amount', '>', 0)
+            ->latest()
+            ->first();
+
+        abort_if(! $invoice, 422, 'This dining session has no invoice balance to receive.');
+
+        $exchangeRate = (float) ($invoice->exchange_rate_snapshot ?: $this->latestExchangeRate($activePosSession));
+        $method = $this->paymentMethodFor(
+            $data['method'],
+            $data['currency'],
+            $activePosSession,
+            $data['payment_method_id'] ?? null,
+        );
+
+        abort_if(! $method, 422, 'Please select a valid payment method.');
+
+        $isMembershipCard = $method->method_type === 'card' || str_starts_with($data['method'], 'member-card-');
+        $isCash = str_starts_with($data['method'], 'cash-');
+        $invoiceBalance = (float) $invoice->balance_amount;
+        $targetAmount = $data['currency'] === 'KHR' ? $invoiceBalance * $exchangeRate : $invoiceBalance;
+        $receivedAmount = (float) ($data['received_amount'] ?? $targetAmount);
+        $changeUsdAmount = $isCash ? (float) floor((float) ($data['change_usd_amount'] ?? 0)) : 0;
+        $changeKhrAmount = $isCash ? $this->roundDownKhrChange((float) ($data['change_khr_amount'] ?? 0)) : 0;
+
+        abort_if($receivedAmount <= 0, 422, 'Payment amount must be greater than zero.');
+
+        $cardBalance = null;
+        if ($isMembershipCard) {
+            abort_if(! $diningSession->customer_id, 422, 'Please assign a customer before using membership card payment.');
+            $cardBalance = $this->membershipCardBalanceForPayment(
+                (int) ($data['membership_card_id'] ?? 0),
+                (int) $diningSession->customer_id,
+                $diningSession->company_id,
+                $data['currency'],
+            );
+            abort_if(! $cardBalance, 422, 'Please select a valid active membership card.');
+            abort_if($receivedAmount > $targetAmount + 0.01, 422, 'Membership card payment cannot be greater than the invoice balance.');
+            abort_if((float) $cardBalance->balance + 0.0001 < $receivedAmount, 422, 'Membership card balance is not enough for this payment.');
+        }
+
+        if ($isCash) {
+            $overpaidUsd = $data['currency'] === 'USD'
+                ? max(0, $receivedAmount - $targetAmount)
+                : max(0, ($receivedAmount - $targetAmount) / $exchangeRate);
+            $changeUsdEquivalent = $changeUsdAmount + ($changeKhrAmount / $exchangeRate);
+            $roundingToleranceUsd = 99 / $exchangeRate;
+
+            abort_if(
+                $changeUsdEquivalent > $overpaidUsd + $roundingToleranceUsd + 0.01,
+                422,
+                'Change amount cannot be greater than the overpaid amount.'
+            );
+        }
+
+        $netReceivedUsd = $data['currency'] === 'KHR'
+            ? ($receivedAmount - $changeKhrAmount - ($changeUsdAmount * $exchangeRate)) / $exchangeRate
+            : $receivedAmount - $changeUsdAmount - ($changeKhrAmount / $exchangeRate);
+        $paidAmount = round(min($invoiceBalance, max(0, $netReceivedUsd)), 2);
+
+        abort_if($paidAmount <= 0, 422, 'Payment amount must be greater than zero.');
+
+        $paymentAmount = $data['currency'] === 'KHR' ? $paidAmount * $exchangeRate : $paidAmount;
+        $newPaidAmount = round((float) $invoice->paid_amount + $paidAmount, 2);
+        $newBalanceAmount = max(0, round($invoiceBalance - $paidAmount, 2));
+        $invoiceStatus = $newBalanceAmount <= 0.01 ? 'paid' : 'partially_paid';
+
+        $invoice->update([
+            'status' => $invoiceStatus,
+            'paid_amount' => $newPaidAmount,
+            'balance_amount' => $newBalanceAmount,
+            'paid_at' => $invoiceStatus === 'paid' ? now() : $invoice->paid_at,
+        ]);
+
+        $payment = Payment::create([
+            'company_id' => $diningSession->company_id,
+            'branch_id' => $diningSession->branch_id,
+            'invoice_id' => $invoice->id,
+            'payment_method_id' => $method->id,
+            'payment_no' => DocumentNumber::make(Payment::class, 'payment_no', 'PY'),
+            'status' => $invoiceStatus === 'paid' ? 'paid' : 'partial',
+            'currency' => $data['currency'],
+            'amount_paid' => $paymentAmount,
+            'received_amount' => $receivedAmount,
+            'change_usd_amount' => floor($changeUsdAmount),
+            'change_khr_amount' => $changeKhrAmount,
+            'exchange_rate_snapshot' => $exchangeRate,
+            'amount_usd_equivalent' => $paidAmount,
+            'amount_khr_equivalent' => $paidAmount * $exchangeRate,
+            'paid_at' => now(),
+            'received_by' => $request->user()->id,
+        ]);
+
+        if ($isMembershipCard && $cardBalance) {
+            $this->recordMembershipCardPayment(
+                $cardBalance,
+                $payment,
+                $invoice,
+                $data['currency'],
+                $paymentAmount,
+                $paidAmount,
+                $exchangeRate,
+                $request->user()->id,
+            );
+        }
+
+        $this->recordPosSessionPaymentTotals(
+            $activePosSession,
+            $data['method'],
+            $data['currency'],
+            $paidAmount,
+            $paymentAmount,
+            $receivedAmount,
+            $changeUsdAmount,
+            $changeKhrAmount,
+            $exchangeRate,
+        );
+
+        $hasRemainingBalance = $diningSession->invoices()
+            ->whereNotIn('status', ['cancelled', 'paid'])
+            ->where('balance_amount', '>', 0)
+            ->exists();
+
+        $hasRemainingBillableLines = $diningSession->orders()
+            ->whereNotIn('status', ['draft', 'cancelled'])
+            ->whereHas('orderLines', fn ($query) => $query
+                ->where('status', '!=', 'cancelled')
+                ->whereDoesntHave('invoiceLines'))
+            ->exists();
+
+        $diningSession->update([
+            'status' => $hasRemainingBillableLines || $hasRemainingBalance ? 'invoiced' : 'paid',
+            'closed_at' => null,
+            'closed_by' => null,
+        ]);
     }
 
     private function paymentMethodsFor(PosSession $posSession): array

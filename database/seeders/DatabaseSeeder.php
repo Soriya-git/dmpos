@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            RoleSeeder::class,
+            RolePermissionSeeder::class,
             CompanySeeder::class,
             CustomerSeeder::class,
             SupplierSeeder::class,
@@ -23,13 +25,13 @@ class DatabaseSeeder extends Seeder
             PaymentMethodSeeder::class,
             UnitSeeder::class,
             ItemSeeder::class,
+            PrinterSeeder::class,
             MenuSeeder::class,
             MenuPriceListSeeder::class,
             BomSeeder::class,
             WarehouseSeeder::class,
             PurchaseSeeder::class,
             StockOperationSeeder::class,
-            PrinterSeeder::class,
             OrderKitchenSeeder::class,
             InvoicePaymentSeeder::class,
             AuditLogSeeder::class,

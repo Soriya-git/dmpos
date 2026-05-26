@@ -50,6 +50,8 @@ class MenuSeeder extends Seeder
                             'menu_category_id' => $category->id,
                             'item_id' => $item->id,
                             'bom_header_id' => null,
+                            'printer_id' => $item->item_type === 'drink' ? 3 : null,
+                            'print_route' => $item->item_type === 'drink' ? 'stock' : 'kitchen',
                             'name' => $item->name,
                             'menu_type' => $item->item_type === 'service_material' ? 'service' : 'product',
                             'base_price' => 0,

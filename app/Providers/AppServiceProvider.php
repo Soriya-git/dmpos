@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -58,6 +59,14 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function configureDefaults(): void
     {
+        Gate::before(function ($user, string $ability): ?bool {
+            if ($user->hasRole('System Admin')) {
+                return true;
+            }
+
+            return $user->permissionOverrideFor($ability);
+        });
+
         JsonResource::withoutWrapping();
 
         Date::use(CarbonImmutable::class);

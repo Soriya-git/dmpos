@@ -9,6 +9,7 @@ use App\Models\PosTerminal;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class CompanySeeder extends Seeder
 {
@@ -26,9 +27,10 @@ class CompanySeeder extends Seeder
                     ['name' => 'DRG Central', 'code' => 'DRG-CEN'],
                 ],
                 'users' => [
-                    ['name' => 'DRG Manager', 'email' => 'drg.manager@diamond.com'],
-                    ['name' => 'DRG Cashier', 'email' => 'drg.cashier@diamond.com'],
-                    ['name' => 'DRG Server', 'email' => 'drg.server@diamond.com'],
+                    ['name' => 'DRG Admin', 'email' => 'drg.admin@diamond.com', 'role' => 'Admin'],
+                    ['name' => 'DRG Manager', 'email' => 'drg.manager@diamond.com', 'role' => 'Manager'],
+                    ['name' => 'DRG Cashier', 'email' => 'drg.cashier@diamond.com', 'role' => 'Supervisor'],
+                    ['name' => 'DRG Server', 'email' => 'drg.server@diamond.com', 'role' => 'Staff'],
                 ],
             ],
             [
@@ -39,9 +41,10 @@ class CompanySeeder extends Seeder
                     ['name' => 'MCG Airport', 'code' => 'MCG-AIR'],
                 ],
                 'users' => [
-                    ['name' => 'MCG Manager', 'email' => 'mcg.manager@diamond.com'],
-                    ['name' => 'MCG Cashier', 'email' => 'mcg.cashier@diamond.com'],
-                    ['name' => 'MCG Server', 'email' => 'mcg.server@diamond.com'],
+                    ['name' => 'MCG Admin', 'email' => 'mcg.admin@diamond.com', 'role' => 'Admin'],
+                    ['name' => 'MCG Manager', 'email' => 'mcg.manager@diamond.com', 'role' => 'Manager'],
+                    ['name' => 'MCG Cashier', 'email' => 'mcg.cashier@diamond.com', 'role' => 'Supervisor'],
+                    ['name' => 'MCG Server', 'email' => 'mcg.server@diamond.com', 'role' => 'Staff'],
                 ],
             ],
         ];
@@ -97,6 +100,7 @@ class CompanySeeder extends Seeder
                 ]);
 
                 $user->branches()->sync($branches->pluck('id')->all());
+                $user->assignRole(Role::findOrCreate($userData['role'], 'web'));
             }
         }
     }

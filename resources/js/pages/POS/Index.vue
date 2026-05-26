@@ -43,6 +43,13 @@ type Session = {
     total_ebanking_khr?: number | string;
     total_pay_later_usd?: number | string;
     total_pay_later_khr?: number | string;
+    open_dining_sessions_count?: number;
+    open_dining_sessions?: {
+        id: number;
+        session_no: string;
+        status: string;
+        resource_name: string;
+    }[];
     pos_terminal?: Terminal | null;
     posTerminal?: Terminal | null;
 };
@@ -189,6 +196,10 @@ const submitOpen = () => {
 };
 
 const submitClose = (session: Session) => {
+    if (!canCloseSelectedSession.value) {
+        return;
+    }
+
     closeForm.post(`/pos-sessions/${session.id}/close`, {
         preserveScroll: true,
         onSuccess: () => {
@@ -200,6 +211,10 @@ const submitClose = (session: Session) => {
 };
 
 const requestClose = () => {
+    if (!canCloseSelectedSession.value) {
+        return;
+    }
+
     closeConfirmOpen.value = true;
 };
 
@@ -286,6 +301,18 @@ const getSessionTerminalName = (session: Session) => {
 
 const closeSessionError = computed(() => {
     return (closeForm.errors as Record<string, string>).session;
+});
+
+const openDiningSessionsCount = computed(() => {
+    return Number(selectedSession.value?.open_dining_sessions_count ?? 0);
+});
+
+const openDiningSessions = computed(() => {
+    return selectedSession.value?.open_dining_sessions ?? [];
+});
+
+const canCloseSelectedSession = computed(() => {
+    return openDiningSessionsCount.value === 0;
 });
 
 const openingBanknotesError = computed(() => {
@@ -862,6 +889,44 @@ const closingBanknotesError = computed(() => {
                                 </div>
                             </section>
 
+                            <section
+                                v-if="openDiningSessionsCount > 0"
+                                class="rounded-xl border border-red-200 bg-red-50 p-3"
+                            >
+                                <div class="flex items-start gap-3">
+                                    <div
+                                        class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-700"
+                                    >
+                                        <ShieldAlert class="size-5" />
+                                    </div>
+                                    <div class="min-w-0">
+                                        <h2
+                                            class="text-xs font-black tracking-wide text-red-700 uppercase"
+                                        >
+                                            Close dining resources first
+                                        </h2>
+                                        <p
+                                            class="mt-1 text-xs font-medium text-red-700/80"
+                                        >
+                                            {{ openDiningSessionsCount }}
+                                            dining resource(s) are still open.
+                                        </p>
+                                        <div class="mt-2 flex flex-wrap gap-1">
+                                            <span
+                                                v-for="session in openDiningSessions.slice(
+                                                    0,
+                                                    6,
+                                                )"
+                                                :key="session.id"
+                                                class="rounded-md bg-white px-2 py-1 text-[10px] font-bold text-red-700"
+                                            >
+                                                {{ session.resource_name }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
                             <section class="space-y-1.5">
                                 <Label
                                     class="text-xs font-bold tracking-wider text-[#2a4858] uppercase"
@@ -1089,7 +1154,10 @@ const closingBanknotesError = computed(() => {
                                 <button
                                     type="button"
                                     class="inline-flex h-11 items-center justify-center rounded-lg bg-[#2a4858] px-4 text-sm font-bold text-white shadow-lg transition hover:bg-[#007882] disabled:pointer-events-none disabled:opacity-50"
-                                    :disabled="closeForm.processing"
+                                    :disabled="
+                                        closeForm.processing ||
+                                        !canCloseSelectedSession
+                                    "
                                     @click="requestClose"
                                 >
                                     Close POS
@@ -1138,7 +1206,9 @@ const closingBanknotesError = computed(() => {
                         <button
                             type="button"
                             class="inline-flex h-11 items-center justify-center rounded-lg bg-[#2a4858] px-4 text-sm font-bold text-white shadow-lg transition hover:bg-[#007882] disabled:pointer-events-none disabled:opacity-50"
-                            :disabled="closeForm.processing"
+                            :disabled="
+                                closeForm.processing || !canCloseSelectedSession
+                            "
                             @click="submitClose(selectedSession)"
                         >
                             Yes

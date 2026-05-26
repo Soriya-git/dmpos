@@ -6,7 +6,9 @@ import {
     History,
     Maximize2,
     Minimize2,
+    MonitorCog,
     Pencil,
+    Power,
     Printer,
     ReceiptText,
     RotateCcw,
@@ -256,6 +258,7 @@ const filteredCustomerOptions = computed(() => {
 });
 
 const cartLineCount = computed(() => cart.value.lines.length);
+const posIsOpen = computed(() => Boolean(props.posSession));
 const hasInvoice = computed(() => Boolean(props.diningSession.invoice_no));
 const billableOrders = computed(() => {
     return props.historyOrders.filter((order) => {
@@ -557,6 +560,10 @@ function checkBill(billGroup?: string) {
 
 function manageOrders() {
     router.get(`/orders/${props.diningSession.id}/manage`);
+}
+
+function openPosSessionPage() {
+    router.visit('/pos-sessions');
 }
 
 function confirmPayment(payload: PaymentPayload) {
@@ -984,6 +991,21 @@ onBeforeUnmount(() => {
                                     ? 'Exit Full Screen'
                                     : 'Full Screen'
                             }}
+                        </button>
+
+                        <button
+                            type="button"
+                            class="hidden h-9 shrink-0 items-center gap-2 rounded-xl px-3 text-xs font-black text-white shadow-lg transition sm:inline-flex"
+                            :class="
+                                posIsOpen
+                                    ? 'bg-red-600 shadow-red-600/20 hover:bg-red-700'
+                                    : 'bg-[#23AA8F] shadow-[#23AA8F]/25 hover:bg-[#007882]'
+                            "
+                            @click="openPosSessionPage"
+                        >
+                            <Power v-if="posIsOpen" class="h-4 w-4" />
+                            <MonitorCog v-else class="h-4 w-4" />
+                            {{ posIsOpen ? 'CLOSE NOW' : 'OPEN NOW' }}
                         </button>
                     </div>
 
