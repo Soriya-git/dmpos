@@ -6,7 +6,7 @@ import { applyUrlDefaults, queryParams, type RouteDefinition, type RouteFormDefi
 /**
  * @see \App\Http\Controllers\Crm\NoteController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php:12
- * @route "http://localhost:8000/contacts/{contact}/notes"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/notes"
  */
 export const store = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(args, options),
@@ -15,13 +15,13 @@ export const store = (args: { contact: number | { id: number } } | [ contact: nu
 
 store.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/contacts/{contact}/notes",
+    url: "http://127.0.0.1:8000/contacts/{contact}/notes",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Crm\NoteController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php:12
- * @route "http://localhost:8000/contacts/{contact}/notes"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/notes"
  */
 store.url = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -52,7 +52,7 @@ store.url = (args: { contact: number | { id: number } } | [ contact: number | { 
 /**
  * @see \App\Http\Controllers\Crm\NoteController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php:12
- * @route "http://localhost:8000/contacts/{contact}/notes"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/notes"
  */
 store.post = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(args, options),
@@ -64,7 +64,7 @@ store.post = (args: { contact: number | { id: number } } | [ contact: number | {
 /**
  * @see \App\Http\Controllers\Crm\NoteController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php:12
- * @route "http://localhost:8000/contacts/{contact}/notes"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/notes"
  */
 const storeForm = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(args, options),
@@ -74,7 +74,7 @@ const storeForm = (args: { contact: number | { id: number } } | [ contact: numbe
 /**
  * @see \App\Http\Controllers\Crm\NoteController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php:12
- * @route "http://localhost:8000/contacts/{contact}/notes"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/notes"
  */
 storeForm.post = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(args, options),

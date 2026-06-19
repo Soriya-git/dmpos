@@ -7,7 +7,7 @@ import prices from "./prices";
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:92
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -16,13 +16,13 @@ export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => (
 
 store.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/master-data/menu-price-lists",
+    url: "http://127.0.0.1:8000/master-data/menu-price-lists",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:92
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options)
@@ -31,7 +31,7 @@ store.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:92
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -43,7 +43,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:92
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -53,7 +53,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => 
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:92
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -66,7 +66,7 @@ store.form = storeForm
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:134
- * @route "http://localhost:8000/master-data/menu-price-lists/{priceList}"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists/{priceList}"
  */
 export const update = (args: { priceList: number | { id: number } } | [ priceList: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: update.url(args, options),
@@ -75,13 +75,13 @@ export const update = (args: { priceList: number | { id: number } } | [ priceLis
 
 update.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/master-data/menu-price-lists/{priceList}",
+    url: "http://127.0.0.1:8000/master-data/menu-price-lists/{priceList}",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:134
- * @route "http://localhost:8000/master-data/menu-price-lists/{priceList}"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists/{priceList}"
  */
 update.url = (args: { priceList: number | { id: number } } | [ priceList: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -112,7 +112,7 @@ update.url = (args: { priceList: number | { id: number } } | [ priceList: number
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:134
- * @route "http://localhost:8000/master-data/menu-price-lists/{priceList}"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists/{priceList}"
  */
 update.patch = (args: { priceList: number | { id: number } } | [ priceList: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: update.url(args, options),
@@ -124,7 +124,7 @@ update.patch = (args: { priceList: number | { id: number } } | [ priceList: numb
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:134
- * @route "http://localhost:8000/master-data/menu-price-lists/{priceList}"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists/{priceList}"
  */
 const updateForm = (args: { priceList: number | { id: number } } | [ priceList: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(args, formSafeOptions("patch", options)),
@@ -134,7 +134,7 @@ const updateForm = (args: { priceList: number | { id: number } } | [ priceList: 
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:134
- * @route "http://localhost:8000/master-data/menu-price-lists/{priceList}"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists/{priceList}"
  */
 updateForm.patch = (args: { priceList: number | { id: number } } | [ priceList: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(args, formSafeOptions("patch", options)),

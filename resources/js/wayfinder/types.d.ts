@@ -26,12 +26,12 @@ export namespace App {
         /**
          * @see [\App\Models\DiningSession](\D:\Lar\dmpos\app\Models\DiningSession.php)
          */
-        export type DiningSession = { id: number, company_id: number, branch_id: number, pos_terminal_id: number | null, pos_session_id: number | null, customer_id: number | null, dining_resource_id: number, resource_booking_id: number | null, menu_price_list_id: number | null, session_no: string, guest_count: number | null, status: string, opened_at: string | null, closed_at: string | null, opened_by: number | null, closed_by: number | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, pos_terminal?: App.Models.PosTerminal | null, customer?: App.Models.Customer | null, dining_resource?: App.Models.DiningResource | null, resource_booking?: App.Models.ResourceBooking | null, menu_price_list?: App.Models.MenuPriceList | null, orders?: App.Models.Order[], invoices?: App.Models.Invoice[], opener?: App.Models.User | null, closer?: App.Models.User | null, logs?: App.Models.SessionLog[], pos_session?: App.Models.PosSession | null }
+        export type DiningSession = { id: number, company_id: number, branch_id: number, pos_terminal_id: number | null, pos_session_id: number | null, pos_open_date: string | null, customer_id: number | null, dining_resource_id: number, resource_booking_id: number | null, menu_price_list_id: number | null, session_no: string, guest_count: number | null, status: string, opened_at: string | null, closed_at: string | null, opened_by: number | null, closed_by: number | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, pos_terminal?: App.Models.PosTerminal | null, customer?: App.Models.Customer | null, dining_resource?: App.Models.DiningResource | null, resource_booking?: App.Models.ResourceBooking | null, menu_price_list?: App.Models.MenuPriceList | null, orders?: App.Models.Order[], invoices?: App.Models.Invoice[], opener?: App.Models.User | null, closer?: App.Models.User | null, logs?: App.Models.SessionLog[], pos_session?: App.Models.PosSession | null }
 
         /**
          * @see [\App\Models\Customer](\D:\Lar\dmpos\app\Models\Customer.php)
          */
-        export type Customer = { id: number, company_id: number, branch_id: number | null, customer_group_id: number | null, name: string | null, phone_number: string, email: string | null, address: string | null, is_general_customer: boolean, note: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, customer_name: Illuminate.Database.Eloquent.Casts.Attribute, customer_phone: Illuminate.Database.Eloquent.Casts.Attribute, mobile: Illuminate.Database.Eloquent.Casts.Attribute, phone: Illuminate.Database.Eloquent.Casts.Attribute, company?: App.Models.Company | null, branch?: App.Models.Branch | null, customer_group?: App.Models.CustomerGroup | null, resource_bookings?: App.Models.ResourceBooking[], dining_sessions?: App.Models.DiningSession[], invoices?: App.Models.Invoice[] }
+        export type Customer = { id: number, company_id: number, branch_id: number | null, customer_group_id: number | null, name: string | null, phone_number: string, email: string | null, address: string | null, is_general_customer: boolean, note: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, customer_name: Illuminate.Database.Eloquent.Casts.Attribute, customer_phone: Illuminate.Database.Eloquent.Casts.Attribute, mobile: Illuminate.Database.Eloquent.Casts.Attribute, phone: Illuminate.Database.Eloquent.Casts.Attribute, company?: App.Models.Company | null, branch?: App.Models.Branch | null, customer_group?: App.Models.CustomerGroup | null, resource_bookings?: App.Models.ResourceBooking[], dining_sessions?: App.Models.DiningSession[], invoices?: App.Models.Invoice[], membership_cards?: App.Models.MembershipCard[] }
 
         /**
          * @see [\App\Models\CustomerGroup](\D:\Lar\dmpos\app\Models\CustomerGroup.php)
@@ -56,7 +56,7 @@ export namespace App {
         /**
          * @see [\App\Models\User](\D:\Lar\dmpos\app\Models\User.php)
          */
-        export type User = { id: number, name: string, email: string, image: string | null, email_verified_at: string | null, password: string, remember_token: string | null, created_at: string | null, updated_at: string | null, company_id: number | null, branch_id: number | null, image_url: string | null, notes?: App.Models.Note[], company?: App.Models.Company | null, branch?: App.Models.Branch | null, branches?: App.Models.Branch[], opened_dining_sessions?: App.Models.DiningSession[], closed_dining_sessions?: App.Models.DiningSession[], created_orders?: App.Models.Order[], issued_invoices?: App.Models.Invoice[], received_payments?: App.Models.Payment[], roles?: Spatie.Permission.Models.Role[], teams?: Spatie.Permission.Models.Permission[], permissions?: Spatie.Permission.Models.Permission[], notifications?: Illuminate.Notifications.DatabaseNotification[] }
+        export type User = { id: number, name: string, email: string, image: string | null, email_verified_at: string | null, password: string, remember_token: string | null, created_at: string | null, updated_at: string | null, company_id: number | null, branch_id: number | null, image_url: string | null, notes?: App.Models.Note[], company?: App.Models.Company | null, branch?: App.Models.Branch | null, branches?: App.Models.Branch[], permission_overrides?: Spatie.Permission.Models.Permission[], opened_dining_sessions?: App.Models.DiningSession[], closed_dining_sessions?: App.Models.DiningSession[], created_orders?: App.Models.Order[], issued_invoices?: App.Models.Invoice[], received_payments?: App.Models.Payment[], roles?: Spatie.Permission.Models.Role[], teams?: Spatie.Permission.Models.Permission[], permissions?: Spatie.Permission.Models.Permission[], notifications?: Illuminate.Notifications.DatabaseNotification[] }
 
         /**
          * @see [\App\Models\Note](\D:\Lar\dmpos\app\Models\Note.php)
@@ -76,7 +76,7 @@ export namespace App {
         /**
          * @see [\App\Models\Order](\D:\Lar\dmpos\app\Models\Order.php)
          */
-        export type Order = { id: number, company_id: number, branch_id: number, dining_session_id: number, menu_price_list_id: number | null, order_no: string, status: string, sent_to_kitchen_at: string | null, created_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, dining_session?: App.Models.DiningSession | null, menu_price_list?: App.Models.MenuPriceList | null, order_lines?: App.Models.OrderLine[], kitchen_tickets?: App.Models.KitchenTicket[], creator?: App.Models.User | null, canceller?: App.Models.User | null }
+        export type Order = { id: number, company_id: number, branch_id: number, dining_session_id: number, menu_price_list_id: number | null, pos_open_date: string | null, order_no: string, status: string, sent_to_kitchen_at: string | null, created_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, dining_session?: App.Models.DiningSession | null, menu_price_list?: App.Models.MenuPriceList | null, order_lines?: App.Models.OrderLine[], kitchen_tickets?: App.Models.KitchenTicket[], creator?: App.Models.User | null, canceller?: App.Models.User | null }
 
         /**
          * @see [\App\Models\MenuPriceList](\D:\Lar\dmpos\app\Models\MenuPriceList.php)
@@ -126,17 +126,32 @@ export namespace App {
         /**
          * @see [\App\Models\Invoice](\D:\Lar\dmpos\app\Models\Invoice.php)
          */
-        export type Invoice = { id: number, company_id: number, branch_id: number, pos_terminal_id: number | null, dining_session_id: number, customer_id: number | null, invoice_no: string, status: string, stock_settlement_status: string, stock_settled_quantity: number, stock_settled_at: string | null, stock_settled_by: number | null, stock_rejected_at: string | null, stock_rejected_by: number | null, stock_settlement_note: string | null, currency: string, exchange_rate_snapshot: number, subtotal: number, discount_amount: number, tax_amount: number, grand_total: number, paid_amount: number, balance_amount: number, issued_at: string | null, paid_at: string | null, cancelled_at: string | null, issued_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, pos_terminal?: App.Models.PosTerminal | null, dining_session?: App.Models.DiningSession | null, customer?: App.Models.Customer | null, lines?: App.Models.InvoiceLine[], payments?: App.Models.Payment[], issuer?: App.Models.User | null, canceller?: App.Models.User | null }
+        export type Invoice = { id: number, company_id: number, branch_id: number, pos_terminal_id: number | null, pos_open_date: string | null, dining_session_id: number, customer_id: number | null, invoice_no: string, status: string, stock_settlement_status: string, stock_settled_quantity: number, stock_settled_at: string | null, stock_settled_by: number | null, stock_rejected_at: string | null, stock_rejected_by: number | null, stock_settlement_note: string | null, currency: string, exchange_rate_snapshot: number, subtotal: number, discount_amount: number, tax_amount: number, grand_total: number, paid_amount: number, balance_amount: number, issued_at: string | null, paid_at: string | null, cancelled_at: string | null, issued_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, pos_terminal?: App.Models.PosTerminal | null, dining_session?: App.Models.DiningSession | null, customer?: App.Models.Customer | null, lines?: App.Models.InvoiceLine[], payments?: App.Models.Payment[], membership_card_transactions?: App.Models.MembershipCardTransaction[], issuer?: App.Models.User | null, stock_settler?: App.Models.User | null, stock_rejecter?: App.Models.User | null, canceller?: App.Models.User | null }
 
         /**
          * @see [\App\Models\Payment](\D:\Lar\dmpos\app\Models\Payment.php)
          */
-        export type Payment = { id: number, company_id: number, branch_id: number, invoice_id: number, payment_method_id: number | null, payment_no: string, status: string, currency: string, amount_paid: number, received_amount: number, change_usd_amount: number, change_khr_amount: number, exchange_rate_snapshot: number, amount_usd_equivalent: number, amount_khr_equivalent: number, paid_at: string | null, received_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, invoice?: App.Models.Invoice | null, payment_method?: App.Models.PaymentMethod | null, receiver?: App.Models.User | null, canceller?: App.Models.User | null }
+        export type Payment = { id: number, company_id: number, branch_id: number, invoice_id: number, payment_method_id: number | null, payment_no: string, status: string, currency: string, amount_paid: number, received_amount: number, change_usd_amount: number, change_khr_amount: number, exchange_rate_snapshot: number, amount_usd_equivalent: number, amount_khr_equivalent: number, paid_at: string | null, received_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, invoice?: App.Models.Invoice | null, payment_method?: App.Models.PaymentMethod | null, receiver?: App.Models.User | null, canceller?: App.Models.User | null, membership_card_transactions?: App.Models.MembershipCardTransaction[] }
 
         /**
          * @see [\App\Models\PaymentMethod](\D:\Lar\dmpos\app\Models\PaymentMethod.php)
          */
         export type PaymentMethod = { id: number, company_id: number, branch_id: number | null, name: string, code: string | null, method_type: string, currency: string, is_default: boolean, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, payments?: App.Models.Payment[] }
+
+        /**
+         * @see [\App\Models\MembershipCardTransaction](\D:\Lar\dmpos\app\Models\MembershipCardTransaction.php)
+         */
+        export type MembershipCardTransaction = { id: number, company_id: number, branch_id: number | null, membership_card_id: number, customer_id: number, invoice_id: number | null, payment_id: number | null, transaction_no: string, transaction_type: string, direction: string, currency: string, amount: number, promotion_amount: number, promotion_name: string | null, balance_before: number, balance_after: number, exchange_rate_snapshot: number, amount_usd_equivalent: number, amount_khr_equivalent: number, transacted_at: string | null, performed_by: number | null, payload: Record<string, unknown>, note: string | null, ledger_sequence: number | null, previous_hash: string | null, entry_hash: string | null, signature_version: number, created_at: string | null, updated_at: string | null, membership_card?: App.Models.MembershipCard | null, customer?: App.Models.Customer | null, invoice?: App.Models.Invoice | null, payment?: App.Models.Payment | null }
+
+        /**
+         * @see [\App\Models\MembershipCard](\D:\Lar\dmpos\app\Models\MembershipCard.php)
+         */
+        export type MembershipCard = { id: number, company_id: number, branch_id: number | null, customer_id: number, card_no: string, card_name: string | null, status: string, issued_date: string | null, expired_date: string | null, remark: string | null, created_by: number | null, updated_by: number | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, customer?: App.Models.Customer | null, balances?: App.Models.MembershipCardBalance[], transactions?: App.Models.MembershipCardTransaction[] }
+
+        /**
+         * @see [\App\Models\MembershipCardBalance](\D:\Lar\dmpos\app\Models\MembershipCardBalance.php)
+         */
+        export type MembershipCardBalance = { id: number, membership_card_id: number, currency: string, balance: number, last_transaction_id: number | null, ledger_verified_at: string | null, created_at: string | null, updated_at: string | null, membership_card?: App.Models.MembershipCard | null }
 
         /**
          * @see [\App\Models\Item](\D:\Lar\dmpos\app\Models\Item.php)
@@ -226,12 +241,12 @@ export namespace App {
         /**
          * @see [\App\Models\GoodsReceipt](\D:\Lar\dmpos\app\Models\GoodsReceipt.php)
          */
-        export type GoodsReceipt = { id: number, company_id: number, branch_id: number, purchase_order_id: number | null, warehouse_id: number, stock_location_id: number, receipt_no: string, status: string, received_at: string | null, received_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, purchase_order?: App.Models.PurchaseOrder | null, warehouse?: App.Models.Warehouse | null, stock_location?: App.Models.StockLocation | null, lines?: App.Models.GoodsReceiptLine[], putaway_transfers?: App.Models.StockTransfer[], receiver?: App.Models.User | null }
+        export type GoodsReceipt = { id: number, company_id: number, branch_id: number, purchase_order_id: number | null, warehouse_id: number, stock_location_id: number, receipt_no: string, status: string, received_at: string | null, received_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, purchase_order?: App.Models.PurchaseOrder | null, warehouse?: App.Models.Warehouse | null, stock_location?: App.Models.StockLocation | null, lines?: App.Models.GoodsReceiptLine[], putaway_transfers?: App.Models.StockTransfer[], receiver?: App.Models.User | null, canceller?: App.Models.User | null }
 
         /**
          * @see [\App\Models\PurchaseOrder](\D:\Lar\dmpos\app\Models\PurchaseOrder.php)
          */
-        export type PurchaseOrder = { id: number, company_id: number, branch_id: number | null, po_no: string, purchase_scope: string, supplier_name: string | null, supplier_phone: string | null, supplier_address: string | null, status: string, subtotal: number, discount_amount: number, tax_amount: number, grand_total: number, order_date: string | null, expected_date: string | null, created_by: number | null, approved_by: number | null, rejected_by: number | null, cancelled_by: number | null, approved_at: string | null, rejected_at: string | null, cancelled_at: string | null, reject_reason: string | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, lines?: App.Models.PurchaseOrderLine[], goods_receipts?: App.Models.GoodsReceipt[], creator?: App.Models.User | null, approver?: App.Models.User | null }
+        export type PurchaseOrder = { id: number, company_id: number, branch_id: number | null, po_no: string, purchase_scope: string, supplier_name: string | null, supplier_phone: string | null, supplier_address: string | null, status: string, subtotal: number, discount_amount: number, tax_amount: number, grand_total: number, order_date: string | null, expected_date: string | null, created_by: number | null, approved_by: number | null, rejected_by: number | null, cancelled_by: number | null, approved_at: string | null, rejected_at: string | null, cancelled_at: string | null, reject_reason: string | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, lines?: App.Models.PurchaseOrderLine[], goods_receipts?: App.Models.GoodsReceipt[], creator?: App.Models.User | null, approver?: App.Models.User | null, rejecter?: App.Models.User | null, canceller?: App.Models.User | null }
 
         /**
          * @see [\App\Models\PurchaseOrderLine](\D:\Lar\dmpos\app\Models\PurchaseOrderLine.php)
@@ -246,7 +261,7 @@ export namespace App {
         /**
          * @see [\App\Models\StockTransfer](\D:\Lar\dmpos\app\Models\StockTransfer.php)
          */
-        export type StockTransfer = { id: number, company_id: number, goods_receipt_id: number | null, from_branch_id: number, to_branch_id: number, from_warehouse_id: number, to_warehouse_id: number, from_location_id: number, to_location_id: number, transfer_no: string, transfer_type: string, status: string, transfer_date: string | null, approved_at: string | null, dispatched_at: string | null, received_at: string | null, cancelled_at: string | null, created_by: number | null, approved_by: number | null, dispatched_by: number | null, received_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, goods_receipt?: App.Models.GoodsReceipt | null, from_branch?: App.Models.Branch | null, to_branch?: App.Models.Branch | null, from_warehouse?: App.Models.Warehouse | null, to_warehouse?: App.Models.Warehouse | null, from_location?: App.Models.StockLocation | null, to_location?: App.Models.StockLocation | null, lines?: App.Models.StockTransferLine[], creator?: App.Models.User | null }
+        export type StockTransfer = { id: number, company_id: number, goods_receipt_id: number | null, invoice_id: number | null, from_branch_id: number, to_branch_id: number, from_warehouse_id: number, to_warehouse_id: number, from_location_id: number, to_location_id: number, transfer_no: string, transfer_type: string | null, status: string, transfer_date: string | null, approved_at: string | null, dispatched_at: string | null, received_at: string | null, cancelled_at: string | null, created_by: number | null, approved_by: number | null, dispatched_by: number | null, received_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, goods_receipt?: App.Models.GoodsReceipt | null, invoice?: App.Models.Invoice | null, from_branch?: App.Models.Branch | null, to_branch?: App.Models.Branch | null, from_warehouse?: App.Models.Warehouse | null, to_warehouse?: App.Models.Warehouse | null, from_location?: App.Models.StockLocation | null, to_location?: App.Models.StockLocation | null, lines?: App.Models.StockTransferLine[], creator?: App.Models.User | null, approver?: App.Models.User | null, canceller?: App.Models.User | null }
 
         /**
          * @see [\App\Models\StockTransferLine](\D:\Lar\dmpos\app\Models\StockTransferLine.php)
@@ -261,7 +276,7 @@ export namespace App {
         /**
          * @see [\App\Models\StockAdjustment](\D:\Lar\dmpos\app\Models\StockAdjustment.php)
          */
-        export type StockAdjustment = { id: number, company_id: number, branch_id: number, warehouse_id: number, stock_location_id: number, adjustment_no: string, adjustment_type: string, status: string, adjustment_date: string | null, created_by: number | null, confirmed_by: number | null, cancelled_by: number | null, confirmed_at: string | null, cancelled_at: string | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, warehouse?: App.Models.Warehouse | null, stock_location?: App.Models.StockLocation | null, lines?: App.Models.StockAdjustmentLine[], creator?: App.Models.User | null, confirmer?: App.Models.User | null }
+        export type StockAdjustment = { id: number, company_id: number, branch_id: number, warehouse_id: number, stock_location_id: number, adjustment_no: string, adjustment_type: string, status: string, adjustment_date: string | null, created_by: number | null, confirmed_by: number | null, cancelled_by: number | null, confirmed_at: string | null, cancelled_at: string | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, warehouse?: App.Models.Warehouse | null, stock_location?: App.Models.StockLocation | null, lines?: App.Models.StockAdjustmentLine[], creator?: App.Models.User | null, confirmer?: App.Models.User | null, canceller?: App.Models.User | null }
 
         /**
          * @see [\App\Models\StockAdjustmentLine](\D:\Lar\dmpos\app\Models\StockAdjustmentLine.php)
@@ -420,6 +435,41 @@ export namespace App {
                 }
             }
 
+            export namespace Users {
+                export namespace UserController {
+                    export namespace __invoke {
+                        /**
+                         * @see [\App\Http\Controllers\Users\UserController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Users\UserController.php)
+                         */
+                        export type Response = Inertia.Pages.Users.Index
+
+                        /**
+                         * @see [\App\Http\Controllers\Users\UserController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Users\UserController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace StoreRole {
+                        /**
+                         * @see [\App\Http\Controllers\Users\UserController::storeRole](\D:\Lar\dmpos\app\Http\Controllers\Users\UserController.php)
+                         */
+                        export type Request = {    name: string;
+                            permission_ids?: unknown[];
+                            "permission_ids.*"?: number;}
+                    }
+
+                    export namespace UpdatePermissions {
+                        /**
+                         * @see [\App\Http\Controllers\Users\UserController::updatePermissions](\D:\Lar\dmpos\app\Http\Controllers\Users\UserController.php)
+                         */
+                        export type Request = {    permission_names?: unknown[];
+                            "permission_names.*"?: string;
+                            permission_scope?: unknown[];
+                            "permission_scope.*"?: string;}
+                    }
+                }
+            }
+
             export namespace POS {
                 export namespace PosSessionController {
                     export namespace Index {
@@ -476,9 +526,34 @@ export namespace App {
                          * @see [\App\Http\Controllers\Sales\SaleInvoiceController::receive](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
                          */
                         export type Request = {    method: string;
+                            payment_method_id?: string | null;
+                            membership_card_id?: string | null;
                             currency: "USD" | "KHR";
                             received_amount?: number | null;
-                            operation_status: "invoice_receipt_done";}
+                            operation_status: "invoice_receipt_done";
+                            change_usd_amount?: number | null;
+                            change_khr_amount?: number | null;}
+                    }
+
+                    export namespace Cancel {
+                        /**
+                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::cancel](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace CancelInvoicePayments {
+                        /**
+                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::cancelInvoicePayments](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace CancelPayment {
+                        /**
+                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::cancelPayment](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
+                         */
+                        export type Request = Record<string, unknown>
                     }
                 }
             }
@@ -687,6 +762,93 @@ export namespace App {
                 }
             }
 
+            export namespace StockCustomer {
+                export namespace StockCustomerController {
+                    export namespace Index {
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::index](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Response = Inertia.Pages.StockCustomer.Index
+
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::index](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Create {
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::create](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Response = Inertia.Pages.StockCustomer.CreateStockCus
+
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::create](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Invoices {
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::invoices](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Response = Inertia.Pages.StockCustomer.CompleteStockCus
+
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::invoices](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Item {
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::item](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Response = Inertia.Pages.StockCustomer.View
+
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::item](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Store {
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::store](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Update {
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::update](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Approve {
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::approve](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Reject {
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::reject](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Cancel {
+                        /**
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::cancel](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+                }
+            }
+
             export namespace BalanceOnHand {
                 export namespace BalanceOnHandController {
                     export namespace Index {
@@ -709,6 +871,36 @@ export namespace App {
 
                         /**
                          * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show](\D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+                }
+            }
+
+            export namespace OperationsReport {
+                export namespace DailySessionStockController {
+                    export namespace __invoke {
+                        /**
+                         * @see [\App\Http\Controllers\OperationsReport\DailySessionStockController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionStockController.php)
+                         */
+                        export type Response = Inertia.Pages.OperationsReport.DailySessionStock
+
+                        /**
+                         * @see [\App\Http\Controllers\OperationsReport\DailySessionStockController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionStockController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+                }
+
+                export namespace DailySessionMenuController {
+                    export namespace __invoke {
+                        /**
+                         * @see [\App\Http\Controllers\OperationsReport\DailySessionMenuController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionMenuController.php)
+                         */
+                        export type Response = Inertia.Pages.OperationsReport.DailySessionMenu
+
+                        /**
+                         * @see [\App\Http\Controllers\OperationsReport\DailySessionMenuController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionMenuController.php)
                          */
                         export type Request = Record<string, unknown>
                     }
@@ -1049,6 +1241,20 @@ export namespace App {
                          */
                         export type Request = Record<string, unknown>
                     }
+
+                    export namespace StoreMembershipCard {
+                        /**
+                         * @see [\App\Http\Controllers\MasterData\CustomerController::storeMembershipCard](\D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace UpdateMembershipCard {
+                        /**
+                         * @see [\App\Http\Controllers\MasterData\CustomerController::updateMembershipCard](\D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
                 }
 
                 export namespace ExchangeRateController {
@@ -1259,6 +1465,82 @@ export namespace App {
                 }
             }
 
+            export namespace MembershipCard {
+                export namespace CustomerCardController {
+                    export namespace Index {
+                        /**
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::index](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         */
+                        export type Response = Inertia.Pages.MembershipCard.CustomerCard
+
+                        /**
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::index](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Create {
+                        /**
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::create](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         */
+                        export type Response = Inertia.Pages.MembershipCard.Create
+
+                        /**
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::create](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Transactions {
+                        /**
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::transactions](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         */
+                        export type Response = Inertia.Pages.MembershipCard.CustomerTransactionDetial
+
+                        /**
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::transactions](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Topup {
+                        /**
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::topup](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         */
+                        export type Response = Inertia.Pages.MembershipCard.CustomerCardTopup
+
+                        /**
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::topup](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         */
+                        export type Request = Record<string, unknown>
+                    }
+
+                    export namespace Store {
+                        /**
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::store](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         */
+                        export type Request = {    customer_id: number;
+                            card_no: string;
+                            card_name?: string | null;
+                            status: "active" | "inactive" | "blocked" | "expired" | "cancelled";
+                            issued_date?: string | null;
+                            expired_date?: string | null;
+                            remark?: string | null;}
+                    }
+
+                    export namespace StoreTopup {
+                        /**
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::storeTopup](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         */
+                        export type Request = {    currency: string;
+                            amount: number;
+                            promotion_amount?: number | null;
+                            promotion_name?: string | null;
+                            note?: string | null;}
+                    }
+                }
+            }
+
             export namespace Seats {
                 export namespace SeatController {
                     export namespace Index {
@@ -1361,6 +1643,7 @@ export namespace App {
                          */
                         export type Request = {    method: string;
                             payment_method_id?: string | null;
+                            membership_card_id?: string | null;
                             currency: "USD" | "KHR";
                             received_amount?: number | null;
                             operation_status: "invoice" | "invoice_receipt_done";
@@ -1374,7 +1657,8 @@ export namespace App {
                         /**
                          * @see [\App\Http\Controllers\Seats\SeatOrderController::updateCustomer](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
                          */
-                        export type Request = {    customer_phone?: string | null;
+                        export type Request = {    customer_id?: number | null;
+                            customer_phone?: string | null;
                             customer_name?: string | null;}
                     }
 
@@ -2269,14 +2553,14 @@ export namespace Spatie {
     export namespace Permission {
         export namespace Models {
             /**
-             * @see [\Spatie\Permission\Models\Role](\D:\Lar\dmpos\vendor\spatie\laravel-permission\src\Models\Role.php)
-             */
-            export type Role = { id: number, name: string, guard_name: string, created_at: string | null, updated_at: string | null, permissions?: Spatie.Permission.Models.Permission[] }
-
-            /**
              * @see [\Spatie\Permission\Models\Permission](\D:\Lar\dmpos\vendor\spatie\laravel-permission\src\Models\Permission.php)
              */
             export type Permission = { id: number, name: string, guard_name: string, created_at: string | null, updated_at: string | null, roles?: Spatie.Permission.Models.Role[], teams?: Spatie.Permission.Models.Permission[], permissions?: Spatie.Permission.Models.Permission[] }
+
+            /**
+             * @see [\Spatie\Permission\Models\Role](\D:\Lar\dmpos\vendor\spatie\laravel-permission\src\Models\Role.php)
+             */
+            export type Role = { id: number, name: string, guard_name: string, created_at: string | null, updated_at: string | null, permissions?: Spatie.Permission.Models.Permission[] }
         }
     }
 }
@@ -2312,6 +2596,13 @@ export namespace Inertia {
             export type Dashboard = Inertia.SharedData & { totalContacts: unknown, totalOrganizations: unknown, recentNotesCount: unknown, recentActivity: Illuminate.Http.Resources.Json.AnonymousResourceCollection }
         }
 
+        export namespace Users {
+            /**
+             * @see [\App\Http\Controllers\Users\UserController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Users\UserController.php)
+             */
+            export type Index = Inertia.SharedData & { users: unknown, roles: unknown, permissions: unknown, branches: unknown, summary: {users: unknown, roles: unknown, permissions: unknown } }
+        }
+
         export namespace POS {
             /**
              * @see [\App\Http\Controllers\POS\PosSessionController::index](\D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php)
@@ -2323,7 +2614,7 @@ export namespace Inertia {
             /**
              * @see [\App\Http\Controllers\Sales\SaleInvoiceController::index](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
              */
-            export type Index = Inertia.SharedData & { posSession: {id: number, session_no: string, opening_cash_usd: number, opening_cash_khr: number }, invoices: unknown, paymentSummary: [], filters: {start_date: unknown, end_date: unknown, search: unknown } }
+            export type Index = Inertia.SharedData & { posSession: {id: number, session_no: string, opening_cash_usd: number, opening_cash_khr: number }, invoices: unknown, paymentMethods: [], membershipCards: [], paymentSummary: [], filters: {start_date: unknown, end_date: unknown, search: unknown } }
         }
 
         export namespace Purchase {
@@ -2367,6 +2658,28 @@ export namespace Inertia {
             export type CompleteGRForPutaway = Inertia.SharedData & { receipts: unknown[] }
         }
 
+        export namespace StockCustomer {
+            /**
+             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::index](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+             */
+            export type Index = Inertia.SharedData & { keeps: unknown, stats: {pendingInvoices: unknown, activeKeeps: unknown, receivedKeeps: unknown, totalQuantity: unknown } }
+
+            /**
+             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::create](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+             */
+            export type CreateStockCus = Inertia.SharedData & { nextTransferNo: string, keep: unknown, invoice: unknown, invoices: unknown[], customerLocations: unknown[] }
+
+            /**
+             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::invoices](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+             */
+            export type CompleteStockCus = Inertia.SharedData & { invoices: unknown[] }
+
+            /**
+             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::item](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+             */
+            export type View = Inertia.SharedData & { item: {id: number, code: string, name: string, unit: string, totalQuantity: unknown }, keeps: unknown }
+        }
+
         export namespace BalanceOnHand {
             /**
              * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index](\D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php)
@@ -2377,6 +2690,18 @@ export namespace Inertia {
              * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show](\D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php)
              */
             export type View = Inertia.SharedData & { item: {id: number, code: string, name: string, itemType: string, unit: string, minimumStockQty: number, quantityOnHand: unknown, quantityAvailable: unknown, quantityReserved: unknown, stockValue: unknown, status: string }, balances: unknown }
+        }
+
+        export namespace OperationsReport {
+            /**
+             * @see [\App\Http\Controllers\OperationsReport\DailySessionStockController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionStockController.php)
+             */
+            export type DailySessionStock = Inertia.SharedData & { session: {date: string, status: string, sessionNo: unknown, branchName: unknown, terminalName: unknown, openedAt: unknown }, rows: unknown, stats: {stockMenus: unknown, confirmedQty: unknown, invoicedQty: unknown, paidQty: unknown, pendingQty: number } }
+
+            /**
+             * @see [\App\Http\Controllers\OperationsReport\DailySessionMenuController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionMenuController.php)
+             */
+            export type DailySessionMenu = Inertia.SharedData & { session: {date: string, status: string, sessionNo: unknown, branchName: unknown, terminalName: unknown, openedAt: unknown }, rows: unknown, stats: {menuItems: unknown, confirmedQty: unknown, invoicedQty: unknown, paidQty: unknown, pendingQty: number } }
         }
 
         export namespace InternalTransfer {
@@ -2484,16 +2809,38 @@ export namespace Inertia {
             export type WarehouseLocation = Inertia.SharedData & { warehouses: unknown, locations: unknown }
         }
 
+        export namespace MembershipCard {
+            /**
+             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::index](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+             */
+            export type CustomerCard = Inertia.SharedData & { cards: unknown, filters: {card: null } }
+
+            /**
+             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::create](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+             */
+            export type Create = Inertia.SharedData & { customers: unknown }
+
+            /**
+             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::transactions](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+             */
+            export type CustomerTransactionDetial = Inertia.SharedData & { card: [], transactions: unknown }
+
+            /**
+             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::topup](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+             */
+            export type CustomerCardTopup = Inertia.SharedData & { card: [] }
+        }
+
         export namespace Seats {
             /**
              * @see [\App\Http\Controllers\Seats\SeatController::index](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php)
              */
-            export type Index = Inertia.SharedData & { posSession: {id: unknown, session_no: string, branch_name: unknown, terminal_name: unknown, opened_by: unknown, opened_at: unknown }, resources: unknown, types: unknown, customers: unknown, priceLists: unknown, filters: {status: string | null | [] | null, type_id: string | null | [] | null, search: string | null | [] | null } }
+            export type Index = Inertia.SharedData & { posSession: App.Models.PosSession | null, openPosSessions: unknown, availablePosTerminals: unknown, requiresPosSessionSelection: boolean, resources: unknown, types: unknown, customers: unknown, priceLists: unknown, filters: {status: string | null | [] | null, type_id: string | null | [] | null, search: string | null | [] | null } }
 
             /**
              * @see [\App\Http\Controllers\Seats\SeatOrderController::show](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
              */
-            export type Orders = Inertia.SharedData & { posSession: {id: number, session_no: string }, diningSession: {id: number, session_no: string, status: string, invoice_no: unknown, invoice_status: unknown, invoice_total: unknown, seat_name: string, seat_type: unknown, customer_name: string, customer_phone: string | null, price_list_name: string }, menus: unknown, categories: unknown, cart: [], exchangeRate: number, paymentMethods: [], historyOrders: unknown, printOrders: [], invoices: unknown, filters: {category_id: string | null | [] | null, search: string | null | [] | null } }
+            export type Orders = Inertia.SharedData & { posSession: {id: number, session_no: string }, diningSession: {id: number, session_no: string, customer_id: number | null, status: string, invoice_no: unknown, invoice_status: unknown, invoice_total: unknown, seat_name: string, seat_type: unknown, customer_name: string, customer_phone: string | null, price_list_name: string }, menus: unknown, categories: unknown, cart: [], exchangeRate: number, paymentMethods: [], membershipCards: [], customers: [], historyOrders: unknown, printOrders: [], invoices: unknown, filters: {category_id: string | null | [] | null, search: string | null | [] | null } }
 
             /**
              * @see [\App\Http\Controllers\Seats\SeatOrderController::manage](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)

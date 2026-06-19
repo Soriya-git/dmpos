@@ -136,22 +136,26 @@ function locationTypeClass(value: string) {
     <Head :title="`${item.code} Balance`" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
+        <template #actions>
+            <Button
+                as-child
+                variant="outline"
+                class="h-9 rounded-lg border-slate-200 bg-white px-4 text-xs font-bold text-slate-600 hover:text-[#007882]"
+            >
+                <Link href="/balance-on-hand">
+                    <ArrowLeft class="size-4" />
+                    Back
+                </Link>
+            </Button>
+        </template>
+
+        <div
+            class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <div
                 class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
             >
                 <div class="flex items-start gap-3">
-                    <Button
-                        as-child
-                        variant="outline"
-                        size="icon"
-                        class="mt-1 size-9 rounded-lg border-slate-200 bg-white text-slate-500 hover:text-[#007882]"
-                    >
-                        <Link href="/balance-on-hand">
-                            <ArrowLeft class="size-4" />
-                            <span class="sr-only">Back</span>
-                        </Link>
-                    </Button>
                     <div>
                         <h1
                             class="text-2xl font-semibold tracking-tight text-[#2A4858]"

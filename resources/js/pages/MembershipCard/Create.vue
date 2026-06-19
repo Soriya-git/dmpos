@@ -108,7 +108,9 @@ function submit() {
     <Head title="Create Membership Card" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
+        <div
+            class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <div
                 class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
             >
@@ -142,7 +144,7 @@ function submit() {
 
             <div class="grid gap-6 xl:grid-cols-[420px_minmax(0,1fr)]">
                 <section
-                    class="h-fit rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+                    class="h-fit rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
                 >
                     <div class="mb-5 text-center">
                         <span
@@ -168,7 +170,7 @@ function submit() {
                 </section>
 
                 <section
-                    class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+                    class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"
                 >
                     <div class="bg-[#2A4858] p-6 text-white">
                         <h2 class="text-lg font-bold">Card Properties</h2>
@@ -180,7 +182,7 @@ function submit() {
                     </div>
 
                     <form class="space-y-5 p-5" @submit.prevent="submit">
-                        <div class="rounded-xl bg-slate-50 p-4">
+                        <div class="rounded-lg bg-slate-50 p-4">
                             <div class="mb-3 flex items-center gap-2">
                                 <UserRound class="size-4 text-[#007882]" />
                                 <span
@@ -203,7 +205,7 @@ function submit() {
                             </div>
 
                             <div
-                                class="mt-2 max-h-56 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-sm"
+                                class="mt-2 max-h-56 overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-sm"
                             >
                                 <button
                                     v-for="customer in filteredCustomers"
@@ -253,7 +255,7 @@ function submit() {
                             </p>
                         </div>
 
-                        <div class="space-y-4 rounded-xl bg-slate-50 p-4">
+                        <div class="space-y-4 rounded-lg bg-slate-50 p-4">
                             <div class="grid gap-3 md:grid-cols-2">
                                 <label class="block">
                                     <span

@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\Item;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderLine;
+use App\Models\Supplier;
 use App\Models\Unit;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
@@ -71,12 +72,25 @@ class PurchaseOrderController extends Controller
             ->orderBy('name')
             ->get(['id', 'name', 'code']);
 
+        $suppliers = Supplier::query()
+            ->where('company_id', $companyId)
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get()
+            ->map(fn (Supplier $supplier) => [
+                'id'      => $supplier->id,
+                'name'    => $supplier->name,
+                'phone'   => $supplier->phone_number,
+                'address' => $supplier->address,
+            ]);
+
         return Inertia::render('Purchase/Index', [
-            'orders' => $orders,
-            'items' => $items,
-            'units' => $units,
-            'nextPoNo' => DocumentNumber::make(PurchaseOrder::class, 'po_no', 'PO'),
-            'filters' => [
+            'orders'    => $orders,
+            'items'     => $items,
+            'units'     => $units,
+            'suppliers' => $suppliers,
+            'nextPoNo'  => DocumentNumber::make(PurchaseOrder::class, 'po_no', 'PO'),
+            'filters'   => [
                 'search' => $filters['search'] ?? null,
                 'status' => $filters['status'] ?? null,
             ],
@@ -238,8 +252,11 @@ class PurchaseOrderController extends Controller
             'discount_amount' => (float) $order->discount_amount,
             'tax_amount' => (float) $order->tax_amount,
             'grand_total' => (float) $order->grand_total,
+            'note' => $order->note,
             'lines' => $order->lines->map(fn (PurchaseOrderLine $line) => [
                 'id' => $line->id,
+                'item_id' => $line->item_id,
+                'unit_id' => $line->unit_id,
                 'item_name' => $line->item?->name,
                 'item_code' => $line->item?->code,
                 'unit_code' => $line->unit?->code,
@@ -252,5 +269,73 @@ class PurchaseOrderController extends Controller
                 'note' => $line->note,
             ]),
         ];
+    }
+
+    public function update(Request $request, PurchaseOrder $purchaseOrder): \Illuminate\Http\RedirectResponse
+    {
+        $user = $request->user();
+        $companyId = $user->company_id ?? Company::query()->value('id');
+
+        abort_if((int) $purchaseOrder->company_id !== (int) $companyId, 403);
+        abort_if($purchaseOrder->status !== 'created', 422, 'Only pending purchase orders can be edited.');
+
+        $data = $request->validate([
+            'supplier_name'   => ['required', 'string', 'max:255'],
+            'supplier_phone'  => ['nullable', 'string', 'max:255'],
+            'supplier_address' => ['nullable', 'string', 'max:255'],
+            'order_date'      => ['required', 'date'],
+            'expected_date'   => ['nullable', 'date'],
+            'note'            => ['nullable', 'string'],
+            'lines'           => ['required', 'array', 'min:1'],
+            'lines.*.item_id' => ['required', Rule::exists('items', 'id')->where('company_id', $companyId)],
+            'lines.*.unit_id' => ['required', Rule::exists('units', 'id')],
+            'lines.*.quantity_ordered' => ['required', 'numeric', 'gt:0'],
+            'lines.*.unit_cost'        => ['required', 'numeric', 'min:0'],
+            'lines.*.note'             => ['nullable', 'string'],
+        ]);
+
+        DB::transaction(function () use ($data, $purchaseOrder) {
+            $subtotal = collect($data['lines'])->sum(
+                fn (array $line) => (float) $line['quantity_ordered'] * (float) $line['unit_cost']
+            );
+
+            $purchaseOrder->update([
+                'supplier_name'    => $data['supplier_name'],
+                'supplier_phone'   => $data['supplier_phone'] ?? null,
+                'supplier_address' => $data['supplier_address'] ?? null,
+                'order_date'       => $data['order_date'],
+                'expected_date'    => $data['expected_date'] ?? null,
+                'note'             => $data['note'] ?? null,
+                'subtotal'         => $subtotal,
+                'discount_amount'  => 0,
+                'tax_amount'       => 0,
+                'grand_total'      => $subtotal,
+            ]);
+
+            $purchaseOrder->lines()->delete();
+
+            foreach ($data['lines'] as $line) {
+                $quantity = (float) $line['quantity_ordered'];
+                $unitCost = (float) $line['unit_cost'];
+
+                PurchaseOrderLine::create([
+                    'purchase_order_id' => $purchaseOrder->id,
+                    'branch_id'         => $purchaseOrder->branch_id,
+                    'item_id'           => $line['item_id'],
+                    'unit_id'           => $line['unit_id'],
+                    'quantity_ordered'  => $quantity,
+                    'quantity_received' => 0,
+                    'quantity_remaining' => $quantity,
+                    'unit_cost'         => $unitCost,
+                    'discount_amount'   => 0,
+                    'tax_amount'        => 0,
+                    'line_total'        => $quantity * $unitCost,
+                    'status'            => 'open',
+                    'note'              => $line['note'] ?? null,
+                ]);
+            }
+        });
+
+        return redirect()->route('purchase.index')->with('success', 'Purchase order updated.');
     }
 }

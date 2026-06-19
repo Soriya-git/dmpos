@@ -5,8 +5,8 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/stock-movements/stock-settlements",
+    url: "http://127.0.0.1:8000/stock-movements/stock-settlements",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -29,8 +29,8 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -39,8 +39,8 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -51,8 +51,8 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -61,8 +61,8 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -71,8 +71,8 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -84,8 +84,8 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 index.form = indexForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:57
- * @route "http://localhost:8000/stock-movements/stock-settlements/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:59
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/approve"
  */
 export const approve = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: approve.url(options),
@@ -94,13 +94,13 @@ export const approve = (options?: RouteQueryOptions): RouteDefinition<"post"> =>
 
 approve.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/stock-movements/stock-settlements/approve",
+    url: "http://127.0.0.1:8000/stock-movements/stock-settlements/approve",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:57
- * @route "http://localhost:8000/stock-movements/stock-settlements/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:59
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/approve"
  */
 approve.url = (options?: RouteQueryOptions) => {
     return approve.definition.url + queryParams(options)
@@ -108,8 +108,8 @@ approve.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:57
- * @route "http://localhost:8000/stock-movements/stock-settlements/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:59
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/approve"
  */
 approve.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: approve.url(options),
@@ -120,8 +120,8 @@ approve.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:57
- * @route "http://localhost:8000/stock-movements/stock-settlements/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:59
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/approve"
  */
 const approveForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(options),
@@ -130,8 +130,8 @@ const approveForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> =
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:57
- * @route "http://localhost:8000/stock-movements/stock-settlements/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:59
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/approve"
  */
 approveForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(options),
@@ -143,8 +143,8 @@ approveForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> =>
 approve.form = approveForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:123
- * @route "http://localhost:8000/stock-movements/stock-settlements/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:152
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/reject"
  */
 export const reject = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: reject.url(options),
@@ -153,13 +153,13 @@ export const reject = (options?: RouteQueryOptions): RouteDefinition<"post"> => 
 
 reject.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/stock-movements/stock-settlements/reject",
+    url: "http://127.0.0.1:8000/stock-movements/stock-settlements/reject",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:123
- * @route "http://localhost:8000/stock-movements/stock-settlements/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:152
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/reject"
  */
 reject.url = (options?: RouteQueryOptions) => {
     return reject.definition.url + queryParams(options)
@@ -167,8 +167,8 @@ reject.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:123
- * @route "http://localhost:8000/stock-movements/stock-settlements/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:152
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/reject"
  */
 reject.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: reject.url(options),
@@ -179,8 +179,8 @@ reject.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:123
- * @route "http://localhost:8000/stock-movements/stock-settlements/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:152
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/reject"
  */
 const rejectForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(options),
@@ -189,8 +189,8 @@ const rejectForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> =>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:123
- * @route "http://localhost:8000/stock-movements/stock-settlements/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:152
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/reject"
  */
 rejectForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(options),
@@ -202,8 +202,8 @@ rejectForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => 
 reject.form = rejectForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:41
- * @route "http://localhost:8000/stock-movements/stock-settlements/{invoice}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:40
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/{invoice}"
  */
 export const show = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: show.url(args, options),
@@ -212,13 +212,13 @@ export const show = (args: { invoice: number | { id: number } } | [ invoice: num
 
 show.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/stock-movements/stock-settlements/{invoice}",
+    url: "http://127.0.0.1:8000/stock-movements/stock-settlements/{invoice}",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:41
- * @route "http://localhost:8000/stock-movements/stock-settlements/{invoice}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:40
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/{invoice}"
  */
 show.url = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -248,8 +248,8 @@ show.url = (args: { invoice: number | { id: number } } | [ invoice: number | { i
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:41
- * @route "http://localhost:8000/stock-movements/stock-settlements/{invoice}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:40
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/{invoice}"
  */
 show.get = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: show.url(args, options),
@@ -258,8 +258,8 @@ show.get = (args: { invoice: number | { id: number } } | [ invoice: number | { i
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:41
- * @route "http://localhost:8000/stock-movements/stock-settlements/{invoice}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:40
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/{invoice}"
  */
 show.head = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: show.url(args, options),
@@ -270,8 +270,8 @@ show.head = (args: { invoice: number | { id: number } } | [ invoice: number | { 
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:41
- * @route "http://localhost:8000/stock-movements/stock-settlements/{invoice}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:40
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/{invoice}"
  */
 const showForm = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, options),
@@ -280,8 +280,8 @@ const showForm = (args: { invoice: number | { id: number } } | [ invoice: number
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:41
- * @route "http://localhost:8000/stock-movements/stock-settlements/{invoice}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:40
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/{invoice}"
  */
 showForm.get = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, options),
@@ -290,8 +290,8 @@ showForm.get = (args: { invoice: number | { id: number } } | [ invoice: number |
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:41
- * @route "http://localhost:8000/stock-movements/stock-settlements/{invoice}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:40
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements/{invoice}"
  */
 showForm.head = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, formSafeOptions("head", options)),

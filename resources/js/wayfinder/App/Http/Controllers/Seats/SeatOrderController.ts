@@ -5,8 +5,8 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:33
- * @route "http://localhost:8000/orders/{diningSession}/menu"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:36
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/menu"
  */
 export const show = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: show.url(args, options),
@@ -15,13 +15,13 @@ export const show = (args: { diningSession: number | { id: number } } | [ dining
 
 show.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/orders/{diningSession}/menu",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/menu",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:33
- * @route "http://localhost:8000/orders/{diningSession}/menu"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:36
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/menu"
  */
 show.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -51,8 +51,8 @@ show.url = (args: { diningSession: number | { id: number } } | [ diningSession: 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:33
- * @route "http://localhost:8000/orders/{diningSession}/menu"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:36
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/menu"
  */
 show.get = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: show.url(args, options),
@@ -61,8 +61,8 @@ show.get = (args: { diningSession: number | { id: number } } | [ diningSession: 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:33
- * @route "http://localhost:8000/orders/{diningSession}/menu"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:36
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/menu"
  */
 show.head = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: show.url(args, options),
@@ -73,8 +73,8 @@ show.head = (args: { diningSession: number | { id: number } } | [ diningSession:
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:33
- * @route "http://localhost:8000/orders/{diningSession}/menu"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:36
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/menu"
  */
 const showForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, options),
@@ -83,8 +83,8 @@ const showForm = (args: { diningSession: number | { id: number } } | [ diningSes
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:33
- * @route "http://localhost:8000/orders/{diningSession}/menu"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:36
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/menu"
  */
 showForm.get = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, options),
@@ -93,8 +93,8 @@ showForm.get = (args: { diningSession: number | { id: number } } | [ diningSessi
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:33
- * @route "http://localhost:8000/orders/{diningSession}/menu"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:36
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/menu"
  */
 showForm.head = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, formSafeOptions("head", options)),
@@ -106,8 +106,8 @@ showForm.head = (args: { diningSession: number | { id: number } } | [ diningSess
 show.form = showForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::manage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:222
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:228
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 export const manage = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: manage.url(args, options),
@@ -116,13 +116,13 @@ export const manage = (args: { diningSession: number | { id: number } } | [ dini
 
 manage.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/orders/{diningSession}/manage",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/manage",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::manage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:222
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:228
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 manage.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -152,8 +152,8 @@ manage.url = (args: { diningSession: number | { id: number } } | [ diningSession
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::manage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:222
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:228
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 manage.get = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: manage.url(args, options),
@@ -162,8 +162,8 @@ manage.get = (args: { diningSession: number | { id: number } } | [ diningSession
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::manage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:222
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:228
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 manage.head = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: manage.url(args, options),
@@ -174,8 +174,8 @@ manage.head = (args: { diningSession: number | { id: number } } | [ diningSessio
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::manage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:222
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:228
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 const manageForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: manage.url(args, options),
@@ -184,8 +184,8 @@ const manageForm = (args: { diningSession: number | { id: number } } | [ diningS
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::manage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:222
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:228
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 manageForm.get = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: manage.url(args, options),
@@ -194,8 +194,8 @@ manageForm.get = (args: { diningSession: number | { id: number } } | [ diningSes
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::manage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:222
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:228
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 manageForm.head = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: manage.url(args, formSafeOptions("head", options)),
@@ -207,8 +207,8 @@ manageForm.head = (args: { diningSession: number | { id: number } } | [ diningSe
 manage.form = manageForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::saveManage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:281
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:287
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 export const saveManage = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: saveManage.url(args, options),
@@ -217,13 +217,13 @@ export const saveManage = (args: { diningSession: number | { id: number } } | [ 
 
 saveManage.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/orders/{diningSession}/manage",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/manage",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::saveManage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:281
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:287
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 saveManage.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -253,8 +253,8 @@ saveManage.url = (args: { diningSession: number | { id: number } } | [ diningSes
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::saveManage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:281
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:287
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 saveManage.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: saveManage.url(args, options),
@@ -265,8 +265,8 @@ saveManage.post = (args: { diningSession: number | { id: number } } | [ diningSe
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::saveManage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:281
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:287
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 const saveManageForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: saveManage.url(args, options),
@@ -275,8 +275,8 @@ const saveManageForm = (args: { diningSession: number | { id: number } } | [ din
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::saveManage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:281
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:287
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 saveManageForm.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: saveManage.url(args, options),
@@ -288,8 +288,8 @@ saveManageForm.post = (args: { diningSession: number | { id: number } } | [ dini
 saveManage.form = saveManageForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::addItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:167
- * @route "http://localhost:8000/orders/{diningSession}/items"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:173
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items"
  */
 export const addItem = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: addItem.url(args, options),
@@ -298,13 +298,13 @@ export const addItem = (args: { diningSession: number | { id: number } } | [ din
 
 addItem.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/orders/{diningSession}/items",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/items",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::addItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:167
- * @route "http://localhost:8000/orders/{diningSession}/items"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:173
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items"
  */
 addItem.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -334,8 +334,8 @@ addItem.url = (args: { diningSession: number | { id: number } } | [ diningSessio
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::addItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:167
- * @route "http://localhost:8000/orders/{diningSession}/items"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:173
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items"
  */
 addItem.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: addItem.url(args, options),
@@ -346,8 +346,8 @@ addItem.post = (args: { diningSession: number | { id: number } } | [ diningSessi
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::addItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:167
- * @route "http://localhost:8000/orders/{diningSession}/items"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:173
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items"
  */
 const addItemForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: addItem.url(args, options),
@@ -356,8 +356,8 @@ const addItemForm = (args: { diningSession: number | { id: number } } | [ dining
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::addItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:167
- * @route "http://localhost:8000/orders/{diningSession}/items"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:173
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items"
  */
 addItemForm.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: addItem.url(args, options),
@@ -369,8 +369,8 @@ addItemForm.post = (args: { diningSession: number | { id: number } } | [ diningS
 addItem.form = addItemForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:347
- * @route "http://localhost:8000/orders/{diningSession}/items/{orderLine}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:353
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}"
  */
 export const updateItem = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: updateItem.url(args, options),
@@ -379,13 +379,13 @@ export const updateItem = (args: { diningSession: number | { id: number }, order
 
 updateItem.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/orders/{diningSession}/items/{orderLine}",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:347
- * @route "http://localhost:8000/orders/{diningSession}/items/{orderLine}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:353
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}"
  */
 updateItem.url = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -410,8 +410,8 @@ updateItem.url = (args: { diningSession: number | { id: number }, orderLine: num
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:347
- * @route "http://localhost:8000/orders/{diningSession}/items/{orderLine}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:353
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}"
  */
 updateItem.patch = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: updateItem.url(args, options),
@@ -422,8 +422,8 @@ updateItem.patch = (args: { diningSession: number | { id: number }, orderLine: n
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:347
- * @route "http://localhost:8000/orders/{diningSession}/items/{orderLine}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:353
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}"
  */
 const updateItemForm = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: updateItem.url(args, formSafeOptions("patch", options)),
@@ -432,8 +432,8 @@ const updateItemForm = (args: { diningSession: number | { id: number }, orderLin
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:347
- * @route "http://localhost:8000/orders/{diningSession}/items/{orderLine}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:353
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}"
  */
 updateItemForm.patch = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: updateItem.url(args, formSafeOptions("patch", options)),
@@ -445,8 +445,8 @@ updateItemForm.patch = (args: { diningSession: number | { id: number }, orderLin
 updateItem.form = updateItemForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::clearItems
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:377
- * @route "http://localhost:8000/orders/{diningSession}/items"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:383
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items"
  */
 export const clearItems = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"delete"> => ({
     url: clearItems.url(args, options),
@@ -455,13 +455,13 @@ export const clearItems = (args: { diningSession: number | { id: number } } | [ 
 
 clearItems.definition = {
     methods: ["delete"],
-    url: "http://localhost:8000/orders/{diningSession}/items",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/items",
 } satisfies RouteDefinition<["delete"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::clearItems
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:377
- * @route "http://localhost:8000/orders/{diningSession}/items"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:383
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items"
  */
 clearItems.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -491,8 +491,8 @@ clearItems.url = (args: { diningSession: number | { id: number } } | [ diningSes
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::clearItems
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:377
- * @route "http://localhost:8000/orders/{diningSession}/items"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:383
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items"
  */
 clearItems.delete = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"delete"> => ({
     url: clearItems.url(args, options),
@@ -503,8 +503,8 @@ clearItems.delete = (args: { diningSession: number | { id: number } } | [ dining
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::clearItems
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:377
- * @route "http://localhost:8000/orders/{diningSession}/items"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:383
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items"
  */
 const clearItemsForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: clearItems.url(args, formSafeOptions("delete", options)),
@@ -513,8 +513,8 @@ const clearItemsForm = (args: { diningSession: number | { id: number } } | [ din
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::clearItems
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:377
- * @route "http://localhost:8000/orders/{diningSession}/items"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:383
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items"
  */
 clearItemsForm.delete = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: clearItems.url(args, formSafeOptions("delete", options)),
@@ -526,8 +526,8 @@ clearItemsForm.delete = (args: { diningSession: number | { id: number } } | [ di
 clearItems.form = clearItemsForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::removeItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:368
- * @route "http://localhost:8000/orders/{diningSession}/items/{orderLine}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:374
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}"
  */
 export const removeItem = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"delete"> => ({
     url: removeItem.url(args, options),
@@ -536,13 +536,13 @@ export const removeItem = (args: { diningSession: number | { id: number }, order
 
 removeItem.definition = {
     methods: ["delete"],
-    url: "http://localhost:8000/orders/{diningSession}/items/{orderLine}",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}",
 } satisfies RouteDefinition<["delete"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::removeItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:368
- * @route "http://localhost:8000/orders/{diningSession}/items/{orderLine}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:374
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}"
  */
 removeItem.url = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -567,8 +567,8 @@ removeItem.url = (args: { diningSession: number | { id: number }, orderLine: num
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::removeItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:368
- * @route "http://localhost:8000/orders/{diningSession}/items/{orderLine}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:374
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}"
  */
 removeItem.delete = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"delete"> => ({
     url: removeItem.url(args, options),
@@ -579,8 +579,8 @@ removeItem.delete = (args: { diningSession: number | { id: number }, orderLine: 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::removeItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:368
- * @route "http://localhost:8000/orders/{diningSession}/items/{orderLine}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:374
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}"
  */
 const removeItemForm = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: removeItem.url(args, formSafeOptions("delete", options)),
@@ -589,8 +589,8 @@ const removeItemForm = (args: { diningSession: number | { id: number }, orderLin
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::removeItem
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:368
- * @route "http://localhost:8000/orders/{diningSession}/items/{orderLine}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:374
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/items/{orderLine}"
  */
 removeItemForm.delete = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: removeItem.url(args, formSafeOptions("delete", options)),
@@ -602,8 +602,8 @@ removeItemForm.delete = (args: { diningSession: number | { id: number }, orderLi
 removeItem.form = removeItemForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::sendToKitchen
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:386
- * @route "http://localhost:8000/orders/{diningSession}/send-kitchen"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:392
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/send-kitchen"
  */
 export const sendToKitchen = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: sendToKitchen.url(args, options),
@@ -612,13 +612,13 @@ export const sendToKitchen = (args: { diningSession: number | { id: number } } |
 
 sendToKitchen.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/orders/{diningSession}/send-kitchen",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/send-kitchen",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::sendToKitchen
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:386
- * @route "http://localhost:8000/orders/{diningSession}/send-kitchen"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:392
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/send-kitchen"
  */
 sendToKitchen.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -648,8 +648,8 @@ sendToKitchen.url = (args: { diningSession: number | { id: number } } | [ dining
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::sendToKitchen
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:386
- * @route "http://localhost:8000/orders/{diningSession}/send-kitchen"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:392
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/send-kitchen"
  */
 sendToKitchen.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: sendToKitchen.url(args, options),
@@ -660,8 +660,8 @@ sendToKitchen.post = (args: { diningSession: number | { id: number } } | [ dinin
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::sendToKitchen
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:386
- * @route "http://localhost:8000/orders/{diningSession}/send-kitchen"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:392
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/send-kitchen"
  */
 const sendToKitchenForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: sendToKitchen.url(args, options),
@@ -670,8 +670,8 @@ const sendToKitchenForm = (args: { diningSession: number | { id: number } } | [ 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::sendToKitchen
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:386
- * @route "http://localhost:8000/orders/{diningSession}/send-kitchen"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:392
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/send-kitchen"
  */
 sendToKitchenForm.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: sendToKitchen.url(args, options),
@@ -683,8 +683,8 @@ sendToKitchenForm.post = (args: { diningSession: number | { id: number } } | [ d
 sendToKitchen.form = sendToKitchenForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::reprint
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:422
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/reprint"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:428
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/reprint"
  */
 export const reprint = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: reprint.url(args, options),
@@ -693,13 +693,13 @@ export const reprint = (args: { diningSession: number | { id: number }, printJob
 
 reprint.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/reprint",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/reprint",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::reprint
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:422
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/reprint"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:428
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/reprint"
  */
 reprint.url = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -724,8 +724,8 @@ reprint.url = (args: { diningSession: number | { id: number }, printJob: number 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::reprint
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:422
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/reprint"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:428
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/reprint"
  */
 reprint.post = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: reprint.url(args, options),
@@ -736,8 +736,8 @@ reprint.post = (args: { diningSession: number | { id: number }, printJob: number
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::reprint
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:422
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/reprint"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:428
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/reprint"
  */
 const reprintForm = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reprint.url(args, options),
@@ -746,8 +746,8 @@ const reprintForm = (args: { diningSession: number | { id: number }, printJob: n
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::reprint
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:422
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/reprint"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:428
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/reprint"
  */
 reprintForm.post = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reprint.url(args, options),
@@ -759,8 +759,8 @@ reprintForm.post = (args: { diningSession: number | { id: number }, printJob: nu
 reprint.form = reprintForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewPrintJob
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:455
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:461
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
  */
 export const previewPrintJob = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: previewPrintJob.url(args, options),
@@ -769,13 +769,13 @@ export const previewPrintJob = (args: { diningSession: number | { id: number }, 
 
 previewPrintJob.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/preview",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/preview",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewPrintJob
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:455
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:461
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
  */
 previewPrintJob.url = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -800,8 +800,8 @@ previewPrintJob.url = (args: { diningSession: number | { id: number }, printJob:
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewPrintJob
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:455
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:461
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
  */
 previewPrintJob.get = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: previewPrintJob.url(args, options),
@@ -810,8 +810,8 @@ previewPrintJob.get = (args: { diningSession: number | { id: number }, printJob:
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewPrintJob
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:455
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:461
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
  */
 previewPrintJob.head = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: previewPrintJob.url(args, options),
@@ -822,8 +822,8 @@ previewPrintJob.head = (args: { diningSession: number | { id: number }, printJob
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewPrintJob
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:455
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:461
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
  */
 const previewPrintJobForm = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: previewPrintJob.url(args, options),
@@ -832,8 +832,8 @@ const previewPrintJobForm = (args: { diningSession: number | { id: number }, pri
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewPrintJob
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:455
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:461
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
  */
 previewPrintJobForm.get = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: previewPrintJob.url(args, options),
@@ -842,8 +842,8 @@ previewPrintJobForm.get = (args: { diningSession: number | { id: number }, print
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewPrintJob
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:455
- * @route "http://localhost:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:461
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-jobs/{printJob}/preview"
  */
 previewPrintJobForm.head = (args: { diningSession: number | { id: number }, printJob: number | { id: number } } | [ diningSession: number | { id: number }, printJob: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: previewPrintJob.url(args, formSafeOptions("head", options)),
@@ -855,8 +855,8 @@ previewPrintJobForm.head = (args: { diningSession: number | { id: number }, prin
 previewPrintJob.form = previewPrintJobForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:620
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:626
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
  */
 export const cancelPrintedLine = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancelPrintedLine.url(args, options),
@@ -865,13 +865,13 @@ export const cancelPrintedLine = (args: { diningSession: number | { id: number }
 
 cancelPrintedLine.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:620
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:626
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
  */
 cancelPrintedLine.url = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -896,8 +896,8 @@ cancelPrintedLine.url = (args: { diningSession: number | { id: number }, orderLi
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:620
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:626
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
  */
 cancelPrintedLine.patch = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancelPrintedLine.url(args, options),
@@ -908,8 +908,8 @@ cancelPrintedLine.patch = (args: { diningSession: number | { id: number }, order
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:620
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:626
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
  */
 const cancelPrintedLineForm = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancelPrintedLine.url(args, formSafeOptions("patch", options)),
@@ -918,8 +918,8 @@ const cancelPrintedLineForm = (args: { diningSession: number | { id: number }, o
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:620
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:626
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
  */
 cancelPrintedLineForm.patch = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancelPrintedLine.url(args, formSafeOptions("patch", options)),
@@ -931,8 +931,8 @@ cancelPrintedLineForm.patch = (args: { diningSession: number | { id: number }, o
 cancelPrintedLine.form = cancelPrintedLineForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:667
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:673
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return"
  */
 export const returnPrintedLine = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: returnPrintedLine.url(args, options),
@@ -941,13 +941,13 @@ export const returnPrintedLine = (args: { diningSession: number | { id: number }
 
 returnPrintedLine.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:667
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:673
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return"
  */
 returnPrintedLine.url = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -972,8 +972,8 @@ returnPrintedLine.url = (args: { diningSession: number | { id: number }, orderLi
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:667
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:673
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return"
  */
 returnPrintedLine.patch = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: returnPrintedLine.url(args, options),
@@ -984,8 +984,8 @@ returnPrintedLine.patch = (args: { diningSession: number | { id: number }, order
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:667
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:673
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return"
  */
 const returnPrintedLineForm = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: returnPrintedLine.url(args, formSafeOptions("patch", options)),
@@ -994,8 +994,8 @@ const returnPrintedLineForm = (args: { diningSession: number | { id: number }, o
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:667
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:673
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return"
  */
 returnPrintedLineForm.patch = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: returnPrintedLine.url(args, formSafeOptions("patch", options)),
@@ -1007,8 +1007,8 @@ returnPrintedLineForm.patch = (args: { diningSession: number | { id: number }, o
 returnPrintedLine.form = returnPrintedLineForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewCurrentInvoice
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:505
- * @route "http://localhost:8000/orders/{diningSession}/print/current-invoice"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:511
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print/current-invoice"
  */
 export const previewCurrentInvoice = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: previewCurrentInvoice.url(args, options),
@@ -1017,13 +1017,13 @@ export const previewCurrentInvoice = (args: { diningSession: number | { id: numb
 
 previewCurrentInvoice.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/orders/{diningSession}/print/current-invoice",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/print/current-invoice",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewCurrentInvoice
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:505
- * @route "http://localhost:8000/orders/{diningSession}/print/current-invoice"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:511
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print/current-invoice"
  */
 previewCurrentInvoice.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -1053,8 +1053,8 @@ previewCurrentInvoice.url = (args: { diningSession: number | { id: number } } | 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewCurrentInvoice
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:505
- * @route "http://localhost:8000/orders/{diningSession}/print/current-invoice"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:511
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print/current-invoice"
  */
 previewCurrentInvoice.get = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: previewCurrentInvoice.url(args, options),
@@ -1063,8 +1063,8 @@ previewCurrentInvoice.get = (args: { diningSession: number | { id: number } } | 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewCurrentInvoice
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:505
- * @route "http://localhost:8000/orders/{diningSession}/print/current-invoice"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:511
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print/current-invoice"
  */
 previewCurrentInvoice.head = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: previewCurrentInvoice.url(args, options),
@@ -1075,8 +1075,8 @@ previewCurrentInvoice.head = (args: { diningSession: number | { id: number } } |
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewCurrentInvoice
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:505
- * @route "http://localhost:8000/orders/{diningSession}/print/current-invoice"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:511
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print/current-invoice"
  */
 const previewCurrentInvoiceForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: previewCurrentInvoice.url(args, options),
@@ -1085,8 +1085,8 @@ const previewCurrentInvoiceForm = (args: { diningSession: number | { id: number 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewCurrentInvoice
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:505
- * @route "http://localhost:8000/orders/{diningSession}/print/current-invoice"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:511
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print/current-invoice"
  */
 previewCurrentInvoiceForm.get = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: previewCurrentInvoice.url(args, options),
@@ -1095,8 +1095,8 @@ previewCurrentInvoiceForm.get = (args: { diningSession: number | { id: number } 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewCurrentInvoice
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:505
- * @route "http://localhost:8000/orders/{diningSession}/print/current-invoice"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:511
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print/current-invoice"
  */
 previewCurrentInvoiceForm.head = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: previewCurrentInvoice.url(args, formSafeOptions("head", options)),
@@ -1108,8 +1108,8 @@ previewCurrentInvoiceForm.head = (args: { diningSession: number | { id: number }
 previewCurrentInvoice.form = previewCurrentInvoiceForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 export const previewInvoiceDocument = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: previewInvoiceDocument.url(args, options),
@@ -1118,13 +1118,13 @@ export const previewInvoiceDocument = (args: { diningSession: number | { id: num
 
 previewInvoiceDocument.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 previewInvoiceDocument.url = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -1152,8 +1152,8 @@ previewInvoiceDocument.url = (args: { diningSession: number | { id: number }, in
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 previewInvoiceDocument.get = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: previewInvoiceDocument.url(args, options),
@@ -1162,8 +1162,8 @@ previewInvoiceDocument.get = (args: { diningSession: number | { id: number }, in
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 previewInvoiceDocument.head = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: previewInvoiceDocument.url(args, options),
@@ -1174,8 +1174,8 @@ previewInvoiceDocument.head = (args: { diningSession: number | { id: number }, i
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 const previewInvoiceDocumentForm = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: previewInvoiceDocument.url(args, options),
@@ -1184,8 +1184,8 @@ const previewInvoiceDocumentForm = (args: { diningSession: number | { id: number
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 previewInvoiceDocumentForm.get = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: previewInvoiceDocument.url(args, options),
@@ -1194,8 +1194,8 @@ previewInvoiceDocumentForm.get = (args: { diningSession: number | { id: number }
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 previewInvoiceDocumentForm.head = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: previewInvoiceDocument.url(args, formSafeOptions("head", options)),
@@ -1207,8 +1207,8 @@ previewInvoiceDocumentForm.head = (args: { diningSession: number | { id: number 
 previewInvoiceDocument.form = previewInvoiceDocumentForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::settle
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:742
- * @route "http://localhost:8000/orders/{diningSession}/settle"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:748
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/settle"
  */
 export const settle = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: settle.url(args, options),
@@ -1217,13 +1217,13 @@ export const settle = (args: { diningSession: number | { id: number } } | [ dini
 
 settle.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/orders/{diningSession}/settle",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/settle",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::settle
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:742
- * @route "http://localhost:8000/orders/{diningSession}/settle"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:748
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/settle"
  */
 settle.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -1253,8 +1253,8 @@ settle.url = (args: { diningSession: number | { id: number } } | [ diningSession
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::settle
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:742
- * @route "http://localhost:8000/orders/{diningSession}/settle"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:748
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/settle"
  */
 settle.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: settle.url(args, options),
@@ -1265,8 +1265,8 @@ settle.post = (args: { diningSession: number | { id: number } } | [ diningSessio
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::settle
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:742
- * @route "http://localhost:8000/orders/{diningSession}/settle"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:748
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/settle"
  */
 const settleForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: settle.url(args, options),
@@ -1275,8 +1275,8 @@ const settleForm = (args: { diningSession: number | { id: number } } | [ diningS
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::settle
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:742
- * @route "http://localhost:8000/orders/{diningSession}/settle"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:748
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/settle"
  */
 settleForm.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: settle.url(args, options),
@@ -1288,8 +1288,8 @@ settleForm.post = (args: { diningSession: number | { id: number } } | [ diningSe
 settle.form = settleForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateCustomer
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:927
- * @route "http://localhost:8000/orders/{diningSession}/customer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:983
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/customer"
  */
 export const updateCustomer = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: updateCustomer.url(args, options),
@@ -1298,13 +1298,13 @@ export const updateCustomer = (args: { diningSession: number | { id: number } } 
 
 updateCustomer.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/orders/{diningSession}/customer",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/customer",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateCustomer
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:927
- * @route "http://localhost:8000/orders/{diningSession}/customer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:983
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/customer"
  */
 updateCustomer.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -1334,8 +1334,8 @@ updateCustomer.url = (args: { diningSession: number | { id: number } } | [ dinin
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateCustomer
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:927
- * @route "http://localhost:8000/orders/{diningSession}/customer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:983
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/customer"
  */
 updateCustomer.patch = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: updateCustomer.url(args, options),
@@ -1346,8 +1346,8 @@ updateCustomer.patch = (args: { diningSession: number | { id: number } } | [ din
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateCustomer
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:927
- * @route "http://localhost:8000/orders/{diningSession}/customer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:983
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/customer"
  */
 const updateCustomerForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: updateCustomer.url(args, formSafeOptions("patch", options)),
@@ -1356,8 +1356,8 @@ const updateCustomerForm = (args: { diningSession: number | { id: number } } | [
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateCustomer
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:927
- * @route "http://localhost:8000/orders/{diningSession}/customer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:983
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/customer"
  */
 updateCustomerForm.patch = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: updateCustomer.url(args, formSafeOptions("patch", options)),
@@ -1369,8 +1369,8 @@ updateCustomerForm.patch = (args: { diningSession: number | { id: number } } | [
 updateCustomer.form = updateCustomerForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::closeOrder
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:973
- * @route "http://localhost:8000/orders/{diningSession}/close"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:1040
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/close"
  */
 export const closeOrder = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: closeOrder.url(args, options),
@@ -1379,13 +1379,13 @@ export const closeOrder = (args: { diningSession: number | { id: number } } | [ 
 
 closeOrder.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/orders/{diningSession}/close",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/close",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::closeOrder
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:973
- * @route "http://localhost:8000/orders/{diningSession}/close"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:1040
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/close"
  */
 closeOrder.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -1415,8 +1415,8 @@ closeOrder.url = (args: { diningSession: number | { id: number } } | [ diningSes
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::closeOrder
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:973
- * @route "http://localhost:8000/orders/{diningSession}/close"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:1040
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/close"
  */
 closeOrder.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: closeOrder.url(args, options),
@@ -1427,8 +1427,8 @@ closeOrder.post = (args: { diningSession: number | { id: number } } | [ diningSe
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::closeOrder
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:973
- * @route "http://localhost:8000/orders/{diningSession}/close"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:1040
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/close"
  */
 const closeOrderForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: closeOrder.url(args, options),
@@ -1437,8 +1437,8 @@ const closeOrderForm = (args: { diningSession: number | { id: number } } | [ din
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::closeOrder
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:973
- * @route "http://localhost:8000/orders/{diningSession}/close"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:1040
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/close"
  */
 closeOrderForm.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: closeOrder.url(args, options),

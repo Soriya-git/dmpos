@@ -6,7 +6,7 @@ import { formSafeOptions, queryParams, type RouteDefinition, type RouteFormDefin
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/exchange-rates",
+    url: "http://127.0.0.1:8000/master-data/exchange-rates",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,7 +40,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,7 +52,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,7 +62,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,7 +72,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),

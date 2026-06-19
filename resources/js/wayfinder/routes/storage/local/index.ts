@@ -5,7 +5,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 
 /**
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:106
- * @route "http://localhost:8000/storage/{path}"
+ * @route "http://127.0.0.1:8000/storage/{path}"
  */
 export const upload = (args: { path: string | number } | [ path: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<"put"> => ({
     url: upload.url(args, options),
@@ -14,12 +14,12 @@ export const upload = (args: { path: string | number } | [ path: string | number
 
 upload.definition = {
     methods: ["put"],
-    url: "http://localhost:8000/storage/{path}",
+    url: "http://127.0.0.1:8000/storage/{path}",
 } satisfies RouteDefinition<["put"]>
 
 /**
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:106
- * @route "http://localhost:8000/storage/{path}"
+ * @route "http://127.0.0.1:8000/storage/{path}"
  */
 upload.url = (args: { path: string | number } | [ path: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -45,7 +45,7 @@ upload.url = (args: { path: string | number } | [ path: string | number ] | stri
 
 /**
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:106
- * @route "http://localhost:8000/storage/{path}"
+ * @route "http://127.0.0.1:8000/storage/{path}"
  */
 upload.put = (args: { path: string | number } | [ path: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<"put"> => ({
     url: upload.url(args, options),
@@ -56,7 +56,7 @@ upload.put = (args: { path: string | number } | [ path: string | number ] | stri
 
 /**
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:106
- * @route "http://localhost:8000/storage/{path}"
+ * @route "http://127.0.0.1:8000/storage/{path}"
  */
 const uploadForm = (args: { path: string | number } | [ path: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: upload.url(args, formSafeOptions("put", options)),
@@ -65,7 +65,7 @@ const uploadForm = (args: { path: string | number } | [ path: string | number ] 
 
 /**
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Filesystem\FilesystemServiceProvider.php:106
- * @route "http://localhost:8000/storage/{path}"
+ * @route "http://127.0.0.1:8000/storage/{path}"
  */
 uploadForm.put = (args: { path: string | number } | [ path: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: upload.url(args, formSafeOptions("put", options)),

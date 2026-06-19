@@ -6,7 +6,7 @@ import { formSafeOptions, queryParams, type RouteDefinition, type RouteFormDefin
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "http://localhost:8000/features/layouts/persistent-layouts/page-2"
+ * @route "http://127.0.0.1:8000/features/layouts/persistent-layouts/page-2"
  */
 export const page2 = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: page2.url(options),
@@ -15,13 +15,13 @@ export const page2 = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 page2.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/layouts/persistent-layouts/page-2",
+    url: "http://127.0.0.1:8000/features/layouts/persistent-layouts/page-2",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "http://localhost:8000/features/layouts/persistent-layouts/page-2"
+ * @route "http://127.0.0.1:8000/features/layouts/persistent-layouts/page-2"
  */
 page2.url = (options?: RouteQueryOptions) => {
     return page2.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ page2.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "http://localhost:8000/features/layouts/persistent-layouts/page-2"
+ * @route "http://127.0.0.1:8000/features/layouts/persistent-layouts/page-2"
  */
 page2.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: page2.url(options),
@@ -40,7 +40,7 @@ page2.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "http://localhost:8000/features/layouts/persistent-layouts/page-2"
+ * @route "http://127.0.0.1:8000/features/layouts/persistent-layouts/page-2"
  */
 page2.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: page2.url(options),
@@ -52,7 +52,7 @@ page2.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "http://localhost:8000/features/layouts/persistent-layouts/page-2"
+ * @route "http://127.0.0.1:8000/features/layouts/persistent-layouts/page-2"
  */
 const page2Form = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: page2.url(options),
@@ -62,7 +62,7 @@ const page2Form = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "http://localhost:8000/features/layouts/persistent-layouts/page-2"
+ * @route "http://127.0.0.1:8000/features/layouts/persistent-layouts/page-2"
  */
 page2Form.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: page2.url(options),
@@ -72,7 +72,7 @@ page2Form.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php:15
- * @route "http://localhost:8000/features/layouts/persistent-layouts/page-2"
+ * @route "http://127.0.0.1:8000/features/layouts/persistent-layouts/page-2"
  */
 page2Form.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: page2.url(formSafeOptions("head", options)),

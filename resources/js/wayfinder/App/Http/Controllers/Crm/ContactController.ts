@@ -6,7 +6,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/contacts",
+    url: "http://127.0.0.1:8000/contacts",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,7 +40,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,7 +52,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,7 +62,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,7 +72,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Crm\ContactController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:20
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ index.form = indexForm
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "http://localhost:8000/contacts/create"
+ * @route "http://127.0.0.1:8000/contacts/create"
  */
 export const create = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: create.url(options),
@@ -94,13 +94,13 @@ export const create = (options?: RouteQueryOptions): RouteDefinition<"get"> => (
 
 create.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/contacts/create",
+    url: "http://127.0.0.1:8000/contacts/create",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "http://localhost:8000/contacts/create"
+ * @route "http://127.0.0.1:8000/contacts/create"
  */
 create.url = (options?: RouteQueryOptions) => {
     return create.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ create.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "http://localhost:8000/contacts/create"
+ * @route "http://127.0.0.1:8000/contacts/create"
  */
 create.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: create.url(options),
@@ -119,7 +119,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "http://localhost:8000/contacts/create"
+ * @route "http://127.0.0.1:8000/contacts/create"
  */
 create.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: create.url(options),
@@ -131,7 +131,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "http://localhost:8000/contacts/create"
+ * @route "http://127.0.0.1:8000/contacts/create"
  */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(options),
@@ -141,7 +141,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "http://localhost:8000/contacts/create"
+ * @route "http://127.0.0.1:8000/contacts/create"
  */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(options),
@@ -151,7 +151,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Crm\ContactController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:42
- * @route "http://localhost:8000/contacts/create"
+ * @route "http://127.0.0.1:8000/contacts/create"
  */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(formSafeOptions("head", options)),
@@ -164,7 +164,7 @@ create.form = createForm
 /**
  * @see \App\Http\Controllers\Crm\ContactController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:51
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -173,13 +173,13 @@ export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => (
 
 store.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/contacts",
+    url: "http://127.0.0.1:8000/contacts",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:51
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options)
@@ -188,7 +188,7 @@ store.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Crm\ContactController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:51
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -200,7 +200,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\Crm\ContactController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:51
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -210,7 +210,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:51
- * @route "http://localhost:8000/contacts"
+ * @route "http://127.0.0.1:8000/contacts"
  */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -223,7 +223,7 @@ store.form = storeForm
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 export const show = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: show.url(args, options),
@@ -232,13 +232,13 @@ export const show = (args: { contact: number | { id: number } } | [ contact: num
 
 show.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/contacts/{contact}",
+    url: "http://127.0.0.1:8000/contacts/{contact}",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 show.url = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -269,7 +269,7 @@ show.url = (args: { contact: number | { id: number } } | [ contact: number | { i
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 show.get = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: show.url(args, options),
@@ -279,7 +279,7 @@ show.get = (args: { contact: number | { id: number } } | [ contact: number | { i
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 show.head = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: show.url(args, options),
@@ -291,7 +291,7 @@ show.head = (args: { contact: number | { id: number } } | [ contact: number | { 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 const showForm = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, options),
@@ -301,7 +301,7 @@ const showForm = (args: { contact: number | { id: number } } | [ contact: number
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 showForm.get = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, options),
@@ -311,7 +311,7 @@ showForm.get = (args: { contact: number | { id: number } } | [ contact: number |
 /**
  * @see \App\Http\Controllers\Crm\ContactController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:60
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 showForm.head = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, formSafeOptions("head", options)),
@@ -324,7 +324,7 @@ show.form = showForm
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "http://localhost:8000/contacts/{contact}/edit"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/edit"
  */
 export const edit = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: edit.url(args, options),
@@ -333,13 +333,13 @@ export const edit = (args: { contact: number | { id: number } } | [ contact: num
 
 edit.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/contacts/{contact}/edit",
+    url: "http://127.0.0.1:8000/contacts/{contact}/edit",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "http://localhost:8000/contacts/{contact}/edit"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/edit"
  */
 edit.url = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -370,7 +370,7 @@ edit.url = (args: { contact: number | { id: number } } | [ contact: number | { i
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "http://localhost:8000/contacts/{contact}/edit"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/edit"
  */
 edit.get = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: edit.url(args, options),
@@ -380,7 +380,7 @@ edit.get = (args: { contact: number | { id: number } } | [ contact: number | { i
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "http://localhost:8000/contacts/{contact}/edit"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/edit"
  */
 edit.head = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: edit.url(args, options),
@@ -392,7 +392,7 @@ edit.head = (args: { contact: number | { id: number } } | [ contact: number | { 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "http://localhost:8000/contacts/{contact}/edit"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/edit"
  */
 const editForm = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: edit.url(args, options),
@@ -402,7 +402,7 @@ const editForm = (args: { contact: number | { id: number } } | [ contact: number
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "http://localhost:8000/contacts/{contact}/edit"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/edit"
  */
 editForm.get = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: edit.url(args, options),
@@ -412,7 +412,7 @@ editForm.get = (args: { contact: number | { id: number } } | [ contact: number |
 /**
  * @see \App\Http\Controllers\Crm\ContactController::edit
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:72
- * @route "http://localhost:8000/contacts/{contact}/edit"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/edit"
  */
 editForm.head = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: edit.url(args, formSafeOptions("head", options)),
@@ -425,7 +425,7 @@ edit.form = editForm
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 export const update = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"put"> => ({
     url: update.url(args, options),
@@ -434,13 +434,13 @@ export const update = (args: { contact: number | { id: number } } | [ contact: n
 
 update.definition = {
     methods: ["put","patch"],
-    url: "http://localhost:8000/contacts/{contact}",
+    url: "http://127.0.0.1:8000/contacts/{contact}",
 } satisfies RouteDefinition<["put","patch"]>
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 update.url = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -471,7 +471,7 @@ update.url = (args: { contact: number | { id: number } } | [ contact: number | {
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 update.put = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"put"> => ({
     url: update.url(args, options),
@@ -481,7 +481,7 @@ update.put = (args: { contact: number | { id: number } } | [ contact: number | {
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 update.patch = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: update.url(args, options),
@@ -493,7 +493,7 @@ update.patch = (args: { contact: number | { id: number } } | [ contact: number |
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 const updateForm = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(args, formSafeOptions("put", options)),
@@ -503,7 +503,7 @@ const updateForm = (args: { contact: number | { id: number } } | [ contact: numb
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 updateForm.put = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(args, formSafeOptions("put", options)),
@@ -513,7 +513,7 @@ updateForm.put = (args: { contact: number | { id: number } } | [ contact: number
 /**
  * @see \App\Http\Controllers\Crm\ContactController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:84
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 updateForm.patch = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(args, formSafeOptions("patch", options)),
@@ -526,7 +526,7 @@ update.form = updateForm
 /**
  * @see \App\Http\Controllers\Crm\ContactController::destroy
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:93
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 export const destroy = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"delete"> => ({
     url: destroy.url(args, options),
@@ -535,13 +535,13 @@ export const destroy = (args: { contact: number | { id: number } } | [ contact: 
 
 destroy.definition = {
     methods: ["delete"],
-    url: "http://localhost:8000/contacts/{contact}",
+    url: "http://127.0.0.1:8000/contacts/{contact}",
 } satisfies RouteDefinition<["delete"]>
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::destroy
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:93
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 destroy.url = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -572,7 +572,7 @@ destroy.url = (args: { contact: number | { id: number } } | [ contact: number | 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::destroy
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:93
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 destroy.delete = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"delete"> => ({
     url: destroy.url(args, options),
@@ -584,7 +584,7 @@ destroy.delete = (args: { contact: number | { id: number } } | [ contact: number
 /**
  * @see \App\Http\Controllers\Crm\ContactController::destroy
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:93
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 const destroyForm = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: destroy.url(args, formSafeOptions("delete", options)),
@@ -594,7 +594,7 @@ const destroyForm = (args: { contact: number | { id: number } } | [ contact: num
 /**
  * @see \App\Http\Controllers\Crm\ContactController::destroy
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:93
- * @route "http://localhost:8000/contacts/{contact}"
+ * @route "http://127.0.0.1:8000/contacts/{contact}"
  */
 destroyForm.delete = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: destroy.url(args, formSafeOptions("delete", options)),
@@ -607,7 +607,7 @@ destroy.form = destroyForm
 /**
  * @see \App\Http\Controllers\Crm\ContactController::favorite
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:102
- * @route "http://localhost:8000/contacts/{contact}/favorite"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/favorite"
  */
 export const favorite = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: favorite.url(args, options),
@@ -616,13 +616,13 @@ export const favorite = (args: { contact: number | { id: number } } | [ contact:
 
 favorite.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/contacts/{contact}/favorite",
+    url: "http://127.0.0.1:8000/contacts/{contact}/favorite",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::favorite
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:102
- * @route "http://localhost:8000/contacts/{contact}/favorite"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/favorite"
  */
 favorite.url = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -653,7 +653,7 @@ favorite.url = (args: { contact: number | { id: number } } | [ contact: number |
 /**
  * @see \App\Http\Controllers\Crm\ContactController::favorite
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:102
- * @route "http://localhost:8000/contacts/{contact}/favorite"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/favorite"
  */
 favorite.post = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: favorite.url(args, options),
@@ -665,7 +665,7 @@ favorite.post = (args: { contact: number | { id: number } } | [ contact: number 
 /**
  * @see \App\Http\Controllers\Crm\ContactController::favorite
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:102
- * @route "http://localhost:8000/contacts/{contact}/favorite"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/favorite"
  */
 const favoriteForm = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: favorite.url(args, options),
@@ -675,7 +675,7 @@ const favoriteForm = (args: { contact: number | { id: number } } | [ contact: nu
 /**
  * @see \App\Http\Controllers\Crm\ContactController::favorite
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php:102
- * @route "http://localhost:8000/contacts/{contact}/favorite"
+ * @route "http://127.0.0.1:8000/contacts/{contact}/favorite"
  */
 favoriteForm.post = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: favorite.url(args, options),

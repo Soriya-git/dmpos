@@ -6,7 +6,7 @@ import { queryParams, type RouteDefinition, type RouteFormDefinition, type Route
 /**
  * @see \App\Http\Controllers\ProfilePictureController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\ProfilePictureController.php:11
- * @route "http://localhost:8000/profile/picture"
+ * @route "http://127.0.0.1:8000/profile/picture"
  */
 export const update = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: update.url(options),
@@ -15,13 +15,13 @@ export const update = (options?: RouteQueryOptions): RouteDefinition<"post"> => 
 
 update.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/profile/picture",
+    url: "http://127.0.0.1:8000/profile/picture",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\ProfilePictureController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\ProfilePictureController.php:11
- * @route "http://localhost:8000/profile/picture"
+ * @route "http://127.0.0.1:8000/profile/picture"
  */
 update.url = (options?: RouteQueryOptions) => {
     return update.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ update.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\ProfilePictureController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\ProfilePictureController.php:11
- * @route "http://localhost:8000/profile/picture"
+ * @route "http://127.0.0.1:8000/profile/picture"
  */
 update.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: update.url(options),
@@ -42,7 +42,7 @@ update.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\ProfilePictureController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\ProfilePictureController.php:11
- * @route "http://localhost:8000/profile/picture"
+ * @route "http://127.0.0.1:8000/profile/picture"
  */
 const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(options),
@@ -52,7 +52,7 @@ const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> =>
 /**
  * @see \App\Http\Controllers\ProfilePictureController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\ProfilePictureController.php:11
- * @route "http://localhost:8000/profile/picture"
+ * @route "http://127.0.0.1:8000/profile/picture"
  */
 updateForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(options),

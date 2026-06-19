@@ -6,7 +6,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:20
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/purchase",
+    url: "http://127.0.0.1:8000/purchase",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:20
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:20
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,7 +40,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:20
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,7 +52,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:20
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,7 +62,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:20
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,7 +72,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:20
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ index.form = indexForm
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:86
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -94,13 +94,13 @@ export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => (
 
 store.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/purchase",
+    url: "http://127.0.0.1:8000/purchase",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:86
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ store.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:86
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -121,7 +121,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:86
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -131,7 +131,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:86
- * @route "http://localhost:8000/purchase"
+ * @route "http://127.0.0.1:8000/purchase"
  */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -144,7 +144,7 @@ store.form = storeForm
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:158
- * @route "http://localhost:8000/purchase/{purchaseOrder}/approve"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/approve"
  */
 export const approve = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: approve.url(args, options),
@@ -153,13 +153,13 @@ export const approve = (args: { purchaseOrder: number | { id: number } } | [ pur
 
 approve.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/purchase/{purchaseOrder}/approve",
+    url: "http://127.0.0.1:8000/purchase/{purchaseOrder}/approve",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:158
- * @route "http://localhost:8000/purchase/{purchaseOrder}/approve"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/approve"
  */
 approve.url = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -190,7 +190,7 @@ approve.url = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrde
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:158
- * @route "http://localhost:8000/purchase/{purchaseOrder}/approve"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/approve"
  */
 approve.patch = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: approve.url(args, options),
@@ -202,7 +202,7 @@ approve.patch = (args: { purchaseOrder: number | { id: number } } | [ purchaseOr
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:158
- * @route "http://localhost:8000/purchase/{purchaseOrder}/approve"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/approve"
  */
 const approveForm = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(args, formSafeOptions("patch", options)),
@@ -212,7 +212,7 @@ const approveForm = (args: { purchaseOrder: number | { id: number } } | [ purcha
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:158
- * @route "http://localhost:8000/purchase/{purchaseOrder}/approve"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/approve"
  */
 approveForm.patch = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(args, formSafeOptions("patch", options)),
@@ -225,7 +225,7 @@ approve.form = approveForm
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:171
- * @route "http://localhost:8000/purchase/{purchaseOrder}/reject"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/reject"
  */
 export const reject = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: reject.url(args, options),
@@ -234,13 +234,13 @@ export const reject = (args: { purchaseOrder: number | { id: number } } | [ purc
 
 reject.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/purchase/{purchaseOrder}/reject",
+    url: "http://127.0.0.1:8000/purchase/{purchaseOrder}/reject",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:171
- * @route "http://localhost:8000/purchase/{purchaseOrder}/reject"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/reject"
  */
 reject.url = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -271,7 +271,7 @@ reject.url = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:171
- * @route "http://localhost:8000/purchase/{purchaseOrder}/reject"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/reject"
  */
 reject.patch = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: reject.url(args, options),
@@ -283,7 +283,7 @@ reject.patch = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrd
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:171
- * @route "http://localhost:8000/purchase/{purchaseOrder}/reject"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/reject"
  */
 const rejectForm = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(args, formSafeOptions("patch", options)),
@@ -293,7 +293,7 @@ const rejectForm = (args: { purchaseOrder: number | { id: number } } | [ purchas
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:171
- * @route "http://localhost:8000/purchase/{purchaseOrder}/reject"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/reject"
  */
 rejectForm.patch = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(args, formSafeOptions("patch", options)),
@@ -306,7 +306,7 @@ reject.form = rejectForm
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:184
- * @route "http://localhost:8000/purchase/{purchaseOrder}/cancel"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/cancel"
  */
 export const cancel = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -315,13 +315,13 @@ export const cancel = (args: { purchaseOrder: number | { id: number } } | [ purc
 
 cancel.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/purchase/{purchaseOrder}/cancel",
+    url: "http://127.0.0.1:8000/purchase/{purchaseOrder}/cancel",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:184
- * @route "http://localhost:8000/purchase/{purchaseOrder}/cancel"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/cancel"
  */
 cancel.url = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -352,7 +352,7 @@ cancel.url = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:184
- * @route "http://localhost:8000/purchase/{purchaseOrder}/cancel"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/cancel"
  */
 cancel.patch = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -364,7 +364,7 @@ cancel.patch = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrd
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:184
- * @route "http://localhost:8000/purchase/{purchaseOrder}/cancel"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/cancel"
  */
 const cancelForm = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),
@@ -374,7 +374,7 @@ const cancelForm = (args: { purchaseOrder: number | { id: number } } | [ purchas
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php:184
- * @route "http://localhost:8000/purchase/{purchaseOrder}/cancel"
+ * @route "http://127.0.0.1:8000/purchase/{purchaseOrder}/cancel"
  */
 cancelForm.patch = (args: { purchaseOrder: number | { id: number } } | [ purchaseOrder: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),

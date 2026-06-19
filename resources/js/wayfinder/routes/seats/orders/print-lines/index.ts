@@ -5,8 +5,8 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:620
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:626
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
  */
 export const cancel = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -15,13 +15,13 @@ export const cancel = (args: { diningSession: number | { id: number }, orderLine
 
 cancel.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:620
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:626
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
  */
 cancel.url = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -46,8 +46,8 @@ cancel.url = (args: { diningSession: number | { id: number }, orderLine: number 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:620
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:626
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
  */
 cancel.patch = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -58,8 +58,8 @@ cancel.patch = (args: { diningSession: number | { id: number }, orderLine: numbe
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:620
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:626
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
  */
 const cancelForm = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),
@@ -68,8 +68,8 @@ const cancelForm = (args: { diningSession: number | { id: number }, orderLine: n
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:620
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:626
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/cancel"
  */
 cancelForm.patch = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),
@@ -81,8 +81,8 @@ cancelForm.patch = (args: { diningSession: number | { id: number }, orderLine: n
 cancel.form = cancelForm
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:667
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:673
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return"
  */
 export const returnMethod = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: returnMethod.url(args, options),
@@ -91,13 +91,13 @@ export const returnMethod = (args: { diningSession: number | { id: number }, ord
 
 returnMethod.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:667
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:673
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return"
  */
 returnMethod.url = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -122,8 +122,8 @@ returnMethod.url = (args: { diningSession: number | { id: number }, orderLine: n
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:667
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:673
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return"
  */
 returnMethod.patch = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: returnMethod.url(args, options),
@@ -134,8 +134,8 @@ returnMethod.patch = (args: { diningSession: number | { id: number }, orderLine:
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:667
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:673
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return"
  */
 const returnMethodForm = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: returnMethod.url(args, formSafeOptions("patch", options)),
@@ -144,8 +144,8 @@ const returnMethodForm = (args: { diningSession: number | { id: number }, orderL
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:667
- * @route "http://localhost:8000/orders/{diningSession}/print-lines/{orderLine}/return"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:673
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/print-lines/{orderLine}/return"
  */
 returnMethodForm.patch = (args: { diningSession: number | { id: number }, orderLine: number | { id: number } } | [ diningSession: number | { id: number }, orderLine: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: returnMethod.url(args, formSafeOptions("patch", options)),

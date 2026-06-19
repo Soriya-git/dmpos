@@ -6,7 +6,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, validateParameters, typ
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::deferredProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:16
- * @route "http://localhost:8000/features/data-loading/deferred-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/deferred-props"
  */
 export const deferredProps = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: deferredProps.url(options),
@@ -15,13 +15,13 @@ export const deferredProps = (options?: RouteQueryOptions): RouteDefinition<"get
 
 deferredProps.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/data-loading/deferred-props",
+    url: "http://127.0.0.1:8000/features/data-loading/deferred-props",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::deferredProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:16
- * @route "http://localhost:8000/features/data-loading/deferred-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/deferred-props"
  */
 deferredProps.url = (options?: RouteQueryOptions) => {
     return deferredProps.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ deferredProps.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::deferredProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:16
- * @route "http://localhost:8000/features/data-loading/deferred-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/deferred-props"
  */
 deferredProps.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: deferredProps.url(options),
@@ -40,7 +40,7 @@ deferredProps.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::deferredProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:16
- * @route "http://localhost:8000/features/data-loading/deferred-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/deferred-props"
  */
 deferredProps.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: deferredProps.url(options),
@@ -52,7 +52,7 @@ deferredProps.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => (
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::deferredProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:16
- * @route "http://localhost:8000/features/data-loading/deferred-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/deferred-props"
  */
 const deferredPropsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: deferredProps.url(options),
@@ -62,7 +62,7 @@ const deferredPropsForm = (options?: RouteQueryOptions): RouteFormDefinition<"ge
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::deferredProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:16
- * @route "http://localhost:8000/features/data-loading/deferred-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/deferred-props"
  */
 deferredPropsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: deferredProps.url(options),
@@ -72,7 +72,7 @@ deferredPropsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::deferredProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:16
- * @route "http://localhost:8000/features/data-loading/deferred-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/deferred-props"
  */
 deferredPropsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: deferredProps.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ deferredProps.form = deferredPropsForm
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::partialReloads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:39
- * @route "http://localhost:8000/features/data-loading/partial-reloads"
+ * @route "http://127.0.0.1:8000/features/data-loading/partial-reloads"
  */
 export const partialReloads = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: partialReloads.url(options),
@@ -94,13 +94,13 @@ export const partialReloads = (options?: RouteQueryOptions): RouteDefinition<"ge
 
 partialReloads.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/data-loading/partial-reloads",
+    url: "http://127.0.0.1:8000/features/data-loading/partial-reloads",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::partialReloads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:39
- * @route "http://localhost:8000/features/data-loading/partial-reloads"
+ * @route "http://127.0.0.1:8000/features/data-loading/partial-reloads"
  */
 partialReloads.url = (options?: RouteQueryOptions) => {
     return partialReloads.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ partialReloads.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::partialReloads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:39
- * @route "http://localhost:8000/features/data-loading/partial-reloads"
+ * @route "http://127.0.0.1:8000/features/data-loading/partial-reloads"
  */
 partialReloads.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: partialReloads.url(options),
@@ -119,7 +119,7 @@ partialReloads.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::partialReloads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:39
- * @route "http://localhost:8000/features/data-loading/partial-reloads"
+ * @route "http://127.0.0.1:8000/features/data-loading/partial-reloads"
  */
 partialReloads.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: partialReloads.url(options),
@@ -131,7 +131,7 @@ partialReloads.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::partialReloads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:39
- * @route "http://localhost:8000/features/data-loading/partial-reloads"
+ * @route "http://127.0.0.1:8000/features/data-loading/partial-reloads"
  */
 const partialReloadsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: partialReloads.url(options),
@@ -141,7 +141,7 @@ const partialReloadsForm = (options?: RouteQueryOptions): RouteFormDefinition<"g
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::partialReloads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:39
- * @route "http://localhost:8000/features/data-loading/partial-reloads"
+ * @route "http://127.0.0.1:8000/features/data-loading/partial-reloads"
  */
 partialReloadsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: partialReloads.url(options),
@@ -151,7 +151,7 @@ partialReloadsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::partialReloads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:39
- * @route "http://localhost:8000/features/data-loading/partial-reloads"
+ * @route "http://127.0.0.1:8000/features/data-loading/partial-reloads"
  */
 partialReloadsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: partialReloads.url(formSafeOptions("head", options)),
@@ -164,7 +164,7 @@ partialReloads.form = partialReloadsForm
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::infiniteScroll
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:56
- * @route "http://localhost:8000/features/data-loading/infinite-scroll"
+ * @route "http://127.0.0.1:8000/features/data-loading/infinite-scroll"
  */
 export const infiniteScroll = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: infiniteScroll.url(options),
@@ -173,13 +173,13 @@ export const infiniteScroll = (options?: RouteQueryOptions): RouteDefinition<"ge
 
 infiniteScroll.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/data-loading/infinite-scroll",
+    url: "http://127.0.0.1:8000/features/data-loading/infinite-scroll",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::infiniteScroll
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:56
- * @route "http://localhost:8000/features/data-loading/infinite-scroll"
+ * @route "http://127.0.0.1:8000/features/data-loading/infinite-scroll"
  */
 infiniteScroll.url = (options?: RouteQueryOptions) => {
     return infiniteScroll.definition.url + queryParams(options)
@@ -188,7 +188,7 @@ infiniteScroll.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::infiniteScroll
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:56
- * @route "http://localhost:8000/features/data-loading/infinite-scroll"
+ * @route "http://127.0.0.1:8000/features/data-loading/infinite-scroll"
  */
 infiniteScroll.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: infiniteScroll.url(options),
@@ -198,7 +198,7 @@ infiniteScroll.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::infiniteScroll
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:56
- * @route "http://localhost:8000/features/data-loading/infinite-scroll"
+ * @route "http://127.0.0.1:8000/features/data-loading/infinite-scroll"
  */
 infiniteScroll.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: infiniteScroll.url(options),
@@ -210,7 +210,7 @@ infiniteScroll.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::infiniteScroll
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:56
- * @route "http://localhost:8000/features/data-loading/infinite-scroll"
+ * @route "http://127.0.0.1:8000/features/data-loading/infinite-scroll"
  */
 const infiniteScrollForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: infiniteScroll.url(options),
@@ -220,7 +220,7 @@ const infiniteScrollForm = (options?: RouteQueryOptions): RouteFormDefinition<"g
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::infiniteScroll
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:56
- * @route "http://localhost:8000/features/data-loading/infinite-scroll"
+ * @route "http://127.0.0.1:8000/features/data-loading/infinite-scroll"
  */
 infiniteScrollForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: infiniteScroll.url(options),
@@ -230,7 +230,7 @@ infiniteScrollForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::infiniteScroll
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:56
- * @route "http://localhost:8000/features/data-loading/infinite-scroll"
+ * @route "http://127.0.0.1:8000/features/data-loading/infinite-scroll"
  */
 infiniteScrollForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: infiniteScroll.url(formSafeOptions("head", options)),
@@ -243,7 +243,7 @@ infiniteScroll.form = infiniteScrollForm
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::whenVisible
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:70
- * @route "http://localhost:8000/features/data-loading/when-visible"
+ * @route "http://127.0.0.1:8000/features/data-loading/when-visible"
  */
 export const whenVisible = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: whenVisible.url(options),
@@ -252,13 +252,13 @@ export const whenVisible = (options?: RouteQueryOptions): RouteDefinition<"get">
 
 whenVisible.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/data-loading/when-visible",
+    url: "http://127.0.0.1:8000/features/data-loading/when-visible",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::whenVisible
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:70
- * @route "http://localhost:8000/features/data-loading/when-visible"
+ * @route "http://127.0.0.1:8000/features/data-loading/when-visible"
  */
 whenVisible.url = (options?: RouteQueryOptions) => {
     return whenVisible.definition.url + queryParams(options)
@@ -267,7 +267,7 @@ whenVisible.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::whenVisible
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:70
- * @route "http://localhost:8000/features/data-loading/when-visible"
+ * @route "http://127.0.0.1:8000/features/data-loading/when-visible"
  */
 whenVisible.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: whenVisible.url(options),
@@ -277,7 +277,7 @@ whenVisible.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::whenVisible
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:70
- * @route "http://localhost:8000/features/data-loading/when-visible"
+ * @route "http://127.0.0.1:8000/features/data-loading/when-visible"
  */
 whenVisible.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: whenVisible.url(options),
@@ -289,7 +289,7 @@ whenVisible.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::whenVisible
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:70
- * @route "http://localhost:8000/features/data-loading/when-visible"
+ * @route "http://127.0.0.1:8000/features/data-loading/when-visible"
  */
 const whenVisibleForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: whenVisible.url(options),
@@ -299,7 +299,7 @@ const whenVisibleForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::whenVisible
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:70
- * @route "http://localhost:8000/features/data-loading/when-visible"
+ * @route "http://127.0.0.1:8000/features/data-loading/when-visible"
  */
 whenVisibleForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: whenVisible.url(options),
@@ -309,7 +309,7 @@ whenVisibleForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::whenVisible
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:70
- * @route "http://localhost:8000/features/data-loading/when-visible"
+ * @route "http://127.0.0.1:8000/features/data-loading/when-visible"
  */
 whenVisibleForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: whenVisible.url(formSafeOptions("head", options)),
@@ -322,7 +322,7 @@ whenVisible.form = whenVisibleForm
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::polling
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:104
- * @route "http://localhost:8000/features/data-loading/polling"
+ * @route "http://127.0.0.1:8000/features/data-loading/polling"
  */
 export const polling = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: polling.url(options),
@@ -331,13 +331,13 @@ export const polling = (options?: RouteQueryOptions): RouteDefinition<"get"> => 
 
 polling.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/data-loading/polling",
+    url: "http://127.0.0.1:8000/features/data-loading/polling",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::polling
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:104
- * @route "http://localhost:8000/features/data-loading/polling"
+ * @route "http://127.0.0.1:8000/features/data-loading/polling"
  */
 polling.url = (options?: RouteQueryOptions) => {
     return polling.definition.url + queryParams(options)
@@ -346,7 +346,7 @@ polling.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::polling
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:104
- * @route "http://localhost:8000/features/data-loading/polling"
+ * @route "http://127.0.0.1:8000/features/data-loading/polling"
  */
 polling.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: polling.url(options),
@@ -356,7 +356,7 @@ polling.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::polling
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:104
- * @route "http://localhost:8000/features/data-loading/polling"
+ * @route "http://127.0.0.1:8000/features/data-loading/polling"
  */
 polling.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: polling.url(options),
@@ -368,7 +368,7 @@ polling.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::polling
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:104
- * @route "http://localhost:8000/features/data-loading/polling"
+ * @route "http://127.0.0.1:8000/features/data-loading/polling"
  */
 const pollingForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: polling.url(options),
@@ -378,7 +378,7 @@ const pollingForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =>
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::polling
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:104
- * @route "http://localhost:8000/features/data-loading/polling"
+ * @route "http://127.0.0.1:8000/features/data-loading/polling"
  */
 pollingForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: polling.url(options),
@@ -388,7 +388,7 @@ pollingForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::polling
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:104
- * @route "http://localhost:8000/features/data-loading/polling"
+ * @route "http://127.0.0.1:8000/features/data-loading/polling"
  */
 pollingForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: polling.url(formSafeOptions("head", options)),
@@ -401,7 +401,7 @@ polling.form = pollingForm
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::propMerging
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:113
- * @route "http://localhost:8000/features/data-loading/prop-merging"
+ * @route "http://127.0.0.1:8000/features/data-loading/prop-merging"
  */
 export const propMerging = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: propMerging.url(options),
@@ -410,13 +410,13 @@ export const propMerging = (options?: RouteQueryOptions): RouteDefinition<"get">
 
 propMerging.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/data-loading/prop-merging",
+    url: "http://127.0.0.1:8000/features/data-loading/prop-merging",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::propMerging
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:113
- * @route "http://localhost:8000/features/data-loading/prop-merging"
+ * @route "http://127.0.0.1:8000/features/data-loading/prop-merging"
  */
 propMerging.url = (options?: RouteQueryOptions) => {
     return propMerging.definition.url + queryParams(options)
@@ -425,7 +425,7 @@ propMerging.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::propMerging
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:113
- * @route "http://localhost:8000/features/data-loading/prop-merging"
+ * @route "http://127.0.0.1:8000/features/data-loading/prop-merging"
  */
 propMerging.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: propMerging.url(options),
@@ -435,7 +435,7 @@ propMerging.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::propMerging
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:113
- * @route "http://localhost:8000/features/data-loading/prop-merging"
+ * @route "http://127.0.0.1:8000/features/data-loading/prop-merging"
  */
 propMerging.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: propMerging.url(options),
@@ -447,7 +447,7 @@ propMerging.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::propMerging
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:113
- * @route "http://localhost:8000/features/data-loading/prop-merging"
+ * @route "http://127.0.0.1:8000/features/data-loading/prop-merging"
  */
 const propMergingForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: propMerging.url(options),
@@ -457,7 +457,7 @@ const propMergingForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::propMerging
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:113
- * @route "http://localhost:8000/features/data-loading/prop-merging"
+ * @route "http://127.0.0.1:8000/features/data-loading/prop-merging"
  */
 propMergingForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: propMerging.url(options),
@@ -467,7 +467,7 @@ propMergingForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::propMerging
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:113
- * @route "http://localhost:8000/features/data-loading/prop-merging"
+ * @route "http://127.0.0.1:8000/features/data-loading/prop-merging"
  */
 propMergingForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: propMerging.url(formSafeOptions("head", options)),
@@ -480,7 +480,7 @@ propMerging.form = propMergingForm
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::onceProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:191
- * @route "http://localhost:8000/features/data-loading/once-props/{page?}"
+ * @route "http://127.0.0.1:8000/features/data-loading/once-props/{page?}"
  */
 export const onceProps = (args?: { page?: string | number } | [ page: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: onceProps.url(args, options),
@@ -489,13 +489,13 @@ export const onceProps = (args?: { page?: string | number } | [ page: string | n
 
 onceProps.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/data-loading/once-props/{page?}",
+    url: "http://127.0.0.1:8000/features/data-loading/once-props/{page?}",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::onceProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:191
- * @route "http://localhost:8000/features/data-loading/once-props/{page?}"
+ * @route "http://127.0.0.1:8000/features/data-loading/once-props/{page?}"
  */
 onceProps.url = (args?: { page?: string | number } | [ page: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -524,7 +524,7 @@ onceProps.url = (args?: { page?: string | number } | [ page: string | number ] |
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::onceProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:191
- * @route "http://localhost:8000/features/data-loading/once-props/{page?}"
+ * @route "http://127.0.0.1:8000/features/data-loading/once-props/{page?}"
  */
 onceProps.get = (args?: { page?: string | number } | [ page: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: onceProps.url(args, options),
@@ -534,7 +534,7 @@ onceProps.get = (args?: { page?: string | number } | [ page: string | number ] |
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::onceProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:191
- * @route "http://localhost:8000/features/data-loading/once-props/{page?}"
+ * @route "http://127.0.0.1:8000/features/data-loading/once-props/{page?}"
  */
 onceProps.head = (args?: { page?: string | number } | [ page: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: onceProps.url(args, options),
@@ -546,7 +546,7 @@ onceProps.head = (args?: { page?: string | number } | [ page: string | number ] 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::onceProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:191
- * @route "http://localhost:8000/features/data-loading/once-props/{page?}"
+ * @route "http://127.0.0.1:8000/features/data-loading/once-props/{page?}"
  */
 const oncePropsForm = (args?: { page?: string | number } | [ page: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: onceProps.url(args, options),
@@ -556,7 +556,7 @@ const oncePropsForm = (args?: { page?: string | number } | [ page: string | numb
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::onceProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:191
- * @route "http://localhost:8000/features/data-loading/once-props/{page?}"
+ * @route "http://127.0.0.1:8000/features/data-loading/once-props/{page?}"
  */
 oncePropsForm.get = (args?: { page?: string | number } | [ page: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: onceProps.url(args, options),
@@ -566,7 +566,7 @@ oncePropsForm.get = (args?: { page?: string | number } | [ page: string | number
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::onceProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:191
- * @route "http://localhost:8000/features/data-loading/once-props/{page?}"
+ * @route "http://127.0.0.1:8000/features/data-loading/once-props/{page?}"
  */
 oncePropsForm.head = (args?: { page?: string | number } | [ page: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: onceProps.url(args, formSafeOptions("head", options)),
@@ -579,7 +579,7 @@ onceProps.form = oncePropsForm
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::optionalProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:162
- * @route "http://localhost:8000/features/data-loading/optional-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/optional-props"
  */
 export const optionalProps = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: optionalProps.url(options),
@@ -588,13 +588,13 @@ export const optionalProps = (options?: RouteQueryOptions): RouteDefinition<"get
 
 optionalProps.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/data-loading/optional-props",
+    url: "http://127.0.0.1:8000/features/data-loading/optional-props",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::optionalProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:162
- * @route "http://localhost:8000/features/data-loading/optional-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/optional-props"
  */
 optionalProps.url = (options?: RouteQueryOptions) => {
     return optionalProps.definition.url + queryParams(options)
@@ -603,7 +603,7 @@ optionalProps.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::optionalProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:162
- * @route "http://localhost:8000/features/data-loading/optional-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/optional-props"
  */
 optionalProps.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: optionalProps.url(options),
@@ -613,7 +613,7 @@ optionalProps.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::optionalProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:162
- * @route "http://localhost:8000/features/data-loading/optional-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/optional-props"
  */
 optionalProps.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: optionalProps.url(options),
@@ -625,7 +625,7 @@ optionalProps.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => (
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::optionalProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:162
- * @route "http://localhost:8000/features/data-loading/optional-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/optional-props"
  */
 const optionalPropsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: optionalProps.url(options),
@@ -635,7 +635,7 @@ const optionalPropsForm = (options?: RouteQueryOptions): RouteFormDefinition<"ge
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::optionalProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:162
- * @route "http://localhost:8000/features/data-loading/optional-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/optional-props"
  */
 optionalPropsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: optionalProps.url(options),
@@ -645,7 +645,7 @@ optionalPropsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"
 /**
  * @see \App\Http\Controllers\Feature\DataLoadingController::optionalProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php:162
- * @route "http://localhost:8000/features/data-loading/optional-props"
+ * @route "http://127.0.0.1:8000/features/data-loading/optional-props"
  */
 optionalPropsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: optionalProps.url(formSafeOptions("head", options)),

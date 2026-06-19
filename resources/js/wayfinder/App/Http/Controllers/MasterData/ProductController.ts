@@ -6,7 +6,7 @@ import { formSafeOptions, queryParams, type RouteDefinition, type RouteFormDefin
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/products",
+    url: "http://127.0.0.1:8000/master-data/products",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,7 +40,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,7 +52,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,7 +62,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,7 +72,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ index.form = indexForm
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeItem
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:81
- * @route "http://localhost:8000/master-data/products/items"
+ * @route "http://127.0.0.1:8000/master-data/products/items"
  */
 export const storeItem = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeItem.url(options),
@@ -94,13 +94,13 @@ export const storeItem = (options?: RouteQueryOptions): RouteDefinition<"post"> 
 
 storeItem.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/master-data/products/items",
+    url: "http://127.0.0.1:8000/master-data/products/items",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeItem
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:81
- * @route "http://localhost:8000/master-data/products/items"
+ * @route "http://127.0.0.1:8000/master-data/products/items"
  */
 storeItem.url = (options?: RouteQueryOptions) => {
     return storeItem.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ storeItem.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeItem
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:81
- * @route "http://localhost:8000/master-data/products/items"
+ * @route "http://127.0.0.1:8000/master-data/products/items"
  */
 storeItem.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeItem.url(options),
@@ -121,7 +121,7 @@ storeItem.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeItem
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:81
- * @route "http://localhost:8000/master-data/products/items"
+ * @route "http://127.0.0.1:8000/master-data/products/items"
  */
 const storeItemForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeItem.url(options),
@@ -131,7 +131,7 @@ const storeItemForm = (options?: RouteQueryOptions): RouteFormDefinition<"post">
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeItem
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:81
- * @route "http://localhost:8000/master-data/products/items"
+ * @route "http://127.0.0.1:8000/master-data/products/items"
  */
 storeItemForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeItem.url(options),
@@ -144,7 +144,7 @@ storeItem.form = storeItemForm
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeBom
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:117
- * @route "http://localhost:8000/master-data/products/bom"
+ * @route "http://127.0.0.1:8000/master-data/products/bom"
  */
 export const storeBom = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeBom.url(options),
@@ -153,13 +153,13 @@ export const storeBom = (options?: RouteQueryOptions): RouteDefinition<"post"> =
 
 storeBom.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/master-data/products/bom",
+    url: "http://127.0.0.1:8000/master-data/products/bom",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeBom
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:117
- * @route "http://localhost:8000/master-data/products/bom"
+ * @route "http://127.0.0.1:8000/master-data/products/bom"
  */
 storeBom.url = (options?: RouteQueryOptions) => {
     return storeBom.definition.url + queryParams(options)
@@ -168,7 +168,7 @@ storeBom.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeBom
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:117
- * @route "http://localhost:8000/master-data/products/bom"
+ * @route "http://127.0.0.1:8000/master-data/products/bom"
  */
 storeBom.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeBom.url(options),
@@ -180,7 +180,7 @@ storeBom.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeBom
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:117
- * @route "http://localhost:8000/master-data/products/bom"
+ * @route "http://127.0.0.1:8000/master-data/products/bom"
  */
 const storeBomForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeBom.url(options),
@@ -190,7 +190,7 @@ const storeBomForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> 
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeBom
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:117
- * @route "http://localhost:8000/master-data/products/bom"
+ * @route "http://127.0.0.1:8000/master-data/products/bom"
  */
 storeBomForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeBom.url(options),

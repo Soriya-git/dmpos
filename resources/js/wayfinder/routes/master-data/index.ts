@@ -7,7 +7,7 @@ import menuPriceListsAde053f from "./menu-price-lists";
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 export const products = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: products.url(options),
@@ -16,13 +16,13 @@ export const products = (options?: RouteQueryOptions): RouteDefinition<"get"> =>
 
 products.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/products",
+    url: "http://127.0.0.1:8000/master-data/products",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 products.url = (options?: RouteQueryOptions) => {
     return products.definition.url + queryParams(options)
@@ -31,7 +31,7 @@ products.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 products.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: products.url(options),
@@ -41,7 +41,7 @@ products.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 products.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: products.url(options),
@@ -53,7 +53,7 @@ products.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 const productsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: products.url(options),
@@ -63,7 +63,7 @@ const productsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 productsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: products.url(options),
@@ -73,7 +73,7 @@ productsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => 
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php:21
- * @route "http://localhost:8000/master-data/products"
+ * @route "http://127.0.0.1:8000/master-data/products"
  */
 productsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: products.url(formSafeOptions("head", options)),
@@ -86,7 +86,7 @@ products.form = productsForm
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 export const companyBranches = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: companyBranches.url(options),
@@ -95,13 +95,13 @@ export const companyBranches = (options?: RouteQueryOptions): RouteDefinition<"g
 
 companyBranches.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/company-branches",
+    url: "http://127.0.0.1:8000/master-data/company-branches",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 companyBranches.url = (options?: RouteQueryOptions) => {
     return companyBranches.definition.url + queryParams(options)
@@ -110,7 +110,7 @@ companyBranches.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 companyBranches.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: companyBranches.url(options),
@@ -120,7 +120,7 @@ companyBranches.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 companyBranches.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: companyBranches.url(options),
@@ -132,7 +132,7 @@ companyBranches.head = (options?: RouteQueryOptions): RouteDefinition<"head"> =>
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 const companyBranchesForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: companyBranches.url(options),
@@ -142,7 +142,7 @@ const companyBranchesForm = (options?: RouteQueryOptions): RouteFormDefinition<"
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 companyBranchesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: companyBranches.url(options),
@@ -152,7 +152,7 @@ companyBranchesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"ge
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 companyBranchesForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: companyBranches.url(formSafeOptions("head", options)),
@@ -164,8 +164,8 @@ companyBranchesForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"g
 companyBranches.form = companyBranchesForm
 /**
  * @see \App\Http\Controllers\MasterData\CustomerController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:13
- * @route "http://localhost:8000/master-data/customers"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:15
+ * @route "http://127.0.0.1:8000/master-data/customers"
  */
 export const customers = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: customers.url(options),
@@ -174,13 +174,13 @@ export const customers = (options?: RouteQueryOptions): RouteDefinition<"get"> =
 
 customers.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/customers",
+    url: "http://127.0.0.1:8000/master-data/customers",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\CustomerController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:13
- * @route "http://localhost:8000/master-data/customers"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:15
+ * @route "http://127.0.0.1:8000/master-data/customers"
  */
 customers.url = (options?: RouteQueryOptions) => {
     return customers.definition.url + queryParams(options)
@@ -188,8 +188,8 @@ customers.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\MasterData\CustomerController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:13
- * @route "http://localhost:8000/master-data/customers"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:15
+ * @route "http://127.0.0.1:8000/master-data/customers"
  */
 customers.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: customers.url(options),
@@ -198,8 +198,8 @@ customers.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 /**
  * @see \App\Http\Controllers\MasterData\CustomerController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:13
- * @route "http://localhost:8000/master-data/customers"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:15
+ * @route "http://127.0.0.1:8000/master-data/customers"
  */
 customers.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: customers.url(options),
@@ -210,8 +210,8 @@ customers.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 
 /**
  * @see \App\Http\Controllers\MasterData\CustomerController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:13
- * @route "http://localhost:8000/master-data/customers"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:15
+ * @route "http://127.0.0.1:8000/master-data/customers"
  */
 const customersForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: customers.url(options),
@@ -220,8 +220,8 @@ const customersForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> 
 
 /**
  * @see \App\Http\Controllers\MasterData\CustomerController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:13
- * @route "http://localhost:8000/master-data/customers"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:15
+ * @route "http://127.0.0.1:8000/master-data/customers"
  */
 customersForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: customers.url(options),
@@ -230,8 +230,8 @@ customersForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =>
 
 /**
  * @see \App\Http\Controllers\MasterData\CustomerController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:13
- * @route "http://localhost:8000/master-data/customers"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php:15
+ * @route "http://127.0.0.1:8000/master-data/customers"
  */
 customersForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: customers.url(formSafeOptions("head", options)),
@@ -244,7 +244,7 @@ customers.form = customersForm
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 export const exchangeRates = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: exchangeRates.url(options),
@@ -253,13 +253,13 @@ export const exchangeRates = (options?: RouteQueryOptions): RouteDefinition<"get
 
 exchangeRates.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/exchange-rates",
+    url: "http://127.0.0.1:8000/master-data/exchange-rates",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 exchangeRates.url = (options?: RouteQueryOptions) => {
     return exchangeRates.definition.url + queryParams(options)
@@ -268,7 +268,7 @@ exchangeRates.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 exchangeRates.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: exchangeRates.url(options),
@@ -278,7 +278,7 @@ exchangeRates.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 exchangeRates.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: exchangeRates.url(options),
@@ -290,7 +290,7 @@ exchangeRates.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => (
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 const exchangeRatesForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: exchangeRates.url(options),
@@ -300,7 +300,7 @@ const exchangeRatesForm = (options?: RouteQueryOptions): RouteFormDefinition<"ge
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 exchangeRatesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: exchangeRates.url(options),
@@ -310,7 +310,7 @@ exchangeRatesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"
 /**
  * @see \App\Http\Controllers\MasterData\ExchangeRateController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php:12
- * @route "http://localhost:8000/master-data/exchange-rates"
+ * @route "http://127.0.0.1:8000/master-data/exchange-rates"
  */
 exchangeRatesForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: exchangeRates.url(formSafeOptions("head", options)),
@@ -323,7 +323,7 @@ exchangeRates.form = exchangeRatesForm
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 export const menu = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: menu.url(options),
@@ -332,13 +332,13 @@ export const menu = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 menu.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/menu",
+    url: "http://127.0.0.1:8000/master-data/menu",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 menu.url = (options?: RouteQueryOptions) => {
     return menu.definition.url + queryParams(options)
@@ -347,7 +347,7 @@ menu.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 menu.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: menu.url(options),
@@ -357,7 +357,7 @@ menu.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 menu.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: menu.url(options),
@@ -369,7 +369,7 @@ menu.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 const menuForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: menu.url(options),
@@ -379,7 +379,7 @@ const menuForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 menuForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: menu.url(options),
@@ -389,7 +389,7 @@ menuForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 menuForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: menu.url(formSafeOptions("head", options)),
@@ -402,7 +402,7 @@ menu.form = menuForm
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:18
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 export const menuPriceLists = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: menuPriceLists.url(options),
@@ -411,13 +411,13 @@ export const menuPriceLists = (options?: RouteQueryOptions): RouteDefinition<"ge
 
 menuPriceLists.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/menu-price-lists",
+    url: "http://127.0.0.1:8000/master-data/menu-price-lists",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:18
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 menuPriceLists.url = (options?: RouteQueryOptions) => {
     return menuPriceLists.definition.url + queryParams(options)
@@ -426,7 +426,7 @@ menuPriceLists.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:18
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 menuPriceLists.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: menuPriceLists.url(options),
@@ -436,7 +436,7 @@ menuPriceLists.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:18
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 menuPriceLists.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: menuPriceLists.url(options),
@@ -448,7 +448,7 @@ menuPriceLists.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => 
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:18
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 const menuPriceListsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: menuPriceLists.url(options),
@@ -458,7 +458,7 @@ const menuPriceListsForm = (options?: RouteQueryOptions): RouteFormDefinition<"g
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:18
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 menuPriceListsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: menuPriceLists.url(options),
@@ -468,7 +468,7 @@ menuPriceListsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get
 /**
  * @see \App\Http\Controllers\MasterData\MenuPriceListController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php:18
- * @route "http://localhost:8000/master-data/menu-price-lists"
+ * @route "http://127.0.0.1:8000/master-data/menu-price-lists"
  */
 menuPriceListsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: menuPriceLists.url(formSafeOptions("head", options)),
@@ -481,7 +481,7 @@ menuPriceLists.form = menuPriceListsForm
 /**
  * @see \App\Http\Controllers\MasterData\PosTerminalController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\PosTerminalController.php:13
- * @route "http://localhost:8000/master-data/pos-terminals"
+ * @route "http://127.0.0.1:8000/master-data/pos-terminals"
  */
 export const posTerminals = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: posTerminals.url(options),
@@ -490,13 +490,13 @@ export const posTerminals = (options?: RouteQueryOptions): RouteDefinition<"get"
 
 posTerminals.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/pos-terminals",
+    url: "http://127.0.0.1:8000/master-data/pos-terminals",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\PosTerminalController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\PosTerminalController.php:13
- * @route "http://localhost:8000/master-data/pos-terminals"
+ * @route "http://127.0.0.1:8000/master-data/pos-terminals"
  */
 posTerminals.url = (options?: RouteQueryOptions) => {
     return posTerminals.definition.url + queryParams(options)
@@ -505,7 +505,7 @@ posTerminals.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\PosTerminalController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\PosTerminalController.php:13
- * @route "http://localhost:8000/master-data/pos-terminals"
+ * @route "http://127.0.0.1:8000/master-data/pos-terminals"
  */
 posTerminals.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: posTerminals.url(options),
@@ -515,7 +515,7 @@ posTerminals.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\PosTerminalController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\PosTerminalController.php:13
- * @route "http://localhost:8000/master-data/pos-terminals"
+ * @route "http://127.0.0.1:8000/master-data/pos-terminals"
  */
 posTerminals.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: posTerminals.url(options),
@@ -527,7 +527,7 @@ posTerminals.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\PosTerminalController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\PosTerminalController.php:13
- * @route "http://localhost:8000/master-data/pos-terminals"
+ * @route "http://127.0.0.1:8000/master-data/pos-terminals"
  */
 const posTerminalsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: posTerminals.url(options),
@@ -537,7 +537,7 @@ const posTerminalsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get
 /**
  * @see \App\Http\Controllers\MasterData\PosTerminalController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\PosTerminalController.php:13
- * @route "http://localhost:8000/master-data/pos-terminals"
+ * @route "http://127.0.0.1:8000/master-data/pos-terminals"
  */
 posTerminalsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: posTerminals.url(options),
@@ -547,7 +547,7 @@ posTerminalsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get">
 /**
  * @see \App\Http\Controllers\MasterData\PosTerminalController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\PosTerminalController.php:13
- * @route "http://localhost:8000/master-data/pos-terminals"
+ * @route "http://127.0.0.1:8000/master-data/pos-terminals"
  */
 posTerminalsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: posTerminals.url(formSafeOptions("head", options)),
@@ -560,7 +560,7 @@ posTerminals.form = posTerminalsForm
 /**
  * @see \App\Http\Controllers\MasterData\DiningResourceController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\DiningResourceController.php:13
- * @route "http://localhost:8000/master-data/seats"
+ * @route "http://127.0.0.1:8000/master-data/seats"
  */
 export const seats = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: seats.url(options),
@@ -569,13 +569,13 @@ export const seats = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 seats.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/seats",
+    url: "http://127.0.0.1:8000/master-data/seats",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\DiningResourceController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\DiningResourceController.php:13
- * @route "http://localhost:8000/master-data/seats"
+ * @route "http://127.0.0.1:8000/master-data/seats"
  */
 seats.url = (options?: RouteQueryOptions) => {
     return seats.definition.url + queryParams(options)
@@ -584,7 +584,7 @@ seats.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\DiningResourceController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\DiningResourceController.php:13
- * @route "http://localhost:8000/master-data/seats"
+ * @route "http://127.0.0.1:8000/master-data/seats"
  */
 seats.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: seats.url(options),
@@ -594,7 +594,7 @@ seats.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\DiningResourceController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\DiningResourceController.php:13
- * @route "http://localhost:8000/master-data/seats"
+ * @route "http://127.0.0.1:8000/master-data/seats"
  */
 seats.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: seats.url(options),
@@ -606,7 +606,7 @@ seats.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\DiningResourceController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\DiningResourceController.php:13
- * @route "http://localhost:8000/master-data/seats"
+ * @route "http://127.0.0.1:8000/master-data/seats"
  */
 const seatsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: seats.url(options),
@@ -616,7 +616,7 @@ const seatsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\MasterData\DiningResourceController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\DiningResourceController.php:13
- * @route "http://localhost:8000/master-data/seats"
+ * @route "http://127.0.0.1:8000/master-data/seats"
  */
 seatsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: seats.url(options),
@@ -626,7 +626,7 @@ seatsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\DiningResourceController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\DiningResourceController.php:13
- * @route "http://localhost:8000/master-data/seats"
+ * @route "http://127.0.0.1:8000/master-data/seats"
  */
 seatsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: seats.url(formSafeOptions("head", options)),
@@ -639,7 +639,7 @@ seats.form = seatsForm
 /**
  * @see \App\Http\Controllers\MasterData\SupplierController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\SupplierController.php:12
- * @route "http://localhost:8000/master-data/suppliers"
+ * @route "http://127.0.0.1:8000/master-data/suppliers"
  */
 export const suppliers = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: suppliers.url(options),
@@ -648,13 +648,13 @@ export const suppliers = (options?: RouteQueryOptions): RouteDefinition<"get"> =
 
 suppliers.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/suppliers",
+    url: "http://127.0.0.1:8000/master-data/suppliers",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\SupplierController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\SupplierController.php:12
- * @route "http://localhost:8000/master-data/suppliers"
+ * @route "http://127.0.0.1:8000/master-data/suppliers"
  */
 suppliers.url = (options?: RouteQueryOptions) => {
     return suppliers.definition.url + queryParams(options)
@@ -663,7 +663,7 @@ suppliers.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\SupplierController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\SupplierController.php:12
- * @route "http://localhost:8000/master-data/suppliers"
+ * @route "http://127.0.0.1:8000/master-data/suppliers"
  */
 suppliers.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: suppliers.url(options),
@@ -673,7 +673,7 @@ suppliers.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\SupplierController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\SupplierController.php:12
- * @route "http://localhost:8000/master-data/suppliers"
+ * @route "http://127.0.0.1:8000/master-data/suppliers"
  */
 suppliers.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: suppliers.url(options),
@@ -685,7 +685,7 @@ suppliers.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\SupplierController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\SupplierController.php:12
- * @route "http://localhost:8000/master-data/suppliers"
+ * @route "http://127.0.0.1:8000/master-data/suppliers"
  */
 const suppliersForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: suppliers.url(options),
@@ -695,7 +695,7 @@ const suppliersForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> 
 /**
  * @see \App\Http\Controllers\MasterData\SupplierController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\SupplierController.php:12
- * @route "http://localhost:8000/master-data/suppliers"
+ * @route "http://127.0.0.1:8000/master-data/suppliers"
  */
 suppliersForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: suppliers.url(options),
@@ -705,7 +705,7 @@ suppliersForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =>
 /**
  * @see \App\Http\Controllers\MasterData\SupplierController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\SupplierController.php:12
- * @route "http://localhost:8000/master-data/suppliers"
+ * @route "http://127.0.0.1:8000/master-data/suppliers"
  */
 suppliersForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: suppliers.url(formSafeOptions("head", options)),
@@ -718,7 +718,7 @@ suppliers.form = suppliersForm
 /**
  * @see \App\Http\Controllers\MasterData\TaxController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\TaxController.php:12
- * @route "http://localhost:8000/master-data/taxes"
+ * @route "http://127.0.0.1:8000/master-data/taxes"
  */
 export const taxes = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: taxes.url(options),
@@ -727,13 +727,13 @@ export const taxes = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 taxes.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/taxes",
+    url: "http://127.0.0.1:8000/master-data/taxes",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\TaxController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\TaxController.php:12
- * @route "http://localhost:8000/master-data/taxes"
+ * @route "http://127.0.0.1:8000/master-data/taxes"
  */
 taxes.url = (options?: RouteQueryOptions) => {
     return taxes.definition.url + queryParams(options)
@@ -742,7 +742,7 @@ taxes.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\TaxController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\TaxController.php:12
- * @route "http://localhost:8000/master-data/taxes"
+ * @route "http://127.0.0.1:8000/master-data/taxes"
  */
 taxes.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: taxes.url(options),
@@ -752,7 +752,7 @@ taxes.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\TaxController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\TaxController.php:12
- * @route "http://localhost:8000/master-data/taxes"
+ * @route "http://127.0.0.1:8000/master-data/taxes"
  */
 taxes.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: taxes.url(options),
@@ -764,7 +764,7 @@ taxes.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\TaxController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\TaxController.php:12
- * @route "http://localhost:8000/master-data/taxes"
+ * @route "http://127.0.0.1:8000/master-data/taxes"
  */
 const taxesForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: taxes.url(options),
@@ -774,7 +774,7 @@ const taxesForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\MasterData\TaxController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\TaxController.php:12
- * @route "http://localhost:8000/master-data/taxes"
+ * @route "http://127.0.0.1:8000/master-data/taxes"
  */
 taxesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: taxes.url(options),
@@ -784,7 +784,7 @@ taxesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\TaxController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\TaxController.php:12
- * @route "http://localhost:8000/master-data/taxes"
+ * @route "http://127.0.0.1:8000/master-data/taxes"
  */
 taxesForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: taxes.url(formSafeOptions("head", options)),
@@ -797,7 +797,7 @@ taxes.form = taxesForm
 /**
  * @see \App\Http\Controllers\MasterData\WarehouseLocationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\WarehouseLocationController.php:13
- * @route "http://localhost:8000/master-data/warehouse-locations"
+ * @route "http://127.0.0.1:8000/master-data/warehouse-locations"
  */
 export const warehouseLocations = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: warehouseLocations.url(options),
@@ -806,13 +806,13 @@ export const warehouseLocations = (options?: RouteQueryOptions): RouteDefinition
 
 warehouseLocations.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/warehouse-locations",
+    url: "http://127.0.0.1:8000/master-data/warehouse-locations",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\WarehouseLocationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\WarehouseLocationController.php:13
- * @route "http://localhost:8000/master-data/warehouse-locations"
+ * @route "http://127.0.0.1:8000/master-data/warehouse-locations"
  */
 warehouseLocations.url = (options?: RouteQueryOptions) => {
     return warehouseLocations.definition.url + queryParams(options)
@@ -821,7 +821,7 @@ warehouseLocations.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\WarehouseLocationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\WarehouseLocationController.php:13
- * @route "http://localhost:8000/master-data/warehouse-locations"
+ * @route "http://127.0.0.1:8000/master-data/warehouse-locations"
  */
 warehouseLocations.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: warehouseLocations.url(options),
@@ -831,7 +831,7 @@ warehouseLocations.get = (options?: RouteQueryOptions): RouteDefinition<"get"> =
 /**
  * @see \App\Http\Controllers\MasterData\WarehouseLocationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\WarehouseLocationController.php:13
- * @route "http://localhost:8000/master-data/warehouse-locations"
+ * @route "http://127.0.0.1:8000/master-data/warehouse-locations"
  */
 warehouseLocations.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: warehouseLocations.url(options),
@@ -843,7 +843,7 @@ warehouseLocations.head = (options?: RouteQueryOptions): RouteDefinition<"head">
 /**
  * @see \App\Http\Controllers\MasterData\WarehouseLocationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\WarehouseLocationController.php:13
- * @route "http://localhost:8000/master-data/warehouse-locations"
+ * @route "http://127.0.0.1:8000/master-data/warehouse-locations"
  */
 const warehouseLocationsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: warehouseLocations.url(options),
@@ -853,7 +853,7 @@ const warehouseLocationsForm = (options?: RouteQueryOptions): RouteFormDefinitio
 /**
  * @see \App\Http\Controllers\MasterData\WarehouseLocationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\WarehouseLocationController.php:13
- * @route "http://localhost:8000/master-data/warehouse-locations"
+ * @route "http://127.0.0.1:8000/master-data/warehouse-locations"
  */
 warehouseLocationsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: warehouseLocations.url(options),
@@ -863,7 +863,7 @@ warehouseLocationsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<
 /**
  * @see \App\Http\Controllers\MasterData\WarehouseLocationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\WarehouseLocationController.php:13
- * @route "http://localhost:8000/master-data/warehouse-locations"
+ * @route "http://127.0.0.1:8000/master-data/warehouse-locations"
  */
 warehouseLocationsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: warehouseLocations.url(formSafeOptions("head", options)),

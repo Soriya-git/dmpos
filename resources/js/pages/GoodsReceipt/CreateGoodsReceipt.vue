@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import { ArrowLeft, PackageOpen, Plus, Trash2 } from 'lucide-vue-next';
+import { Head, router, useForm } from '@inertiajs/vue3';
+import { PackageOpen, Plus, Trash2 } from 'lucide-vue-next';
 import { computed, watch } from 'vue';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { type BreadcrumbItem } from '@/types';
 
 type PurchaseOrderLine = {
     id: number;
@@ -37,6 +39,12 @@ const props = defineProps<{
     purchaseOrders: PurchaseOrder[];
     stagingLocations: StagingLocation[];
 }>();
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Stock Operations' },
+    { title: 'Goods Receipt', href: '/goods-receipts' },
+    { title: 'Create' },
+];
 
 const form = useForm({
     purchase_order_id: props.purchaseOrder?.id ?? '',
@@ -105,8 +113,7 @@ function maxQuantityFor(allocation: {
     return Math.max(
         0,
         Number(
-            poLineFor(allocation.purchase_order_line_id)?.quantity_remaining ??
-                0,
+            poLineFor(allocation.purchase_order_line_id)?.quantity_remaining ?? 0,
         ) -
             allocatedQuantity(
                 allocation.purchase_order_line_id,
@@ -128,9 +135,7 @@ function addAllocation(lineId: number) {
     const remaining =
         Number(poLine?.quantity_remaining ?? 0) - allocatedQuantity(lineId);
 
-    if (!poLine || remaining <= 0) {
-        return;
-    }
+    if (!poLine || remaining <= 0) return;
 
     form.lines.push({
         allocation_key: `${lineId}-${Date.now()}-${form.lines.length}`,
@@ -159,9 +164,7 @@ function removeAllocation(allocationKey: string) {
 }
 
 function updateQuantity(allocationKey: string, value: string) {
-    const line = form.lines.find(
-        (line) => line.allocation_key === allocationKey,
-    );
+    const line = form.lines.find((line) => line.allocation_key === allocationKey);
 
     if (line) {
         const nextValue = Number(value || 0);
@@ -173,13 +176,9 @@ function updateQuantity(allocationKey: string, value: string) {
 }
 
 function updateSelected(allocationKey: string, event: Event) {
-    const line = form.lines.find(
-        (line) => line.allocation_key === allocationKey,
-    );
+    const line = form.lines.find((line) => line.allocation_key === allocationKey);
 
-    if (!line) {
-        return;
-    }
+    if (!line) return;
 
     line.selected = (event.target as HTMLInputElement).checked;
 
@@ -195,9 +194,7 @@ function updateQuantityFromEvent(allocationKey: string, event: Event) {
 }
 
 function updateStagingZone(allocationKey: string, event: Event) {
-    const line = form.lines.find(
-        (line) => line.allocation_key === allocationKey,
-    );
+    const line = form.lines.find((line) => line.allocation_key === allocationKey);
 
     if (line) {
         const value = (event.target as HTMLSelectElement).value;
@@ -206,9 +203,7 @@ function updateStagingZone(allocationKey: string, event: Event) {
 }
 
 function submit() {
-    form.post('/goods-receipts', {
-        preserveScroll: true,
-    });
+    form.post('/goods-receipts', { preserveScroll: true });
 }
 
 function fieldError(name: string) {
@@ -222,9 +217,7 @@ const canSubmit = computed(() => {
             (line) => line.selected && Number(line.quantity_received) > 0,
         ) &&
         form.lines
-            .filter(
-                (line) => line.selected && Number(line.quantity_received) > 0,
-            )
+            .filter((line) => line.selected && Number(line.quantity_received) > 0)
             .every((line) => line.stock_location_id) &&
         !form.processing
     );
@@ -234,85 +227,56 @@ const canSubmit = computed(() => {
 <template>
     <Head title="Create Goods Receipt" />
 
-    <AppLayout>
-        <form
-            class="w-full bg-slate-100 p-4 text-slate-800 md:p-8"
-            @submit.prevent="submit"
-        >
-            <div
-                class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
-            >
-                <div class="flex items-center gap-4">
-                    <Link
-                        href="/goods-receipts/approved-purchase-orders"
-                        class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 transition hover:text-[#007882]"
-                    >
-                        <ArrowLeft class="h-5 w-5" />
-                    </Link>
-                    <div>
-                        <h1 class="text-2xl font-bold text-[#2a4858]">
-                            New Goods Receipt
-                        </h1>
-                        <p class="text-slate-500">
-                            {{
-                                selectedPurchaseOrder
-                                    ? `Inbound staging area entry for ${selectedPurchaseOrder.po_no}`
-                                    : 'Create a receipt from an approved purchase order'
-                            }}
-                        </p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <Link
-                        href="/goods-receipts"
-                        class="px-6 py-2 font-bold text-slate-500"
-                    >
-                        Cancel
-                    </Link>
-                    <button
-                        type="submit"
-                        :disabled="!canSubmit"
-                        class="rounded-lg bg-[#23aa8f] px-8 py-2 font-bold text-white shadow-md hover:opacity-90"
-                        :class="{
-                            'cursor-not-allowed opacity-60': !canSubmit,
-                        }"
-                    >
-                        {{ form.processing ? 'Saving...' : 'Save GR' }}
-                    </button>
-                </div>
+    <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <div class="flex gap-2">
+                <Button
+                    type="button"
+                    variant="ghost"
+                    class="h-9 font-semibold text-slate-600 hover:text-red-500"
+                    :disabled="form.processing"
+                    @click="router.visit('/goods-receipts/approved-purchase-orders')"
+                >
+                    Cancel
+                </Button>
+                <Button
+                    type="button"
+                    class="h-9 rounded-lg bg-[#23aa8f] px-4 text-xs font-bold text-white shadow-md hover:bg-[#1e917a]"
+                    :disabled="!canSubmit"
+                    @click="submit"
+                >
+                    {{ form.processing ? 'Saving...' : 'Save GR' }}
+                </Button>
             </div>
+        </template>
 
-            <div class="grid grid-cols-1 gap-6 xl:grid-cols-4">
+        <main
+            class="h-[calc(100dvh-4rem)] w-full scrollbar-gutter-stable overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
+            <div class="grid grid-cols-1 gap-6 xl:grid-cols-4 2xl:gap-8">
+
+                <!-- Left: Info -->
                 <aside class="space-y-6 xl:col-span-1">
-                    <div
-                        class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
-                    >
-                        <h2
-                            class="mb-4 text-xs font-black tracking-widest text-slate-400 uppercase"
-                        >
-                            Source PO Reference
+                    <div class="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
+                        <h2 class="mb-4 text-sm font-bold text-slate-700 uppercase">
+                            Source PO
                         </h2>
-                        <div class="space-y-3">
+                        <div class="space-y-4">
                             <div>
-                                <label
-                                    class="mb-1 block text-xs font-bold text-slate-500"
-                                >
-                                    Source Purchase Order
+                                <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                                    Purchase Order
                                 </label>
                                 <select
                                     v-model="form.purchase_order_id"
-                                    class="w-full rounded-lg border border-slate-200 bg-slate-50 p-2 text-sm"
+                                    class="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-600 outline-none focus:border-[#007882] focus:ring-2 focus:ring-[#007882]/20"
                                 >
-                                    <option value="" disabled>
-                                        Select approved PO
-                                    </option>
+                                    <option value="" disabled>Select approved PO</option>
                                     <option
                                         v-for="order in purchaseOrders"
                                         :key="order.id"
                                         :value="order.id"
                                     >
-                                        {{ order.po_no }} -
-                                        {{ order.supplier_name ?? 'Supplier' }}
+                                        {{ order.po_no }} — {{ order.supplier_name ?? 'Supplier' }}
                                     </option>
                                 </select>
                                 <p
@@ -327,61 +291,44 @@ const canSubmit = computed(() => {
                                 v-if="selectedPurchaseOrder"
                                 class="rounded-lg border border-[#007882]/10 bg-[#007882]/5 p-3"
                             >
-                                <p class="text-xs font-bold text-[#007882]">
-                                    PO Info
-                                </p>
-                                <p
-                                    class="mt-1 text-sm font-bold text-slate-700"
-                                >
-                                    {{
-                                        selectedPurchaseOrder.supplier_name ??
-                                        'Supplier'
-                                    }}
+                                <p class="text-xs font-bold text-[#007882]">PO Info</p>
+                                <p class="mt-1 text-sm font-bold text-slate-700">
+                                    {{ selectedPurchaseOrder.supplier_name ?? '-' }}
                                 </p>
                                 <p class="text-xs text-slate-500">
                                     {{ selectedPurchaseOrder.po_no }}
                                 </p>
                             </div>
-                        </div>
-                        <div
-                            v-if="purchaseOrders.length === 0"
-                            class="mt-3 text-sm text-slate-500"
-                        >
-                            Choose an approved PO before saving a receipt.
+
+                            <p v-if="purchaseOrders.length === 0" class="text-sm text-slate-500">
+                                No approved POs available for receipt.
+                            </p>
                         </div>
                     </div>
 
-                    <div
-                        class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
-                    >
-                        <h2
-                            class="mb-4 text-xs font-black tracking-widest text-slate-400 uppercase"
-                        >
+                    <div class="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
+                        <h2 class="mb-4 text-sm font-bold text-slate-700 uppercase">
                             Receipt Details
                         </h2>
                         <div class="space-y-4">
                             <div>
-                                <label
-                                    class="mb-1 block text-xs font-bold text-slate-500"
-                                >
+                                <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
                                     Receipt Number
                                 </label>
                                 <input
                                     :value="nextReceiptNo"
                                     readonly
-                                    class="w-full rounded-lg border border-slate-200 bg-slate-50 p-2 text-sm font-bold text-slate-600"
+                                    class="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm font-bold text-slate-500"
                                 />
                             </div>
                             <div>
-                                <label
-                                    class="mb-1 block text-xs font-bold text-slate-500"
-                                >
+                                <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
                                     Note
                                 </label>
                                 <textarea
                                     v-model="form.note"
                                     rows="3"
-                                    class="w-full rounded-lg border border-slate-200 bg-slate-50 p-2 text-sm"
+                                    class="min-h-20 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#007882] focus:ring-2 focus:ring-[#007882]/20"
                                     placeholder="Optional receipt note"
                                 ></textarea>
                             </div>
@@ -389,240 +336,117 @@ const canSubmit = computed(() => {
                     </div>
                 </aside>
 
+                <!-- Right: Items -->
                 <section class="space-y-6 xl:col-span-3">
-                    <div
-                        class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
-                    >
-                        <div
-                            class="flex items-center justify-between border-b bg-slate-50 p-4"
-                        >
-                            <h2
-                                class="text-xs font-black tracking-widest text-slate-500 uppercase"
-                            >
+                    <div class="overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm">
+                        <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4">
+                            <h2 class="text-xs font-bold tracking-wider text-slate-700 uppercase">
                                 Verify Inbound Items
                             </h2>
+                            <span v-if="form.lines.length > 0" class="text-xs text-slate-400">
+                                {{ form.lines.filter((l) => l.selected).length }} /
+                                {{ form.lines.length }} selected
+                            </span>
                         </div>
+
                         <div class="overflow-x-auto">
-                            <table class="w-full min-w-[980px] text-sm">
-                                <thead>
-                                    <tr
-                                        class="border-b border-slate-100 text-slate-400"
-                                    >
-                                        <th
-                                            class="w-12 px-4 py-3 text-center text-[10px] font-bold uppercase"
-                                        >
-                                            Use
-                                        </th>
-                                        <th
-                                            class="px-6 py-3 text-left text-[10px] font-bold uppercase"
-                                        >
-                                            Product / SKU
-                                        </th>
-                                        <th
-                                            class="px-6 py-3 text-center text-[10px] font-bold uppercase"
-                                        >
-                                            Ordered
-                                        </th>
-                                        <th
-                                            class="px-6 py-3 text-center text-[10px] font-bold uppercase"
-                                        >
-                                            Prev. Received
-                                        </th>
-                                        <th
-                                            class="px-6 py-3 text-center text-[10px] font-bold text-[#007882] uppercase"
-                                        >
-                                            Received Today
-                                        </th>
-                                        <th
-                                            class="px-6 py-3 text-left text-[10px] font-bold text-[#007882] uppercase"
-                                        >
-                                            Staging Zone
-                                        </th>
-                                        <th
-                                            class="px-4 py-3 text-center text-[10px] font-bold uppercase"
-                                        >
-                                            Split
-                                        </th>
+                            <table class="w-full text-sm">
+                                <thead class="border-b border-slate-100 text-slate-500">
+                                    <tr>
+                                        <th class="w-12 px-4 py-3 text-center font-semibold">Use</th>
+                                        <th class="min-w-48 px-4 py-3 text-left font-semibold">Product / SKU</th>
+                                        <th class="px-4 py-3 text-center font-semibold">Ordered</th>
+                                        <th class="px-4 py-3 text-center font-semibold">Prev. Received</th>
+                                        <th class="px-4 py-3 text-center font-semibold text-[#007882]">Received Today</th>
+                                        <th class="px-4 py-3 text-left font-semibold text-[#007882]">Staging Zone</th>
+                                        <th class="w-20 px-4 py-3 text-center font-semibold">Split</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-50">
                                     <tr
                                         v-for="allocation in form.lines"
                                         :key="allocation.allocation_key"
+                                        class="transition hover:bg-slate-50/50"
                                     >
                                         <td class="px-4 py-4 text-center">
                                             <input
                                                 type="checkbox"
                                                 :checked="allocation.selected"
                                                 class="h-4 w-4 rounded border-slate-300 text-[#007882] focus:ring-[#007882]"
-                                                @change="
-                                                    updateSelected(
-                                                        allocation.allocation_key,
-                                                        $event,
-                                                    )
-                                                "
+                                                @change="updateSelected(allocation.allocation_key, $event)"
                                             />
                                         </td>
-                                        <td class="px-6 py-4">
-                                            <div
-                                                class="font-bold text-slate-800"
-                                            >
-                                                {{
-                                                    poLineFor(
-                                                        allocation.purchase_order_line_id,
-                                                    )?.item_name ??
-                                                    'Inventory item'
-                                                }}
+                                        <td class="px-4 py-4">
+                                            <div class="font-bold text-[#2a4858]">
+                                                {{ poLineFor(allocation.purchase_order_line_id)?.item_name ?? 'Item' }}
                                             </div>
-                                            <div
-                                                class="font-mono text-[10px] text-slate-400"
-                                            >
-                                                SKU:
-                                                {{
-                                                    poLineFor(
-                                                        allocation.purchase_order_line_id,
-                                                    )?.item_code ?? '-'
-                                                }}
-                                                <span
-                                                    v-if="
-                                                        poLineFor(
-                                                            allocation.purchase_order_line_id,
-                                                        )?.unit_code
-                                                    "
-                                                >
-                                                    /
-                                                    {{
-                                                        poLineFor(
-                                                            allocation.purchase_order_line_id,
-                                                        )?.unit_code
-                                                    }}
+                                            <p class="mt-1 font-mono text-xs text-slate-400">
+                                                {{ poLineFor(allocation.purchase_order_line_id)?.item_code ?? '-' }}
+                                                <span v-if="poLineFor(allocation.purchase_order_line_id)?.unit_code">
+                                                    / {{ poLineFor(allocation.purchase_order_line_id)?.unit_code }}
                                                 </span>
-                                            </div>
+                                            </p>
                                         </td>
-                                        <td
-                                            class="px-6 py-4 text-center font-bold text-slate-500"
-                                        >
-                                            {{
-                                                poLineFor(
-                                                    allocation.purchase_order_line_id,
-                                                )?.quantity_ordered ?? 0
-                                            }}
+                                        <td class="px-4 py-4 text-center font-bold text-slate-500">
+                                            {{ poLineFor(allocation.purchase_order_line_id)?.quantity_ordered ?? 0 }}
                                         </td>
-                                        <td
-                                            class="px-6 py-4 text-center font-bold text-slate-400"
-                                        >
-                                            {{
-                                                poLineFor(
-                                                    allocation.purchase_order_line_id,
-                                                )?.quantity_received ?? 0
-                                            }}
+                                        <td class="px-4 py-4 text-center font-bold text-slate-400">
+                                            {{ poLineFor(allocation.purchase_order_line_id)?.quantity_received ?? 0 }}
                                         </td>
-                                        <td class="px-6 py-4 text-center">
+                                        <td class="px-4 py-4 text-center">
                                             <input
                                                 type="number"
                                                 min="0"
-                                                :max="
-                                                    maxQuantityFor(allocation)
-                                                "
-                                                :value="
-                                                    allocation.quantity_received
-                                                "
+                                                :max="maxQuantityFor(allocation)"
+                                                :value="allocation.quantity_received"
                                                 :disabled="!allocation.selected"
                                                 class="w-24 rounded-lg border-2 border-[#007882] py-1 text-center font-bold text-[#007882]"
                                                 :class="{
-                                                    'border-slate-200 bg-slate-50 text-slate-400':
-                                                        !allocation.selected,
+                                                    'border-slate-200 bg-slate-50 text-slate-400': !allocation.selected,
                                                 }"
-                                                @input="
-                                                    updateQuantityFromEvent(
-                                                        allocation.allocation_key,
-                                                        $event,
-                                                    )
-                                                "
+                                                @input="updateQuantityFromEvent(allocation.allocation_key, $event)"
                                             />
                                         </td>
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 py-4">
                                             <select
-                                                :value="
-                                                    allocation.stock_location_id
-                                                "
+                                                :value="allocation.stock_location_id"
                                                 :disabled="!allocation.selected"
-                                                class="w-full min-w-48 rounded-lg border border-slate-200 bg-slate-50 p-2 text-sm"
-                                                @change="
-                                                    updateStagingZone(
-                                                        allocation.allocation_key,
-                                                        $event,
-                                                    )
-                                                "
+                                                class="h-9 w-full min-w-44 rounded-lg border border-slate-200 bg-white px-2 text-sm outline-none focus:border-[#007882] focus:ring-2 focus:ring-[#007882]/20 disabled:bg-slate-50 disabled:text-slate-400"
+                                                @change="updateStagingZone(allocation.allocation_key, $event)"
                                             >
-                                                <option value="" disabled>
-                                                    Select staging zone
-                                                </option>
+                                                <option value="" disabled>Select staging zone</option>
                                                 <option
                                                     v-for="location in stagingLocations"
                                                     :key="location.id"
                                                     :value="location.id"
                                                 >
-                                                    {{
-                                                        location.code ??
-                                                        location.name
-                                                    }}
-                                                    -
-                                                    {{
-                                                        location.warehouse_name
-                                                    }}
+                                                    {{ location.code ?? location.name }} — {{ location.warehouse_name }}
                                                 </option>
                                             </select>
                                             <p
-                                                v-if="
-                                                    fieldError(
-                                                        `lines.${form.lines.indexOf(allocation)}.stock_location_id`,
-                                                    )
-                                                "
+                                                v-if="fieldError(`lines.${form.lines.indexOf(allocation)}.stock_location_id`)"
                                                 class="mt-1 text-xs font-medium text-rose-600"
                                             >
-                                                {{
-                                                    fieldError(
-                                                        `lines.${form.lines.indexOf(allocation)}.stock_location_id`,
-                                                    )
-                                                }}
+                                                {{ fieldError(`lines.${form.lines.indexOf(allocation)}.stock_location_id`) }}
                                             </p>
                                         </td>
                                         <td class="px-4 py-4">
-                                            <div
-                                                class="flex items-center justify-center gap-2"
-                                            >
+                                            <div class="flex items-center justify-center gap-1">
                                                 <button
                                                     type="button"
-                                                    :disabled="
-                                                        !canAddAllocation(
-                                                            allocation.purchase_order_line_id,
-                                                        )
-                                                    "
+                                                    :disabled="!canAddAllocation(allocation.purchase_order_line_id)"
                                                     class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-[#007882] hover:bg-[#007882]/10 disabled:cursor-not-allowed disabled:text-slate-300"
                                                     title="Add staging split"
-                                                    @click="
-                                                        addAllocation(
-                                                            allocation.purchase_order_line_id,
-                                                        )
-                                                    "
+                                                    @click="addAllocation(allocation.purchase_order_line_id)"
                                                 >
                                                     <Plus class="h-4 w-4" />
                                                 </button>
                                                 <button
                                                     type="button"
-                                                    :disabled="
-                                                        allocationsFor(
-                                                            allocation.purchase_order_line_id,
-                                                        ).length <= 1
-                                                    "
-                                                    class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-rose-500 hover:bg-rose-50 disabled:cursor-not-allowed disabled:text-slate-300"
+                                                    :disabled="allocationsFor(allocation.purchase_order_line_id).length <= 1"
+                                                    class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-rose-400 hover:bg-rose-50 disabled:cursor-not-allowed disabled:text-slate-300"
                                                     title="Remove staging split"
-                                                    @click="
-                                                        removeAllocation(
-                                                            allocation.allocation_key,
-                                                        )
-                                                    "
+                                                    @click="removeAllocation(allocation.allocation_key)"
                                                 >
                                                     <Trash2 class="h-4 w-4" />
                                                 </button>
@@ -630,29 +454,21 @@ const canSubmit = computed(() => {
                                         </td>
                                     </tr>
                                     <tr v-if="form.lines.length === 0">
-                                        <td
-                                            colspan="7"
-                                            class="px-6 py-12 text-center text-sm text-slate-500"
-                                        >
-                                            <PackageOpen
-                                                class="mx-auto mb-3 h-8 w-8 text-slate-300"
-                                            />
-                                            Open the waiting PO list and start a
-                                            receipt from an approved PO.
+                                        <td colspan="7" class="px-6 py-16 text-center text-sm text-slate-400">
+                                            <PackageOpen class="mx-auto mb-3 size-8 text-slate-300" />
+                                            Select an approved PO above to load items for receipt.
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <p
-                        v-if="form.errors.lines"
-                        class="text-sm font-medium text-rose-600"
-                    >
+
+                    <p v-if="form.errors.lines" class="text-sm font-medium text-rose-600">
                         {{ form.errors.lines }}
                     </p>
                 </section>
             </div>
-        </form>
+        </main>
     </AppLayout>
 </template>

@@ -242,6 +242,17 @@ function updateAdjustmentStatus(
     <Head title="Stock Adjustments" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <Button
+                type="button"
+                class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white shadow-md hover:bg-[#006773]"
+                @click="showCreate"
+            >
+                <Plus class="size-4" />
+                New Stock Adjustment
+            </Button>
+        </template>
+
         <main
             class="h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
@@ -365,15 +376,6 @@ function updateAdjustmentStatus(
                             <RotateCcw class="size-4" />
                         </Button>
                     </div>
-
-                    <Button
-                        type="button"
-                        class="h-11 rounded-lg bg-[#007882] px-6 font-bold text-white shadow-md hover:bg-[#006773]"
-                        @click="showCreate"
-                    >
-                        <Plus class="size-4" />
-                        New Stock Adjustment
-                    </Button>
                 </div>
 
                 <div

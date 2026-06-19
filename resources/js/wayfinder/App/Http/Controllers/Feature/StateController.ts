@@ -6,7 +6,7 @@ import { formSafeOptions, queryParams, type RouteDefinition, type RouteFormDefin
 /**
  * @see \App\Http\Controllers\Feature\StateController::remember
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:11
- * @route "http://localhost:8000/features/state/remember"
+ * @route "http://127.0.0.1:8000/features/state/remember"
  */
 export const remember = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: remember.url(options),
@@ -15,13 +15,13 @@ export const remember = (options?: RouteQueryOptions): RouteDefinition<"get"> =>
 
 remember.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/state/remember",
+    url: "http://127.0.0.1:8000/features/state/remember",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::remember
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:11
- * @route "http://localhost:8000/features/state/remember"
+ * @route "http://127.0.0.1:8000/features/state/remember"
  */
 remember.url = (options?: RouteQueryOptions) => {
     return remember.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ remember.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\StateController::remember
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:11
- * @route "http://localhost:8000/features/state/remember"
+ * @route "http://127.0.0.1:8000/features/state/remember"
  */
 remember.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: remember.url(options),
@@ -40,7 +40,7 @@ remember.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\StateController::remember
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:11
- * @route "http://localhost:8000/features/state/remember"
+ * @route "http://127.0.0.1:8000/features/state/remember"
  */
 remember.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: remember.url(options),
@@ -52,7 +52,7 @@ remember.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\StateController::remember
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:11
- * @route "http://localhost:8000/features/state/remember"
+ * @route "http://127.0.0.1:8000/features/state/remember"
  */
 const rememberForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: remember.url(options),
@@ -62,7 +62,7 @@ const rememberForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =
 /**
  * @see \App\Http\Controllers\Feature\StateController::remember
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:11
- * @route "http://localhost:8000/features/state/remember"
+ * @route "http://127.0.0.1:8000/features/state/remember"
  */
 rememberForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: remember.url(options),
@@ -72,7 +72,7 @@ rememberForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => 
 /**
  * @see \App\Http\Controllers\Feature\StateController::remember
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:11
- * @route "http://localhost:8000/features/state/remember"
+ * @route "http://127.0.0.1:8000/features/state/remember"
  */
 rememberForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: remember.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ remember.form = rememberForm
 /**
  * @see \App\Http\Controllers\Feature\StateController::flashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:16
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 export const flashData = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: flashData.url(options),
@@ -94,13 +94,13 @@ export const flashData = (options?: RouteQueryOptions): RouteDefinition<"get"> =
 
 flashData.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/state/flash-data",
+    url: "http://127.0.0.1:8000/features/state/flash-data",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::flashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:16
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 flashData.url = (options?: RouteQueryOptions) => {
     return flashData.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ flashData.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\StateController::flashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:16
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 flashData.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: flashData.url(options),
@@ -119,7 +119,7 @@ flashData.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\StateController::flashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:16
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 flashData.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: flashData.url(options),
@@ -131,7 +131,7 @@ flashData.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\StateController::flashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:16
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 const flashDataForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: flashData.url(options),
@@ -141,7 +141,7 @@ const flashDataForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> 
 /**
  * @see \App\Http\Controllers\Feature\StateController::flashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:16
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 flashDataForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: flashData.url(options),
@@ -151,7 +151,7 @@ flashDataForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =>
 /**
  * @see \App\Http\Controllers\Feature\StateController::flashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:16
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 flashDataForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: flashData.url(formSafeOptions("head", options)),
@@ -164,7 +164,7 @@ flashData.form = flashDataForm
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:21
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 export const storeFlashData = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeFlashData.url(options),
@@ -173,13 +173,13 @@ export const storeFlashData = (options?: RouteQueryOptions): RouteDefinition<"po
 
 storeFlashData.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/features/state/flash-data",
+    url: "http://127.0.0.1:8000/features/state/flash-data",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:21
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 storeFlashData.url = (options?: RouteQueryOptions) => {
     return storeFlashData.definition.url + queryParams(options)
@@ -188,7 +188,7 @@ storeFlashData.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:21
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 storeFlashData.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeFlashData.url(options),
@@ -200,7 +200,7 @@ storeFlashData.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:21
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 const storeFlashDataForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeFlashData.url(options),
@@ -210,7 +210,7 @@ const storeFlashDataForm = (options?: RouteQueryOptions): RouteFormDefinition<"p
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashData
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:21
- * @route "http://localhost:8000/features/state/flash-data"
+ * @route "http://127.0.0.1:8000/features/state/flash-data"
  */
 storeFlashDataForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeFlashData.url(options),
@@ -223,7 +223,7 @@ storeFlashData.form = storeFlashDataForm
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataError
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:28
- * @route "http://localhost:8000/features/state/flash-data/error"
+ * @route "http://127.0.0.1:8000/features/state/flash-data/error"
  */
 export const storeFlashDataError = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeFlashDataError.url(options),
@@ -232,13 +232,13 @@ export const storeFlashDataError = (options?: RouteQueryOptions): RouteDefinitio
 
 storeFlashDataError.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/features/state/flash-data/error",
+    url: "http://127.0.0.1:8000/features/state/flash-data/error",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataError
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:28
- * @route "http://localhost:8000/features/state/flash-data/error"
+ * @route "http://127.0.0.1:8000/features/state/flash-data/error"
  */
 storeFlashDataError.url = (options?: RouteQueryOptions) => {
     return storeFlashDataError.definition.url + queryParams(options)
@@ -247,7 +247,7 @@ storeFlashDataError.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataError
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:28
- * @route "http://localhost:8000/features/state/flash-data/error"
+ * @route "http://127.0.0.1:8000/features/state/flash-data/error"
  */
 storeFlashDataError.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeFlashDataError.url(options),
@@ -259,7 +259,7 @@ storeFlashDataError.post = (options?: RouteQueryOptions): RouteDefinition<"post"
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataError
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:28
- * @route "http://localhost:8000/features/state/flash-data/error"
+ * @route "http://127.0.0.1:8000/features/state/flash-data/error"
  */
 const storeFlashDataErrorForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeFlashDataError.url(options),
@@ -269,7 +269,7 @@ const storeFlashDataErrorForm = (options?: RouteQueryOptions): RouteFormDefiniti
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataError
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:28
- * @route "http://localhost:8000/features/state/flash-data/error"
+ * @route "http://127.0.0.1:8000/features/state/flash-data/error"
  */
 storeFlashDataErrorForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeFlashDataError.url(options),
@@ -282,7 +282,7 @@ storeFlashDataError.form = storeFlashDataErrorForm
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataWarning
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:35
- * @route "http://localhost:8000/features/state/flash-data/warning"
+ * @route "http://127.0.0.1:8000/features/state/flash-data/warning"
  */
 export const storeFlashDataWarning = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeFlashDataWarning.url(options),
@@ -291,13 +291,13 @@ export const storeFlashDataWarning = (options?: RouteQueryOptions): RouteDefinit
 
 storeFlashDataWarning.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/features/state/flash-data/warning",
+    url: "http://127.0.0.1:8000/features/state/flash-data/warning",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataWarning
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:35
- * @route "http://localhost:8000/features/state/flash-data/warning"
+ * @route "http://127.0.0.1:8000/features/state/flash-data/warning"
  */
 storeFlashDataWarning.url = (options?: RouteQueryOptions) => {
     return storeFlashDataWarning.definition.url + queryParams(options)
@@ -306,7 +306,7 @@ storeFlashDataWarning.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataWarning
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:35
- * @route "http://localhost:8000/features/state/flash-data/warning"
+ * @route "http://127.0.0.1:8000/features/state/flash-data/warning"
  */
 storeFlashDataWarning.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeFlashDataWarning.url(options),
@@ -318,7 +318,7 @@ storeFlashDataWarning.post = (options?: RouteQueryOptions): RouteDefinition<"pos
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataWarning
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:35
- * @route "http://localhost:8000/features/state/flash-data/warning"
+ * @route "http://127.0.0.1:8000/features/state/flash-data/warning"
  */
 const storeFlashDataWarningForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeFlashDataWarning.url(options),
@@ -328,7 +328,7 @@ const storeFlashDataWarningForm = (options?: RouteQueryOptions): RouteFormDefini
 /**
  * @see \App\Http\Controllers\Feature\StateController::storeFlashDataWarning
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:35
- * @route "http://localhost:8000/features/state/flash-data/warning"
+ * @route "http://127.0.0.1:8000/features/state/flash-data/warning"
  */
 storeFlashDataWarningForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeFlashDataWarning.url(options),
@@ -341,7 +341,7 @@ storeFlashDataWarning.form = storeFlashDataWarningForm
 /**
  * @see \App\Http\Controllers\Feature\StateController::sharedProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:42
- * @route "http://localhost:8000/features/state/shared-props"
+ * @route "http://127.0.0.1:8000/features/state/shared-props"
  */
 export const sharedProps = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: sharedProps.url(options),
@@ -350,13 +350,13 @@ export const sharedProps = (options?: RouteQueryOptions): RouteDefinition<"get">
 
 sharedProps.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/state/shared-props",
+    url: "http://127.0.0.1:8000/features/state/shared-props",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\StateController::sharedProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:42
- * @route "http://localhost:8000/features/state/shared-props"
+ * @route "http://127.0.0.1:8000/features/state/shared-props"
  */
 sharedProps.url = (options?: RouteQueryOptions) => {
     return sharedProps.definition.url + queryParams(options)
@@ -365,7 +365,7 @@ sharedProps.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\StateController::sharedProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:42
- * @route "http://localhost:8000/features/state/shared-props"
+ * @route "http://127.0.0.1:8000/features/state/shared-props"
  */
 sharedProps.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: sharedProps.url(options),
@@ -375,7 +375,7 @@ sharedProps.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\StateController::sharedProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:42
- * @route "http://localhost:8000/features/state/shared-props"
+ * @route "http://127.0.0.1:8000/features/state/shared-props"
  */
 sharedProps.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: sharedProps.url(options),
@@ -387,7 +387,7 @@ sharedProps.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\StateController::sharedProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:42
- * @route "http://localhost:8000/features/state/shared-props"
+ * @route "http://127.0.0.1:8000/features/state/shared-props"
  */
 const sharedPropsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: sharedProps.url(options),
@@ -397,7 +397,7 @@ const sharedPropsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"
 /**
  * @see \App\Http\Controllers\Feature\StateController::sharedProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:42
- * @route "http://localhost:8000/features/state/shared-props"
+ * @route "http://127.0.0.1:8000/features/state/shared-props"
  */
 sharedPropsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: sharedProps.url(options),
@@ -407,7 +407,7 @@ sharedPropsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> 
 /**
  * @see \App\Http\Controllers\Feature\StateController::sharedProps
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php:42
- * @route "http://localhost:8000/features/state/shared-props"
+ * @route "http://127.0.0.1:8000/features/state/shared-props"
  */
 sharedPropsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: sharedProps.url(formSafeOptions("head", options)),

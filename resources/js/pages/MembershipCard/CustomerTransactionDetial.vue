@@ -98,7 +98,9 @@ function balanceText(currency: string, value: number) {
     <Head title="Membership Card Ledger" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
+        <div
+            class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <div
                 class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
             >
@@ -124,7 +126,7 @@ function balanceText(currency: string, value: number) {
 
             <div class="grid gap-6 xl:grid-cols-[420px_minmax(0,1fr)]">
                 <section
-                    class="h-fit rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+                    class="h-fit rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
                 >
                     <MembershipCardPreview
                         :card-no="card.cardNo"
@@ -139,7 +141,7 @@ function balanceText(currency: string, value: number) {
                 </section>
 
                 <section
-                    class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+                    class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"
                 >
                     <div class="border-b border-slate-100 p-5">
                         <div class="grid gap-3 md:grid-cols-[1fr_160px]">

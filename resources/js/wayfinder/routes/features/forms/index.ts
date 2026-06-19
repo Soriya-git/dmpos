@@ -7,7 +7,7 @@ import validationFd8f7e4 from "./validation";
 /**
  * @see \App\Http\Controllers\Feature\FormController::useForm
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:22
- * @route "http://localhost:8000/features/forms/use-form"
+ * @route "http://127.0.0.1:8000/features/forms/use-form"
  */
 export const useForm = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: useForm.url(options),
@@ -16,13 +16,13 @@ export const useForm = (options?: RouteQueryOptions): RouteDefinition<"get"> => 
 
 useForm.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/forms/use-form",
+    url: "http://127.0.0.1:8000/features/forms/use-form",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::useForm
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:22
- * @route "http://localhost:8000/features/forms/use-form"
+ * @route "http://127.0.0.1:8000/features/forms/use-form"
  */
 useForm.url = (options?: RouteQueryOptions) => {
     return useForm.definition.url + queryParams(options)
@@ -31,7 +31,7 @@ useForm.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\FormController::useForm
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:22
- * @route "http://localhost:8000/features/forms/use-form"
+ * @route "http://127.0.0.1:8000/features/forms/use-form"
  */
 useForm.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: useForm.url(options),
@@ -41,7 +41,7 @@ useForm.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::useForm
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:22
- * @route "http://localhost:8000/features/forms/use-form"
+ * @route "http://127.0.0.1:8000/features/forms/use-form"
  */
 useForm.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: useForm.url(options),
@@ -53,7 +53,7 @@ useForm.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::useForm
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:22
- * @route "http://localhost:8000/features/forms/use-form"
+ * @route "http://127.0.0.1:8000/features/forms/use-form"
  */
 const useFormForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: useForm.url(options),
@@ -63,7 +63,7 @@ const useFormForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =>
 /**
  * @see \App\Http\Controllers\Feature\FormController::useForm
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:22
- * @route "http://localhost:8000/features/forms/use-form"
+ * @route "http://127.0.0.1:8000/features/forms/use-form"
  */
 useFormForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: useForm.url(options),
@@ -73,7 +73,7 @@ useFormForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\Feature\FormController::useForm
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:22
- * @route "http://localhost:8000/features/forms/use-form"
+ * @route "http://127.0.0.1:8000/features/forms/use-form"
  */
 useFormForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: useForm.url(formSafeOptions("head", options)),
@@ -86,7 +86,7 @@ useForm.form = useFormForm
 /**
  * @see \App\Http\Controllers\Feature\FormController::formComponent
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:32
- * @route "http://localhost:8000/features/forms/form-component"
+ * @route "http://127.0.0.1:8000/features/forms/form-component"
  */
 export const formComponent = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: formComponent.url(options),
@@ -95,13 +95,13 @@ export const formComponent = (options?: RouteQueryOptions): RouteDefinition<"get
 
 formComponent.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/forms/form-component",
+    url: "http://127.0.0.1:8000/features/forms/form-component",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::formComponent
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:32
- * @route "http://localhost:8000/features/forms/form-component"
+ * @route "http://127.0.0.1:8000/features/forms/form-component"
  */
 formComponent.url = (options?: RouteQueryOptions) => {
     return formComponent.definition.url + queryParams(options)
@@ -110,7 +110,7 @@ formComponent.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\FormController::formComponent
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:32
- * @route "http://localhost:8000/features/forms/form-component"
+ * @route "http://127.0.0.1:8000/features/forms/form-component"
  */
 formComponent.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: formComponent.url(options),
@@ -120,7 +120,7 @@ formComponent.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::formComponent
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:32
- * @route "http://localhost:8000/features/forms/form-component"
+ * @route "http://127.0.0.1:8000/features/forms/form-component"
  */
 formComponent.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: formComponent.url(options),
@@ -132,7 +132,7 @@ formComponent.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => (
 /**
  * @see \App\Http\Controllers\Feature\FormController::formComponent
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:32
- * @route "http://localhost:8000/features/forms/form-component"
+ * @route "http://127.0.0.1:8000/features/forms/form-component"
  */
 const formComponentForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: formComponent.url(options),
@@ -142,7 +142,7 @@ const formComponentForm = (options?: RouteQueryOptions): RouteFormDefinition<"ge
 /**
  * @see \App\Http\Controllers\Feature\FormController::formComponent
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:32
- * @route "http://localhost:8000/features/forms/form-component"
+ * @route "http://127.0.0.1:8000/features/forms/form-component"
  */
 formComponentForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: formComponent.url(options),
@@ -152,7 +152,7 @@ formComponentForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"
 /**
  * @see \App\Http\Controllers\Feature\FormController::formComponent
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:32
- * @route "http://localhost:8000/features/forms/form-component"
+ * @route "http://127.0.0.1:8000/features/forms/form-component"
  */
 formComponentForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: formComponent.url(formSafeOptions("head", options)),
@@ -165,7 +165,7 @@ formComponent.form = formComponentForm
 /**
  * @see \App\Http\Controllers\Feature\FormController::fileUploads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:42
- * @route "http://localhost:8000/features/forms/file-uploads"
+ * @route "http://127.0.0.1:8000/features/forms/file-uploads"
  */
 export const fileUploads = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: fileUploads.url(options),
@@ -174,13 +174,13 @@ export const fileUploads = (options?: RouteQueryOptions): RouteDefinition<"get">
 
 fileUploads.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/forms/file-uploads",
+    url: "http://127.0.0.1:8000/features/forms/file-uploads",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::fileUploads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:42
- * @route "http://localhost:8000/features/forms/file-uploads"
+ * @route "http://127.0.0.1:8000/features/forms/file-uploads"
  */
 fileUploads.url = (options?: RouteQueryOptions) => {
     return fileUploads.definition.url + queryParams(options)
@@ -189,7 +189,7 @@ fileUploads.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\FormController::fileUploads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:42
- * @route "http://localhost:8000/features/forms/file-uploads"
+ * @route "http://127.0.0.1:8000/features/forms/file-uploads"
  */
 fileUploads.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: fileUploads.url(options),
@@ -199,7 +199,7 @@ fileUploads.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::fileUploads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:42
- * @route "http://localhost:8000/features/forms/file-uploads"
+ * @route "http://127.0.0.1:8000/features/forms/file-uploads"
  */
 fileUploads.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: fileUploads.url(options),
@@ -211,7 +211,7 @@ fileUploads.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::fileUploads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:42
- * @route "http://localhost:8000/features/forms/file-uploads"
+ * @route "http://127.0.0.1:8000/features/forms/file-uploads"
  */
 const fileUploadsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: fileUploads.url(options),
@@ -221,7 +221,7 @@ const fileUploadsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"
 /**
  * @see \App\Http\Controllers\Feature\FormController::fileUploads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:42
- * @route "http://localhost:8000/features/forms/file-uploads"
+ * @route "http://127.0.0.1:8000/features/forms/file-uploads"
  */
 fileUploadsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: fileUploads.url(options),
@@ -231,7 +231,7 @@ fileUploadsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> 
 /**
  * @see \App\Http\Controllers\Feature\FormController::fileUploads
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:42
- * @route "http://localhost:8000/features/forms/file-uploads"
+ * @route "http://127.0.0.1:8000/features/forms/file-uploads"
  */
 fileUploadsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: fileUploads.url(formSafeOptions("head", options)),
@@ -244,7 +244,7 @@ fileUploads.form = fileUploadsForm
 /**
  * @see \App\Http\Controllers\Feature\FormController::validation
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:56
- * @route "http://localhost:8000/features/forms/validation"
+ * @route "http://127.0.0.1:8000/features/forms/validation"
  */
 export const validation = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: validation.url(options),
@@ -253,13 +253,13 @@ export const validation = (options?: RouteQueryOptions): RouteDefinition<"get"> 
 
 validation.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/forms/validation",
+    url: "http://127.0.0.1:8000/features/forms/validation",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::validation
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:56
- * @route "http://localhost:8000/features/forms/validation"
+ * @route "http://127.0.0.1:8000/features/forms/validation"
  */
 validation.url = (options?: RouteQueryOptions) => {
     return validation.definition.url + queryParams(options)
@@ -268,7 +268,7 @@ validation.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\FormController::validation
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:56
- * @route "http://localhost:8000/features/forms/validation"
+ * @route "http://127.0.0.1:8000/features/forms/validation"
  */
 validation.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: validation.url(options),
@@ -278,7 +278,7 @@ validation.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::validation
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:56
- * @route "http://localhost:8000/features/forms/validation"
+ * @route "http://127.0.0.1:8000/features/forms/validation"
  */
 validation.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: validation.url(options),
@@ -290,7 +290,7 @@ validation.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::validation
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:56
- * @route "http://localhost:8000/features/forms/validation"
+ * @route "http://127.0.0.1:8000/features/forms/validation"
  */
 const validationForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: validation.url(options),
@@ -300,7 +300,7 @@ const validationForm = (options?: RouteQueryOptions): RouteFormDefinition<"get">
 /**
  * @see \App\Http\Controllers\Feature\FormController::validation
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:56
- * @route "http://localhost:8000/features/forms/validation"
+ * @route "http://127.0.0.1:8000/features/forms/validation"
  */
 validationForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: validation.url(options),
@@ -310,7 +310,7 @@ validationForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =
 /**
  * @see \App\Http\Controllers\Feature\FormController::validation
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:56
- * @route "http://localhost:8000/features/forms/validation"
+ * @route "http://127.0.0.1:8000/features/forms/validation"
  */
 validationForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: validation.url(formSafeOptions("head", options)),
@@ -323,7 +323,7 @@ validation.form = validationForm
 /**
  * @see \App\Http\Controllers\Feature\FormController::precognition
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:71
- * @route "http://localhost:8000/features/forms/precognition"
+ * @route "http://127.0.0.1:8000/features/forms/precognition"
  */
 export const precognition = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: precognition.url(options),
@@ -332,13 +332,13 @@ export const precognition = (options?: RouteQueryOptions): RouteDefinition<"get"
 
 precognition.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/forms/precognition",
+    url: "http://127.0.0.1:8000/features/forms/precognition",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::precognition
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:71
- * @route "http://localhost:8000/features/forms/precognition"
+ * @route "http://127.0.0.1:8000/features/forms/precognition"
  */
 precognition.url = (options?: RouteQueryOptions) => {
     return precognition.definition.url + queryParams(options)
@@ -347,7 +347,7 @@ precognition.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\FormController::precognition
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:71
- * @route "http://localhost:8000/features/forms/precognition"
+ * @route "http://127.0.0.1:8000/features/forms/precognition"
  */
 precognition.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: precognition.url(options),
@@ -357,7 +357,7 @@ precognition.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::precognition
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:71
- * @route "http://localhost:8000/features/forms/precognition"
+ * @route "http://127.0.0.1:8000/features/forms/precognition"
  */
 precognition.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: precognition.url(options),
@@ -369,7 +369,7 @@ precognition.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::precognition
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:71
- * @route "http://localhost:8000/features/forms/precognition"
+ * @route "http://127.0.0.1:8000/features/forms/precognition"
  */
 const precognitionForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: precognition.url(options),
@@ -379,7 +379,7 @@ const precognitionForm = (options?: RouteQueryOptions): RouteFormDefinition<"get
 /**
  * @see \App\Http\Controllers\Feature\FormController::precognition
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:71
- * @route "http://localhost:8000/features/forms/precognition"
+ * @route "http://127.0.0.1:8000/features/forms/precognition"
  */
 precognitionForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: precognition.url(options),
@@ -389,7 +389,7 @@ precognitionForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get">
 /**
  * @see \App\Http\Controllers\Feature\FormController::precognition
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:71
- * @route "http://localhost:8000/features/forms/precognition"
+ * @route "http://127.0.0.1:8000/features/forms/precognition"
  */
 precognitionForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: precognition.url(formSafeOptions("head", options)),
@@ -402,7 +402,7 @@ precognition.form = precognitionForm
 /**
  * @see \App\Http\Controllers\Feature\FormController::optimisticUpdates
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:81
- * @route "http://localhost:8000/features/forms/optimistic-updates"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-updates"
  */
 export const optimisticUpdates = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: optimisticUpdates.url(options),
@@ -411,13 +411,13 @@ export const optimisticUpdates = (options?: RouteQueryOptions): RouteDefinition<
 
 optimisticUpdates.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/forms/optimistic-updates",
+    url: "http://127.0.0.1:8000/features/forms/optimistic-updates",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::optimisticUpdates
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:81
- * @route "http://localhost:8000/features/forms/optimistic-updates"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-updates"
  */
 optimisticUpdates.url = (options?: RouteQueryOptions) => {
     return optimisticUpdates.definition.url + queryParams(options)
@@ -426,7 +426,7 @@ optimisticUpdates.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\FormController::optimisticUpdates
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:81
- * @route "http://localhost:8000/features/forms/optimistic-updates"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-updates"
  */
 optimisticUpdates.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: optimisticUpdates.url(options),
@@ -436,7 +436,7 @@ optimisticUpdates.get = (options?: RouteQueryOptions): RouteDefinition<"get"> =>
 /**
  * @see \App\Http\Controllers\Feature\FormController::optimisticUpdates
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:81
- * @route "http://localhost:8000/features/forms/optimistic-updates"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-updates"
  */
 optimisticUpdates.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: optimisticUpdates.url(options),
@@ -448,7 +448,7 @@ optimisticUpdates.head = (options?: RouteQueryOptions): RouteDefinition<"head"> 
 /**
  * @see \App\Http\Controllers\Feature\FormController::optimisticUpdates
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:81
- * @route "http://localhost:8000/features/forms/optimistic-updates"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-updates"
  */
 const optimisticUpdatesForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: optimisticUpdates.url(options),
@@ -458,7 +458,7 @@ const optimisticUpdatesForm = (options?: RouteQueryOptions): RouteFormDefinition
 /**
  * @see \App\Http\Controllers\Feature\FormController::optimisticUpdates
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:81
- * @route "http://localhost:8000/features/forms/optimistic-updates"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-updates"
  */
 optimisticUpdatesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: optimisticUpdates.url(options),
@@ -468,7 +468,7 @@ optimisticUpdatesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"
 /**
  * @see \App\Http\Controllers\Feature\FormController::optimisticUpdates
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:81
- * @route "http://localhost:8000/features/forms/optimistic-updates"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-updates"
  */
 optimisticUpdatesForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: optimisticUpdates.url(formSafeOptions("head", options)),
@@ -481,7 +481,7 @@ optimisticUpdates.form = optimisticUpdatesForm
 /**
  * @see \App\Http\Controllers\Feature\FormController::toggleFavorite
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:116
- * @route "http://localhost:8000/features/forms/optimistic-toggle/{contact}"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-toggle/{contact}"
  */
 export const optimisticToggle = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: optimisticToggle.url(args, options),
@@ -490,13 +490,13 @@ export const optimisticToggle = (args: { contact: number | { id: number } } | [ 
 
 optimisticToggle.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/features/forms/optimistic-toggle/{contact}",
+    url: "http://127.0.0.1:8000/features/forms/optimistic-toggle/{contact}",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::toggleFavorite
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:116
- * @route "http://localhost:8000/features/forms/optimistic-toggle/{contact}"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-toggle/{contact}"
  */
 optimisticToggle.url = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -527,7 +527,7 @@ optimisticToggle.url = (args: { contact: number | { id: number } } | [ contact: 
 /**
  * @see \App\Http\Controllers\Feature\FormController::toggleFavorite
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:116
- * @route "http://localhost:8000/features/forms/optimistic-toggle/{contact}"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-toggle/{contact}"
  */
 optimisticToggle.post = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: optimisticToggle.url(args, options),
@@ -539,7 +539,7 @@ optimisticToggle.post = (args: { contact: number | { id: number } } | [ contact:
 /**
  * @see \App\Http\Controllers\Feature\FormController::toggleFavorite
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:116
- * @route "http://localhost:8000/features/forms/optimistic-toggle/{contact}"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-toggle/{contact}"
  */
 const optimisticToggleForm = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: optimisticToggle.url(args, options),
@@ -549,7 +549,7 @@ const optimisticToggleForm = (args: { contact: number | { id: number } } | [ con
 /**
  * @see \App\Http\Controllers\Feature\FormController::toggleFavorite
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:116
- * @route "http://localhost:8000/features/forms/optimistic-toggle/{contact}"
+ * @route "http://127.0.0.1:8000/features/forms/optimistic-toggle/{contact}"
  */
 optimisticToggleForm.post = (args: { contact: number | { id: number } } | [ contact: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: optimisticToggle.url(args, options),
@@ -562,7 +562,7 @@ optimisticToggle.form = optimisticToggleForm
 /**
  * @see \App\Http\Controllers\Feature\FormController::useFormContext
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:90
- * @route "http://localhost:8000/features/forms/use-form-context"
+ * @route "http://127.0.0.1:8000/features/forms/use-form-context"
  */
 export const useFormContext = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: useFormContext.url(options),
@@ -571,13 +571,13 @@ export const useFormContext = (options?: RouteQueryOptions): RouteDefinition<"ge
 
 useFormContext.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/forms/use-form-context",
+    url: "http://127.0.0.1:8000/features/forms/use-form-context",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::useFormContext
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:90
- * @route "http://localhost:8000/features/forms/use-form-context"
+ * @route "http://127.0.0.1:8000/features/forms/use-form-context"
  */
 useFormContext.url = (options?: RouteQueryOptions) => {
     return useFormContext.definition.url + queryParams(options)
@@ -586,7 +586,7 @@ useFormContext.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\FormController::useFormContext
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:90
- * @route "http://localhost:8000/features/forms/use-form-context"
+ * @route "http://127.0.0.1:8000/features/forms/use-form-context"
  */
 useFormContext.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: useFormContext.url(options),
@@ -596,7 +596,7 @@ useFormContext.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::useFormContext
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:90
- * @route "http://localhost:8000/features/forms/use-form-context"
+ * @route "http://127.0.0.1:8000/features/forms/use-form-context"
  */
 useFormContext.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: useFormContext.url(options),
@@ -608,7 +608,7 @@ useFormContext.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => 
 /**
  * @see \App\Http\Controllers\Feature\FormController::useFormContext
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:90
- * @route "http://localhost:8000/features/forms/use-form-context"
+ * @route "http://127.0.0.1:8000/features/forms/use-form-context"
  */
 const useFormContextForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: useFormContext.url(options),
@@ -618,7 +618,7 @@ const useFormContextForm = (options?: RouteQueryOptions): RouteFormDefinition<"g
 /**
  * @see \App\Http\Controllers\Feature\FormController::useFormContext
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:90
- * @route "http://localhost:8000/features/forms/use-form-context"
+ * @route "http://127.0.0.1:8000/features/forms/use-form-context"
  */
 useFormContextForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: useFormContext.url(options),
@@ -628,7 +628,7 @@ useFormContextForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get
 /**
  * @see \App\Http\Controllers\Feature\FormController::useFormContext
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:90
- * @route "http://localhost:8000/features/forms/use-form-context"
+ * @route "http://127.0.0.1:8000/features/forms/use-form-context"
  */
 useFormContextForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: useFormContext.url(formSafeOptions("head", options)),
@@ -641,7 +641,7 @@ useFormContext.form = useFormContextForm
 /**
  * @see \App\Http\Controllers\Feature\FormController::dottedKeys
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:95
- * @route "http://localhost:8000/features/forms/dotted-keys"
+ * @route "http://127.0.0.1:8000/features/forms/dotted-keys"
  */
 export const dottedKeys = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: dottedKeys.url(options),
@@ -650,13 +650,13 @@ export const dottedKeys = (options?: RouteQueryOptions): RouteDefinition<"get"> 
 
 dottedKeys.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/forms/dotted-keys",
+    url: "http://127.0.0.1:8000/features/forms/dotted-keys",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::dottedKeys
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:95
- * @route "http://localhost:8000/features/forms/dotted-keys"
+ * @route "http://127.0.0.1:8000/features/forms/dotted-keys"
  */
 dottedKeys.url = (options?: RouteQueryOptions) => {
     return dottedKeys.definition.url + queryParams(options)
@@ -665,7 +665,7 @@ dottedKeys.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\FormController::dottedKeys
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:95
- * @route "http://localhost:8000/features/forms/dotted-keys"
+ * @route "http://127.0.0.1:8000/features/forms/dotted-keys"
  */
 dottedKeys.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: dottedKeys.url(options),
@@ -675,7 +675,7 @@ dottedKeys.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::dottedKeys
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:95
- * @route "http://localhost:8000/features/forms/dotted-keys"
+ * @route "http://127.0.0.1:8000/features/forms/dotted-keys"
  */
 dottedKeys.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: dottedKeys.url(options),
@@ -687,7 +687,7 @@ dottedKeys.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::dottedKeys
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:95
- * @route "http://localhost:8000/features/forms/dotted-keys"
+ * @route "http://127.0.0.1:8000/features/forms/dotted-keys"
  */
 const dottedKeysForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: dottedKeys.url(options),
@@ -697,7 +697,7 @@ const dottedKeysForm = (options?: RouteQueryOptions): RouteFormDefinition<"get">
 /**
  * @see \App\Http\Controllers\Feature\FormController::dottedKeys
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:95
- * @route "http://localhost:8000/features/forms/dotted-keys"
+ * @route "http://127.0.0.1:8000/features/forms/dotted-keys"
  */
 dottedKeysForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: dottedKeys.url(options),
@@ -707,7 +707,7 @@ dottedKeysForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =
 /**
  * @see \App\Http\Controllers\Feature\FormController::dottedKeys
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:95
- * @route "http://localhost:8000/features/forms/dotted-keys"
+ * @route "http://127.0.0.1:8000/features/forms/dotted-keys"
  */
 dottedKeysForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: dottedKeys.url(formSafeOptions("head", options)),
@@ -720,7 +720,7 @@ dottedKeys.form = dottedKeysForm
 /**
  * @see \App\Http\Controllers\Feature\FormController::wayfinder
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:109
- * @route "http://localhost:8000/features/forms/wayfinder"
+ * @route "http://127.0.0.1:8000/features/forms/wayfinder"
  */
 export const wayfinder = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: wayfinder.url(options),
@@ -729,13 +729,13 @@ export const wayfinder = (options?: RouteQueryOptions): RouteDefinition<"get"> =
 
 wayfinder.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/forms/wayfinder",
+    url: "http://127.0.0.1:8000/features/forms/wayfinder",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\FormController::wayfinder
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:109
- * @route "http://localhost:8000/features/forms/wayfinder"
+ * @route "http://127.0.0.1:8000/features/forms/wayfinder"
  */
 wayfinder.url = (options?: RouteQueryOptions) => {
     return wayfinder.definition.url + queryParams(options)
@@ -744,7 +744,7 @@ wayfinder.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\FormController::wayfinder
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:109
- * @route "http://localhost:8000/features/forms/wayfinder"
+ * @route "http://127.0.0.1:8000/features/forms/wayfinder"
  */
 wayfinder.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: wayfinder.url(options),
@@ -754,7 +754,7 @@ wayfinder.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::wayfinder
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:109
- * @route "http://localhost:8000/features/forms/wayfinder"
+ * @route "http://127.0.0.1:8000/features/forms/wayfinder"
  */
 wayfinder.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: wayfinder.url(options),
@@ -766,7 +766,7 @@ wayfinder.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\FormController::wayfinder
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:109
- * @route "http://localhost:8000/features/forms/wayfinder"
+ * @route "http://127.0.0.1:8000/features/forms/wayfinder"
  */
 const wayfinderForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: wayfinder.url(options),
@@ -776,7 +776,7 @@ const wayfinderForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> 
 /**
  * @see \App\Http\Controllers\Feature\FormController::wayfinder
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:109
- * @route "http://localhost:8000/features/forms/wayfinder"
+ * @route "http://127.0.0.1:8000/features/forms/wayfinder"
  */
 wayfinderForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: wayfinder.url(options),
@@ -786,7 +786,7 @@ wayfinderForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =>
 /**
  * @see \App\Http\Controllers\Feature\FormController::wayfinder
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php:109
- * @route "http://localhost:8000/features/forms/wayfinder"
+ * @route "http://127.0.0.1:8000/features/forms/wayfinder"
  */
 wayfinderForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: wayfinder.url(formSafeOptions("head", options)),

@@ -6,7 +6,7 @@ import { queryParams, type RouteDefinition, type RouteFormDefinition, type Route
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectStandard
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:118
- * @route "http://localhost:8000/features/navigation/redirects/back"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/back"
  */
 export const back = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: back.url(options),
@@ -15,13 +15,13 @@ export const back = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 
 back.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/features/navigation/redirects/back",
+    url: "http://127.0.0.1:8000/features/navigation/redirects/back",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectStandard
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:118
- * @route "http://localhost:8000/features/navigation/redirects/back"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/back"
  */
 back.url = (options?: RouteQueryOptions) => {
     return back.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ back.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectStandard
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:118
- * @route "http://localhost:8000/features/navigation/redirects/back"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/back"
  */
 back.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: back.url(options),
@@ -42,7 +42,7 @@ back.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectStandard
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:118
- * @route "http://localhost:8000/features/navigation/redirects/back"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/back"
  */
 const backForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: back.url(options),
@@ -52,7 +52,7 @@ const backForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => (
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectStandard
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:118
- * @route "http://localhost:8000/features/navigation/redirects/back"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/back"
  */
 backForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: back.url(options),
@@ -65,7 +65,7 @@ back.form = backForm
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectToRoute
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:123
- * @route "http://localhost:8000/features/navigation/redirects/to-route"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/to-route"
  */
 export const toRoute = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: toRoute.url(options),
@@ -74,13 +74,13 @@ export const toRoute = (options?: RouteQueryOptions): RouteDefinition<"post"> =>
 
 toRoute.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/features/navigation/redirects/to-route",
+    url: "http://127.0.0.1:8000/features/navigation/redirects/to-route",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectToRoute
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:123
- * @route "http://localhost:8000/features/navigation/redirects/to-route"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/to-route"
  */
 toRoute.url = (options?: RouteQueryOptions) => {
     return toRoute.definition.url + queryParams(options)
@@ -89,7 +89,7 @@ toRoute.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectToRoute
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:123
- * @route "http://localhost:8000/features/navigation/redirects/to-route"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/to-route"
  */
 toRoute.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: toRoute.url(options),
@@ -101,7 +101,7 @@ toRoute.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectToRoute
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:123
- * @route "http://localhost:8000/features/navigation/redirects/to-route"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/to-route"
  */
 const toRouteForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: toRoute.url(options),
@@ -111,7 +111,7 @@ const toRouteForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> =
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectToRoute
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:123
- * @route "http://localhost:8000/features/navigation/redirects/to-route"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/to-route"
  */
 toRouteForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: toRoute.url(options),
@@ -124,7 +124,7 @@ toRoute.form = toRouteForm
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectExternal
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:130
- * @route "http://localhost:8000/features/navigation/redirects/external"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/external"
  */
 export const external = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: external.url(options),
@@ -133,13 +133,13 @@ export const external = (options?: RouteQueryOptions): RouteDefinition<"post"> =
 
 external.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/features/navigation/redirects/external",
+    url: "http://127.0.0.1:8000/features/navigation/redirects/external",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectExternal
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:130
- * @route "http://localhost:8000/features/navigation/redirects/external"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/external"
  */
 external.url = (options?: RouteQueryOptions) => {
     return external.definition.url + queryParams(options)
@@ -148,7 +148,7 @@ external.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectExternal
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:130
- * @route "http://localhost:8000/features/navigation/redirects/external"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/external"
  */
 external.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: external.url(options),
@@ -160,7 +160,7 @@ external.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectExternal
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:130
- * @route "http://localhost:8000/features/navigation/redirects/external"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/external"
  */
 const externalForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: external.url(options),
@@ -170,7 +170,7 @@ const externalForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> 
 /**
  * @see \App\Http\Controllers\Feature\NavigationController::redirectExternal
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php:130
- * @route "http://localhost:8000/features/navigation/redirects/external"
+ * @route "http://127.0.0.1:8000/features/navigation/redirects/external"
  */
 externalForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: external.url(options),

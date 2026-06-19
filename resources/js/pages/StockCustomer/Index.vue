@@ -13,6 +13,7 @@ import ApprovalActionMenu from '@/components/master-data/ApprovalActionMenu.vue'
 import TablePagination from '@/components/TablePagination.vue';
 import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { type BreadcrumbItem } from '@/types';
 import SCModal from './SCModal.vue';
 
 type Keep = {
@@ -49,6 +50,12 @@ const props = defineProps<{
         totalQuantity: number;
     };
 }>();
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Stock Operations' },
+    { title: 'Stock Movements' },
+    { title: 'Customer Keep Stock', href: '/stock-customer' },
+];
 
 const search = ref('');
 const detailKeep = ref<Keep | null>(null);
@@ -122,35 +129,24 @@ function updateStatus(keep: Keep, action: 'approve' | 'reject' | 'cancel') {
 <template>
     <Head title="Customer Keep Stock" />
 
-    <AppLayout>
-        <main class="w-full bg-slate-100 p-4 text-slate-800 md:p-8">
-            <header
-                class="mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center"
+    <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <Link
+                href="/stock-customer/create"
+                class="flex h-9 items-center rounded-lg bg-[#007882] px-4 text-xs font-bold text-white shadow-md transition hover:bg-[#006773]"
             >
-                <div>
-                    <h1
-                        class="text-2xl font-black tracking-tight text-[#2a4858]"
-                    >
-                        Customer Keep Stock
-                    </h1>
-                    <p class="text-sm font-medium text-slate-500">
-                        Customer-owned leftover items kept in restaurant
-                        locations
-                    </p>
-                </div>
-                <Link
-                    href="/stock-customer/create"
-                    class="flex items-center rounded-lg bg-[#007882] px-6 py-2.5 font-bold text-white shadow-lg transition hover:brightness-110"
-                >
-                    <Plus class="mr-2 h-4 w-4" />
-                    New Customer Stock
-                </Link>
-            </header>
+                <Plus class="mr-2 h-4 w-4" />
+                New Customer Stock
+            </Link>
+        </template>
 
+        <main
+            class="h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
                 <Link
                     href="/stock-customer/invoices"
-                    class="group rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#007882] hover:bg-teal-50"
+                    class="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#007882] hover:bg-teal-50"
                 >
                     <div class="flex items-start justify-between">
                         <span
@@ -170,7 +166,7 @@ function updateStatus(keep: Keep, action: 'approve' | 'reject' | 'cancel') {
                     </div>
                 </Link>
                 <div
-                    class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                    class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
                 >
                     <span
                         class="text-[10px] font-black tracking-widest text-slate-400 uppercase"
@@ -181,7 +177,7 @@ function updateStatus(keep: Keep, action: 'approve' | 'reject' | 'cancel') {
                     </div>
                 </div>
                 <div
-                    class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                    class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
                 >
                     <span
                         class="text-[10px] font-black tracking-widest text-slate-400 uppercase"
@@ -192,7 +188,7 @@ function updateStatus(keep: Keep, action: 'approve' | 'reject' | 'cancel') {
                     </div>
                 </div>
                 <div
-                    class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                    class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
                 >
                     <span
                         class="text-[10px] font-black tracking-widest text-slate-400 uppercase"
@@ -205,7 +201,7 @@ function updateStatus(keep: Keep, action: 'approve' | 'reject' | 'cancel') {
             </div>
 
             <div
-                class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+                class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"
             >
                 <div
                     class="flex flex-col gap-3 border-b border-slate-100 bg-slate-50/30 p-4 md:flex-row md:items-center md:justify-between"

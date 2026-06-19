@@ -69,6 +69,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Purchase order routes
     Route::get('/purchase', [PurchaseOrderController::class, 'index'])->name('purchase.index');
     Route::post('/purchase', [PurchaseOrderController::class, 'store'])->name('purchase.store');
+    Route::patch('/purchase/{purchaseOrder}', [PurchaseOrderController::class, 'update'])->name('purchase.update');
     Route::patch('/purchase/{purchaseOrder}/approve', [PurchaseOrderController::class, 'approve'])
         ->name('purchase.approve');
     Route::patch('/purchase/{purchaseOrder}/reject', [PurchaseOrderController::class, 'reject'])
@@ -80,6 +81,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/goods-receipts', [GoodsReceiptController::class, 'index'])->name('goods-receipts.index');
     Route::get('/goods-receipts/create', [GoodsReceiptController::class, 'create'])->name('goods-receipts.create');
     Route::post('/goods-receipts', [GoodsReceiptController::class, 'store'])->name('goods-receipts.store');
+    Route::patch('/goods-receipts/{goodsReceipt}', [GoodsReceiptController::class, 'update'])->name('goods-receipts.update');
     Route::patch('/goods-receipts/{goodsReceipt}/approve', [GoodsReceiptController::class, 'approve'])
         ->name('goods-receipts.approve');
     Route::patch('/goods-receipts/{goodsReceipt}/reject', [GoodsReceiptController::class, 'reject'])
@@ -203,6 +205,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/master-data/pos-terminals', [PosTerminalController::class, 'index'])->name('master-data.pos-terminals');
     Route::get('/master-data/seats', [DiningResourceController::class, 'index'])->name('master-data.seats');
     Route::get('/master-data/suppliers', [SupplierController::class, 'index'])->name('master-data.suppliers');
+    Route::post('/master-data/suppliers', [SupplierController::class, 'store'])->name('master-data.suppliers.store');
+    Route::patch('/master-data/suppliers/{supplier}/approve', [SupplierController::class, 'approve'])->name('master-data.suppliers.approve');
+    Route::patch('/master-data/suppliers/{supplier}/reject', [SupplierController::class, 'reject'])->name('master-data.suppliers.reject');
+    Route::patch('/master-data/suppliers/{supplier}/cancel', [SupplierController::class, 'cancel'])->name('master-data.suppliers.cancel');
     Route::get('/master-data/taxes', [TaxController::class, 'index'])->name('master-data.taxes');
     Route::get('/master-data/warehouse-locations', [WarehouseLocationController::class, 'index'])->name('master-data.warehouse-locations');
 

@@ -10,7 +10,7 @@ import writeOffFe7a514 from "./write-off";
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 export const internalTransfer = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: internalTransfer.url(options),
@@ -19,13 +19,13 @@ export const internalTransfer = (options?: RouteQueryOptions): RouteDefinition<"
 
 internalTransfer.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/stock-movements/internal-transfer",
+    url: "http://127.0.0.1:8000/stock-movements/internal-transfer",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 internalTransfer.url = (options?: RouteQueryOptions) => {
     return internalTransfer.definition.url + queryParams(options)
@@ -34,7 +34,7 @@ internalTransfer.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 internalTransfer.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: internalTransfer.url(options),
@@ -44,7 +44,7 @@ internalTransfer.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 internalTransfer.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: internalTransfer.url(options),
@@ -56,7 +56,7 @@ internalTransfer.head = (options?: RouteQueryOptions): RouteDefinition<"head"> =
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 const internalTransferForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: internalTransfer.url(options),
@@ -66,7 +66,7 @@ const internalTransferForm = (options?: RouteQueryOptions): RouteFormDefinition<
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 internalTransferForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: internalTransfer.url(options),
@@ -76,7 +76,7 @@ internalTransferForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"g
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 internalTransferForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: internalTransfer.url(formSafeOptions("head", options)),
@@ -89,7 +89,7 @@ internalTransfer.form = internalTransferForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:26
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 export const stockAdjustments = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: stockAdjustments.url(options),
@@ -98,13 +98,13 @@ export const stockAdjustments = (options?: RouteQueryOptions): RouteDefinition<"
 
 stockAdjustments.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/stock-movements/stock-adjustments",
+    url: "http://127.0.0.1:8000/stock-movements/stock-adjustments",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:26
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 stockAdjustments.url = (options?: RouteQueryOptions) => {
     return stockAdjustments.definition.url + queryParams(options)
@@ -113,7 +113,7 @@ stockAdjustments.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:26
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 stockAdjustments.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: stockAdjustments.url(options),
@@ -123,7 +123,7 @@ stockAdjustments.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => 
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:26
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 stockAdjustments.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: stockAdjustments.url(options),
@@ -135,7 +135,7 @@ stockAdjustments.head = (options?: RouteQueryOptions): RouteDefinition<"head"> =
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:26
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 const stockAdjustmentsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: stockAdjustments.url(options),
@@ -145,7 +145,7 @@ const stockAdjustmentsForm = (options?: RouteQueryOptions): RouteFormDefinition<
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:26
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 stockAdjustmentsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: stockAdjustments.url(options),
@@ -155,7 +155,7 @@ stockAdjustmentsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"g
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:26
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 stockAdjustmentsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: stockAdjustments.url(formSafeOptions("head", options)),
@@ -167,8 +167,8 @@ stockAdjustmentsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"
 stockAdjustments.form = stockAdjustmentsForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 export const stockSettlements = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: stockSettlements.url(options),
@@ -177,13 +177,13 @@ export const stockSettlements = (options?: RouteQueryOptions): RouteDefinition<"
 
 stockSettlements.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/stock-movements/stock-settlements",
+    url: "http://127.0.0.1:8000/stock-movements/stock-settlements",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 stockSettlements.url = (options?: RouteQueryOptions) => {
     return stockSettlements.definition.url + queryParams(options)
@@ -191,8 +191,8 @@ stockSettlements.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 stockSettlements.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: stockSettlements.url(options),
@@ -201,8 +201,8 @@ stockSettlements.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => 
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 stockSettlements.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: stockSettlements.url(options),
@@ -213,8 +213,8 @@ stockSettlements.head = (options?: RouteQueryOptions): RouteDefinition<"head"> =
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 const stockSettlementsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: stockSettlements.url(options),
@@ -223,8 +223,8 @@ const stockSettlementsForm = (options?: RouteQueryOptions): RouteFormDefinition<
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 stockSettlementsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: stockSettlements.url(options),
@@ -233,8 +233,8 @@ stockSettlementsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"g
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockSettlementController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:24
- * @route "http://localhost:8000/stock-movements/stock-settlements"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php:23
+ * @route "http://127.0.0.1:8000/stock-movements/stock-settlements"
  */
 stockSettlementsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: stockSettlements.url(formSafeOptions("head", options)),
@@ -247,7 +247,7 @@ stockSettlements.form = stockSettlementsForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:25
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 export const writeOff = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: writeOff.url(options),
@@ -256,13 +256,13 @@ export const writeOff = (options?: RouteQueryOptions): RouteDefinition<"get"> =>
 
 writeOff.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/stock-movements/write-off",
+    url: "http://127.0.0.1:8000/stock-movements/write-off",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:25
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 writeOff.url = (options?: RouteQueryOptions) => {
     return writeOff.definition.url + queryParams(options)
@@ -271,7 +271,7 @@ writeOff.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:25
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 writeOff.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: writeOff.url(options),
@@ -281,7 +281,7 @@ writeOff.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:25
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 writeOff.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: writeOff.url(options),
@@ -293,7 +293,7 @@ writeOff.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:25
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 const writeOffForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: writeOff.url(options),
@@ -303,7 +303,7 @@ const writeOffForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:25
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 writeOffForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: writeOff.url(options),
@@ -313,7 +313,7 @@ writeOffForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:25
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 writeOffForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: writeOff.url(formSafeOptions("head", options)),

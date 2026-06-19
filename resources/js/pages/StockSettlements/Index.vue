@@ -243,6 +243,30 @@ function viewSettlement(row: Settlement) {
     <Head title="Sale Stock Settlements" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <div class="flex flex-wrap justify-end gap-2">
+                <Button
+                    type="button"
+                    variant="outline"
+                    class="h-9 rounded-lg border-rose-200 bg-white px-4 text-xs font-bold text-rose-600 hover:bg-rose-50"
+                    :disabled="!canBulkAct"
+                    @click="openConfirm('reject', selected)"
+                >
+                    <XCircle class="size-4" />
+                    Reject Selected
+                </Button>
+                <Button
+                    type="button"
+                    class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white shadow-md hover:bg-[#006773]"
+                    :disabled="!canBulkAct"
+                    @click="openConfirm('approve', selected)"
+                >
+                    <CheckCircle2 class="size-4" />
+                    Approve Selected
+                </Button>
+            </div>
+        </template>
+
         <main
             class="h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
@@ -353,28 +377,6 @@ function viewSettlement(row: Settlement) {
                             @click="resetFilters"
                         >
                             <RotateCcw class="size-4" />
-                        </Button>
-                    </div>
-
-                    <div class="flex flex-wrap gap-2">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            class="h-11 rounded-lg border-rose-200 bg-white px-5 font-bold text-rose-600 hover:bg-rose-50"
-                            :disabled="!canBulkAct"
-                            @click="openConfirm('reject', selected)"
-                        >
-                            <XCircle class="size-4" />
-                            Reject Selected
-                        </Button>
-                        <Button
-                            type="button"
-                            class="h-11 rounded-lg bg-[#007882] px-5 font-bold text-white shadow-md hover:bg-[#006773]"
-                            :disabled="!canBulkAct"
-                            @click="openConfirm('approve', selected)"
-                        >
-                            <CheckCircle2 class="size-4" />
-                            Approve Selected
                         </Button>
                     </div>
                 </div>

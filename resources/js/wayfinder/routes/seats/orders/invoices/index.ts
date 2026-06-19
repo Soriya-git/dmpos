@@ -5,8 +5,8 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 export const preview = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: preview.url(args, options),
@@ -15,13 +15,13 @@ export const preview = (args: { diningSession: number | { id: number }, invoice:
 
 preview.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 preview.url = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -49,8 +49,8 @@ preview.url = (args: { diningSession: number | { id: number }, invoice: number |
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 preview.get = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: preview.url(args, options),
@@ -59,8 +59,8 @@ preview.get = (args: { diningSession: number | { id: number }, invoice: number |
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 preview.head = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: preview.url(args, options),
@@ -71,8 +71,8 @@ preview.head = (args: { diningSession: number | { id: number }, invoice: number 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 const previewForm = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: preview.url(args, options),
@@ -81,8 +81,8 @@ const previewForm = (args: { diningSession: number | { id: number }, invoice: nu
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 previewForm.get = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: preview.url(args, options),
@@ -91,8 +91,8 @@ previewForm.get = (args: { diningSession: number | { id: number }, invoice: numb
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:566
- * @route "http://localhost:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:572
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/invoices/{invoice}/print/{documentType}"
  */
 previewForm.head = (args: { diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number } | [ diningSession: number | { id: number }, invoice: number | { id: number }, documentType: string | number ], options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: preview.url(args, formSafeOptions("head", options)),

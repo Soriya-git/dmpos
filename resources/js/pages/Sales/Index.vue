@@ -32,6 +32,7 @@ import { usePosFormatting } from '@/composables/usePosFormatting';
 import AppLayout from '@/layouts/AppLayout.vue';
 import Payment from '@/pages/Seats/Payment.vue';
 import InvoiceView from '@/pages/Sales/view.vue';
+import { type BreadcrumbItem } from '@/types';
 
 type InvoiceStatus =
     | 'draft'
@@ -153,6 +154,11 @@ const props = defineProps<{
         search?: string | null;
     };
 }>();
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Sales', href: '/sales' },
+    { title: 'Invoice Management' },
+];
 
 const startDate = ref(props.filters.start_date ?? '');
 const endDate = ref(props.filters.end_date ?? '');
@@ -395,140 +401,68 @@ function statusLabel(status: InvoiceStatus) {
 <template>
     <Head title="Sales" />
 
-    <AppLayout>
-        <main class="min-h-screen bg-[#f8fafc] p-4 md:p-8">
-            <div class="mx-auto max-w-7xl">
-                <header
-                    class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center"
+    <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <div class="flex gap-2">
+                <Button
+                    type="button"
+                    variant="outline"
+                    class="h-9 rounded-lg border-2 border-gray-200 bg-white px-4 text-xs font-bold text-[#2A4858] hover:bg-gray-50"
+                    @click="goBack"
                 >
+                    <ArrowLeft class="size-4" />
+                    Back
+                </Button>
+                <Button
+                    type="button"
+                    class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white shadow-md hover:bg-[#006773]"
+                    @click="resetFilters"
+                >
+                    <RotateCcw class="size-4" />
+                    Reset
+                </Button>
+            </div>
+        </template>
+
+        <main class="min-h-screen bg-[#f8fafc] p-4 md:p-8">
+            <div class="w-full">
+                <!-- <header class="mb-8">
                     <div>
-                        <h1 class="text-3xl font-black text-[#2A4858]">
-                            Invoice Management
-                        </h1>
-                        <p class="text-sm font-medium text-gray-500">
-                            Filter activity by date range and terminal
-                        </p>
                         <p
                             v-if="posSession"
-                            class="mt-2 text-xs font-bold text-[#007882]"
+                            class="text-xs font-bold text-[#007882]"
                         >
                             Session: {{ posSession.session_no }}
                         </p>
                     </div>
+                </header> -->
 
-                    <div class="flex gap-3">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            class="h-11 rounded-xl border-2 border-gray-200 bg-white px-5 text-sm font-bold text-[#2A4858] hover:bg-gray-50"
-                            @click="goBack"
-                        >
-                            <ArrowLeft class="h-4 w-4" />
-                            Back
-                        </Button>
-                        <Button
-                            type="button"
-                            class="h-11 rounded-xl bg-[#007882] px-5 text-sm font-bold text-white shadow-lg shadow-[#007882]/20 hover:bg-[#006773]"
-                            @click="resetFilters"
-                        >
-                            <RotateCcw class="h-4 w-4" />
-                            Reset
-                        </Button>
-                    </div>
-                </header>
-
-                <section
-                    class="mb-4 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm"
-                >
-                    <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
-                        <div>
-                            <label
-                                class="mb-1 ml-1 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                            >
-                                Start Date
-                            </label>
-                            <div class="relative">
-                                <Calendar
-                                    class="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-gray-400"
-                                />
-                                <Input
-                                    v-model="startDate"
-                                    type="date"
-                                    class="h-10 rounded-xl border-none bg-gray-50 pr-4 pl-11 text-sm font-semibold text-[#2A4858] focus-visible:ring-[#23AA8F]/40"
-                                    @change="applyFilters"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label
-                                class="mb-1 ml-1 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                            >
-                                End Date
-                            </label>
-                            <div class="relative">
-                                <Calendar
-                                    class="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-gray-400"
-                                />
-                                <Input
-                                    v-model="endDate"
-                                    type="date"
-                                    class="h-10 rounded-xl border-none bg-gray-50 pr-4 pl-11 text-sm font-semibold text-[#2A4858] focus-visible:ring-[#23AA8F]/40"
-                                    @change="applyFilters"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label
-                                class="mb-1 ml-1 block text-[10px] font-black tracking-widest text-gray-400 uppercase"
-                            >
-                                Keywords
-                            </label>
-                            <div class="relative">
-                                <Search
-                                    class="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-gray-400"
-                                />
-                                <Input
-                                    v-model="search"
-                                    type="text"
-                                    placeholder="Search #INV, phone, seat..."
-                                    class="h-10 rounded-xl border-none bg-gray-50 pr-4 pl-11 text-sm focus-visible:ring-[#23AA8F]/40"
-                                    @keyup.enter="applyFilters"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="mb-6 grid gap-4 lg:grid-cols-[1.35fr_1fr]">
+                <section class="mb-4 grid gap-3 lg:grid-cols-[1.35fr_1fr]">
                     <div
-                        class="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"
+                        class="rounded-xl border border-gray-100 bg-white p-3 shadow-sm"
                     >
-                        <div class="mb-3 flex items-center justify-between">
-                            <h2
-                                class="text-xs font-black tracking-wide text-[#2A4858] uppercase"
+                        <div class="mb-2 flex items-center justify-between">
+                            <p
+                                class="text-[10px] font-black tracking-wide text-[#2A4858] uppercase"
                             >
                                 Amount by Payment Term
-                            </h2>
+                            </p>
                             <span class="text-xs font-semibold text-gray-400">
                                 Sales {{ money(paymentSummary.sales_usd) }}
                             </span>
                         </div>
 
-                        <div class="grid gap-3 md:grid-cols-3">
-                            <div class="rounded-xl bg-gray-50 p-3">
+                        <div class="grid gap-2 md:grid-cols-3">
+                            <div class="rounded-lg bg-gray-50 px-3 py-2">
                                 <p
                                     class="text-[10px] font-black text-gray-400 uppercase"
                                 >
                                     Cash
                                 </p>
-                                <p
-                                    class="mt-1 text-sm font-black text-[#2A4858]"
-                                >
+                                <p class="text-sm font-black text-[#2A4858]">
                                     {{ money(paymentSummary.cash_usd) }}
                                 </p>
-                                <p class="text-xs font-bold text-gray-500">
+                                <p class="text-[11px] font-bold text-gray-500">
                                     ៛{{
                                         money(paymentSummary.cash_khr).replace(
                                             '$',
@@ -538,18 +472,16 @@ function statusLabel(status: InvoiceStatus) {
                                 </p>
                             </div>
 
-                            <div class="rounded-xl bg-gray-50 p-3">
+                            <div class="rounded-lg bg-gray-50 px-3 py-2">
                                 <p
                                     class="text-[10px] font-black text-gray-400 uppercase"
                                 >
                                     E-Banking
                                 </p>
-                                <p
-                                    class="mt-1 text-sm font-black text-[#2A4858]"
-                                >
+                                <p class="text-sm font-black text-[#2A4858]">
                                     {{ money(paymentSummary.ebanking_usd) }}
                                 </p>
-                                <p class="text-xs font-bold text-gray-500">
+                                <p class="text-[11px] font-bold text-gray-500">
                                     ៛{{
                                         money(
                                             paymentSummary.ebanking_khr,
@@ -558,18 +490,16 @@ function statusLabel(status: InvoiceStatus) {
                                 </p>
                             </div>
 
-                            <div class="rounded-xl bg-gray-50 p-3">
+                            <div class="rounded-lg bg-gray-50 px-3 py-2">
                                 <p
                                     class="text-[10px] font-black text-gray-400 uppercase"
                                 >
                                     Pay Later
                                 </p>
-                                <p
-                                    class="mt-1 text-sm font-black text-[#2A4858]"
-                                >
+                                <p class="text-sm font-black text-[#2A4858]">
                                     {{ money(paymentSummary.pay_later_usd) }}
                                 </p>
-                                <p class="text-xs font-bold text-gray-500">
+                                <p class="text-[11px] font-bold text-gray-500">
                                     ៛{{
                                         money(
                                             paymentSummary.pay_later_khr,
@@ -578,27 +508,15 @@ function statusLabel(status: InvoiceStatus) {
                                 </p>
                             </div>
                         </div>
-                    </div>
 
-                    <div
-                        class="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-4 shadow-sm"
-                    >
-                        <h2
-                            class="mb-3 text-xs font-black tracking-wide text-[#2A4858] uppercase"
-                        >
-                            Expected Cash in Drawer
-                        </h2>
-
-                        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                            <div class="rounded-xl bg-white p-3">
+                        <div class="mt-2 grid gap-2 sm:grid-cols-2">
+                            <div class="rounded-lg bg-emerald-50/70 px-3 py-2">
                                 <p
                                     class="text-[10px] font-black text-gray-400 uppercase"
                                 >
-                                    USD Drawer
+                                    Expected USD Drawer
                                 </p>
-                                <p
-                                    class="mt-1 text-lg font-black text-[#007882]"
-                                >
+                                <p class="text-base font-black text-[#007882]">
                                     {{
                                         money(paymentSummary.expected_cash_usd)
                                     }}
@@ -612,15 +530,13 @@ function statusLabel(status: InvoiceStatus) {
                                 </p>
                             </div>
 
-                            <div class="rounded-xl bg-white p-3">
+                            <div class="rounded-lg bg-emerald-50/70 px-3 py-2">
                                 <p
                                     class="text-[10px] font-black text-gray-400 uppercase"
                                 >
-                                    KHR Drawer
+                                    Expected KHR Drawer
                                 </p>
-                                <p
-                                    class="mt-1 text-lg font-black text-[#007882]"
-                                >
+                                <p class="text-base font-black text-[#007882]">
                                     ៛{{
                                         money(
                                             paymentSummary.expected_cash_khr,
@@ -640,6 +556,76 @@ function statusLabel(status: InvoiceStatus) {
                                         )
                                     }}
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="rounded-xl border border-emerald-100 bg-emerald-50/60 p-2.5 shadow-sm"
+                    >
+                        <h2
+                            class="mb-1.5 text-[10px] font-black tracking-wide text-[#2A4858] uppercase"
+                        >
+                            Filters
+                        </h2>
+
+                        <div class="grid gap-1.5">
+                            <div>
+                                <label
+                                    class="mb-0.5 ml-1 block text-[9px] font-black tracking-widest text-gray-400 uppercase"
+                                >
+                                    Keywords
+                                </label>
+                                <div class="relative">
+                                    <Search
+                                        class="absolute top-1/2 left-2.5 h-3 w-3 -translate-y-1/2 text-gray-400"
+                                    />
+                                    <Input
+                                        v-model="search"
+                                        type="text"
+                                        placeholder="Search #INV, phone, seat..."
+                                        class="h-8 rounded-lg border-none bg-white pr-2.5 pl-8 text-xs focus-visible:ring-[#23AA8F]/40"
+                                        @keyup.enter="applyFilters"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label
+                                    class="mb-0.5 ml-1 block text-[9px] font-black tracking-widest text-gray-400 uppercase"
+                                >
+                                    Start Date
+                                </label>
+                                <div class="relative">
+                                    <Calendar
+                                        class="absolute top-1/2 left-2.5 h-3 w-3 -translate-y-1/2 text-gray-400"
+                                    />
+                                    <Input
+                                        v-model="startDate"
+                                        type="date"
+                                        class="h-8 rounded-lg border-none bg-white pr-2.5 pl-8 text-xs font-semibold text-[#2A4858] focus-visible:ring-[#23AA8F]/40"
+                                        @change="applyFilters"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label
+                                    class="mb-0.5 ml-1 block text-[9px] font-black tracking-widest text-gray-400 uppercase"
+                                >
+                                    End Date
+                                </label>
+                                <div class="relative">
+                                    <Calendar
+                                        class="absolute top-1/2 left-2.5 h-3 w-3 -translate-y-1/2 text-gray-400"
+                                    />
+                                    <Input
+                                        v-model="endDate"
+                                        type="date"
+                                        class="h-8 rounded-lg border-none bg-white pr-2.5 pl-8 text-xs font-semibold text-[#2A4858] focus-visible:ring-[#23AA8F]/40"
+                                        @change="applyFilters"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

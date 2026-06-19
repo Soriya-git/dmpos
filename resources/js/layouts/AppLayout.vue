@@ -16,6 +16,9 @@ withDefaults(
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template v-if="$slots.actions" #actions>
+            <slot name="actions" />
+        </template>
         <div
             v-if="subtitle"
             data-test="layout-subtitle"

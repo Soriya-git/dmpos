@@ -6,7 +6,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/stock-movements/internal-transfer",
+    url: "http://127.0.0.1:8000/stock-movements/internal-transfer",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,7 +40,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,7 +52,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,7 +62,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,7 +72,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:28
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ index.form = indexForm
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:33
- * @route "http://localhost:8000/stock-movements/internal-transfer/create"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/create"
  */
 export const create = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: create.url(options),
@@ -94,13 +94,13 @@ export const create = (options?: RouteQueryOptions): RouteDefinition<"get"> => (
 
 create.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/stock-movements/internal-transfer/create",
+    url: "http://127.0.0.1:8000/stock-movements/internal-transfer/create",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:33
- * @route "http://localhost:8000/stock-movements/internal-transfer/create"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/create"
  */
 create.url = (options?: RouteQueryOptions) => {
     return create.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ create.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:33
- * @route "http://localhost:8000/stock-movements/internal-transfer/create"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/create"
  */
 create.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: create.url(options),
@@ -119,7 +119,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:33
- * @route "http://localhost:8000/stock-movements/internal-transfer/create"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/create"
  */
 create.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: create.url(options),
@@ -131,7 +131,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:33
- * @route "http://localhost:8000/stock-movements/internal-transfer/create"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/create"
  */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(options),
@@ -141,7 +141,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:33
- * @route "http://localhost:8000/stock-movements/internal-transfer/create"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/create"
  */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(options),
@@ -151,7 +151,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:33
- * @route "http://localhost:8000/stock-movements/internal-transfer/create"
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/create"
  */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(formSafeOptions("head", options)),
@@ -163,8 +163,8 @@ createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 create.form = createForm
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:173
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:175
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -173,13 +173,13 @@ export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => (
 
 store.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/stock-movements/internal-transfer",
+    url: "http://127.0.0.1:8000/stock-movements/internal-transfer",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:173
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:175
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options)
@@ -187,8 +187,8 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:173
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:175
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -199,8 +199,8 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:173
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:175
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -209,8 +209,8 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => 
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:173
- * @route "http://localhost:8000/stock-movements/internal-transfer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:175
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer"
  */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -222,8 +222,8 @@ storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => (
 store.form = storeForm
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:295
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:297
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/approve"
  */
 export const approve = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: approve.url(args, options),
@@ -232,13 +232,13 @@ export const approve = (args: { stockTransfer: number | { id: number } } | [ sto
 
 approve.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/approve",
+    url: "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/approve",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:295
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:297
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/approve"
  */
 approve.url = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -268,8 +268,8 @@ approve.url = (args: { stockTransfer: number | { id: number } } | [ stockTransfe
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:295
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:297
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/approve"
  */
 approve.patch = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: approve.url(args, options),
@@ -280,8 +280,8 @@ approve.patch = (args: { stockTransfer: number | { id: number } } | [ stockTrans
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:295
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:297
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/approve"
  */
 const approveForm = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(args, formSafeOptions("patch", options)),
@@ -290,8 +290,8 @@ const approveForm = (args: { stockTransfer: number | { id: number } } | [ stockT
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:295
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:297
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/approve"
  */
 approveForm.patch = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(args, formSafeOptions("patch", options)),
@@ -303,8 +303,8 @@ approveForm.patch = (args: { stockTransfer: number | { id: number } } | [ stockT
 approve.form = approveForm
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:438
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:440
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/reject"
  */
 export const reject = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: reject.url(args, options),
@@ -313,13 +313,13 @@ export const reject = (args: { stockTransfer: number | { id: number } } | [ stoc
 
 reject.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/reject",
+    url: "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/reject",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:438
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:440
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/reject"
  */
 reject.url = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -349,8 +349,8 @@ reject.url = (args: { stockTransfer: number | { id: number } } | [ stockTransfer
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:438
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:440
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/reject"
  */
 reject.patch = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: reject.url(args, options),
@@ -361,8 +361,8 @@ reject.patch = (args: { stockTransfer: number | { id: number } } | [ stockTransf
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:438
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:440
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/reject"
  */
 const rejectForm = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(args, formSafeOptions("patch", options)),
@@ -371,8 +371,8 @@ const rejectForm = (args: { stockTransfer: number | { id: number } } | [ stockTr
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:438
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:440
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/reject"
  */
 rejectForm.patch = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(args, formSafeOptions("patch", options)),
@@ -384,8 +384,8 @@ rejectForm.patch = (args: { stockTransfer: number | { id: number } } | [ stockTr
 reject.form = rejectForm
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::cancel
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:450
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:454
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/cancel"
  */
 export const cancel = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -394,13 +394,13 @@ export const cancel = (args: { stockTransfer: number | { id: number } } | [ stoc
 
 cancel.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/cancel",
+    url: "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/cancel",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::cancel
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:450
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:454
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/cancel"
  */
 cancel.url = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -430,8 +430,8 @@ cancel.url = (args: { stockTransfer: number | { id: number } } | [ stockTransfer
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::cancel
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:450
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:454
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/cancel"
  */
 cancel.patch = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -442,8 +442,8 @@ cancel.patch = (args: { stockTransfer: number | { id: number } } | [ stockTransf
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::cancel
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:450
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:454
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/cancel"
  */
 const cancelForm = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),
@@ -452,8 +452,8 @@ const cancelForm = (args: { stockTransfer: number | { id: number } } | [ stockTr
 
 /**
  * @see \App\Http\Controllers\StockMovements\InternalTransferController::cancel
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:450
- * @route "http://localhost:8000/stock-movements/internal-transfer/{stockTransfer}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php:454
+ * @route "http://127.0.0.1:8000/stock-movements/internal-transfer/{stockTransfer}/cancel"
  */
 cancelForm.patch = (args: { stockTransfer: number | { id: number } } | [ stockTransfer: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),

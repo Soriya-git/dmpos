@@ -6,7 +6,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:31
- * @route "http://localhost:8000/stock-movements/stock-adjustments/create"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/create"
  */
 export const create = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: create.url(options),
@@ -15,13 +15,13 @@ export const create = (options?: RouteQueryOptions): RouteDefinition<"get"> => (
 
 create.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/stock-movements/stock-adjustments/create",
+    url: "http://127.0.0.1:8000/stock-movements/stock-adjustments/create",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:31
- * @route "http://localhost:8000/stock-movements/stock-adjustments/create"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/create"
  */
 create.url = (options?: RouteQueryOptions) => {
     return create.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ create.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:31
- * @route "http://localhost:8000/stock-movements/stock-adjustments/create"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/create"
  */
 create.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: create.url(options),
@@ -40,7 +40,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:31
- * @route "http://localhost:8000/stock-movements/stock-adjustments/create"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/create"
  */
 create.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: create.url(options),
@@ -52,7 +52,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:31
- * @route "http://localhost:8000/stock-movements/stock-adjustments/create"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/create"
  */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(options),
@@ -62,7 +62,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => 
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:31
- * @route "http://localhost:8000/stock-movements/stock-adjustments/create"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/create"
  */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(options),
@@ -72,7 +72,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:31
- * @route "http://localhost:8000/stock-movements/stock-adjustments/create"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/create"
  */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ create.form = createForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:36
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -94,13 +94,13 @@ export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => (
 
 store.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/stock-movements/stock-adjustments",
+    url: "http://127.0.0.1:8000/stock-movements/stock-adjustments",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:36
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ store.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:36
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -121,7 +121,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:36
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -131,7 +131,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => 
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:36
- * @route "http://localhost:8000/stock-movements/stock-adjustments"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments"
  */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -144,7 +144,7 @@ store.form = storeForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:73
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve"
  */
 export const approve = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: approve.url(args, options),
@@ -153,13 +153,13 @@ export const approve = (args: { stockAdjustment: number | { id: number } } | [ s
 
 approve.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve",
+    url: "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:73
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve"
  */
 approve.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -190,7 +190,7 @@ approve.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjus
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:73
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve"
  */
 approve.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: approve.url(args, options),
@@ -202,7 +202,7 @@ approve.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdj
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:73
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve"
  */
 const approveForm = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(args, formSafeOptions("patch", options)),
@@ -212,7 +212,7 @@ const approveForm = (args: { stockAdjustment: number | { id: number } } | [ stoc
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:73
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/approve"
  */
 approveForm.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(args, formSafeOptions("patch", options)),
@@ -225,7 +225,7 @@ approve.form = approveForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:106
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject"
  */
 export const reject = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: reject.url(args, options),
@@ -234,13 +234,13 @@ export const reject = (args: { stockAdjustment: number | { id: number } } | [ st
 
 reject.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject",
+    url: "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:106
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject"
  */
 reject.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -271,7 +271,7 @@ reject.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjust
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:106
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject"
  */
 reject.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: reject.url(args, options),
@@ -283,7 +283,7 @@ reject.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdju
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:106
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject"
  */
 const rejectForm = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(args, formSafeOptions("patch", options)),
@@ -293,7 +293,7 @@ const rejectForm = (args: { stockAdjustment: number | { id: number } } | [ stock
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:106
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/reject"
  */
 rejectForm.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(args, formSafeOptions("patch", options)),
@@ -306,7 +306,7 @@ reject.form = rejectForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:120
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel"
  */
 export const cancel = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -315,13 +315,13 @@ export const cancel = (args: { stockAdjustment: number | { id: number } } | [ st
 
 cancel.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel",
+    url: "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:120
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel"
  */
 cancel.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -352,7 +352,7 @@ cancel.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjust
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:120
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel"
  */
 cancel.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -364,7 +364,7 @@ cancel.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdju
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:120
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel"
  */
 const cancelForm = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),
@@ -374,7 +374,7 @@ const cancelForm = (args: { stockAdjustment: number | { id: number } } | [ stock
 /**
  * @see \App\Http\Controllers\StockMovements\StockAdjustmentController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php:120
- * @route "http://localhost:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel"
+ * @route "http://127.0.0.1:8000/stock-movements/stock-adjustments/{stockAdjustment}/cancel"
  */
 cancelForm.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),

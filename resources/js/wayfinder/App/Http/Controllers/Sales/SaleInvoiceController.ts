@@ -5,8 +5,8 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/sales",
+    url: "http://127.0.0.1:8000/sales",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -29,8 +29,8 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -39,8 +39,8 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -51,8 +51,8 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -61,8 +61,8 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -71,8 +71,8 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -84,8 +84,8 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 index.form = indexForm
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::receive
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:84
- * @route "http://localhost:8000/sales/invoices/{invoice}/receive"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:93
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/receive"
  */
 export const receive = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: receive.url(args, options),
@@ -94,13 +94,13 @@ export const receive = (args: { invoice: number | { id: number } } | [ invoice: 
 
 receive.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/sales/invoices/{invoice}/receive",
+    url: "http://127.0.0.1:8000/sales/invoices/{invoice}/receive",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::receive
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:84
- * @route "http://localhost:8000/sales/invoices/{invoice}/receive"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:93
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/receive"
  */
 receive.url = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -130,8 +130,8 @@ receive.url = (args: { invoice: number | { id: number } } | [ invoice: number | 
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::receive
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:84
- * @route "http://localhost:8000/sales/invoices/{invoice}/receive"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:93
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/receive"
  */
 receive.post = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: receive.url(args, options),
@@ -142,8 +142,8 @@ receive.post = (args: { invoice: number | { id: number } } | [ invoice: number |
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::receive
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:84
- * @route "http://localhost:8000/sales/invoices/{invoice}/receive"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:93
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/receive"
  */
 const receiveForm = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: receive.url(args, options),
@@ -152,8 +152,8 @@ const receiveForm = (args: { invoice: number | { id: number } } | [ invoice: num
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::receive
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:84
- * @route "http://localhost:8000/sales/invoices/{invoice}/receive"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:93
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/receive"
  */
 receiveForm.post = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: receive.url(args, options),
@@ -163,10 +163,256 @@ receiveForm.post = (args: { invoice: number | { id: number } } | [ invoice: numb
 
 
 receive.form = receiveForm
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancel
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:233
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/cancel"
+ */
+export const cancel = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
+    url: cancel.url(args, options),
+    method: "patch",
+})
+
+cancel.definition = {
+    methods: ["patch"],
+    url: "http://127.0.0.1:8000/sales/invoices/{invoice}/cancel",
+} satisfies RouteDefinition<["patch"]>
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancel
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:233
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/cancel"
+ */
+cancel.url = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+    if (typeof args === "string" || typeof args === "number") {
+    args = { invoice: args }
+}
+    
+    if (typeof args === "object" && !Array.isArray(args) && "id" in args) {
+    args = { invoice: args.id }
+}
+    
+    if (Array.isArray(args)) {
+    args = {
+        invoice: args[0],
+    }
+}
+    
+    args = applyUrlDefaults(args)
+    
+    const parsedArgs = {
+        invoice: typeof args.invoice === "object" ? args.invoice.id : args.invoice,
+    }
+    
+    return cancel.definition.url
+        .replace("{invoice}", parsedArgs.invoice.toString())
+        .replace(/\/+$/, "") + queryParams(options)
+}
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancel
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:233
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/cancel"
+ */
+cancel.patch = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
+    url: cancel.url(args, options),
+    method: "patch",
+})
+
+
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancel
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:233
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/cancel"
+ */
+const cancelForm = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
+    action: cancel.url(args, formSafeOptions("patch", options)),
+    method: "post",
+})
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancel
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:233
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/cancel"
+ */
+cancelForm.patch = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
+    action: cancel.url(args, formSafeOptions("patch", options)),
+    method: "post",
+})
+
+
+
+cancel.form = cancelForm
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancelInvoicePayments
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:333
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/receipts/cancel"
+ */
+export const cancelInvoicePayments = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
+    url: cancelInvoicePayments.url(args, options),
+    method: "patch",
+})
+
+cancelInvoicePayments.definition = {
+    methods: ["patch"],
+    url: "http://127.0.0.1:8000/sales/invoices/{invoice}/receipts/cancel",
+} satisfies RouteDefinition<["patch"]>
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancelInvoicePayments
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:333
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/receipts/cancel"
+ */
+cancelInvoicePayments.url = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+    if (typeof args === "string" || typeof args === "number") {
+    args = { invoice: args }
+}
+    
+    if (typeof args === "object" && !Array.isArray(args) && "id" in args) {
+    args = { invoice: args.id }
+}
+    
+    if (Array.isArray(args)) {
+    args = {
+        invoice: args[0],
+    }
+}
+    
+    args = applyUrlDefaults(args)
+    
+    const parsedArgs = {
+        invoice: typeof args.invoice === "object" ? args.invoice.id : args.invoice,
+    }
+    
+    return cancelInvoicePayments.definition.url
+        .replace("{invoice}", parsedArgs.invoice.toString())
+        .replace(/\/+$/, "") + queryParams(options)
+}
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancelInvoicePayments
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:333
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/receipts/cancel"
+ */
+cancelInvoicePayments.patch = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
+    url: cancelInvoicePayments.url(args, options),
+    method: "patch",
+})
+
+
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancelInvoicePayments
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:333
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/receipts/cancel"
+ */
+const cancelInvoicePaymentsForm = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
+    action: cancelInvoicePayments.url(args, formSafeOptions("patch", options)),
+    method: "post",
+})
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancelInvoicePayments
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:333
+ * @route "http://127.0.0.1:8000/sales/invoices/{invoice}/receipts/cancel"
+ */
+cancelInvoicePaymentsForm.patch = (args: { invoice: number | { id: number } } | [ invoice: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
+    action: cancelInvoicePayments.url(args, formSafeOptions("patch", options)),
+    method: "post",
+})
+
+
+
+cancelInvoicePayments.form = cancelInvoicePaymentsForm
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancelPayment
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:291
+ * @route "http://127.0.0.1:8000/sales/payments/{payment}/cancel"
+ */
+export const cancelPayment = (args: { payment: number | { id: number } } | [ payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
+    url: cancelPayment.url(args, options),
+    method: "patch",
+})
+
+cancelPayment.definition = {
+    methods: ["patch"],
+    url: "http://127.0.0.1:8000/sales/payments/{payment}/cancel",
+} satisfies RouteDefinition<["patch"]>
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancelPayment
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:291
+ * @route "http://127.0.0.1:8000/sales/payments/{payment}/cancel"
+ */
+cancelPayment.url = (args: { payment: number | { id: number } } | [ payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+    if (typeof args === "string" || typeof args === "number") {
+    args = { payment: args }
+}
+    
+    if (typeof args === "object" && !Array.isArray(args) && "id" in args) {
+    args = { payment: args.id }
+}
+    
+    if (Array.isArray(args)) {
+    args = {
+        payment: args[0],
+    }
+}
+    
+    args = applyUrlDefaults(args)
+    
+    const parsedArgs = {
+        payment: typeof args.payment === "object" ? args.payment.id : args.payment,
+    }
+    
+    return cancelPayment.definition.url
+        .replace("{payment}", parsedArgs.payment.toString())
+        .replace(/\/+$/, "") + queryParams(options)
+}
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancelPayment
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:291
+ * @route "http://127.0.0.1:8000/sales/payments/{payment}/cancel"
+ */
+cancelPayment.patch = (args: { payment: number | { id: number } } | [ payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
+    url: cancelPayment.url(args, options),
+    method: "patch",
+})
+
+
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancelPayment
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:291
+ * @route "http://127.0.0.1:8000/sales/payments/{payment}/cancel"
+ */
+const cancelPaymentForm = (args: { payment: number | { id: number } } | [ payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
+    action: cancelPayment.url(args, formSafeOptions("patch", options)),
+    method: "post",
+})
+
+/**
+ * @see \App\Http\Controllers\Sales\SaleInvoiceController::cancelPayment
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:291
+ * @route "http://127.0.0.1:8000/sales/payments/{payment}/cancel"
+ */
+cancelPaymentForm.patch = (args: { payment: number | { id: number } } | [ payment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
+    action: cancelPayment.url(args, formSafeOptions("patch", options)),
+    method: "post",
+})
+
+
+
+cancelPayment.form = cancelPaymentForm
 
 const SaleInvoiceController = {
     index,
     receive,
+    cancel,
+    cancelInvoicePayments,
+    cancelPayment,
 }
 
 export default SaleInvoiceController

@@ -171,7 +171,9 @@ function setSessionStatus(record: SessionRecord, status: ApprovalStatus) {
     <Head title="POS Terminals" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
+        <div
+            class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <div
                 class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
             >
@@ -472,7 +474,7 @@ function setSessionStatus(record: SessionRecord, status: ApprovalStatus) {
                 </SheetHeader>
 
                 <div class="flex-1 space-y-4 overflow-y-auto p-6">
-                    <div class="space-y-3 rounded-xl bg-slate-50 p-4">
+                    <div class="space-y-3 rounded-lg bg-slate-50 p-4">
                         <label class="block">
                             <span
                                 class="text-[10px] font-bold text-slate-400 uppercase"

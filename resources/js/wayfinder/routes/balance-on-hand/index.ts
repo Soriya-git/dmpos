@@ -6,7 +6,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:16
- * @route "http://localhost:8000/balance-on-hand"
+ * @route "http://127.0.0.1:8000/balance-on-hand"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/balance-on-hand",
+    url: "http://127.0.0.1:8000/balance-on-hand",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:16
- * @route "http://localhost:8000/balance-on-hand"
+ * @route "http://127.0.0.1:8000/balance-on-hand"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:16
- * @route "http://localhost:8000/balance-on-hand"
+ * @route "http://127.0.0.1:8000/balance-on-hand"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,7 +40,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:16
- * @route "http://localhost:8000/balance-on-hand"
+ * @route "http://127.0.0.1:8000/balance-on-hand"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,7 +52,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:16
- * @route "http://localhost:8000/balance-on-hand"
+ * @route "http://127.0.0.1:8000/balance-on-hand"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,7 +62,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:16
- * @route "http://localhost:8000/balance-on-hand"
+ * @route "http://127.0.0.1:8000/balance-on-hand"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,7 +72,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:16
- * @route "http://localhost:8000/balance-on-hand"
+ * @route "http://127.0.0.1:8000/balance-on-hand"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -84,8 +84,8 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 index.form = indexForm
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:65
- * @route "http://localhost:8000/balance-on-hand/{item}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:74
+ * @route "http://127.0.0.1:8000/balance-on-hand/{item}"
  */
 export const show = (args: { item: number | { id: number } } | [ item: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: show.url(args, options),
@@ -94,13 +94,13 @@ export const show = (args: { item: number | { id: number } } | [ item: number | 
 
 show.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/balance-on-hand/{item}",
+    url: "http://127.0.0.1:8000/balance-on-hand/{item}",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:65
- * @route "http://localhost:8000/balance-on-hand/{item}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:74
+ * @route "http://127.0.0.1:8000/balance-on-hand/{item}"
  */
 show.url = (args: { item: number | { id: number } } | [ item: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -130,8 +130,8 @@ show.url = (args: { item: number | { id: number } } | [ item: number | { id: num
 
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:65
- * @route "http://localhost:8000/balance-on-hand/{item}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:74
+ * @route "http://127.0.0.1:8000/balance-on-hand/{item}"
  */
 show.get = (args: { item: number | { id: number } } | [ item: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: show.url(args, options),
@@ -140,8 +140,8 @@ show.get = (args: { item: number | { id: number } } | [ item: number | { id: num
 
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:65
- * @route "http://localhost:8000/balance-on-hand/{item}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:74
+ * @route "http://127.0.0.1:8000/balance-on-hand/{item}"
  */
 show.head = (args: { item: number | { id: number } } | [ item: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: show.url(args, options),
@@ -152,8 +152,8 @@ show.head = (args: { item: number | { id: number } } | [ item: number | { id: nu
 
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:65
- * @route "http://localhost:8000/balance-on-hand/{item}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:74
+ * @route "http://127.0.0.1:8000/balance-on-hand/{item}"
  */
 const showForm = (args: { item: number | { id: number } } | [ item: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, options),
@@ -162,8 +162,8 @@ const showForm = (args: { item: number | { id: number } } | [ item: number | { i
 
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:65
- * @route "http://localhost:8000/balance-on-hand/{item}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:74
+ * @route "http://127.0.0.1:8000/balance-on-hand/{item}"
  */
 showForm.get = (args: { item: number | { id: number } } | [ item: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, options),
@@ -172,8 +172,8 @@ showForm.get = (args: { item: number | { id: number } } | [ item: number | { id:
 
 /**
  * @see \App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show
- * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:65
- * @route "http://localhost:8000/balance-on-hand/{item}"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php:74
+ * @route "http://127.0.0.1:8000/balance-on-hand/{item}"
  */
 showForm.head = (args: { item: number | { id: number } } | [ item: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, formSafeOptions("head", options)),

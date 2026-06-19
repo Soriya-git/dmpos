@@ -489,11 +489,13 @@ function addToDish(menu: MenuItem) {
             note: note ?? line.note,
             qty: line.qty + 1,
         });
+        activeTab.value = 'cart';
 
         return;
     }
 
     draftLines.value = [...draftLines.value, makeDraftLine(menu, note)];
+    activeTab.value = 'cart';
 }
 
 function increaseQty(line: CartLine) {

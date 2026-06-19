@@ -6,7 +6,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:23
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/goods-receipts",
+    url: "http://127.0.0.1:8000/goods-receipts",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:23
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:23
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,7 +40,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:23
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,7 +52,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:23
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,7 +62,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:23
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,7 +72,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:23
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ index.form = indexForm
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:48
- * @route "http://localhost:8000/goods-receipts/create"
+ * @route "http://127.0.0.1:8000/goods-receipts/create"
  */
 export const create = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: create.url(options),
@@ -94,13 +94,13 @@ export const create = (options?: RouteQueryOptions): RouteDefinition<"get"> => (
 
 create.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/goods-receipts/create",
+    url: "http://127.0.0.1:8000/goods-receipts/create",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:48
- * @route "http://localhost:8000/goods-receipts/create"
+ * @route "http://127.0.0.1:8000/goods-receipts/create"
  */
 create.url = (options?: RouteQueryOptions) => {
     return create.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ create.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:48
- * @route "http://localhost:8000/goods-receipts/create"
+ * @route "http://127.0.0.1:8000/goods-receipts/create"
  */
 create.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: create.url(options),
@@ -119,7 +119,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:48
- * @route "http://localhost:8000/goods-receipts/create"
+ * @route "http://127.0.0.1:8000/goods-receipts/create"
  */
 create.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: create.url(options),
@@ -131,7 +131,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:48
- * @route "http://localhost:8000/goods-receipts/create"
+ * @route "http://127.0.0.1:8000/goods-receipts/create"
  */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(options),
@@ -141,7 +141,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => 
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:48
- * @route "http://localhost:8000/goods-receipts/create"
+ * @route "http://127.0.0.1:8000/goods-receipts/create"
  */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(options),
@@ -151,7 +151,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:48
- * @route "http://localhost:8000/goods-receipts/create"
+ * @route "http://127.0.0.1:8000/goods-receipts/create"
  */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(formSafeOptions("head", options)),
@@ -164,7 +164,7 @@ create.form = createForm
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:67
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -173,13 +173,13 @@ export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => (
 
 store.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/goods-receipts",
+    url: "http://127.0.0.1:8000/goods-receipts",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:67
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options)
@@ -188,7 +188,7 @@ store.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:67
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -200,7 +200,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:67
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -210,7 +210,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => 
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::store
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:67
- * @route "http://localhost:8000/goods-receipts"
+ * @route "http://127.0.0.1:8000/goods-receipts"
  */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -223,7 +223,7 @@ store.form = storeForm
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:180
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/approve"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/approve"
  */
 export const approve = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: approve.url(args, options),
@@ -232,13 +232,13 @@ export const approve = (args: { goodsReceipt: number | { id: number } } | [ good
 
 approve.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/goods-receipts/{goodsReceipt}/approve",
+    url: "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/approve",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:180
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/approve"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/approve"
  */
 approve.url = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -269,7 +269,7 @@ approve.url = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt:
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:180
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/approve"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/approve"
  */
 approve.patch = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: approve.url(args, options),
@@ -281,7 +281,7 @@ approve.patch = (args: { goodsReceipt: number | { id: number } } | [ goodsReceip
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:180
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/approve"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/approve"
  */
 const approveForm = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(args, formSafeOptions("patch", options)),
@@ -291,7 +291,7 @@ const approveForm = (args: { goodsReceipt: number | { id: number } } | [ goodsRe
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approve
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:180
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/approve"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/approve"
  */
 approveForm.patch = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(args, formSafeOptions("patch", options)),
@@ -304,7 +304,7 @@ approve.form = approveForm
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:247
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/reject"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/reject"
  */
 export const reject = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: reject.url(args, options),
@@ -313,13 +313,13 @@ export const reject = (args: { goodsReceipt: number | { id: number } } | [ goods
 
 reject.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/goods-receipts/{goodsReceipt}/reject",
+    url: "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/reject",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:247
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/reject"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/reject"
  */
 reject.url = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -350,7 +350,7 @@ reject.url = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: 
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:247
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/reject"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/reject"
  */
 reject.patch = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: reject.url(args, options),
@@ -362,7 +362,7 @@ reject.patch = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:247
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/reject"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/reject"
  */
 const rejectForm = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(args, formSafeOptions("patch", options)),
@@ -372,7 +372,7 @@ const rejectForm = (args: { goodsReceipt: number | { id: number } } | [ goodsRec
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::reject
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:247
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/reject"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/reject"
  */
 rejectForm.patch = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(args, formSafeOptions("patch", options)),
@@ -385,7 +385,7 @@ reject.form = rejectForm
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:256
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/cancel"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/cancel"
  */
 export const cancel = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -394,13 +394,13 @@ export const cancel = (args: { goodsReceipt: number | { id: number } } | [ goods
 
 cancel.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/goods-receipts/{goodsReceipt}/cancel",
+    url: "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/cancel",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:256
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/cancel"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/cancel"
  */
 cancel.url = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -431,7 +431,7 @@ cancel.url = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: 
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:256
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/cancel"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/cancel"
  */
 cancel.patch = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -443,7 +443,7 @@ cancel.patch = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:256
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/cancel"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/cancel"
  */
 const cancelForm = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),
@@ -453,7 +453,7 @@ const cancelForm = (args: { goodsReceipt: number | { id: number } } | [ goodsRec
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::cancel
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:256
- * @route "http://localhost:8000/goods-receipts/{goodsReceipt}/cancel"
+ * @route "http://127.0.0.1:8000/goods-receipts/{goodsReceipt}/cancel"
  */
 cancelForm.patch = (args: { goodsReceipt: number | { id: number } } | [ goodsReceipt: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),
@@ -466,7 +466,7 @@ cancel.form = cancelForm
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:171
- * @route "http://localhost:8000/goods-receipts/approved-purchase-orders"
+ * @route "http://127.0.0.1:8000/goods-receipts/approved-purchase-orders"
  */
 export const approvedPurchaseOrders = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: approvedPurchaseOrders.url(options),
@@ -475,13 +475,13 @@ export const approvedPurchaseOrders = (options?: RouteQueryOptions): RouteDefini
 
 approvedPurchaseOrders.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/goods-receipts/approved-purchase-orders",
+    url: "http://127.0.0.1:8000/goods-receipts/approved-purchase-orders",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:171
- * @route "http://localhost:8000/goods-receipts/approved-purchase-orders"
+ * @route "http://127.0.0.1:8000/goods-receipts/approved-purchase-orders"
  */
 approvedPurchaseOrders.url = (options?: RouteQueryOptions) => {
     return approvedPurchaseOrders.definition.url + queryParams(options)
@@ -490,7 +490,7 @@ approvedPurchaseOrders.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:171
- * @route "http://localhost:8000/goods-receipts/approved-purchase-orders"
+ * @route "http://127.0.0.1:8000/goods-receipts/approved-purchase-orders"
  */
 approvedPurchaseOrders.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: approvedPurchaseOrders.url(options),
@@ -500,7 +500,7 @@ approvedPurchaseOrders.get = (options?: RouteQueryOptions): RouteDefinition<"get
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:171
- * @route "http://localhost:8000/goods-receipts/approved-purchase-orders"
+ * @route "http://127.0.0.1:8000/goods-receipts/approved-purchase-orders"
  */
 approvedPurchaseOrders.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: approvedPurchaseOrders.url(options),
@@ -512,7 +512,7 @@ approvedPurchaseOrders.head = (options?: RouteQueryOptions): RouteDefinition<"he
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:171
- * @route "http://localhost:8000/goods-receipts/approved-purchase-orders"
+ * @route "http://127.0.0.1:8000/goods-receipts/approved-purchase-orders"
  */
 const approvedPurchaseOrdersForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: approvedPurchaseOrders.url(options),
@@ -522,7 +522,7 @@ const approvedPurchaseOrdersForm = (options?: RouteQueryOptions): RouteFormDefin
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:171
- * @route "http://localhost:8000/goods-receipts/approved-purchase-orders"
+ * @route "http://127.0.0.1:8000/goods-receipts/approved-purchase-orders"
  */
 approvedPurchaseOrdersForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: approvedPurchaseOrders.url(options),
@@ -532,7 +532,7 @@ approvedPurchaseOrdersForm.get = (options?: RouteQueryOptions): RouteFormDefinit
 /**
  * @see \App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders
  * @see \D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php:171
- * @route "http://localhost:8000/goods-receipts/approved-purchase-orders"
+ * @route "http://127.0.0.1:8000/goods-receipts/approved-purchase-orders"
  */
 approvedPurchaseOrdersForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: approvedPurchaseOrders.url(formSafeOptions("head", options)),

@@ -97,7 +97,7 @@ const OperationsReport: NavSectionType = {
             icon: ClipboardList,
             items: [
                 {
-                    title: 'Stock',
+                    title: 'Daily Stock',
                     href: '/operations-report/daily-session-stock',
                     permission: 'daily-session-stock.view',
                 },

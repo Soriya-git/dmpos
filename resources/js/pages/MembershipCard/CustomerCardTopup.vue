@@ -116,7 +116,9 @@ function submitTopup() {
     <Head title="Topup Membership Card" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
+        <div
+            class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <div
                 class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
             >
@@ -151,7 +153,7 @@ function submitTopup() {
             <div class="grid gap-6 xl:grid-cols-[420px_minmax(0,1fr)]">
                 <section class="flex flex-col gap-5">
                     <div
-                        class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+                        class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
                     >
                         <MembershipCardPreview
                             :card-no="card.cardNo"
@@ -166,7 +168,7 @@ function submitTopup() {
                     </div>
 
                     <div
-                        class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+                        class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
                     >
                         <div class="mb-4 flex items-center justify-between">
                             <div>
@@ -209,7 +211,7 @@ function submitTopup() {
                 </section>
 
                 <section
-                    class="h-fit rounded-xl border border-slate-200 bg-white shadow-sm"
+                    class="h-fit rounded-lg border border-slate-200 bg-white shadow-sm"
                 >
                     <div class="border-b border-slate-100 p-5">
                         <h2 class="text-lg font-black text-[#2A4858]">
@@ -288,7 +290,7 @@ function submitTopup() {
                         </div>
 
                         <div
-                            class="rounded-xl border border-[#23AA8F]/20 bg-[#23AA8F]/5 p-4"
+                            class="rounded-lg border border-[#23AA8F]/20 bg-[#23AA8F]/5 p-4"
                         >
                             <div class="mb-3 flex items-center gap-2">
                                 <Gift class="size-4 text-[#007882]" />
@@ -365,7 +367,7 @@ function submitTopup() {
                         </label>
 
                         <div
-                            class="grid gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 md:grid-cols-3"
+                            class="grid gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 md:grid-cols-3"
                         >
                             <div>
                                 <p

@@ -151,34 +151,9 @@ function viewCustomerStock(item: BalanceItem) {
     <Head title="Balance On Hand" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
-            <div
-                class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
-            >
-                <div>
-                    <h1
-                        class="text-2xl font-semibold tracking-tight text-[#2A4858]"
-                    >
-                        Balance On Hand
-                    </h1>
-                    <p class="mt-1 text-sm text-slate-500">
-                        Current inventory on hand, available stock, minimum
-                        stock levels, and stock value.
-                    </p>
-                </div>
-
-                <div class="relative">
-                    <Search
-                        class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
-                    />
-                    <Input
-                        v-model="search"
-                        placeholder="Search item balance..."
-                        class="h-9 w-56 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] lg:w-72"
-                    />
-                </div>
-            </div>
-
+        <div
+            class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <div
                     class="rounded-lg border-l-4 border-[#007882] bg-white p-4 shadow-sm"
@@ -241,9 +216,21 @@ function viewCustomerStock(item: BalanceItem) {
                 </button>
             </div>
 
+            <div class="relative w-full md:w-80">
+                <Search
+                    class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
+                />
+                <Input
+                    v-model="search"
+                    placeholder="Search item balance..."
+                    class="h-10 rounded-lg border-slate-200 bg-white pl-10 text-sm focus-visible:ring-[#007882]/30"
+                />
+            </div>
+
             <MasterDataTable
                 :rows="visibleItems"
                 empty-text="No balance on hand data found."
+                scroll-body
             >
                 <template #head>
                     <th

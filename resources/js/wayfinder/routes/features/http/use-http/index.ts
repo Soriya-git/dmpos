@@ -6,7 +6,7 @@ import { queryParams, type RouteDefinition, type RouteFormDefinition, type Route
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttpApi
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:17
- * @route "http://localhost:8000/features/http/use-http/api"
+ * @route "http://127.0.0.1:8000/features/http/use-http/api"
  */
 export const api = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: api.url(options),
@@ -15,13 +15,13 @@ export const api = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 
 api.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/features/http/use-http/api",
+    url: "http://127.0.0.1:8000/features/http/use-http/api",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttpApi
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:17
- * @route "http://localhost:8000/features/http/use-http/api"
+ * @route "http://127.0.0.1:8000/features/http/use-http/api"
  */
 api.url = (options?: RouteQueryOptions) => {
     return api.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ api.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttpApi
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:17
- * @route "http://localhost:8000/features/http/use-http/api"
+ * @route "http://127.0.0.1:8000/features/http/use-http/api"
  */
 api.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: api.url(options),
@@ -42,7 +42,7 @@ api.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttpApi
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:17
- * @route "http://localhost:8000/features/http/use-http/api"
+ * @route "http://127.0.0.1:8000/features/http/use-http/api"
  */
 const apiForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: api.url(options),
@@ -52,7 +52,7 @@ const apiForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttpApi
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:17
- * @route "http://localhost:8000/features/http/use-http/api"
+ * @route "http://127.0.0.1:8000/features/http/use-http/api"
  */
 apiForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: api.url(options),

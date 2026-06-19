@@ -6,7 +6,7 @@ import { formSafeOptions, queryParams, type RouteDefinition, type RouteFormDefin
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "http://localhost:8000/features/prefetching/link-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/link-prefetch"
  */
 export const linkPrefetch = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: linkPrefetch.url(options),
@@ -15,13 +15,13 @@ export const linkPrefetch = (options?: RouteQueryOptions): RouteDefinition<"get"
 
 linkPrefetch.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/prefetching/link-prefetch",
+    url: "http://127.0.0.1:8000/features/prefetching/link-prefetch",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "http://localhost:8000/features/prefetching/link-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/link-prefetch"
  */
 linkPrefetch.url = (options?: RouteQueryOptions) => {
     return linkPrefetch.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ linkPrefetch.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "http://localhost:8000/features/prefetching/link-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/link-prefetch"
  */
 linkPrefetch.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: linkPrefetch.url(options),
@@ -40,7 +40,7 @@ linkPrefetch.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "http://localhost:8000/features/prefetching/link-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/link-prefetch"
  */
 linkPrefetch.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: linkPrefetch.url(options),
@@ -52,7 +52,7 @@ linkPrefetch.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "http://localhost:8000/features/prefetching/link-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/link-prefetch"
  */
 const linkPrefetchForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: linkPrefetch.url(options),
@@ -62,7 +62,7 @@ const linkPrefetchForm = (options?: RouteQueryOptions): RouteFormDefinition<"get
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "http://localhost:8000/features/prefetching/link-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/link-prefetch"
  */
 linkPrefetchForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: linkPrefetch.url(options),
@@ -72,7 +72,7 @@ linkPrefetchForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get">
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::linkPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:10
- * @route "http://localhost:8000/features/prefetching/link-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/link-prefetch"
  */
 linkPrefetchForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: linkPrefetch.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ linkPrefetch.form = linkPrefetchForm
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "http://localhost:8000/features/prefetching/stale-while-revalidate"
+ * @route "http://127.0.0.1:8000/features/prefetching/stale-while-revalidate"
  */
 export const staleWhileRevalidate = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: staleWhileRevalidate.url(options),
@@ -94,13 +94,13 @@ export const staleWhileRevalidate = (options?: RouteQueryOptions): RouteDefiniti
 
 staleWhileRevalidate.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/prefetching/stale-while-revalidate",
+    url: "http://127.0.0.1:8000/features/prefetching/stale-while-revalidate",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "http://localhost:8000/features/prefetching/stale-while-revalidate"
+ * @route "http://127.0.0.1:8000/features/prefetching/stale-while-revalidate"
  */
 staleWhileRevalidate.url = (options?: RouteQueryOptions) => {
     return staleWhileRevalidate.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ staleWhileRevalidate.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "http://localhost:8000/features/prefetching/stale-while-revalidate"
+ * @route "http://127.0.0.1:8000/features/prefetching/stale-while-revalidate"
  */
 staleWhileRevalidate.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: staleWhileRevalidate.url(options),
@@ -119,7 +119,7 @@ staleWhileRevalidate.get = (options?: RouteQueryOptions): RouteDefinition<"get">
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "http://localhost:8000/features/prefetching/stale-while-revalidate"
+ * @route "http://127.0.0.1:8000/features/prefetching/stale-while-revalidate"
  */
 staleWhileRevalidate.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: staleWhileRevalidate.url(options),
@@ -131,7 +131,7 @@ staleWhileRevalidate.head = (options?: RouteQueryOptions): RouteDefinition<"head
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "http://localhost:8000/features/prefetching/stale-while-revalidate"
+ * @route "http://127.0.0.1:8000/features/prefetching/stale-while-revalidate"
  */
 const staleWhileRevalidateForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: staleWhileRevalidate.url(options),
@@ -141,7 +141,7 @@ const staleWhileRevalidateForm = (options?: RouteQueryOptions): RouteFormDefinit
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "http://localhost:8000/features/prefetching/stale-while-revalidate"
+ * @route "http://127.0.0.1:8000/features/prefetching/stale-while-revalidate"
  */
 staleWhileRevalidateForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: staleWhileRevalidate.url(options),
@@ -151,7 +151,7 @@ staleWhileRevalidateForm.get = (options?: RouteQueryOptions): RouteFormDefinitio
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:15
- * @route "http://localhost:8000/features/prefetching/stale-while-revalidate"
+ * @route "http://127.0.0.1:8000/features/prefetching/stale-while-revalidate"
  */
 staleWhileRevalidateForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: staleWhileRevalidate.url(formSafeOptions("head", options)),
@@ -164,7 +164,7 @@ staleWhileRevalidate.form = staleWhileRevalidateForm
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "http://localhost:8000/features/prefetching/manual-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/manual-prefetch"
  */
 export const manualPrefetch = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: manualPrefetch.url(options),
@@ -173,13 +173,13 @@ export const manualPrefetch = (options?: RouteQueryOptions): RouteDefinition<"ge
 
 manualPrefetch.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/prefetching/manual-prefetch",
+    url: "http://127.0.0.1:8000/features/prefetching/manual-prefetch",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "http://localhost:8000/features/prefetching/manual-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/manual-prefetch"
  */
 manualPrefetch.url = (options?: RouteQueryOptions) => {
     return manualPrefetch.definition.url + queryParams(options)
@@ -188,7 +188,7 @@ manualPrefetch.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "http://localhost:8000/features/prefetching/manual-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/manual-prefetch"
  */
 manualPrefetch.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: manualPrefetch.url(options),
@@ -198,7 +198,7 @@ manualPrefetch.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "http://localhost:8000/features/prefetching/manual-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/manual-prefetch"
  */
 manualPrefetch.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: manualPrefetch.url(options),
@@ -210,7 +210,7 @@ manualPrefetch.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "http://localhost:8000/features/prefetching/manual-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/manual-prefetch"
  */
 const manualPrefetchForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: manualPrefetch.url(options),
@@ -220,7 +220,7 @@ const manualPrefetchForm = (options?: RouteQueryOptions): RouteFormDefinition<"g
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "http://localhost:8000/features/prefetching/manual-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/manual-prefetch"
  */
 manualPrefetchForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: manualPrefetch.url(options),
@@ -230,7 +230,7 @@ manualPrefetchForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::manualPrefetch
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:20
- * @route "http://localhost:8000/features/prefetching/manual-prefetch"
+ * @route "http://127.0.0.1:8000/features/prefetching/manual-prefetch"
  */
 manualPrefetchForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: manualPrefetch.url(formSafeOptions("head", options)),
@@ -243,7 +243,7 @@ manualPrefetch.form = manualPrefetchForm
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "http://localhost:8000/features/prefetching/cache-management"
+ * @route "http://127.0.0.1:8000/features/prefetching/cache-management"
  */
 export const cacheManagement = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: cacheManagement.url(options),
@@ -252,13 +252,13 @@ export const cacheManagement = (options?: RouteQueryOptions): RouteDefinition<"g
 
 cacheManagement.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/prefetching/cache-management",
+    url: "http://127.0.0.1:8000/features/prefetching/cache-management",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "http://localhost:8000/features/prefetching/cache-management"
+ * @route "http://127.0.0.1:8000/features/prefetching/cache-management"
  */
 cacheManagement.url = (options?: RouteQueryOptions) => {
     return cacheManagement.definition.url + queryParams(options)
@@ -267,7 +267,7 @@ cacheManagement.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "http://localhost:8000/features/prefetching/cache-management"
+ * @route "http://127.0.0.1:8000/features/prefetching/cache-management"
  */
 cacheManagement.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: cacheManagement.url(options),
@@ -277,7 +277,7 @@ cacheManagement.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "http://localhost:8000/features/prefetching/cache-management"
+ * @route "http://127.0.0.1:8000/features/prefetching/cache-management"
  */
 cacheManagement.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: cacheManagement.url(options),
@@ -289,7 +289,7 @@ cacheManagement.head = (options?: RouteQueryOptions): RouteDefinition<"head"> =>
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "http://localhost:8000/features/prefetching/cache-management"
+ * @route "http://127.0.0.1:8000/features/prefetching/cache-management"
  */
 const cacheManagementForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: cacheManagement.url(options),
@@ -299,7 +299,7 @@ const cacheManagementForm = (options?: RouteQueryOptions): RouteFormDefinition<"
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "http://localhost:8000/features/prefetching/cache-management"
+ * @route "http://127.0.0.1:8000/features/prefetching/cache-management"
  */
 cacheManagementForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: cacheManagement.url(options),
@@ -309,7 +309,7 @@ cacheManagementForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"ge
 /**
  * @see \App\Http\Controllers\Feature\PrefetchingController::cacheManagement
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php:25
- * @route "http://localhost:8000/features/prefetching/cache-management"
+ * @route "http://127.0.0.1:8000/features/prefetching/cache-management"
  */
 cacheManagementForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: cacheManagement.url(formSafeOptions("head", options)),

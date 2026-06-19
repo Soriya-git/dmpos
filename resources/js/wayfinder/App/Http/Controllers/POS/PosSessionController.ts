@@ -5,8 +5,8 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:16
- * @route "http://localhost:8000/pos-sessions"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:17
+ * @route "http://127.0.0.1:8000/pos-sessions"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/pos-sessions",
+    url: "http://127.0.0.1:8000/pos-sessions",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:16
- * @route "http://localhost:8000/pos-sessions"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:17
+ * @route "http://127.0.0.1:8000/pos-sessions"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -29,8 +29,8 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:16
- * @route "http://localhost:8000/pos-sessions"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:17
+ * @route "http://127.0.0.1:8000/pos-sessions"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -39,8 +39,8 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:16
- * @route "http://localhost:8000/pos-sessions"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:17
+ * @route "http://127.0.0.1:8000/pos-sessions"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -51,8 +51,8 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:16
- * @route "http://localhost:8000/pos-sessions"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:17
+ * @route "http://127.0.0.1:8000/pos-sessions"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -61,8 +61,8 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:16
- * @route "http://localhost:8000/pos-sessions"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:17
+ * @route "http://127.0.0.1:8000/pos-sessions"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -71,8 +71,8 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:16
- * @route "http://localhost:8000/pos-sessions"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:17
+ * @route "http://127.0.0.1:8000/pos-sessions"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -84,8 +84,8 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 index.form = indexForm
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::open
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:45
- * @route "http://localhost:8000/pos-sessions/open"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:46
+ * @route "http://127.0.0.1:8000/pos-sessions/open"
  */
 export const open = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: open.url(options),
@@ -94,13 +94,13 @@ export const open = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 
 open.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/pos-sessions/open",
+    url: "http://127.0.0.1:8000/pos-sessions/open",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::open
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:45
- * @route "http://localhost:8000/pos-sessions/open"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:46
+ * @route "http://127.0.0.1:8000/pos-sessions/open"
  */
 open.url = (options?: RouteQueryOptions) => {
     return open.definition.url + queryParams(options)
@@ -108,8 +108,8 @@ open.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::open
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:45
- * @route "http://localhost:8000/pos-sessions/open"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:46
+ * @route "http://127.0.0.1:8000/pos-sessions/open"
  */
 open.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: open.url(options),
@@ -120,8 +120,8 @@ open.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::open
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:45
- * @route "http://localhost:8000/pos-sessions/open"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:46
+ * @route "http://127.0.0.1:8000/pos-sessions/open"
  */
 const openForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: open.url(options),
@@ -130,8 +130,8 @@ const openForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => (
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::open
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:45
- * @route "http://localhost:8000/pos-sessions/open"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:46
+ * @route "http://127.0.0.1:8000/pos-sessions/open"
  */
 openForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: open.url(options),
@@ -143,8 +143,8 @@ openForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
 open.form = openForm
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::close
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:118
- * @route "http://localhost:8000/pos-sessions/{posSession}/close"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:119
+ * @route "http://127.0.0.1:8000/pos-sessions/{posSession}/close"
  */
 export const close = (args: { posSession: number | { id: number } } | [ posSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: close.url(args, options),
@@ -153,13 +153,13 @@ export const close = (args: { posSession: number | { id: number } } | [ posSessi
 
 close.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/pos-sessions/{posSession}/close",
+    url: "http://127.0.0.1:8000/pos-sessions/{posSession}/close",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::close
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:118
- * @route "http://localhost:8000/pos-sessions/{posSession}/close"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:119
+ * @route "http://127.0.0.1:8000/pos-sessions/{posSession}/close"
  */
 close.url = (args: { posSession: number | { id: number } } | [ posSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -189,8 +189,8 @@ close.url = (args: { posSession: number | { id: number } } | [ posSession: numbe
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::close
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:118
- * @route "http://localhost:8000/pos-sessions/{posSession}/close"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:119
+ * @route "http://127.0.0.1:8000/pos-sessions/{posSession}/close"
  */
 close.post = (args: { posSession: number | { id: number } } | [ posSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: close.url(args, options),
@@ -201,8 +201,8 @@ close.post = (args: { posSession: number | { id: number } } | [ posSession: numb
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::close
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:118
- * @route "http://localhost:8000/pos-sessions/{posSession}/close"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:119
+ * @route "http://127.0.0.1:8000/pos-sessions/{posSession}/close"
  */
 const closeForm = (args: { posSession: number | { id: number } } | [ posSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: close.url(args, options),
@@ -211,8 +211,8 @@ const closeForm = (args: { posSession: number | { id: number } } | [ posSession:
 
 /**
  * @see \App\Http\Controllers\POS\PosSessionController::close
- * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:118
- * @route "http://localhost:8000/pos-sessions/{posSession}/close"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php:119
+ * @route "http://127.0.0.1:8000/pos-sessions/{posSession}/close"
  */
 closeForm.post = (args: { posSession: number | { id: number } } | [ posSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: close.url(args, options),

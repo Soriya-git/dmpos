@@ -6,7 +6,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:30
- * @route "http://localhost:8000/stock-movements/write-off/create"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/create"
  */
 export const create = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: create.url(options),
@@ -15,13 +15,13 @@ export const create = (options?: RouteQueryOptions): RouteDefinition<"get"> => (
 
 create.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/stock-movements/write-off/create",
+    url: "http://127.0.0.1:8000/stock-movements/write-off/create",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:30
- * @route "http://localhost:8000/stock-movements/write-off/create"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/create"
  */
 create.url = (options?: RouteQueryOptions) => {
     return create.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ create.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:30
- * @route "http://localhost:8000/stock-movements/write-off/create"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/create"
  */
 create.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: create.url(options),
@@ -40,7 +40,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:30
- * @route "http://localhost:8000/stock-movements/write-off/create"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/create"
  */
 create.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: create.url(options),
@@ -52,7 +52,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:30
- * @route "http://localhost:8000/stock-movements/write-off/create"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/create"
  */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(options),
@@ -62,7 +62,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:30
- * @route "http://localhost:8000/stock-movements/write-off/create"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/create"
  */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(options),
@@ -72,7 +72,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::create
  * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:30
- * @route "http://localhost:8000/stock-movements/write-off/create"
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/create"
  */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: create.url(formSafeOptions("head", options)),
@@ -84,8 +84,8 @@ createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 create.form = createForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:194
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:196
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -94,13 +94,13 @@ export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => (
 
 store.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/stock-movements/write-off",
+    url: "http://127.0.0.1:8000/stock-movements/write-off",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:194
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:196
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options)
@@ -108,8 +108,8 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:194
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:196
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -120,8 +120,8 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:194
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:196
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -130,8 +130,8 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => 
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::store
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:194
- * @route "http://localhost:8000/stock-movements/write-off"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:196
+ * @route "http://127.0.0.1:8000/stock-movements/write-off"
  */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -143,8 +143,8 @@ storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => (
 store.form = storeForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:292
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:294
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/approve"
  */
 export const approve = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: approve.url(args, options),
@@ -153,13 +153,13 @@ export const approve = (args: { stockAdjustment: number | { id: number } } | [ s
 
 approve.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/approve",
+    url: "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/approve",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:292
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:294
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/approve"
  */
 approve.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -189,8 +189,8 @@ approve.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjus
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:292
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:294
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/approve"
  */
 approve.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: approve.url(args, options),
@@ -201,8 +201,8 @@ approve.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdj
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:292
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:294
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/approve"
  */
 const approveForm = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(args, formSafeOptions("patch", options)),
@@ -211,8 +211,8 @@ const approveForm = (args: { stockAdjustment: number | { id: number } } | [ stoc
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::approve
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:292
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/approve"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:294
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/approve"
  */
 approveForm.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: approve.url(args, formSafeOptions("patch", options)),
@@ -224,8 +224,8 @@ approveForm.patch = (args: { stockAdjustment: number | { id: number } } | [ stoc
 approve.form = approveForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:375
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:377
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/reject"
  */
 export const reject = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: reject.url(args, options),
@@ -234,13 +234,13 @@ export const reject = (args: { stockAdjustment: number | { id: number } } | [ st
 
 reject.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/reject",
+    url: "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/reject",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:375
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:377
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/reject"
  */
 reject.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -270,8 +270,8 @@ reject.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjust
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:375
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:377
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/reject"
  */
 reject.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: reject.url(args, options),
@@ -282,8 +282,8 @@ reject.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdju
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:375
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:377
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/reject"
  */
 const rejectForm = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(args, formSafeOptions("patch", options)),
@@ -292,8 +292,8 @@ const rejectForm = (args: { stockAdjustment: number | { id: number } } | [ stock
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::reject
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:375
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/reject"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:377
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/reject"
  */
 rejectForm.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: reject.url(args, formSafeOptions("patch", options)),
@@ -305,8 +305,8 @@ rejectForm.patch = (args: { stockAdjustment: number | { id: number } } | [ stock
 reject.form = rejectForm
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::cancel
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:389
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:391
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/cancel"
  */
 export const cancel = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -315,13 +315,13 @@ export const cancel = (args: { stockAdjustment: number | { id: number } } | [ st
 
 cancel.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/cancel",
+    url: "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/cancel",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::cancel
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:389
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:391
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/cancel"
  */
 cancel.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -351,8 +351,8 @@ cancel.url = (args: { stockAdjustment: number | { id: number } } | [ stockAdjust
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::cancel
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:389
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:391
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/cancel"
  */
 cancel.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: cancel.url(args, options),
@@ -363,8 +363,8 @@ cancel.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdju
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::cancel
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:389
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:391
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/cancel"
  */
 const cancelForm = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),
@@ -373,8 +373,8 @@ const cancelForm = (args: { stockAdjustment: number | { id: number } } | [ stock
 
 /**
  * @see \App\Http\Controllers\StockMovements\StockWriteOffController::cancel
- * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:389
- * @route "http://localhost:8000/stock-movements/write-off/{stockAdjustment}/cancel"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php:391
+ * @route "http://127.0.0.1:8000/stock-movements/write-off/{stockAdjustment}/cancel"
  */
 cancelForm.patch = (args: { stockAdjustment: number | { id: number } } | [ stockAdjustment: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: cancel.url(args, formSafeOptions("patch", options)),

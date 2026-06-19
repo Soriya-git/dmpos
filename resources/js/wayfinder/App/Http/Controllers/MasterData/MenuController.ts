@@ -6,7 +6,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/menu",
+    url: "http://127.0.0.1:8000/master-data/menu",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,7 +40,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,7 +52,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,7 +62,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,7 +72,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:21
- * @route "http://localhost:8000/master-data/menu"
+ * @route "http://127.0.0.1:8000/master-data/menu"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ index.form = indexForm
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:141
- * @route "http://localhost:8000/master-data/menu/menus"
+ * @route "http://127.0.0.1:8000/master-data/menu/menus"
  */
 export const storeMenu = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeMenu.url(options),
@@ -94,13 +94,13 @@ export const storeMenu = (options?: RouteQueryOptions): RouteDefinition<"post"> 
 
 storeMenu.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/master-data/menu/menus",
+    url: "http://127.0.0.1:8000/master-data/menu/menus",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:141
- * @route "http://localhost:8000/master-data/menu/menus"
+ * @route "http://127.0.0.1:8000/master-data/menu/menus"
  */
 storeMenu.url = (options?: RouteQueryOptions) => {
     return storeMenu.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ storeMenu.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:141
- * @route "http://localhost:8000/master-data/menu/menus"
+ * @route "http://127.0.0.1:8000/master-data/menu/menus"
  */
 storeMenu.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeMenu.url(options),
@@ -121,7 +121,7 @@ storeMenu.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:141
- * @route "http://localhost:8000/master-data/menu/menus"
+ * @route "http://127.0.0.1:8000/master-data/menu/menus"
  */
 const storeMenuForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeMenu.url(options),
@@ -131,7 +131,7 @@ const storeMenuForm = (options?: RouteQueryOptions): RouteFormDefinition<"post">
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:141
- * @route "http://localhost:8000/master-data/menu/menus"
+ * @route "http://127.0.0.1:8000/master-data/menu/menus"
  */
 storeMenuForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeMenu.url(options),
@@ -144,7 +144,7 @@ storeMenu.form = storeMenuForm
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:194
- * @route "http://localhost:8000/master-data/menu/menus/{menu}"
+ * @route "http://127.0.0.1:8000/master-data/menu/menus/{menu}"
  */
 export const updateMenu = (args: { menu: number | { id: number } } | [ menu: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: updateMenu.url(args, options),
@@ -153,13 +153,13 @@ export const updateMenu = (args: { menu: number | { id: number } } | [ menu: num
 
 updateMenu.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/master-data/menu/menus/{menu}",
+    url: "http://127.0.0.1:8000/master-data/menu/menus/{menu}",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:194
- * @route "http://localhost:8000/master-data/menu/menus/{menu}"
+ * @route "http://127.0.0.1:8000/master-data/menu/menus/{menu}"
  */
 updateMenu.url = (args: { menu: number | { id: number } } | [ menu: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -190,7 +190,7 @@ updateMenu.url = (args: { menu: number | { id: number } } | [ menu: number | { i
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:194
- * @route "http://localhost:8000/master-data/menu/menus/{menu}"
+ * @route "http://127.0.0.1:8000/master-data/menu/menus/{menu}"
  */
 updateMenu.patch = (args: { menu: number | { id: number } } | [ menu: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: updateMenu.url(args, options),
@@ -202,7 +202,7 @@ updateMenu.patch = (args: { menu: number | { id: number } } | [ menu: number | {
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:194
- * @route "http://localhost:8000/master-data/menu/menus/{menu}"
+ * @route "http://127.0.0.1:8000/master-data/menu/menus/{menu}"
  */
 const updateMenuForm = (args: { menu: number | { id: number } } | [ menu: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: updateMenu.url(args, formSafeOptions("patch", options)),
@@ -212,7 +212,7 @@ const updateMenuForm = (args: { menu: number | { id: number } } | [ menu: number
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:194
- * @route "http://localhost:8000/master-data/menu/menus/{menu}"
+ * @route "http://127.0.0.1:8000/master-data/menu/menus/{menu}"
  */
 updateMenuForm.patch = (args: { menu: number | { id: number } } | [ menu: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: updateMenu.url(args, formSafeOptions("patch", options)),
@@ -225,7 +225,7 @@ updateMenu.form = updateMenuForm
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:213
- * @route "http://localhost:8000/master-data/menu/categories"
+ * @route "http://127.0.0.1:8000/master-data/menu/categories"
  */
 export const storeCategory = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeCategory.url(options),
@@ -234,13 +234,13 @@ export const storeCategory = (options?: RouteQueryOptions): RouteDefinition<"pos
 
 storeCategory.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/master-data/menu/categories",
+    url: "http://127.0.0.1:8000/master-data/menu/categories",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:213
- * @route "http://localhost:8000/master-data/menu/categories"
+ * @route "http://127.0.0.1:8000/master-data/menu/categories"
  */
 storeCategory.url = (options?: RouteQueryOptions) => {
     return storeCategory.definition.url + queryParams(options)
@@ -249,7 +249,7 @@ storeCategory.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:213
- * @route "http://localhost:8000/master-data/menu/categories"
+ * @route "http://127.0.0.1:8000/master-data/menu/categories"
  */
 storeCategory.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storeCategory.url(options),
@@ -261,7 +261,7 @@ storeCategory.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => (
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:213
- * @route "http://localhost:8000/master-data/menu/categories"
+ * @route "http://127.0.0.1:8000/master-data/menu/categories"
  */
 const storeCategoryForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeCategory.url(options),
@@ -271,7 +271,7 @@ const storeCategoryForm = (options?: RouteQueryOptions): RouteFormDefinition<"po
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:213
- * @route "http://localhost:8000/master-data/menu/categories"
+ * @route "http://127.0.0.1:8000/master-data/menu/categories"
  */
 storeCategoryForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storeCategory.url(options),
@@ -284,7 +284,7 @@ storeCategory.form = storeCategoryForm
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storePrice
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:234
- * @route "http://localhost:8000/master-data/menu/prices"
+ * @route "http://127.0.0.1:8000/master-data/menu/prices"
  */
 export const storePrice = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storePrice.url(options),
@@ -293,13 +293,13 @@ export const storePrice = (options?: RouteQueryOptions): RouteDefinition<"post">
 
 storePrice.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/master-data/menu/prices",
+    url: "http://127.0.0.1:8000/master-data/menu/prices",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storePrice
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:234
- * @route "http://localhost:8000/master-data/menu/prices"
+ * @route "http://127.0.0.1:8000/master-data/menu/prices"
  */
 storePrice.url = (options?: RouteQueryOptions) => {
     return storePrice.definition.url + queryParams(options)
@@ -308,7 +308,7 @@ storePrice.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storePrice
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:234
- * @route "http://localhost:8000/master-data/menu/prices"
+ * @route "http://127.0.0.1:8000/master-data/menu/prices"
  */
 storePrice.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: storePrice.url(options),
@@ -320,7 +320,7 @@ storePrice.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storePrice
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:234
- * @route "http://localhost:8000/master-data/menu/prices"
+ * @route "http://127.0.0.1:8000/master-data/menu/prices"
  */
 const storePriceForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storePrice.url(options),
@@ -330,7 +330,7 @@ const storePriceForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storePrice
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php:234
- * @route "http://localhost:8000/master-data/menu/prices"
+ * @route "http://127.0.0.1:8000/master-data/menu/prices"
  */
 storePriceForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: storePrice.url(options),

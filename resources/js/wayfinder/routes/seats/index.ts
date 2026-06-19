@@ -6,8 +6,8 @@ import orders from "./orders";
 
 /**
  * @see \App\Http\Controllers\Seats\SeatController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:20
- * @route "http://localhost:8000/orders"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:21
+ * @route "http://127.0.0.1:8000/orders"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -16,13 +16,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/orders",
+    url: "http://127.0.0.1:8000/orders",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:20
- * @route "http://localhost:8000/orders"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:21
+ * @route "http://127.0.0.1:8000/orders"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,8 +30,8 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Seats\SeatController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:20
- * @route "http://localhost:8000/orders"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:21
+ * @route "http://127.0.0.1:8000/orders"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,8 +40,8 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 /**
  * @see \App\Http\Controllers\Seats\SeatController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:20
- * @route "http://localhost:8000/orders"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:21
+ * @route "http://127.0.0.1:8000/orders"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,8 +52,8 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 
 /**
  * @see \App\Http\Controllers\Seats\SeatController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:20
- * @route "http://localhost:8000/orders"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:21
+ * @route "http://127.0.0.1:8000/orders"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,8 +62,8 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 
 /**
  * @see \App\Http\Controllers\Seats\SeatController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:20
- * @route "http://localhost:8000/orders"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:21
+ * @route "http://127.0.0.1:8000/orders"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,8 +72,8 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 
 /**
  * @see \App\Http\Controllers\Seats\SeatController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:20
- * @route "http://localhost:8000/orders"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:21
+ * @route "http://127.0.0.1:8000/orders"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -85,8 +85,8 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 index.form = indexForm
 /**
  * @see \App\Http\Controllers\Seats\SeatController::checkIn
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:153
- * @route "http://localhost:8000/orders/{resource}/check-in"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:173
+ * @route "http://127.0.0.1:8000/orders/{resource}/check-in"
  */
 export const checkIn = (args: { resource: number | { id: number } } | [ resource: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: checkIn.url(args, options),
@@ -95,13 +95,13 @@ export const checkIn = (args: { resource: number | { id: number } } | [ resource
 
 checkIn.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/orders/{resource}/check-in",
+    url: "http://127.0.0.1:8000/orders/{resource}/check-in",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatController::checkIn
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:153
- * @route "http://localhost:8000/orders/{resource}/check-in"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:173
+ * @route "http://127.0.0.1:8000/orders/{resource}/check-in"
  */
 checkIn.url = (args: { resource: number | { id: number } } | [ resource: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -131,8 +131,8 @@ checkIn.url = (args: { resource: number | { id: number } } | [ resource: number 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatController::checkIn
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:153
- * @route "http://localhost:8000/orders/{resource}/check-in"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:173
+ * @route "http://127.0.0.1:8000/orders/{resource}/check-in"
  */
 checkIn.post = (args: { resource: number | { id: number } } | [ resource: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: checkIn.url(args, options),
@@ -143,8 +143,8 @@ checkIn.post = (args: { resource: number | { id: number } } | [ resource: number
 
 /**
  * @see \App\Http\Controllers\Seats\SeatController::checkIn
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:153
- * @route "http://localhost:8000/orders/{resource}/check-in"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:173
+ * @route "http://127.0.0.1:8000/orders/{resource}/check-in"
  */
 const checkInForm = (args: { resource: number | { id: number } } | [ resource: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: checkIn.url(args, options),
@@ -153,8 +153,8 @@ const checkInForm = (args: { resource: number | { id: number } } | [ resource: n
 
 /**
  * @see \App\Http\Controllers\Seats\SeatController::checkIn
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:153
- * @route "http://localhost:8000/orders/{resource}/check-in"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php:173
+ * @route "http://127.0.0.1:8000/orders/{resource}/check-in"
  */
 checkInForm.post = (args: { resource: number | { id: number } } | [ resource: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: checkIn.url(args, options),

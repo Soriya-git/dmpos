@@ -7,7 +7,7 @@ import useHttpE30dfc8 from "./use-http";
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "http://localhost:8000/features/http/use-http"
+ * @route "http://127.0.0.1:8000/features/http/use-http"
  */
 export const useHttp = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: useHttp.url(options),
@@ -16,13 +16,13 @@ export const useHttp = (options?: RouteQueryOptions): RouteDefinition<"get"> => 
 
 useHttp.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/http/use-http",
+    url: "http://127.0.0.1:8000/features/http/use-http",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "http://localhost:8000/features/http/use-http"
+ * @route "http://127.0.0.1:8000/features/http/use-http"
  */
 useHttp.url = (options?: RouteQueryOptions) => {
     return useHttp.definition.url + queryParams(options)
@@ -31,7 +31,7 @@ useHttp.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "http://localhost:8000/features/http/use-http"
+ * @route "http://127.0.0.1:8000/features/http/use-http"
  */
 useHttp.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: useHttp.url(options),
@@ -41,7 +41,7 @@ useHttp.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "http://localhost:8000/features/http/use-http"
+ * @route "http://127.0.0.1:8000/features/http/use-http"
  */
 useHttp.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: useHttp.url(options),
@@ -53,7 +53,7 @@ useHttp.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "http://localhost:8000/features/http/use-http"
+ * @route "http://127.0.0.1:8000/features/http/use-http"
  */
 const useHttpForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: useHttp.url(options),
@@ -63,7 +63,7 @@ const useHttpForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =>
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "http://localhost:8000/features/http/use-http"
+ * @route "http://127.0.0.1:8000/features/http/use-http"
  */
 useHttpForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: useHttp.url(options),
@@ -73,7 +73,7 @@ useHttpForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\Feature\HttpController::useHttp
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php:12
- * @route "http://localhost:8000/features/http/use-http"
+ * @route "http://127.0.0.1:8000/features/http/use-http"
  */
 useHttpForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: useHttp.url(formSafeOptions("head", options)),

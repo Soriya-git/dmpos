@@ -6,7 +6,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/master-data/company-branches",
+    url: "http://127.0.0.1:8000/master-data/company-branches",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,7 +40,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,7 +52,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,7 +62,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,7 +72,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:15
- * @route "http://localhost:8000/master-data/company-branches"
+ * @route "http://127.0.0.1:8000/master-data/company-branches"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ index.form = indexForm
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::updateBranch
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:62
- * @route "http://localhost:8000/master-data/company-branches/branches/{branch}"
+ * @route "http://127.0.0.1:8000/master-data/company-branches/branches/{branch}"
  */
 export const updateBranch = (args: { branch: number | { id: number } } | [ branch: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: updateBranch.url(args, options),
@@ -94,13 +94,13 @@ export const updateBranch = (args: { branch: number | { id: number } } | [ branc
 
 updateBranch.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/master-data/company-branches/branches/{branch}",
+    url: "http://127.0.0.1:8000/master-data/company-branches/branches/{branch}",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::updateBranch
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:62
- * @route "http://localhost:8000/master-data/company-branches/branches/{branch}"
+ * @route "http://127.0.0.1:8000/master-data/company-branches/branches/{branch}"
  */
 updateBranch.url = (args: { branch: number | { id: number } } | [ branch: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -131,7 +131,7 @@ updateBranch.url = (args: { branch: number | { id: number } } | [ branch: number
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::updateBranch
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:62
- * @route "http://localhost:8000/master-data/company-branches/branches/{branch}"
+ * @route "http://127.0.0.1:8000/master-data/company-branches/branches/{branch}"
  */
 updateBranch.post = (args: { branch: number | { id: number } } | [ branch: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: updateBranch.url(args, options),
@@ -143,7 +143,7 @@ updateBranch.post = (args: { branch: number | { id: number } } | [ branch: numbe
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::updateBranch
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:62
- * @route "http://localhost:8000/master-data/company-branches/branches/{branch}"
+ * @route "http://127.0.0.1:8000/master-data/company-branches/branches/{branch}"
  */
 const updateBranchForm = (args: { branch: number | { id: number } } | [ branch: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: updateBranch.url(args, options),
@@ -153,7 +153,7 @@ const updateBranchForm = (args: { branch: number | { id: number } } | [ branch: 
 /**
  * @see \App\Http\Controllers\MasterData\CompanyBranchController::updateBranch
  * @see \D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php:62
- * @route "http://localhost:8000/master-data/company-branches/branches/{branch}"
+ * @route "http://127.0.0.1:8000/master-data/company-branches/branches/{branch}"
  */
 updateBranchForm.post = (args: { branch: number | { id: number } } | [ branch: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: updateBranch.url(args, options),

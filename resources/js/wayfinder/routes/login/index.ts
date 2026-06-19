@@ -6,7 +6,7 @@ import { queryParams, type RouteDefinition, type RouteFormDefinition, type Route
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:58
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -15,13 +15,13 @@ export const store = (options?: RouteQueryOptions): RouteDefinition<"post"> => (
 
 store.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/login",
+    url: "http://127.0.0.1:8000/login",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:58
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ store.url = (options?: RouteQueryOptions) => {
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:58
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: store.url(options),
@@ -42,7 +42,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:58
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),
@@ -52,7 +52,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:58
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: store.url(options),

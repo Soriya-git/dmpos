@@ -67,7 +67,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Sale Operations' },
     { title: 'Report' },
     {
-        title: 'Stock',
+        title: 'Daily Stock',
         href: '/operations-report/daily-session-stock',
     },
 ];
@@ -179,73 +179,12 @@ function statusClass(value: StockRow['status']) {
 </script>
 
 <template>
-    <Head title="Daily Session Stock" />
+    <Head title="Daily Stock" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
-            <div
-                class="flex flex-col justify-between gap-4 xl:flex-row xl:items-center"
-            >
-                <div>
-                    <h1
-                        class="text-2xl font-semibold tracking-tight text-[#2A4858]"
-                    >
-                        Daily Session Stock
-                    </h1>
-                    <p class="mt-1 text-sm text-slate-500">
-                        Menu items sent to the stock route, confirmed, invoiced,
-                        and paid for the POS session date.
-                    </p>
-                    <div
-                        class="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500"
-                    >
-                        <span
-                            class="rounded border border-slate-200 bg-white px-2 py-1 font-bold text-slate-700"
-                        >
-                            {{ session.branchName || 'Branch' }}
-                        </span>
-                        <span
-                            class="rounded border border-slate-200 bg-white px-2 py-1"
-                        >
-                            Session:
-                            {{ session.sessionNo || 'No open session' }}
-                        </span>
-                        <span
-                            class="rounded border border-slate-200 bg-white px-2 py-1"
-                        >
-                            Terminal:
-                            {{ session.terminalName || 'Any terminal' }}
-                        </span>
-                    </div>
-                </div>
-
-                <div
-                    class="flex flex-col gap-3 sm:flex-row sm:items-center xl:justify-end"
-                >
-                    <label class="relative block">
-                        <CalendarDays
-                            class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
-                        />
-                        <Input
-                            v-model="sessionDate"
-                            type="date"
-                            class="h-9 w-full rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] sm:w-44"
-                            @change="applyDateFilter"
-                        />
-                    </label>
-                    <div class="relative">
-                        <Search
-                            class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
-                        />
-                        <Input
-                            v-model="search"
-                            placeholder="Search stock order menu..."
-                            class="h-9 w-full rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] sm:w-64"
-                        />
-                    </div>
-                </div>
-            </div>
-
+        <div
+            class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <div class="grid grid-cols-1 gap-4 md:grid-cols-5">
                 <div
                     class="rounded-lg border-l-4 border-[#007882] bg-white p-4 shadow-sm"
@@ -296,6 +235,58 @@ function statusClass(value: StockRow['status']) {
                     <h3 class="mt-1 text-2xl font-bold text-amber-600">
                         {{ numberValue(stats.pendingQty) }}
                     </h3>
+                </div>
+            </div>
+
+            <div
+                class="flex flex-col justify-between gap-4 xl:flex-row xl:items-center"
+            >
+                <div
+                    class="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500"
+                >
+                    <span
+                        class="rounded border border-slate-200 bg-white px-2 py-1 font-bold text-slate-700"
+                    >
+                        {{ session.branchName || 'Branch' }}
+                    </span>
+                    <span
+                        class="rounded border border-slate-200 bg-white px-2 py-1"
+                    >
+                        Session:
+                        {{ session.sessionNo || 'No open session' }}
+                    </span>
+                    <span
+                        class="rounded border border-slate-200 bg-white px-2 py-1"
+                    >
+                        Terminal:
+                        {{ session.terminalName || 'Any terminal' }}
+                    </span>
+                </div>
+
+                <div
+                    class="flex flex-col gap-3 sm:flex-row sm:items-center xl:justify-end"
+                >
+                    <label class="relative block">
+                        <CalendarDays
+                            class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
+                        />
+                        <Input
+                            v-model="sessionDate"
+                            type="date"
+                            class="h-9 w-full rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] sm:w-44"
+                            @change="applyDateFilter"
+                        />
+                    </label>
+                    <div class="relative">
+                        <Search
+                            class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
+                        />
+                        <Input
+                            v-model="search"
+                            placeholder="Search stock order menu..."
+                            class="h-9 w-full rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] sm:w-64"
+                        />
+                    </div>
                 </div>
             </div>
 

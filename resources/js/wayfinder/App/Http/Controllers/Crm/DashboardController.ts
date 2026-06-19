@@ -6,7 +6,7 @@ import { formSafeOptions, queryParams, type RouteDefinition, type RouteFormDefin
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 const DashboardController = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: DashboardController.url(options),
@@ -15,13 +15,13 @@ const DashboardController = (options?: RouteQueryOptions): RouteDefinition<"get"
 
 DashboardController.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/dashboard",
+    url: "http://127.0.0.1:8000/dashboard",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 DashboardController.url = (options?: RouteQueryOptions) => {
     return DashboardController.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ DashboardController.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 DashboardController.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: DashboardController.url(options),
@@ -40,7 +40,7 @@ DashboardController.get = (options?: RouteQueryOptions): RouteDefinition<"get"> 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 DashboardController.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: DashboardController.url(options),
@@ -52,7 +52,7 @@ DashboardController.head = (options?: RouteQueryOptions): RouteDefinition<"head"
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 const DashboardControllerForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: DashboardController.url(options),
@@ -62,7 +62,7 @@ const DashboardControllerForm = (options?: RouteQueryOptions): RouteFormDefiniti
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 DashboardControllerForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: DashboardController.url(options),
@@ -72,7 +72,7 @@ DashboardControllerForm.get = (options?: RouteQueryOptions): RouteFormDefinition
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 DashboardControllerForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: DashboardController.url(formSafeOptions("head", options)),

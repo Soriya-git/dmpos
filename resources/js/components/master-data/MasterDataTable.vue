@@ -7,9 +7,11 @@ const props = withDefaults(
         rows: TRow[];
         emptyText?: string;
         rowsPerPage?: number;
+        scrollBody?: boolean;
     }>(),
     {
         rowsPerPage: 10,
+        scrollBody: false,
     },
 );
 
@@ -31,9 +33,13 @@ const {
 
 <template>
     <div
-        class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+        class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"
+        :class="scrollBody ? 'flex min-h-0 flex-1 flex-col' : ''"
     >
-        <div class="overflow-x-auto">
+        <div
+            class="overflow-x-auto"
+            :class="scrollBody ? 'min-h-0 flex-1 overflow-y-auto' : ''"
+        >
             <table class="w-full min-w-[760px] border-collapse">
                 <thead class="bg-slate-50">
                     <tr>

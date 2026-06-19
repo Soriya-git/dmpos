@@ -25,7 +25,16 @@ class GoodsReceiptController extends Controller
         [$companyId, $branchId] = $this->scope($request);
 
         $receipts = GoodsReceipt::query()
-            ->with(['purchaseOrder', 'stockLocation', 'receiver', 'canceller', 'lines.item', 'lines.unit', 'lines.stockLocation'])
+            ->with([
+                'purchaseOrder.lines.item',
+                'purchaseOrder.lines.unit',
+                'stockLocation',
+                'receiver',
+                'canceller',
+                'lines.item',
+                'lines.unit',
+                'lines.stockLocation',
+            ])
             ->where('company_id', $companyId)
             ->when($branchId, fn ($query) => $query->where('branch_id', $branchId))
             ->latest()
@@ -37,6 +46,7 @@ class GoodsReceiptController extends Controller
 
         return Inertia::render('GoodsReceipt/Index', [
             'receipts' => $receipts,
+            'stagingLocations' => $this->stagingLocations($companyId, $branchId),
             'stats' => [
                 'waitingPurchaseOrders' => $waitingPurchaseOrders,
                 'awaitingStaging' => $receipts->whereIn('status', ['draft', 'in_progress'])->count(),
@@ -168,6 +178,74 @@ class GoodsReceiptController extends Controller
             ->with('success', "Goods receipt {$receipt->receipt_no} saved as draft.");
     }
 
+    public function update(Request $request, GoodsReceipt $goodsReceipt)
+    {
+        $this->ensureEditableReceipt($request, $goodsReceipt);
+
+        [$companyId, $branchId] = $this->scope($request);
+
+        $data = $request->validate([
+            'note' => ['nullable', 'string'],
+            'lines' => ['required', 'array', 'min:1'],
+            'lines.*.purchase_order_line_id' => ['required', 'integer'],
+            'lines.*.stock_location_id' => [
+                'required',
+                Rule::exists('stock_locations', 'id')
+                    ->where('company_id', $companyId)
+                    ->where('branch_id', $branchId)
+                    ->where('location_type', 'inbound_staging'),
+            ],
+            'lines.*.quantity_received' => ['required', 'numeric', 'min:0'],
+        ]);
+
+        DB::transaction(function () use ($data, $goodsReceipt) {
+            $lineInput = collect($data['lines'])
+                ->filter(fn (array $line) => (float) $line['quantity_received'] > 0);
+
+            abort_if($lineInput->isEmpty(), 422, 'Receive at least one item quantity.');
+
+            $goodsReceipt->load(['purchaseOrder.lines.item', 'purchaseOrder.lines.unit']);
+
+            $goodsReceipt->update(['note' => $data['note'] ?? null]);
+            $goodsReceipt->lines()->delete();
+
+            foreach ($lineInput as $inputLine) {
+                $poLine = $goodsReceipt->purchaseOrder->lines
+                    ->firstWhere('id', (int) $inputLine['purchase_order_line_id']);
+
+                if (! $poLine) {
+                    continue;
+                }
+
+                $quantity = (float) $inputLine['quantity_received'];
+
+                GoodsReceiptLine::create([
+                    'goods_receipt_id' => $goodsReceipt->id,
+                    'purchase_order_line_id' => $poLine->id,
+                    'item_id' => $poLine->item_id,
+                    'unit_id' => $poLine->unit_id,
+                    'stock_location_id' => (int) $inputLine['stock_location_id'],
+                    'quantity_received' => $quantity,
+                    'unit_cost' => $poLine->unit_cost,
+                    'total_cost' => $quantity * (float) $poLine->unit_cost,
+                ]);
+            }
+
+            $firstLocationId = (int) $lineInput->first()['stock_location_id'];
+            $location = StockLocation::find($firstLocationId);
+            if ($location) {
+                $goodsReceipt->update([
+                    'stock_location_id' => $location->id,
+                    'warehouse_id' => $location->warehouse_id,
+                ]);
+            }
+        });
+
+        return redirect()
+            ->route('goods-receipts.index')
+            ->with('success', "Goods receipt {$goodsReceipt->receipt_no} updated.");
+    }
+
     public function approvedPurchaseOrders(Request $request)
     {
         [$companyId, $branchId] = $this->scope($request);
@@ -286,6 +364,15 @@ class GoodsReceiptController extends Controller
         abort_if($goodsReceipt->status !== 'draft', 422, 'Only draft goods receipts can be changed.');
     }
 
+    private function ensureEditableReceipt(Request $request, GoodsReceipt $goodsReceipt): void
+    {
+        [$companyId, $branchId] = $this->scope($request);
+
+        abort_if((int) $goodsReceipt->company_id !== (int) $companyId, 403);
+        abort_if((int) $goodsReceipt->branch_id !== (int) $branchId, 403);
+        abort_if($goodsReceipt->status !== 'draft', 422, 'Only draft goods receipts can be edited.');
+    }
+
     private function receivablePurchaseOrders(int $companyId, ?int $branchId)
     {
         return PurchaseOrder::query()
@@ -298,12 +385,15 @@ class GoodsReceiptController extends Controller
             ->whereHas('lines', fn ($query) => $query->where('quantity_remaining', '>', 0));
     }
 
-    private function activeGoodsReceiptQuantities(PurchaseOrder $order)
+    private function activeGoodsReceiptQuantities(PurchaseOrder $order, ?int $excludeReceiptId = null)
     {
         return GoodsReceiptLine::query()
-            ->whereHas('goodsReceipt', function ($query) use ($order) {
+            ->whereHas('goodsReceipt', function ($query) use ($order, $excludeReceiptId) {
                 $query->where('purchase_order_id', $order->id)
                     ->whereNotIn('status', ['rejected', 'cancelled']);
+                if ($excludeReceiptId) {
+                    $query->where('id', '!=', $excludeReceiptId);
+                }
             })
             ->selectRaw('purchase_order_line_id, sum(quantity_received) as quantity')
             ->groupBy('purchase_order_line_id')
@@ -344,10 +434,25 @@ class GoodsReceiptController extends Controller
 
     private function formatReceipt(GoodsReceipt $receipt): array
     {
+        $poLines = null;
+        if ($receipt->status === 'draft' && $receipt->purchaseOrder) {
+            $otherQuantities = $this->activeGoodsReceiptQuantities($receipt->purchaseOrder, $receipt->id);
+            $poLines = $receipt->purchaseOrder->lines->map(fn (PurchaseOrderLine $line) => [
+                'id' => $line->id,
+                'item_name' => $line->item?->name,
+                'item_code' => $line->item?->code,
+                'unit_code' => $line->unit?->code,
+                'quantity_ordered' => (float) $line->quantity_ordered,
+                'quantity_available' => max(0, (float) $line->quantity_ordered - $otherQuantities->get($line->id, 0)),
+            ])->values();
+        }
+
         return [
             'id' => $receipt->id,
             'receipt_no' => $receipt->receipt_no,
+            'purchase_order_id' => $receipt->purchase_order_id,
             'purchase_order_no' => $receipt->purchaseOrder?->po_no,
+            'note' => $receipt->note,
             'status' => $receipt->status,
             'created_at' => $receipt->created_at?->format('M d, Y h:i A'),
             'updated_at' => $receipt->updated_at?->format('M d, Y h:i A'),
@@ -356,8 +461,11 @@ class GoodsReceiptController extends Controller
             'operator' => $receipt->receiver?->name,
             'cancelled_by' => $receipt->canceller?->name,
             'line_count' => $receipt->lines->count(),
+            'po_lines' => $poLines,
             'lines' => $receipt->lines->map(fn (GoodsReceiptLine $line) => [
                 'id' => $line->id,
+                'purchase_order_line_id' => $line->purchase_order_line_id,
+                'stock_location_id' => $line->stock_location_id,
                 'item_name' => $line->item?->name,
                 'item_code' => $line->item?->code,
                 'unit_code' => $line->unit?->code,

@@ -218,6 +218,39 @@ function submitConfirmed() {
     <Head :title="`Sale Settlement ${settlement.invoiceNo}`" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <div class="flex flex-wrap justify-end gap-2">
+                <Button
+                    type="button"
+                    variant="outline"
+                    class="h-9 rounded-lg border-slate-200 bg-white px-4 text-xs font-bold text-slate-600 hover:text-[#007882]"
+                    @click="router.visit('/stock-movements/stock-settlements')"
+                >
+                    <ArrowLeft class="size-4" />
+                    Back
+                </Button>
+                <Button
+                    type="button"
+                    variant="outline"
+                    class="h-9 rounded-lg border-rose-200 bg-white px-4 text-xs font-bold text-rose-600 hover:bg-rose-50"
+                    :disabled="!canAct"
+                    @click="confirmAction = 'reject'"
+                >
+                    <XCircle class="size-4" />
+                    Reject
+                </Button>
+                <Button
+                    type="button"
+                    class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white shadow-md hover:bg-[#006773]"
+                    :disabled="!canAct"
+                    @click="confirmAction = 'approve'"
+                >
+                    <CheckCircle2 class="size-4" />
+                    Approve
+                </Button>
+            </div>
+        </template>
+
         <main
             class="h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
@@ -239,19 +272,6 @@ function submitConfirmed() {
                     class="mb-6 flex flex-col justify-between gap-4 xl:flex-row xl:items-start"
                 >
                     <div>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            class="mb-4 h-10 rounded-lg border-slate-200 bg-white"
-                            @click="
-                                router.visit(
-                                    '/stock-movements/stock-settlements',
-                                )
-                            "
-                        >
-                            <ArrowLeft class="size-4" />
-                            Back
-                        </Button>
                         <p
                             class="text-xs font-bold tracking-widest text-slate-400 uppercase"
                         >
@@ -274,25 +294,6 @@ function submitConfirmed() {
                         >
                             {{ settlement.status }}
                         </span>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            class="h-10 rounded-lg border-rose-200 bg-white px-5 font-bold text-rose-600 hover:bg-rose-50"
-                            :disabled="!canAct"
-                            @click="confirmAction = 'reject'"
-                        >
-                            <XCircle class="size-4" />
-                            Reject
-                        </Button>
-                        <Button
-                            type="button"
-                            class="h-10 rounded-lg bg-[#007882] px-5 font-bold text-white shadow-md hover:bg-[#006773]"
-                            :disabled="!canAct"
-                            @click="confirmAction = 'approve'"
-                        >
-                            <CheckCircle2 class="size-4" />
-                            Approve
-                        </Button>
                     </div>
                 </div>
 

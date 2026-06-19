@@ -6,7 +6,7 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "http://localhost:8000/organizations"
+ * @route "http://127.0.0.1:8000/organizations"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -15,13 +15,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/organizations",
+    url: "http://127.0.0.1:8000/organizations",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "http://localhost:8000/organizations"
+ * @route "http://127.0.0.1:8000/organizations"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "http://localhost:8000/organizations"
+ * @route "http://127.0.0.1:8000/organizations"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,7 +40,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "http://localhost:8000/organizations"
+ * @route "http://127.0.0.1:8000/organizations"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,7 +52,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "http://localhost:8000/organizations"
+ * @route "http://127.0.0.1:8000/organizations"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,7 +62,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "http://localhost:8000/organizations"
+ * @route "http://127.0.0.1:8000/organizations"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,7 +72,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::index
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:16
- * @route "http://localhost:8000/organizations"
+ * @route "http://127.0.0.1:8000/organizations"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ index.form = indexForm
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 export const show = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: show.url(args, options),
@@ -94,13 +94,13 @@ export const show = (args: { organization: number | { id: number } } | [ organiz
 
 show.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/organizations/{organization}",
+    url: "http://127.0.0.1:8000/organizations/{organization}",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 show.url = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -131,7 +131,7 @@ show.url = (args: { organization: number | { id: number } } | [ organization: nu
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 show.get = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: show.url(args, options),
@@ -141,7 +141,7 @@ show.get = (args: { organization: number | { id: number } } | [ organization: nu
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 show.head = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: show.url(args, options),
@@ -153,7 +153,7 @@ show.head = (args: { organization: number | { id: number } } | [ organization: n
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 const showForm = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, options),
@@ -163,7 +163,7 @@ const showForm = (args: { organization: number | { id: number } } | [ organizati
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 showForm.get = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, options),
@@ -173,7 +173,7 @@ showForm.get = (args: { organization: number | { id: number } } | [ organization
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::show
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:32
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 showForm.head = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: show.url(args, formSafeOptions("head", options)),
@@ -186,7 +186,7 @@ show.form = showForm
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 export const update = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"put"> => ({
     url: update.url(args, options),
@@ -195,13 +195,13 @@ export const update = (args: { organization: number | { id: number } } | [ organ
 
 update.definition = {
     methods: ["put","patch"],
-    url: "http://localhost:8000/organizations/{organization}",
+    url: "http://127.0.0.1:8000/organizations/{organization}",
 } satisfies RouteDefinition<["put","patch"]>
 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 update.url = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -232,7 +232,7 @@ update.url = (args: { organization: number | { id: number } } | [ organization: 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 update.put = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"put"> => ({
     url: update.url(args, options),
@@ -242,7 +242,7 @@ update.put = (args: { organization: number | { id: number } } | [ organization: 
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 update.patch = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: update.url(args, options),
@@ -254,7 +254,7 @@ update.patch = (args: { organization: number | { id: number } } | [ organization
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 const updateForm = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(args, formSafeOptions("put", options)),
@@ -264,7 +264,7 @@ const updateForm = (args: { organization: number | { id: number } } | [ organiza
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 updateForm.put = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(args, formSafeOptions("put", options)),
@@ -274,7 +274,7 @@ updateForm.put = (args: { organization: number | { id: number } } | [ organizati
 /**
  * @see \App\Http\Controllers\Crm\OrganizationController::update
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php:48
- * @route "http://localhost:8000/organizations/{organization}"
+ * @route "http://127.0.0.1:8000/organizations/{organization}"
  */
 updateForm.patch = (args: { organization: number | { id: number } } | [ organization: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(args, formSafeOptions("patch", options)),

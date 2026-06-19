@@ -9,7 +9,7 @@ import progressFb9fab3 from "./progress";
 /**
  * @see \App\Http\Controllers\Feature\EventController::globalEvents
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:12
- * @route "http://localhost:8000/features/events/global-events"
+ * @route "http://127.0.0.1:8000/features/events/global-events"
  */
 export const globalEvents = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: globalEvents.url(options),
@@ -18,13 +18,13 @@ export const globalEvents = (options?: RouteQueryOptions): RouteDefinition<"get"
 
 globalEvents.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/events/global-events",
+    url: "http://127.0.0.1:8000/features/events/global-events",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::globalEvents
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:12
- * @route "http://localhost:8000/features/events/global-events"
+ * @route "http://127.0.0.1:8000/features/events/global-events"
  */
 globalEvents.url = (options?: RouteQueryOptions) => {
     return globalEvents.definition.url + queryParams(options)
@@ -33,7 +33,7 @@ globalEvents.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\EventController::globalEvents
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:12
- * @route "http://localhost:8000/features/events/global-events"
+ * @route "http://127.0.0.1:8000/features/events/global-events"
  */
 globalEvents.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: globalEvents.url(options),
@@ -43,7 +43,7 @@ globalEvents.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\EventController::globalEvents
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:12
- * @route "http://localhost:8000/features/events/global-events"
+ * @route "http://127.0.0.1:8000/features/events/global-events"
  */
 globalEvents.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: globalEvents.url(options),
@@ -55,7 +55,7 @@ globalEvents.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\EventController::globalEvents
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:12
- * @route "http://localhost:8000/features/events/global-events"
+ * @route "http://127.0.0.1:8000/features/events/global-events"
  */
 const globalEventsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: globalEvents.url(options),
@@ -65,7 +65,7 @@ const globalEventsForm = (options?: RouteQueryOptions): RouteFormDefinition<"get
 /**
  * @see \App\Http\Controllers\Feature\EventController::globalEvents
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:12
- * @route "http://localhost:8000/features/events/global-events"
+ * @route "http://127.0.0.1:8000/features/events/global-events"
  */
 globalEventsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: globalEvents.url(options),
@@ -75,7 +75,7 @@ globalEventsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get">
 /**
  * @see \App\Http\Controllers\Feature\EventController::globalEvents
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:12
- * @route "http://localhost:8000/features/events/global-events"
+ * @route "http://127.0.0.1:8000/features/events/global-events"
  */
 globalEventsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: globalEvents.url(formSafeOptions("head", options)),
@@ -88,7 +88,7 @@ globalEvents.form = globalEventsForm
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacks
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:22
- * @route "http://localhost:8000/features/events/visit-callbacks"
+ * @route "http://127.0.0.1:8000/features/events/visit-callbacks"
  */
 export const visitCallbacks = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: visitCallbacks.url(options),
@@ -97,13 +97,13 @@ export const visitCallbacks = (options?: RouteQueryOptions): RouteDefinition<"ge
 
 visitCallbacks.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/events/visit-callbacks",
+    url: "http://127.0.0.1:8000/features/events/visit-callbacks",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacks
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:22
- * @route "http://localhost:8000/features/events/visit-callbacks"
+ * @route "http://127.0.0.1:8000/features/events/visit-callbacks"
  */
 visitCallbacks.url = (options?: RouteQueryOptions) => {
     return visitCallbacks.definition.url + queryParams(options)
@@ -112,7 +112,7 @@ visitCallbacks.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacks
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:22
- * @route "http://localhost:8000/features/events/visit-callbacks"
+ * @route "http://127.0.0.1:8000/features/events/visit-callbacks"
  */
 visitCallbacks.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: visitCallbacks.url(options),
@@ -122,7 +122,7 @@ visitCallbacks.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacks
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:22
- * @route "http://localhost:8000/features/events/visit-callbacks"
+ * @route "http://127.0.0.1:8000/features/events/visit-callbacks"
  */
 visitCallbacks.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: visitCallbacks.url(options),
@@ -134,7 +134,7 @@ visitCallbacks.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => 
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacks
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:22
- * @route "http://localhost:8000/features/events/visit-callbacks"
+ * @route "http://127.0.0.1:8000/features/events/visit-callbacks"
  */
 const visitCallbacksForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: visitCallbacks.url(options),
@@ -144,7 +144,7 @@ const visitCallbacksForm = (options?: RouteQueryOptions): RouteFormDefinition<"g
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacks
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:22
- * @route "http://localhost:8000/features/events/visit-callbacks"
+ * @route "http://127.0.0.1:8000/features/events/visit-callbacks"
  */
 visitCallbacksForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: visitCallbacks.url(options),
@@ -154,7 +154,7 @@ visitCallbacksForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get
 /**
  * @see \App\Http\Controllers\Feature\EventController::visitCallbacks
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:22
- * @route "http://localhost:8000/features/events/visit-callbacks"
+ * @route "http://127.0.0.1:8000/features/events/visit-callbacks"
  */
 visitCallbacksForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: visitCallbacks.url(formSafeOptions("head", options)),
@@ -167,7 +167,7 @@ visitCallbacks.form = visitCallbacksForm
 /**
  * @see \App\Http\Controllers\Feature\EventController::progress
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:32
- * @route "http://localhost:8000/features/events/progress"
+ * @route "http://127.0.0.1:8000/features/events/progress"
  */
 export const progress = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: progress.url(options),
@@ -176,13 +176,13 @@ export const progress = (options?: RouteQueryOptions): RouteDefinition<"get"> =>
 
 progress.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/features/events/progress",
+    url: "http://127.0.0.1:8000/features/events/progress",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Feature\EventController::progress
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:32
- * @route "http://localhost:8000/features/events/progress"
+ * @route "http://127.0.0.1:8000/features/events/progress"
  */
 progress.url = (options?: RouteQueryOptions) => {
     return progress.definition.url + queryParams(options)
@@ -191,7 +191,7 @@ progress.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Feature\EventController::progress
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:32
- * @route "http://localhost:8000/features/events/progress"
+ * @route "http://127.0.0.1:8000/features/events/progress"
  */
 progress.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: progress.url(options),
@@ -201,7 +201,7 @@ progress.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Feature\EventController::progress
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:32
- * @route "http://localhost:8000/features/events/progress"
+ * @route "http://127.0.0.1:8000/features/events/progress"
  */
 progress.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: progress.url(options),
@@ -213,7 +213,7 @@ progress.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Feature\EventController::progress
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:32
- * @route "http://localhost:8000/features/events/progress"
+ * @route "http://127.0.0.1:8000/features/events/progress"
  */
 const progressForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: progress.url(options),
@@ -223,7 +223,7 @@ const progressForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =
 /**
  * @see \App\Http\Controllers\Feature\EventController::progress
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:32
- * @route "http://localhost:8000/features/events/progress"
+ * @route "http://127.0.0.1:8000/features/events/progress"
  */
 progressForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: progress.url(options),
@@ -233,7 +233,7 @@ progressForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => 
 /**
  * @see \App\Http\Controllers\Feature\EventController::progress
  * @see \D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php:32
- * @route "http://localhost:8000/features/events/progress"
+ * @route "http://127.0.0.1:8000/features/events/progress"
  */
 progressForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: progress.url(formSafeOptions("head", options)),

@@ -63,7 +63,9 @@ function numberValue(value: number | string | null | undefined) {
     <Head :title="`${item.name} Customer Keep Stock`" />
 
     <AppLayout>
-        <main class="w-full bg-slate-100 p-4 text-slate-800 md:p-8">
+        <main
+            class="h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <header
                 class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
             >
@@ -84,7 +86,7 @@ function numberValue(value: number | string | null | undefined) {
                     </div>
                 </div>
                 <div
-                    class="rounded-xl border border-rose-100 bg-white px-5 py-3 text-right shadow-sm"
+                    class="rounded-lg border border-rose-100 bg-white px-5 py-3 text-right shadow-sm"
                 >
                     <div
                         class="text-[10px] font-black tracking-widest text-slate-400 uppercase"
@@ -98,7 +100,7 @@ function numberValue(value: number | string | null | undefined) {
             </header>
 
             <div
-                class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+                class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"
             >
                 <div
                     class="flex flex-col gap-3 border-b bg-slate-50/50 p-4 md:flex-row md:items-center md:justify-between"

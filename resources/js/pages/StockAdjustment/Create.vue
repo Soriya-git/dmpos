@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, router, useForm } from '@inertiajs/vue3';
-import { ArrowLeft, Boxes, Plus, Trash2 } from 'lucide-vue-next';
+import { Boxes, Plus, Trash2 } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AlertError from '@/components/AlertError.vue';
 import InputError from '@/components/InputError.vue';
@@ -393,51 +393,32 @@ function submitAdjustment() {
     <Head title="Create Stock Adjustment" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <div class="flex gap-2">
+                <Button
+                    type="button"
+                    variant="ghost"
+                    class="h-9 font-semibold text-slate-600 hover:text-red-500"
+                    :disabled="form.processing"
+                    @click="showDashboard"
+                >
+                    Cancel
+                </Button>
+                <Button
+                    type="button"
+                    class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white shadow-md hover:bg-[#006773]"
+                    :disabled="form.processing"
+                    @click="submitAdjustment"
+                >
+                    Save Draft
+                </Button>
+            </div>
+        </template>
+
         <main
             class="h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
             <section class="w-full">
-                <div
-                    class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center"
-                >
-                    <div class="flex items-center gap-4">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            class="h-10 w-10 rounded-full border-slate-200 bg-white p-0 text-slate-500 hover:text-[#007882]"
-                            title="Back"
-                            @click="showDashboard"
-                        >
-                            <ArrowLeft class="size-4" />
-                        </Button>
-                        <div>
-                            <h2 class="text-2xl font-bold text-slate-800">
-                                Create Stock Adjustment
-                            </h2>
-                            <p class="text-sm text-slate-500">
-                                {{ nextAdjustmentNo }}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex gap-3">
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            class="font-semibold text-slate-600 hover:text-red-500"
-                            :disabled="form.processing"
-                            @click="showDashboard"
-                            >Cancel</Button
-                        >
-                        <Button
-                            type="button"
-                            class="rounded-lg bg-[#007882] px-6 font-bold text-white shadow-md hover:bg-[#006773]"
-                            :disabled="form.processing"
-                            @click="submitAdjustment"
-                            >Save Draft</Button
-                        >
-                    </div>
-                </div>
-
                 <div class="grid gap-6 xl:grid-cols-4">
                     <div class="space-y-6 xl:col-span-1">
                         <div
@@ -451,6 +432,19 @@ function submitAdjustment() {
                                 </h2>
                             </div>
                             <div class="space-y-4 p-5">
+                                <div>
+                                    <label
+                                        class="mb-1.5 block text-xs font-bold text-slate-500 uppercase"
+                                    >
+                                        Adjustment Number
+                                    </label>
+                                    <Input
+                                        :model-value="nextAdjustmentNo"
+                                        readonly
+                                        class="h-10 rounded-lg border-slate-200 bg-slate-50 font-mono text-slate-500"
+                                    />
+                                </div>
+
                                 <div>
                                     <label
                                         class="mb-1.5 block text-xs font-bold text-slate-500 uppercase"

@@ -36,7 +36,9 @@ const filteredInvoices = computed(() => {
     <Head title="Invoices for Customer Stock" />
 
     <AppLayout>
-        <main class="w-full bg-slate-100 p-4 text-slate-800 md:p-8">
+        <main
+            class="h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <header class="mb-6 flex items-center gap-4">
                 <Link
                     href="/stock-customer"
@@ -55,7 +57,7 @@ const filteredInvoices = computed(() => {
             </header>
 
             <div
-                class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+                class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"
             >
                 <div
                     class="flex flex-col gap-3 border-b bg-slate-50/50 p-4 md:flex-row md:items-center md:justify-between"

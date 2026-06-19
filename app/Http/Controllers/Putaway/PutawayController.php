@@ -26,7 +26,18 @@ class PutawayController extends Controller
         [$companyId, $branchId] = $this->scope($request);
 
         $transfers = StockTransfer::query()
-            ->with(['goodsReceipt', 'creator', 'approver', 'canceller', 'lines.item', 'lines.unit', 'lines.toLocation'])
+            ->with([
+                'goodsReceipt.purchaseOrder',
+                'goodsReceipt.stockLocation',
+                'goodsReceipt.lines.item',
+                'goodsReceipt.lines.unit',
+                'creator',
+                'approver',
+                'canceller',
+                'lines.item',
+                'lines.unit',
+                'lines.toLocation',
+            ])
             ->where('company_id', $companyId)
             ->where('from_branch_id', $branchId)
             ->where('transfer_type', 'internal_transfer')
@@ -39,6 +50,8 @@ class PutawayController extends Controller
 
         return Inertia::render('Putaway/Index', [
             'putaways' => $transfers,
+            'storageLocations' => $this->storageLocations($companyId, $branchId),
+            'staff' => $this->staff($companyId, $branchId),
             'stats' => [
                 'pendingReceipts' => $pendingReceipts,
                 'activeTasks' => $transfers->whereIn('status', ['draft', 'submitted', 'approved', 'in_transit'])->count(),
@@ -369,14 +382,27 @@ class PutawayController extends Controller
 
     private function formatTransfer(StockTransfer $transfer): array
     {
+        $note = (string) $transfer->note;
+        $priority = str_contains($note, 'Priority: urgent') ? 'urgent'
+            : (str_contains($note, 'Priority: low') ? 'low' : 'normal');
+        $cleanNote = trim(preg_replace('/\n?Priority:.*|\n?Assigned staff ID:.*/', '', $note));
+        $assignedToId = null;
+        if (preg_match('/Assigned staff ID:\s*(\d+)/', $note, $matches)) {
+            $assignedToId = (int) $matches[1];
+        }
+
         return [
             'id' => $transfer->id,
             'transfer_no' => $transfer->transfer_no,
+            'goods_receipt_id' => $transfer->goods_receipt_id,
+            'goods_receipt_no' => $transfer->goodsReceipt?->receipt_no,
+            'priority' => $priority,
+            'assigned_to_id' => $assignedToId,
+            'note' => $cleanNote,
             'created_at' => $transfer->created_at?->format('M d, Y H:i'),
             'updated_at' => $transfer->updated_at?->format('M d, Y H:i'),
             'approved_at' => $transfer->approved_at?->format('M d, Y H:i'),
             'cancelled_at' => $transfer->cancelled_at?->format('M d, Y H:i'),
-            'goods_receipt_no' => $transfer->goodsReceipt?->receipt_no,
             'assigned_staff' => $transfer->creator?->name ?? 'Unassigned',
             'created_by' => $transfer->creator?->name,
             'approved_by' => $transfer->approver?->name,
@@ -384,12 +410,18 @@ class PutawayController extends Controller
             'item_count' => $transfer->lines->count(),
             'total_quantity' => $transfer->lines->sum(fn (StockTransferLine $line) => (float) ($transfer->status === 'received' ? $line->quantity_received : $line->quantity_requested)),
             'status' => $transfer->status,
+            'receipt' => $transfer->status === 'draft' && $transfer->goodsReceipt
+                ? $this->formatReceipt($transfer->goodsReceipt)
+                : null,
             'lines' => $transfer->lines->map(fn (StockTransferLine $line) => [
                 'id' => $line->id,
+                'item_id' => $line->item_id,
+                'unit_id' => $line->unit_id,
                 'item_name' => $line->item?->name,
                 'item_code' => $line->item?->code,
                 'unit_code' => $line->unit?->code,
                 'to_location' => $line->toLocation?->code ?? $line->toLocation?->name,
+                'to_location_id' => $line->to_location_id,
                 'quantity' => (float) ($transfer->status === 'received' ? $line->quantity_received : $line->quantity_requested),
                 'unit_cost' => (float) $line->unit_cost,
                 'total_cost' => (float) $line->total_cost,

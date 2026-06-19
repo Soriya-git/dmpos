@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import {
-    ArrowLeft,
     ArrowRightLeft,
     Boxes,
     CalendarDays,
@@ -597,96 +596,74 @@ function updateTransferStatus(
     <Head title="Create Internal Transfer" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <div class="flex gap-2">
+                <Button
+                    type="button"
+                    variant="ghost"
+                    class="h-9 font-semibold text-slate-600 hover:text-red-500"
+                    :disabled="form.processing"
+                    @click="showDashboard"
+                >
+                    Cancel
+                </Button>
+                <Button
+                    type="button"
+                    class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white shadow-md hover:bg-[#006773]"
+                    :disabled="form.processing"
+                    @click="submitTransfer"
+                >
+                    Save Transfer
+                </Button>
+            </div>
+        </template>
+
         <main
             class="h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
             <section class="w-full">
-                <div
-                    class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center"
-                >
-                    <div class="flex items-center gap-4">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            class="h-10 w-10 rounded-full border-slate-200 bg-white p-0 text-slate-500 hover:text-[#007882]"
-                            title="Back"
-                            @click="showDashboard"
-                        >
-                            <ArrowLeft class="size-4" />
-                        </Button>
-                        <div>
-                            <p
-                                class="text-xs font-bold tracking-widest text-slate-400 uppercase"
-                            >
-                                {{ nextTransferNo }}
-                            </p>
-                            <h1 class="mt-1 text-2xl font-bold text-[#2a4858]">
-                                Create New Internal Transfer
-                            </h1>
-                        </div>
-                    </div>
-                    <div class="flex gap-3">
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            class="font-semibold text-slate-600 hover:text-red-500"
-                            :disabled="form.processing"
-                            @click="showDashboard"
-                            >Cancel</Button
-                        >
-                        <Button
-                            type="button"
-                            class="rounded-lg bg-[#007882] px-6 font-bold text-white shadow-md hover:bg-[#006773]"
-                            :disabled="form.processing"
-                            @click="submitTransfer"
-                            >Save Transfer</Button
-                        >
-                    </div>
-                </div>
-
                 <div class="grid gap-5 xl:grid-cols-[22rem_minmax(0,1fr)]">
                     <div class="space-y-5 xl:order-2">
                         <div
                             class="rounded-lg border border-slate-100 bg-white shadow-sm"
                         >
-                            <div class="border-b border-slate-100 px-5 py-4">
-                                <h2 class="font-bold text-[#2a4858]">
-                                    Transfer Lines
-                                </h2>
-                                <p class="mt-1 text-sm text-slate-500">
-                                    Choose the source item, warehouse, and
-                                    location on each row, then choose where it
-                                    should move.
-                                </p>
+                            <div
+                                class="flex flex-col gap-3 border-b border-slate-100 px-5 py-4 sm:flex-row sm:items-start sm:justify-between"
+                            >
+                                <div>
+                                    <h2 class="font-bold text-[#2a4858]">
+                                        Transfer Lines
+                                    </h2>
+                                    <p class="mt-1 text-sm text-slate-500">
+                                        Choose the source item, warehouse, and
+                                        location on each row, then choose where
+                                        it should move.
+                                    </p>
+                                </div>
+                                <Button
+                                    type="button"
+                                    class="h-8 rounded bg-[#23aa8f] px-3 text-xs font-bold text-white hover:bg-[#1e917a]"
+                                    @click="addLine"
+                                >
+                                    <Plus class="size-3.5" />
+                                    Add Line
+                                </Button>
                             </div>
 
                             <div class="overflow-x-auto">
-                                <table class="w-full min-w-[1180px] text-left">
+                                <table class="w-full min-w-[1060px] text-left">
                                     <thead
                                         class="bg-slate-50 text-xs font-bold text-slate-500 uppercase"
                                     >
                                         <tr>
-                                            <th class="px-4 py-3">Item</th>
-                                            <th class="px-4 py-3">
-                                                From Warehouse
+                                            <th class="w-[52%] px-4 py-3">
+                                                Item
                                             </th>
-                                            <th class="px-4 py-3">
-                                                From Location
-                                            </th>
-                                            <th class="px-4 py-3 text-right">
-                                                Available
-                                            </th>
-                                            <th class="px-4 py-3 text-center">
+                                            <th class="w-[16rem] px-4 py-3">
                                                 Qty
                                             </th>
-                                            <th class="px-4 py-3">
-                                                To Warehouse
-                                            </th>
-                                            <th class="px-4 py-3">
-                                                To Location
-                                            </th>
-                                            <th class="px-4 py-3 text-right">
-                                                Value
+                                            <th class="w-[32%] px-4 py-3">
+                                                Destination
                                             </th>
                                             <th class="w-12 px-4 py-3"></th>
                                         </tr>
@@ -698,125 +675,141 @@ function updateTransferStatus(
                                             class="border-b border-slate-50 last:border-0"
                                         >
                                             <td class="px-4 py-4">
-                                                <SearchDropdown
-                                                    v-model="line.item_id"
-                                                    :options="itemOptions"
-                                                    placeholder="Select item"
-                                                    search-placeholder="Search item..."
-                                                    empty-text="No stocked item found."
-                                                    input-class="border-transparent font-medium"
-                                                    @select="selectItem(line)"
-                                                />
+                                                <div class="space-y-3">
+                                                    <SearchDropdown
+                                                        v-model="line.item_id"
+                                                        :options="itemOptions"
+                                                        placeholder="Select item"
+                                                        search-placeholder="Search item..."
+                                                        empty-text="No stocked item found."
+                                                        input-class="border-transparent font-medium"
+                                                        @select="
+                                                            selectItem(line)
+                                                        "
+                                                    />
+                                                    <div
+                                                        class="grid gap-3 md:grid-cols-2"
+                                                    >
+                                                        <SearchDropdown
+                                                            v-model="
+                                                                line.from_warehouse_id
+                                                            "
+                                                            :options="
+                                                                warehouseOptions
+                                                            "
+                                                            placeholder="From warehouse"
+                                                            search-placeholder="Search warehouse..."
+                                                            empty-text="No warehouse found."
+                                                            input-class="border-transparent font-medium"
+                                                            @select="
+                                                                selectSourceWarehouse(
+                                                                    line,
+                                                                )
+                                                            "
+                                                        />
+                                                        <SearchDropdown
+                                                            v-model="
+                                                                line.stock_balance_id
+                                                            "
+                                                            :options="
+                                                                sourceLocationOptionsFor(
+                                                                    line,
+                                                                )
+                                                            "
+                                                            :disabled="
+                                                                !line.item_id ||
+                                                                !line.from_warehouse_id ||
+                                                                !itemHasStock(
+                                                                    line,
+                                                                )
+                                                            "
+                                                            placeholder="From location"
+                                                            search-placeholder="Search location..."
+                                                            empty-text="No source stock found."
+                                                            input-class="border-transparent font-medium"
+                                                            @select="
+                                                                selectSourceLocation(
+                                                                    line,
+                                                                )
+                                                            "
+                                                        />
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td class="px-4 py-4">
-                                                <SearchDropdown
-                                                    v-model="
-                                                        line.from_warehouse_id
-                                                    "
-                                                    :options="warehouseOptions"
-                                                    placeholder="Source warehouse"
-                                                    search-placeholder="Search warehouse..."
-                                                    empty-text="No warehouse found."
-                                                    input-class="border-transparent font-medium"
-                                                    @select="
-                                                        selectSourceWarehouse(
-                                                            line,
-                                                        )
-                                                    "
-                                                />
+                                                <div class="space-y-2">
+                                                    <Input
+                                                        v-model.number="
+                                                            line.quantity
+                                                        "
+                                                        type="number"
+                                                        min="0.0001"
+                                                        step="0.0001"
+                                                        :max="
+                                                            availableFor(line)
+                                                        "
+                                                        class="h-10 w-full rounded border-slate-200 text-center font-semibold"
+                                                    />
+                                                    <p
+                                                        class="text-xs font-semibold text-slate-500"
+                                                    >
+                                                        Available:
+                                                        <span
+                                                            class="text-[#2a4858]"
+                                                        >
+                                                            {{
+                                                                numberValue(
+                                                                    availableFor(
+                                                                        line,
+                                                                    ),
+                                                                )
+                                                            }}
+                                                            {{
+                                                                selectedBalance(
+                                                                    line.stock_balance_id,
+                                                                )?.unit ?? ''
+                                                            }}
+                                                        </span>
+                                                    </p>
+                                                </div>
                                             </td>
                                             <td class="px-4 py-4">
-                                                <SearchDropdown
-                                                    v-model="
-                                                        line.stock_balance_id
-                                                    "
-                                                    :options="
-                                                        sourceLocationOptionsFor(
-                                                            line,
-                                                        )
-                                                    "
-                                                    :disabled="
-                                                        !line.item_id ||
-                                                        !line.from_warehouse_id ||
-                                                        !itemHasStock(line)
-                                                    "
-                                                    placeholder="Source location"
-                                                    search-placeholder="Search location..."
-                                                    empty-text="No source stock found."
-                                                    input-class="border-transparent font-medium"
-                                                    @select="
-                                                        selectSourceLocation(
-                                                            line,
-                                                        )
-                                                    "
-                                                />
-                                            </td>
-                                            <td
-                                                class="px-4 py-4 text-right font-bold text-[#2a4858]"
-                                            >
-                                                {{
-                                                    numberValue(
-                                                        availableFor(line),
-                                                    )
-                                                }}
-                                                {{
-                                                    selectedBalance(
-                                                        line.stock_balance_id,
-                                                    )?.unit ?? ''
-                                                }}
-                                            </td>
-                                            <td class="px-4 py-4">
-                                                <Input
-                                                    v-model.number="
-                                                        line.quantity
-                                                    "
-                                                    type="number"
-                                                    min="0.0001"
-                                                    step="0.0001"
-                                                    :max="availableFor(line)"
-                                                    class="h-9 w-28 rounded border-slate-200 text-center"
-                                                />
-                                            </td>
-                                            <td class="px-4 py-4">
-                                                <SearchDropdown
-                                                    v-model="
-                                                        line.to_warehouse_id
-                                                    "
-                                                    :options="warehouseOptions"
-                                                    placeholder="Target warehouse"
-                                                    search-placeholder="Search warehouse..."
-                                                    empty-text="No warehouse found."
-                                                    input-class="border-transparent font-medium"
-                                                    @select="
-                                                        selectDestinationWarehouse(
-                                                            line,
-                                                        )
-                                                    "
-                                                />
-                                            </td>
-                                            <td class="px-4 py-4">
-                                                <SearchDropdown
-                                                    v-model="
-                                                        line.to_location_id
-                                                    "
-                                                    :options="
-                                                        destinationLocationOptionsFor(
-                                                            line,
-                                                        )
-                                                    "
-                                                    :disabled="
-                                                        !line.to_warehouse_id
-                                                    "
-                                                    placeholder="Target location"
-                                                    search-placeholder="Search location..."
-                                                    empty-text="No target location found."
-                                                    input-class="border-transparent font-medium"
-                                                />
-                                            </td>
-                                            <td
-                                                class="px-4 py-4 text-right font-mono font-bold text-[#007882]"
-                                            >
-                                                {{ money(lineTotal(line)) }}
+                                                <div class="space-y-3">
+                                                    <SearchDropdown
+                                                        v-model="
+                                                            line.to_warehouse_id
+                                                        "
+                                                        :options="
+                                                            warehouseOptions
+                                                        "
+                                                        placeholder="Warehouse selection"
+                                                        search-placeholder="Search warehouse..."
+                                                        empty-text="No warehouse found."
+                                                        input-class="border-transparent font-medium"
+                                                        @select="
+                                                            selectDestinationWarehouse(
+                                                                line,
+                                                            )
+                                                        "
+                                                    />
+                                                    <SearchDropdown
+                                                        v-model="
+                                                            line.to_location_id
+                                                        "
+                                                        :options="
+                                                            destinationLocationOptionsFor(
+                                                                line,
+                                                            )
+                                                        "
+                                                        :disabled="
+                                                            !line.to_warehouse_id
+                                                        "
+                                                        placeholder="Location selection"
+                                                        search-placeholder="Search location..."
+                                                        empty-text="No target location found."
+                                                        input-class="border-transparent font-medium"
+                                                    />
+                                                </div>
                                             </td>
                                             <td class="px-4 py-4 text-center">
                                                 <Button
@@ -833,19 +826,8 @@ function updateTransferStatus(
                                     </tbody>
                                 </table>
                             </div>
-                            <div
-                                class="flex flex-col gap-3 border-t border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
-                            >
+                            <div class="border-t border-slate-100 px-4 py-4">
                                 <InputError :message="firstLineError" />
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    class="h-10 rounded-lg border-[#007882]/20 bg-white font-bold text-[#007882]"
-                                    @click="addLine"
-                                >
-                                    <Plus class="size-4" />
-                                    Add Line
-                                </Button>
                             </div>
                         </div>
 
@@ -864,6 +846,18 @@ function updateTransferStatus(
                                 Transfer Header
                             </h2>
                             <div class="mt-4 space-y-4">
+                                <label class="block">
+                                    <span
+                                        class="text-xs font-bold text-slate-500 uppercase"
+                                    >
+                                        Document Number
+                                    </span>
+                                    <Input
+                                        :model-value="nextTransferNo"
+                                        readonly
+                                        class="mt-1 h-10 rounded-lg border-slate-200 bg-slate-50 font-mono text-slate-500"
+                                    />
+                                </label>
                                 <label class="block">
                                     <span
                                         class="text-xs font-bold text-slate-500 uppercase"

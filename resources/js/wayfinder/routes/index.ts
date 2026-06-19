@@ -6,7 +6,7 @@ import { formSafeOptions, queryParams, type RouteDefinition, type RouteFormDefin
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 export const login = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: login.url(options),
@@ -15,13 +15,13 @@ export const login = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 login.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/login",
+    url: "http://127.0.0.1:8000/login",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 login.url = (options?: RouteQueryOptions) => {
     return login.definition.url + queryParams(options)
@@ -30,7 +30,7 @@ login.url = (options?: RouteQueryOptions) => {
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 login.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: login.url(options),
@@ -40,7 +40,7 @@ login.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 login.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: login.url(options),
@@ -52,7 +52,7 @@ login.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: login.url(options),
@@ -62,7 +62,7 @@ const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 loginForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: login.url(options),
@@ -72,7 +72,7 @@ loginForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:47
- * @route "http://localhost:8000/login"
+ * @route "http://127.0.0.1:8000/login"
  */
 loginForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: login.url(formSafeOptions("head", options)),
@@ -85,7 +85,7 @@ login.form = loginForm
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "http://localhost:8000/logout"
+ * @route "http://127.0.0.1:8000/logout"
  */
 export const logout = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: logout.url(options),
@@ -94,13 +94,13 @@ export const logout = (options?: RouteQueryOptions): RouteDefinition<"post"> => 
 
 logout.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/logout",
+    url: "http://127.0.0.1:8000/logout",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "http://localhost:8000/logout"
+ * @route "http://127.0.0.1:8000/logout"
  */
 logout.url = (options?: RouteQueryOptions) => {
     return logout.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ logout.url = (options?: RouteQueryOptions) => {
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "http://localhost:8000/logout"
+ * @route "http://127.0.0.1:8000/logout"
  */
 logout.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: logout.url(options),
@@ -121,7 +121,7 @@ logout.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "http://localhost:8000/logout"
+ * @route "http://127.0.0.1:8000/logout"
  */
 const logoutForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: logout.url(options),
@@ -131,7 +131,7 @@ const logoutForm = (options?: RouteQueryOptions): RouteFormDefinition<"post"> =>
 /**
  * @see \Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy
  * @see \D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php:100
- * @route "http://localhost:8000/logout"
+ * @route "http://127.0.0.1:8000/logout"
  */
 logoutForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: logout.url(options),
@@ -144,7 +144,7 @@ logout.form = logoutForm
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 export const home = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: home.url(options),
@@ -153,13 +153,13 @@ export const home = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 home.definition = {
     methods: ["get","head","post","put","patch","delete","options"],
-    url: "http://localhost:8000",
+    url: "http://127.0.0.1:8000",
 } satisfies RouteDefinition<["get","head","post","put","patch","delete","options"]>
 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 home.url = (options?: RouteQueryOptions) => {
     return home.definition.url + queryParams(options)
@@ -168,7 +168,7 @@ home.url = (options?: RouteQueryOptions) => {
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 home.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: home.url(options),
@@ -178,7 +178,7 @@ home.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 home.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: home.url(options),
@@ -188,7 +188,7 @@ home.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 home.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: home.url(options),
@@ -198,7 +198,7 @@ home.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 home.put = (options?: RouteQueryOptions): RouteDefinition<"put"> => ({
     url: home.url(options),
@@ -208,7 +208,7 @@ home.put = (options?: RouteQueryOptions): RouteDefinition<"put"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 home.patch = (options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: home.url(options),
@@ -218,7 +218,7 @@ home.patch = (options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 home.delete = (options?: RouteQueryOptions): RouteDefinition<"delete"> => ({
     url: home.url(options),
@@ -228,7 +228,7 @@ home.delete = (options?: RouteQueryOptions): RouteDefinition<"delete"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 home.options = (options?: RouteQueryOptions): RouteDefinition<"options"> => ({
     url: home.url(options),
@@ -240,7 +240,7 @@ home.options = (options?: RouteQueryOptions): RouteDefinition<"options"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 const homeForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: home.url(options),
@@ -250,7 +250,7 @@ const homeForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 homeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: home.url(options),
@@ -260,7 +260,7 @@ homeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 homeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: home.url(formSafeOptions("head", options)),
@@ -270,7 +270,7 @@ homeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 homeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: home.url(options),
@@ -280,7 +280,7 @@ homeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 homeForm.put = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: home.url(formSafeOptions("put", options)),
@@ -290,7 +290,7 @@ homeForm.put = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 homeForm.patch = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: home.url(formSafeOptions("patch", options)),
@@ -300,7 +300,7 @@ homeForm.patch = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => (
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 homeForm.delete = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: home.url(formSafeOptions("delete", options)),
@@ -310,7 +310,7 @@ homeForm.delete = (options?: RouteQueryOptions): RouteFormDefinition<"post"> => 
 /**
  * @see \Illuminate\Routing\RedirectController::__invoke
  * @see \D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php:19
- * @route "http://localhost:8000"
+ * @route "http://127.0.0.1:8000"
  */
 homeForm.options = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: home.url(formSafeOptions("options", options)),
@@ -323,7 +323,7 @@ home.form = homeForm
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 export const dashboard = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: dashboard.url(options),
@@ -332,13 +332,13 @@ export const dashboard = (options?: RouteQueryOptions): RouteDefinition<"get"> =
 
 dashboard.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/dashboard",
+    url: "http://127.0.0.1:8000/dashboard",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 dashboard.url = (options?: RouteQueryOptions) => {
     return dashboard.definition.url + queryParams(options)
@@ -347,7 +347,7 @@ dashboard.url = (options?: RouteQueryOptions) => {
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 dashboard.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: dashboard.url(options),
@@ -357,7 +357,7 @@ dashboard.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 dashboard.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: dashboard.url(options),
@@ -369,7 +369,7 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: dashboard.url(options),
@@ -379,7 +379,7 @@ const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> 
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: dashboard.url(options),
@@ -389,7 +389,7 @@ dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> =>
 /**
  * @see \App\Http\Controllers\Crm\DashboardController::__invoke
  * @see \D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php:14
- * @route "http://localhost:8000/dashboard"
+ * @route "http://127.0.0.1:8000/dashboard"
  */
 dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: dashboard.url(formSafeOptions("head", options)),

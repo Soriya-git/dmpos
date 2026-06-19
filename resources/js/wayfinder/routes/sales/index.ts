@@ -3,11 +3,12 @@
 
 import { formSafeOptions, queryParams, type RouteDefinition, type RouteFormDefinition, type RouteQueryOptions } from "./../../index";
 import invoices from "./invoices";
+import payments from "./payments";
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -16,13 +17,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: "http://localhost:8000/sales",
+    url: "http://127.0.0.1:8000/sales",
 } satisfies RouteDefinition<["get","head"]>
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -30,8 +31,8 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
     url: index.url(options),
@@ -40,8 +41,8 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
     url: index.url(options),
@@ -52,8 +53,8 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -62,8 +63,8 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => (
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(options),
@@ -72,8 +73,8 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 
 /**
  * @see \App\Http\Controllers\Sales\SaleInvoiceController::index
- * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:19
- * @route "http://localhost:8000/sales"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php:23
+ * @route "http://127.0.0.1:8000/sales"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
     action: index.url(formSafeOptions("head", options)),
@@ -87,6 +88,7 @@ index.form = indexForm
 const sales = {
     index,
     invoices,
+    payments,
 }
 
 export default sales

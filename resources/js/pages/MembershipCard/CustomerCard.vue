@@ -162,11 +162,13 @@ function goTransactions(card: CustomerCard | null = selectedCard.value) {
     <Head title="Membership Cards" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
+        <div
+            class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_440px]">
                 <section class="flex flex-col gap-6">
                     <div
-                        class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+                        class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
                     >
                         <div
                             class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
@@ -220,7 +222,7 @@ function goTransactions(card: CustomerCard | null = selectedCard.value) {
 
                     <div class="grid gap-4 md:grid-cols-3">
                         <div
-                            class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                            class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
                         >
                             <p
                                 class="text-[10px] font-black tracking-widest text-slate-400 uppercase"
@@ -232,7 +234,7 @@ function goTransactions(card: CustomerCard | null = selectedCard.value) {
                             </p>
                         </div>
                         <div
-                            class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                            class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
                         >
                             <p
                                 class="text-[10px] font-black tracking-widest text-slate-400 uppercase"
@@ -244,7 +246,7 @@ function goTransactions(card: CustomerCard | null = selectedCard.value) {
                             </p>
                         </div>
                         <div
-                            class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                            class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
                         >
                             <p
                                 class="text-[10px] font-black tracking-widest text-slate-400 uppercase"
@@ -258,7 +260,7 @@ function goTransactions(card: CustomerCard | null = selectedCard.value) {
                     </div>
 
                     <div
-                        class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+                        class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"
                     >
                         <div class="overflow-x-auto">
                             <table class="w-full min-w-[900px] border-collapse">
@@ -420,7 +422,7 @@ function goTransactions(card: CustomerCard | null = selectedCard.value) {
 
                 <aside class="flex flex-col gap-6">
                     <div
-                        class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+                        class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
                     >
                         <div class="mb-4 flex items-center justify-between">
                             <span
@@ -457,7 +459,7 @@ function goTransactions(card: CustomerCard | null = selectedCard.value) {
                     </div>
 
                     <div
-                        class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+                        class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
                     >
                         <div class="mb-4 flex items-center justify-between">
                             <div>
@@ -496,7 +498,7 @@ function goTransactions(card: CustomerCard | null = selectedCard.value) {
                     </div>
 
                     <div
-                        class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+                        class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
                     >
                         <div class="mb-4 flex items-center justify-between">
                             <div>

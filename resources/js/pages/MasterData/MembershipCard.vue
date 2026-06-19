@@ -168,7 +168,9 @@ function saveCard() {
             })),
     };
 
-    const existingIndex = cards.value.findIndex((card) => card.id === payload.id);
+    const existingIndex = cards.value.findIndex(
+        (card) => card.id === payload.id,
+    );
 
     if (existingIndex >= 0) {
         cards.value[existingIndex] = payload;
@@ -189,7 +191,10 @@ function removeBalanceRow(index: number) {
 
 function balanceSummary(card: MembershipCardRecord) {
     return card.balances
-        .map((balance) => `${balance.currency} ${balance.balance.toLocaleString()}`)
+        .map(
+            (balance) =>
+                `${balance.currency} ${balance.balance.toLocaleString()}`,
+        )
         .join(' / ');
 }
 
@@ -216,17 +221,21 @@ if (cards.value[0]) {
     <Head title="Membership Cards" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-1 flex-col gap-6 p-4 lg:p-6">
+        <div
+            class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
+        >
             <div
                 class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
             >
                 <div>
-                    <h1 class="text-2xl font-semibold tracking-tight text-[#2A4858]">
+                    <h1
+                        class="text-2xl font-semibold tracking-tight text-[#2A4858]"
+                    >
                         Membership Cards
                     </h1>
                     <p class="mt-1 text-sm text-slate-500">
-                        Manage reusable customer payment cards, balances, and card
-                        status.
+                        Manage reusable customer payment cards, balances, and
+                        card status.
                     </p>
                 </div>
 
@@ -313,7 +322,9 @@ if (cards.value[0]) {
                                     {{ row.customerPhone || '-' }}
                                 </div>
                             </td>
-                            <td class="px-4 py-3 text-xs font-bold text-slate-600">
+                            <td
+                                class="px-4 py-3 text-xs font-bold text-slate-600"
+                            >
                                 {{ balanceSummary(row) || '-' }}
                             </td>
                             <td class="px-4 py-3">
@@ -340,7 +351,7 @@ if (cards.value[0]) {
                     </MasterDataTable>
 
                     <div
-                        class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+                        class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
                     >
                         <div class="mb-5 flex items-center justify-between">
                             <div>
@@ -385,7 +396,7 @@ if (cards.value[0]) {
                             </div>
 
                             <div
-                                class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4"
+                                class="rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4"
                             >
                                 <span
                                     class="mb-3 block text-[9px] font-black tracking-widest text-slate-400 uppercase"
@@ -442,10 +453,14 @@ if (cards.value[0]) {
                                         class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-xs font-bold shadow-xs outline-none focus:border-[#007882]"
                                     >
                                         <option value="active">Active</option>
-                                        <option value="inactive">Inactive</option>
+                                        <option value="inactive">
+                                            Inactive
+                                        </option>
                                         <option value="blocked">Blocked</option>
                                         <option value="expired">Expired</option>
-                                        <option value="cancelled">Cancelled</option>
+                                        <option value="cancelled">
+                                            Cancelled
+                                        </option>
                                     </select>
                                 </label>
                             </div>
@@ -492,8 +507,12 @@ if (cards.value[0]) {
                                         class="size-9 rounded-lg text-slate-400 hover:text-rose-600"
                                         @click="removeBalanceRow(index)"
                                     >
-                                        <span class="text-lg leading-none">×</span>
-                                        <span class="sr-only">Remove currency</span>
+                                        <span class="text-lg leading-none"
+                                            >×</span
+                                        >
+                                        <span class="sr-only"
+                                            >Remove currency</span
+                                        >
                                     </Button>
                                 </div>
                             </div>
@@ -535,7 +554,7 @@ if (cards.value[0]) {
                 </div>
 
                 <div
-                    class="h-fit rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+                    class="h-fit rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
                 >
                     <div class="mb-5 text-center">
                         <span

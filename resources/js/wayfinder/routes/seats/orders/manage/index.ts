@@ -5,8 +5,8 @@ import { applyUrlDefaults, queryParams, type RouteDefinition, type RouteFormDefi
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::saveManage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:281
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:287
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 export const save = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: save.url(args, options),
@@ -15,13 +15,13 @@ export const save = (args: { diningSession: number | { id: number } } | [ dining
 
 save.definition = {
     methods: ["post"],
-    url: "http://localhost:8000/orders/{diningSession}/manage",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/manage",
 } satisfies RouteDefinition<["post"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::saveManage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:281
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:287
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 save.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -51,8 +51,8 @@ save.url = (args: { diningSession: number | { id: number } } | [ diningSession: 
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::saveManage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:281
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:287
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 save.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"post"> => ({
     url: save.url(args, options),
@@ -63,8 +63,8 @@ save.post = (args: { diningSession: number | { id: number } } | [ diningSession:
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::saveManage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:281
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:287
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 const saveForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: save.url(args, options),
@@ -73,8 +73,8 @@ const saveForm = (args: { diningSession: number | { id: number } } | [ diningSes
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::saveManage
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:281
- * @route "http://localhost:8000/orders/{diningSession}/manage"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:287
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/manage"
  */
 saveForm.post = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: save.url(args, options),

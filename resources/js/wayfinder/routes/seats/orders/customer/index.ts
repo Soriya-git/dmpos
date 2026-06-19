@@ -5,8 +5,8 @@ import { applyUrlDefaults, formSafeOptions, queryParams, type RouteDefinition, t
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateCustomer
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:927
- * @route "http://localhost:8000/orders/{diningSession}/customer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:983
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/customer"
  */
 export const update = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: update.url(args, options),
@@ -15,13 +15,13 @@ export const update = (args: { diningSession: number | { id: number } } | [ dini
 
 update.definition = {
     methods: ["patch"],
-    url: "http://localhost:8000/orders/{diningSession}/customer",
+    url: "http://127.0.0.1:8000/orders/{diningSession}/customer",
 } satisfies RouteDefinition<["patch"]>
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateCustomer
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:927
- * @route "http://localhost:8000/orders/{diningSession}/customer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:983
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/customer"
  */
 update.url = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === "string" || typeof args === "number") {
@@ -51,8 +51,8 @@ update.url = (args: { diningSession: number | { id: number } } | [ diningSession
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateCustomer
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:927
- * @route "http://localhost:8000/orders/{diningSession}/customer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:983
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/customer"
  */
 update.patch = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<"patch"> => ({
     url: update.url(args, options),
@@ -63,8 +63,8 @@ update.patch = (args: { diningSession: number | { id: number } } | [ diningSessi
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateCustomer
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:927
- * @route "http://localhost:8000/orders/{diningSession}/customer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:983
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/customer"
  */
 const updateForm = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(args, formSafeOptions("patch", options)),
@@ -73,8 +73,8 @@ const updateForm = (args: { diningSession: number | { id: number } } | [ diningS
 
 /**
  * @see \App\Http\Controllers\Seats\SeatOrderController::updateCustomer
- * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:927
- * @route "http://localhost:8000/orders/{diningSession}/customer"
+ * @see \D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php:983
+ * @route "http://127.0.0.1:8000/orders/{diningSession}/customer"
  */
 updateForm.patch = (args: { diningSession: number | { id: number } } | [ diningSession: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<"post"> => ({
     action: update.url(args, formSafeOptions("patch", options)),
