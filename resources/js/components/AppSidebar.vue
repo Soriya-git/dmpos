@@ -16,6 +16,7 @@ import {
     PackageSearch,
     Utensils,
     Landmark,
+    Printer as PrinterIcon,
 } from 'lucide-vue-next';
 import NavFooter from '@/components/NavFooter.vue';
 import NavSection from '@/components/NavSection.vue';
@@ -274,6 +275,28 @@ const masterDataSection: NavSectionType = {
     ],
 };
 
+const accessControlSection: NavSectionType = {
+    label: 'Acess Control',
+    groups: [
+        {
+            title: 'Acess Control',
+            icon: PrinterIcon,
+            items: [
+                {
+                    title: 'Printer',
+                    href: '/access-control/printers',
+                    permission: 'printers.view',
+                },
+                {
+                    title: 'Printer Log',
+                    href: '/access-control/printer-logs',
+                    permission: 'printer-logs.view',
+                },
+            ],
+        },
+    ],
+};
+
 // const footerNavItems: NavItem[] = [
 //     {
 //         title: 'Documentation',
@@ -312,6 +335,7 @@ const masterDataSection: NavSectionType = {
                 :items="visibleItems(stockNavItems)"
             />
             <NavSection :section="visibleSection(masterDataSection)" />
+            <NavSection :section="visibleSection(accessControlSection)" />
         </SidebarContent>
 
         <SidebarFooter>

@@ -43,6 +43,8 @@ class RolePermissionSeeder extends Seeder
             'exchange-rates',
             'taxes',
             'menu-price-lists',
+            'printers',
+            'printer-logs',
         ];
 
         $allPermissions = collect($supervisorPages)

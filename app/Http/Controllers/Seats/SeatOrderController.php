@@ -25,8 +25,10 @@ use App\Models\Printer;
 use App\Models\PrintJob;
 use App\Models\PrintTemplate;
 use App\Services\MembershipCardLedger;
+use App\Services\RawTcpPrinter;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -398,7 +400,7 @@ class SeatOrderController extends Controller
             'lines.*.note' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        DB::transaction(function () use ($diningSession, $data, $request) {
+        $printJobs = DB::transaction(function () use ($diningSession, $data, $request): Collection {
             $order = $this->getCartOrder($diningSession);
 
             if (isset($data['lines']) && is_array($data['lines'])) {
@@ -419,8 +421,11 @@ class SeatOrderController extends Controller
             ]);
 
             $order->load(['orderLines.menu.printer', 'diningSession.diningResource']);
-            $this->createPrintJobsForOrder($order, $request);
+
+            return $this->createPrintJobsForOrder($order, $request);
         });
+
+        $printJobs->each(fn (PrintJob $printJob) => app(RawTcpPrinter::class)->print($printJob));
 
         return back()->with('success', 'Order sent to kitchen.');
     }
@@ -1324,8 +1329,13 @@ class SeatOrderController extends Controller
             });
     }
 
-    private function createPrintJobsForOrder(Order $order, Request $request): void
+    /**
+     * @return Collection<int, PrintJob>
+     */
+    private function createPrintJobsForOrder(Order $order, Request $request): Collection
     {
+        $printJobs = collect();
+
         $defaultPrinters = Printer::query()
             ->where('company_id', $order->company_id)
             ->where('branch_id', $order->branch_id)
@@ -1353,7 +1363,7 @@ class SeatOrderController extends Controller
 
                 return ($printer?->id ?: 'route-'.$route).'|'.$route;
             })
-            ->each(function ($lines, string $key) use ($order, $request, $defaultPrinters, $templates) {
+            ->each(function ($lines, string $key) use ($order, $request, $defaultPrinters, $templates, $printJobs) {
                 [, $route] = explode('|', $key, 2);
                 $firstLine = $lines->first();
                 $printer = $firstLine->menu->printer ?: $defaultPrinters->get($route);
@@ -1364,7 +1374,7 @@ class SeatOrderController extends Controller
                     default => 'kitchen_ticket',
                 };
 
-                PrintJob::create([
+                $printJobs->push(PrintJob::create([
                     'company_id' => $order->company_id,
                     'branch_id' => $order->branch_id,
                     'printer_id' => $printer?->id,
@@ -1383,6 +1393,7 @@ class SeatOrderController extends Controller
                             'connection_type' => $printer->connection_type,
                             'network_protocol' => $printer->network_protocol,
                             'ip_address' => $printer->ip_address,
+                            'host_name' => $printer->host_name,
                             'port' => $printer->port,
                             'paper_size' => $printer->paper_size,
                         ] : null,
@@ -1401,8 +1412,10 @@ class SeatOrderController extends Controller
                             'note' => $line->note,
                         ])->values()->all(),
                     ],
-                ]);
+                ]));
             });
+
+        return $printJobs;
     }
 
     private function createCancelSlipPrintJob(OrderLine $orderLine, Request $request): void
@@ -1468,6 +1481,7 @@ class SeatOrderController extends Controller
                     'connection_type' => $printer->connection_type,
                     'network_protocol' => $printer->network_protocol,
                     'ip_address' => $printer->ip_address,
+                    'host_name' => $printer->host_name,
                     'port' => $printer->port,
                     'paper_size' => $printer->paper_size,
                 ] : null,
@@ -1553,6 +1567,7 @@ class SeatOrderController extends Controller
                     'connection_type' => $printer->connection_type,
                     'network_protocol' => $printer->network_protocol,
                     'ip_address' => $printer->ip_address,
+                    'host_name' => $printer->host_name,
                     'port' => $printer->port,
                     'paper_size' => $printer->paper_size,
                 ] : null,

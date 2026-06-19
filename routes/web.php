@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccessControl\PrinterController;
 use App\Http\Controllers\BalanceOnHand\BalanceOnHandController;
 use App\Http\Controllers\Crm;
 use App\Http\Controllers\Feature;
@@ -44,6 +45,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/users', UserController::class)->name('users.index');
     Route::post('/users/roles', [UserController::class, 'storeRole'])->name('users.roles.store');
     Route::patch('/users/{user}/permissions', [UserController::class, 'updatePermissions'])->name('users.permissions.update');
+
+    // Access control routes
+    Route::get('/access-control/printers', [PrinterController::class, 'index'])->name('access-control.printers');
+    Route::post('/access-control/printers', [PrinterController::class, 'store'])->name('access-control.printers.store');
+    Route::patch('/access-control/printers/{printer}', [PrinterController::class, 'update'])->name('access-control.printers.update');
+    Route::get('/access-control/printer-logs', [PrinterController::class, 'logs'])->name('access-control.printer-logs');
+    Route::delete('/access-control/printer-logs', [PrinterController::class, 'destroyLogs'])->name('access-control.printer-logs.destroy');
 
     // POS session routes
     Route::get('/pos-sessions', [PosSessionController::class, 'index'])
