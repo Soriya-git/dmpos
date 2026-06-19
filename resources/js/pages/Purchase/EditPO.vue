@@ -83,15 +83,17 @@ const form = useForm({
     order_date: props.order.order_date ?? '',
     expected_date: props.order.expected_date ?? '',
     note: props.order.note ?? '',
-    lines: props.order.lines.length > 0
-        ? props.order.lines.map((l) => makeLine(l))
-        : [makeLine()],
+    lines:
+        props.order.lines.length > 0
+            ? props.order.lines.map((l) => makeLine(l))
+            : [makeLine()],
 });
 
 const grandTotal = computed(() =>
     form.lines.reduce(
         (total, line) =>
-            total + Number(line.quantity_ordered || 0) * Number(line.unit_cost || 0),
+            total +
+            Number(line.quantity_ordered || 0) * Number(line.unit_cost || 0),
         0,
     ),
 );
@@ -190,17 +192,22 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
 <template>
     <div class="w-full">
         <div class="grid grid-cols-1 gap-6 xl:grid-cols-4 2xl:gap-8">
-
             <!-- Left: Info -->
             <div class="space-y-6 xl:col-span-1">
-                <div class="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
-                    <h3 class="mb-4 flex items-center text-sm font-bold text-slate-700 uppercase">
+                <div
+                    class="rounded-lg border border-slate-100 bg-white p-6 shadow-sm"
+                >
+                    <h3
+                        class="mb-4 flex items-center text-sm font-bold text-slate-700 uppercase"
+                    >
                         <PackagePlus class="mr-2 size-4 text-[#007882]" />
                         Info
                     </h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                            >
                                 PO Number
                             </label>
                             <Input
@@ -210,7 +217,9 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                             />
                         </div>
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                            >
                                 Supplier
                             </label>
                             <SearchDropdown
@@ -225,7 +234,9 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                             <InputError :message="form.errors.supplier_name" />
                         </div>
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                            >
                                 Supplier Phone
                             </label>
                             <Input
@@ -236,7 +247,9 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="mb-1 block text-xs font-bold text-amber-600 uppercase">
+                                <label
+                                    class="mb-1 block text-xs font-bold text-amber-600 uppercase"
+                                >
                                     Expected Date
                                 </label>
                                 <Input
@@ -246,7 +259,9 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                                 />
                             </div>
                             <div>
-                                <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                                <label
+                                    class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                >
                                     Order Date
                                 </label>
                                 <Input
@@ -258,7 +273,9 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                         </div>
                         <InputError :message="form.errors.order_date" />
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                            >
                                 Note
                             </label>
                             <textarea
@@ -273,9 +290,15 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
 
             <!-- Right: Order items -->
             <div class="space-y-6 xl:col-span-3">
-                <div class="overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm">
-                    <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4">
-                        <h3 class="text-xs font-bold tracking-wider text-slate-700 uppercase">
+                <div
+                    class="overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm"
+                >
+                    <div
+                        class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4"
+                    >
+                        <h3
+                            class="text-xs font-bold tracking-wider text-slate-700 uppercase"
+                        >
                             Order Items
                         </h3>
                         <Button
@@ -290,13 +313,35 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
-                            <thead class="border-b border-slate-100 text-slate-500">
+                            <thead
+                                class="border-b border-slate-100 text-slate-500"
+                            >
                                 <tr>
-                                    <th class="min-w-64 px-4 py-3 text-left font-semibold">Item Details</th>
-                                    <th class="px-4 py-3 text-center font-semibold">Qty</th>
-                                    <th class="px-4 py-3 text-left font-semibold">Unit</th>
-                                    <th class="px-4 py-3 text-right font-semibold">Cost</th>
-                                    <th class="px-4 py-3 text-right font-semibold">Total</th>
+                                    <th
+                                        class="min-w-64 px-4 py-3 text-left font-semibold"
+                                    >
+                                        Item Details
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-center font-semibold"
+                                    >
+                                        Qty
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left font-semibold"
+                                    >
+                                        Unit
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-right font-semibold"
+                                    >
+                                        Cost
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-right font-semibold"
+                                    >
+                                        Total
+                                    </th>
                                     <th class="w-12 px-4 py-3"></th>
                                 </tr>
                             </thead>
@@ -319,7 +364,9 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                                     </td>
                                     <td class="px-4 py-4">
                                         <Input
-                                            v-model.number="line.quantity_ordered"
+                                            v-model.number="
+                                                line.quantity_ordered
+                                            "
                                             type="number"
                                             min="0.0001"
                                             step="0.0001"
@@ -350,7 +397,9 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                                             class="h-9 w-28 rounded border-slate-200 text-right font-mono"
                                         />
                                     </td>
-                                    <td class="px-4 py-4 text-right font-mono font-bold text-slate-700">
+                                    <td
+                                        class="px-4 py-4 text-right font-mono font-bold text-slate-700"
+                                    >
                                         {{ money(lineTotal(line)) }}
                                     </td>
                                     <td class="px-4 py-4 text-center">

@@ -30,8 +30,8 @@ import { Input } from '@/components/ui/input';
 import { usePagination } from '@/composables/usePagination';
 import { usePosFormatting } from '@/composables/usePosFormatting';
 import AppLayout from '@/layouts/AppLayout.vue';
-import Payment from '@/pages/Seats/Payment.vue';
 import InvoiceView from '@/pages/Sales/view.vue';
+import Payment from '@/pages/Seats/Payment.vue';
 import { type BreadcrumbItem } from '@/types';
 
 type InvoiceStatus =

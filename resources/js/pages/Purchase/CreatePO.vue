@@ -77,7 +77,8 @@ const form = useForm({
 const grandTotal = computed(() =>
     form.lines.reduce(
         (total, line) =>
-            total + Number(line.quantity_ordered || 0) * Number(line.unit_cost || 0),
+            total +
+            Number(line.quantity_ordered || 0) * Number(line.unit_cost || 0),
         0,
     ),
 );
@@ -348,7 +349,9 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                                     </td>
                                     <td class="px-4 py-4">
                                         <Input
-                                            v-model.number="line.quantity_ordered"
+                                            v-model.number="
+                                                line.quantity_ordered
+                                            "
                                             type="number"
                                             min="0.0001"
                                             step="0.0001"

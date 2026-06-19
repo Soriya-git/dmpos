@@ -59,10 +59,14 @@ function statusClass(status: string) {
         <main
             class="h-[calc(100dvh-4rem)] w-full scrollbar-gutter-stable overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
-            <div class="min-h-[56vh] overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm">
+            <div
+                class="min-h-[56vh] overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm"
+            >
                 <div v-if="orders.length > 0" class="overflow-x-auto">
                     <table class="w-full border-collapse text-left">
-                        <thead class="bg-slate-50 text-xs font-bold text-slate-600 uppercase">
+                        <thead
+                            class="bg-slate-50 text-xs font-bold text-slate-600 uppercase"
+                        >
                             <tr>
                                 <th class="px-6 py-4">PO Number</th>
                                 <th class="px-6 py-4">Supplier</th>
@@ -79,7 +83,9 @@ function statusClass(status: string) {
                                 :key="order.id"
                                 class="transition hover:bg-slate-50/50"
                             >
-                                <td class="px-6 py-4 font-mono font-bold text-[#007882]">
+                                <td
+                                    class="px-6 py-4 font-mono font-bold text-[#007882]"
+                                >
                                     {{ order.po_no }}
                                 </td>
                                 <td class="px-6 py-4">
@@ -97,20 +103,29 @@ function statusClass(status: string) {
                                     {{ order.expected_date ?? '-' }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="h-1.5 w-28 overflow-hidden rounded-full bg-slate-100">
+                                    <div
+                                        class="h-1.5 w-28 overflow-hidden rounded-full bg-slate-100"
+                                    >
                                         <div
                                             class="h-full bg-[#007882]"
-                                            :style="{ width: `${order.progress}%` }"
+                                            :style="{
+                                                width: `${order.progress}%`,
+                                            }"
                                         ></div>
                                     </div>
-                                    <span class="mt-1 block text-xs text-slate-400">
-                                        {{ order.progress }}% · {{ order.remaining_quantity }} remaining
+                                    <span
+                                        class="mt-1 block text-xs text-slate-400"
+                                    >
+                                        {{ order.progress }}% ·
+                                        {{ order.remaining_quantity }} remaining
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
                                         class="rounded-full px-2.5 py-1 text-xs font-bold uppercase"
-                                        :class="statusClass(order.receipt_status)"
+                                        :class="
+                                            statusClass(order.receipt_status)
+                                        "
                                     >
                                         {{ order.receipt_status }}
                                     </span>
@@ -129,10 +144,14 @@ function statusClass(status: string) {
                 </div>
 
                 <div v-if="orders.length === 0" class="p-16 text-center">
-                    <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-50">
+                    <div
+                        class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-50"
+                    >
                         <ClipboardList class="size-6 text-slate-300" />
                     </div>
-                    <h3 class="font-bold text-[#2a4858]">No approved POs found</h3>
+                    <h3 class="font-bold text-[#2a4858]">
+                        No approved POs found
+                    </h3>
                     <p class="mt-1 text-sm text-slate-500">
                         No approved purchase orders are waiting for receipt.
                     </p>

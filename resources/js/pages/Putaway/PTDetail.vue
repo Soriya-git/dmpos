@@ -38,13 +38,25 @@ const props = defineProps<{ putaway: Putaway }>();
 const actionInfo = computed(() => {
     const s = props.putaway.status;
     if (s === 'approved') {
-        return { label: 'Approved', name: props.putaway.approved_by, at: props.putaway.approved_at };
+        return {
+            label: 'Approved',
+            name: props.putaway.approved_by,
+            at: props.putaway.approved_at,
+        };
     }
     if (s === 'cancelled') {
-        return { label: 'Cancelled', name: props.putaway.cancelled_by, at: props.putaway.cancelled_at };
+        return {
+            label: 'Cancelled',
+            name: props.putaway.cancelled_by,
+            at: props.putaway.cancelled_at,
+        };
     }
     if (s === 'rejected') {
-        return { label: 'Rejected', name: props.putaway.created_by ?? props.putaway.assigned_staff, at: props.putaway.updated_at };
+        return {
+            label: 'Rejected',
+            name: props.putaway.created_by ?? props.putaway.assigned_staff,
+            at: props.putaway.updated_at,
+        };
     }
     return null;
 });
@@ -81,46 +93,73 @@ function statusLabel(status: string) {
         cancelled: 'Cancelled',
         rejected: 'Rejected',
     };
-    return labels[status] ?? status.split('_').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    return (
+        labels[status] ??
+        status
+            .split('_')
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(' ')
+    );
 }
 </script>
 
 <template>
     <div class="w-full">
         <div class="grid grid-cols-1 gap-6 xl:grid-cols-4 2xl:gap-8">
-
             <!-- Left: Info + Audit -->
             <div class="space-y-6 xl:col-span-1">
-                <div class="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
-                    <h3 class="mb-4 flex items-center text-sm font-bold text-slate-700 uppercase">
+                <div
+                    class="rounded-lg border border-slate-100 bg-white p-6 shadow-sm"
+                >
+                    <h3
+                        class="mb-4 flex items-center text-sm font-bold text-slate-700 uppercase"
+                    >
                         <MoveRight class="mr-2 size-4 text-[#007882]" />
                         Info
                     </h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Transfer #</label>
-                            <div class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm font-bold text-[#007882]">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                >Transfer #</label
+                            >
+                            <div
+                                class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm font-bold text-[#007882]"
+                            >
                                 {{ putaway.transfer_no }}
                             </div>
                         </div>
 
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Source GR</label>
-                            <div class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm font-semibold text-slate-700">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                >Source GR</label
+                            >
+                            <div
+                                class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm font-semibold text-slate-700"
+                            >
                                 {{ putaway.goods_receipt_no ?? 'Direct' }}
                             </div>
                         </div>
 
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Assigned Staff</label>
-                            <div class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                >Assigned Staff</label
+                            >
+                            <div
+                                class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700"
+                            >
                                 {{ putaway.assigned_staff ?? '-' }}
                             </div>
                         </div>
 
                         <div class="flex items-center gap-3">
                             <div class="flex-1">
-                                <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Priority</label>
+                                <label
+                                    class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                    >Priority</label
+                                >
                                 <span
                                     class="inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase"
                                     :class="priorityClass(putaway.priority)"
@@ -129,7 +168,10 @@ function statusLabel(status: string) {
                                 </span>
                             </div>
                             <div class="flex-1">
-                                <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Status</label>
+                                <label
+                                    class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                    >Status</label
+                                >
                                 <span
                                     class="inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase"
                                     :class="statusClass(putaway.status)"
@@ -140,15 +182,25 @@ function statusLabel(status: string) {
                         </div>
 
                         <div v-if="putaway.note">
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Note</label>
-                            <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                >Note</label
+                            >
+                            <div
+                                class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600"
+                            >
                                 {{ putaway.note }}
                             </div>
                         </div>
 
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">Created</label>
-                            <div class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs text-slate-600">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                >Created</label
+                            >
+                            <div
+                                class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs text-slate-600"
+                            >
                                 {{ putaway.created_at ?? '-' }}
                             </div>
                         </div>
@@ -156,29 +208,51 @@ function statusLabel(status: string) {
                 </div>
 
                 <!-- Audit -->
-                <div class="rounded-lg border border-slate-100 bg-white p-5 shadow-sm">
-                    <p class="mb-3 text-xs font-bold tracking-wider text-slate-400 uppercase">Audit</p>
+                <div
+                    class="rounded-lg border border-slate-100 bg-white p-5 shadow-sm"
+                >
+                    <p
+                        class="mb-3 text-xs font-bold tracking-wider text-slate-400 uppercase"
+                    >
+                        Audit
+                    </p>
                     <div class="space-y-2 text-sm">
                         <div class="flex items-start gap-2">
-                            <span class="mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full bg-[#007882]"></span>
+                            <span
+                                class="mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full bg-[#007882]"
+                            ></span>
                             <div>
                                 <p class="text-xs text-slate-400">Created by</p>
-                                <p class="font-semibold text-slate-700">{{ putaway.created_by ?? '-' }}</p>
+                                <p class="font-semibold text-slate-700">
+                                    {{ putaway.created_by ?? '-' }}
+                                </p>
                             </div>
                         </div>
                         <div v-if="actionInfo" class="flex items-start gap-2">
                             <span
                                 class="mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full"
                                 :class="{
-                                    'bg-green-500': actionInfo.label === 'Approved',
-                                    'bg-red-500': actionInfo.label === 'Rejected',
-                                    'bg-rose-500': actionInfo.label === 'Cancelled',
+                                    'bg-green-500':
+                                        actionInfo.label === 'Approved',
+                                    'bg-red-500':
+                                        actionInfo.label === 'Rejected',
+                                    'bg-rose-500':
+                                        actionInfo.label === 'Cancelled',
                                 }"
                             ></span>
                             <div>
-                                <p class="text-xs text-slate-400">{{ actionInfo.label }} by</p>
-                                <p class="font-semibold text-slate-700">{{ actionInfo.name ?? '-' }}</p>
-                                <p v-if="actionInfo.at" class="text-xs text-slate-400">{{ actionInfo.at }}</p>
+                                <p class="text-xs text-slate-400">
+                                    {{ actionInfo.label }} by
+                                </p>
+                                <p class="font-semibold text-slate-700">
+                                    {{ actionInfo.name ?? '-' }}
+                                </p>
+                                <p
+                                    v-if="actionInfo.at"
+                                    class="text-xs text-slate-400"
+                                >
+                                    {{ actionInfo.at }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -187,24 +261,46 @@ function statusLabel(status: string) {
 
             <!-- Right: Items + summary -->
             <div class="space-y-6 xl:col-span-3">
-                <div class="overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm">
-                    <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4">
-                        <h3 class="text-xs font-bold tracking-wider text-slate-700 uppercase">
+                <div
+                    class="overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm"
+                >
+                    <div
+                        class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4"
+                    >
+                        <h3
+                            class="text-xs font-bold tracking-wider text-slate-700 uppercase"
+                        >
                             Putaway Items
                         </h3>
                         <span class="text-xs text-slate-400">
-                            {{ putaway.item_count }} SKU{{ putaway.item_count === 1 ? '' : 's' }}
+                            {{ putaway.item_count }} SKU{{
+                                putaway.item_count === 1 ? '' : 's'
+                            }}
                             · {{ putaway.total_quantity }} units
                         </span>
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
-                            <thead class="border-b border-slate-100 text-slate-500">
+                            <thead
+                                class="border-b border-slate-100 text-slate-500"
+                            >
                                 <tr>
-                                    <th class="min-w-56 px-4 py-3 text-left font-semibold">Item</th>
-                                    <th class="px-4 py-3 text-right font-semibold">Qty</th>
-                                    <th class="px-4 py-3 text-left font-semibold">Destination Bin</th>
+                                    <th
+                                        class="min-w-56 px-4 py-3 text-left font-semibold"
+                                    >
+                                        Item
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-right font-semibold"
+                                    >
+                                        Qty
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left font-semibold"
+                                    >
+                                        Destination Bin
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -218,20 +314,28 @@ function statusLabel(status: string) {
                                             {{ line.item_name ?? 'Item' }}
                                         </div>
                                         <p class="mt-1 text-xs text-slate-400">
-                                            {{ line.item_code ?? '-' }} / {{ line.unit_code ?? '-' }}
+                                            {{ line.item_code ?? '-' }} /
+                                            {{ line.unit_code ?? '-' }}
                                         </p>
                                     </td>
-                                    <td class="px-4 py-4 text-right font-bold text-[#23aa8f]">
+                                    <td
+                                        class="px-4 py-4 text-right font-bold text-[#23aa8f]"
+                                    >
                                         {{ line.quantity }}
                                     </td>
                                     <td class="px-4 py-4">
-                                        <span class="rounded bg-slate-100 px-2.5 py-1 text-xs font-bold text-[#007882]">
+                                        <span
+                                            class="rounded bg-slate-100 px-2.5 py-1 text-xs font-bold text-[#007882]"
+                                        >
                                             {{ line.to_location ?? '-' }}
                                         </span>
                                     </td>
                                 </tr>
                                 <tr v-if="putaway.lines.length === 0">
-                                    <td colspan="3" class="px-4 py-12 text-center text-sm text-slate-400">
+                                    <td
+                                        colspan="3"
+                                        class="px-4 py-12 text-center text-sm text-slate-400"
+                                    >
                                         No items recorded.
                                     </td>
                                 </tr>
@@ -244,19 +348,32 @@ function statusLabel(status: string) {
                 <div class="rounded-lg bg-[#2a4858] p-6 text-white shadow-lg">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-xs font-bold uppercase text-white/50">Source GR</p>
+                            <p
+                                class="text-xs font-bold text-white/50 uppercase"
+                            >
+                                Source GR
+                            </p>
                             <p class="mt-0.5 text-lg font-bold">
-                                {{ putaway.goods_receipt_no ?? 'Direct Receipt' }}
+                                {{
+                                    putaway.goods_receipt_no ?? 'Direct Receipt'
+                                }}
                             </p>
                             <p class="mt-0.5 text-xs text-white/60">
                                 Priority: {{ putaway.priority }}
                             </p>
                         </div>
                         <div class="text-right">
-                            <p class="text-xs font-bold uppercase text-white/50">Total Units</p>
+                            <p
+                                class="text-xs font-bold text-white/50 uppercase"
+                            >
+                                Total Units
+                            </p>
                             <p class="mt-0.5 text-2xl font-bold text-[#fafa6e]">
                                 {{ putaway.total_quantity }}
-                                <span class="text-base font-normal text-white/60">units</span>
+                                <span
+                                    class="text-base font-normal text-white/60"
+                                    >units</span
+                                >
                             </p>
                         </div>
                     </div>

@@ -56,9 +56,8 @@ const activeSuppliers = computed(
 );
 const pendingSuppliers = computed(
     () =>
-        props.suppliers.filter((s) =>
-            ['draft', 'pending'].includes(s.status),
-        ).length,
+        props.suppliers.filter((s) => ['draft', 'pending'].includes(s.status))
+            .length,
 );
 const inactiveSuppliers = computed(
     () =>
@@ -317,7 +316,12 @@ function updateStatus(
                                     <td
                                         class="px-6 py-4 text-center text-xs text-slate-400"
                                     >
-                                        {{ String(pageStart + index).padStart(2, '0') }}
+                                        {{
+                                            String(pageStart + index).padStart(
+                                                2,
+                                                '0',
+                                            )
+                                        }}
                                     </td>
                                     <td
                                         class="px-6 py-4 font-mono text-xs font-bold text-[#007882]"
@@ -357,8 +361,12 @@ function updateStatus(
                                             @approve="
                                                 updateStatus(row, 'approve')
                                             "
-                                            @reject="updateStatus(row, 'reject')"
-                                            @cancel="updateStatus(row, 'cancel')"
+                                            @reject="
+                                                updateStatus(row, 'reject')
+                                            "
+                                            @cancel="
+                                                updateStatus(row, 'cancel')
+                                            "
                                         />
                                     </td>
                                 </tr>
@@ -393,11 +401,7 @@ function updateStatus(
                 </div>
             </section>
 
-            <SupplierCreate
-                v-else
-                ref="createRef"
-                @success="showList"
-            />
+            <SupplierCreate v-else ref="createRef" @success="showList" />
         </main>
     </AppLayout>
 </template>

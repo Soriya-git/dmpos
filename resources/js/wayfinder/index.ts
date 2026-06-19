@@ -9,7 +9,7 @@ export type QueryParams = {
         | QueryParams;
 };
 
-type Method = "get" | "post" | "put" | "delete" | "patch" | "head" | "options";
+type Method = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options';
 type ParamValue = string | number | boolean;
 type UrlDefaults = Record<string, unknown>;
 
@@ -41,7 +41,7 @@ export const formSafeOptions = (
     method: Method,
     options?: RouteQueryOptions,
 ): RouteQueryOptions => ({
-    [options?.mergeQuery ? "mergeQuery" : "query"]: {
+    [options?.mergeQuery ? 'mergeQuery' : 'query']: {
         _method: method.toUpperCase(),
         ...(options?.query ?? options?.mergeQuery),
     },
@@ -49,11 +49,11 @@ export const formSafeOptions = (
 
 const getValue = (value: ParamValue) => {
     if (value === true) {
-        return "1";
+        return '1';
     }
 
     if (value === false) {
-        return "0";
+        return '0';
     }
 
     return value.toString();
@@ -73,51 +73,56 @@ const addNestedParams = (
 
         if (Array.isArray(value)) {
             value.forEach((v) => params.append(`${paramKey}[]`, getValue(v)));
-        } else if (value !== null && typeof value === "object") {
+        } else if (value !== null && typeof value === 'object') {
             addNestedParams(value, paramKey, params);
-        } else if (["string", "number", "boolean"].includes(typeof value)) {
+        } else if (['string', 'number', 'boolean'].includes(typeof value)) {
             params.set(paramKey, getValue(value as string | number | boolean));
         }
     });
 };
 
+const clearParamFamily = (params: URLSearchParams, key: string) => {
+    const toDelete = new Set<string>();
+
+    params.forEach((_, paramKey) => {
+        if (paramKey === key || paramKey.startsWith(`${key}[`)) {
+            toDelete.add(paramKey);
+        }
+    });
+
+    toDelete.forEach((paramKey) => params.delete(paramKey));
+};
+
 export const queryParams = (options?: RouteQueryOptions) => {
     if (!options || (!options.query && !options.mergeQuery)) {
-        return "";
+        return '';
     }
 
     const query = options.query ?? options.mergeQuery;
     const includeExisting = options.mergeQuery !== undefined;
 
     const params = new URLSearchParams(
-        includeExisting && typeof window !== "undefined"
+        includeExisting && typeof window !== 'undefined'
             ? window.location.search
-            : "",
+            : '',
     );
 
     for (const key in query) {
         const queryValue = query[key];
 
+        if (includeExisting) {
+            clearParamFamily(params, key);
+        }
+
         if (queryValue === undefined || queryValue === null) {
-            params.delete(key);
             continue;
         }
 
         if (Array.isArray(queryValue)) {
-            if (params.has(`${key}[]`)) {
-                params.delete(`${key}[]`);
-            }
-
             queryValue.forEach((value) => {
                 params.append(`${key}[]`, value.toString());
             });
-        } else if (typeof queryValue === "object") {
-            params.forEach((_, paramKey) => {
-                if (paramKey.startsWith(`${key}[`)) {
-                    params.delete(paramKey);
-                }
-            });
-
+        } else if (typeof queryValue === 'object') {
             addNestedParams(queryValue, key, params);
         } else {
             params.set(key, getValue(queryValue));
@@ -126,7 +131,7 @@ export const queryParams = (options?: RouteQueryOptions) => {
 
     const str = params.toString();
 
-    return str.length > 0 ? `?${str}` : "";
+    return str.length > 0 ? `?${str}` : '';
 };
 
 export const validateParameters = (
@@ -139,7 +144,7 @@ export const validateParameters = (
         return (
             value === undefined ||
             value === null ||
-            value === "" ||
+            value === '' ||
             value === false
         );
     });
@@ -148,22 +153,24 @@ export const validateParameters = (
     for (let i = 0; i < missing.length; i++) {
         if (missing[i] !== expectedMissing[i]) {
             throw Error(
-                "Unexpected optional parameters missing. Unable to generate a URL.",
+                'Unexpected optional parameters missing. Unable to generate a URL.',
             );
         }
     }
 };
 
 export const setUrlDefaults = (params: UrlDefaults | (() => UrlDefaults)) => {
-    urlDefaults = typeof params === "function" ? params : () => params;
+    urlDefaults = typeof params === 'function' ? params : () => params;
 };
 
 export const addUrlDefault = (
     key: string,
     value: string | number | boolean,
 ) => {
+    const previousDefaults = urlDefaults;
+
     urlDefaults = () => ({
-        ...urlDefaults(),
+        ...previousDefaults(),
         [key]: value,
     });
 };

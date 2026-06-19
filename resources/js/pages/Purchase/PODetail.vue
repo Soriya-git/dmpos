@@ -135,63 +135,96 @@ function lineStatusClass(value: string) {
 <template>
     <div class="w-full">
         <div class="grid grid-cols-1 gap-6 xl:grid-cols-4 2xl:gap-8">
-
             <!-- Left: Info -->
             <div class="space-y-6 xl:col-span-1">
-                <div class="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
-                    <h3 class="mb-4 flex items-center text-sm font-bold text-slate-700 uppercase">
+                <div
+                    class="rounded-lg border border-slate-100 bg-white p-6 shadow-sm"
+                >
+                    <h3
+                        class="mb-4 flex items-center text-sm font-bold text-slate-700 uppercase"
+                    >
                         <FileText class="mr-2 size-4 text-[#007882]" />
                         Info
                     </h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                            >
                                 PO Number
                             </label>
-                            <div class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm font-bold text-[#007882]">
+                            <div
+                                class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm font-bold text-[#007882]"
+                            >
                                 {{ order.po_no }}
                             </div>
                         </div>
 
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                            >
                                 Supplier
                             </label>
-                            <div class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-slate-700">
+                            <div
+                                class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-slate-700"
+                            >
                                 {{ order.supplier_name ?? '-' }}
                             </div>
                         </div>
 
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                            >
                                 Supplier Phone
                             </label>
-                            <div class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-500">
+                            <div
+                                class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-500"
+                            >
                                 {{ order.supplier_phone ?? '-' }}
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="mb-1 block text-xs font-bold text-amber-600 uppercase">
+                                <label
+                                    class="mb-1 block text-xs font-bold text-amber-600 uppercase"
+                                >
                                     Expected
                                 </label>
-                                <div class="flex h-10 items-center rounded-lg border border-amber-200 bg-amber-50 px-3 text-xs text-slate-600">
-                                    {{ order.display_expected_date ?? order.expected_date ?? '-' }}
+                                <div
+                                    class="flex h-10 items-center rounded-lg border border-amber-200 bg-amber-50 px-3 text-xs text-slate-600"
+                                >
+                                    {{
+                                        order.display_expected_date ??
+                                        order.expected_date ??
+                                        '-'
+                                    }}
                                 </div>
                             </div>
                             <div>
-                                <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                                <label
+                                    class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                                >
                                     Order Date
                                 </label>
-                                <div class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs text-slate-600">
-                                    {{ order.display_order_date ?? order.order_date ?? '-' }}
+                                <div
+                                    class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs text-slate-600"
+                                >
+                                    {{
+                                        order.display_order_date ??
+                                        order.order_date ??
+                                        '-'
+                                    }}
                                 </div>
                             </div>
                         </div>
 
                         <div>
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                            >
                                 Status
                             </label>
                             <span
@@ -203,10 +236,14 @@ function lineStatusClass(value: string) {
                         </div>
 
                         <div v-if="order.note">
-                            <label class="mb-1 block text-xs font-bold text-slate-500 uppercase">
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                            >
                                 Note
                             </label>
-                            <div class="min-h-[4.5rem] rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500">
+                            <div
+                                class="min-h-[4.5rem] rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500"
+                            >
                                 {{ order.note }}
                             </div>
                         </div>
@@ -214,13 +251,19 @@ function lineStatusClass(value: string) {
                 </div>
 
                 <!-- Audit trail -->
-                <div class="rounded-lg border border-slate-100 bg-white p-5 shadow-sm">
-                    <p class="mb-3 text-xs font-bold tracking-wider text-slate-400 uppercase">
+                <div
+                    class="rounded-lg border border-slate-100 bg-white p-5 shadow-sm"
+                >
+                    <p
+                        class="mb-3 text-xs font-bold tracking-wider text-slate-400 uppercase"
+                    >
                         Audit
                     </p>
                     <div class="space-y-2 text-sm">
                         <div class="flex items-start gap-2">
-                            <span class="mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full bg-[#007882]"></span>
+                            <span
+                                class="mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full bg-[#007882]"
+                            ></span>
                             <div>
                                 <p class="text-xs text-slate-400">Created by</p>
                                 <p class="font-semibold text-slate-700">
@@ -232,9 +275,12 @@ function lineStatusClass(value: string) {
                             <span
                                 class="mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full"
                                 :class="{
-                                    'bg-green-500': actionInfo.label === 'Approved',
-                                    'bg-red-500': actionInfo.label === 'Rejected',
-                                    'bg-slate-400': actionInfo.label === 'Cancelled',
+                                    'bg-green-500':
+                                        actionInfo.label === 'Approved',
+                                    'bg-red-500':
+                                        actionInfo.label === 'Rejected',
+                                    'bg-slate-400':
+                                        actionInfo.label === 'Cancelled',
                                 }"
                             ></span>
                             <div>
@@ -244,7 +290,10 @@ function lineStatusClass(value: string) {
                                 <p class="font-semibold text-slate-700">
                                     {{ actionInfo.name ?? '-' }}
                                 </p>
-                                <p v-if="actionInfo.at" class="text-xs text-slate-400">
+                                <p
+                                    v-if="actionInfo.at"
+                                    class="text-xs text-slate-400"
+                                >
                                     {{ actionInfo.at }}
                                 </p>
                             </div>
@@ -255,27 +304,65 @@ function lineStatusClass(value: string) {
 
             <!-- Right: Items table -->
             <div class="space-y-6 xl:col-span-3">
-                <div class="overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm">
-                    <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4">
-                        <h3 class="text-xs font-bold tracking-wider text-slate-700 uppercase">
+                <div
+                    class="overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm"
+                >
+                    <div
+                        class="flex items-center justify-between border-b border-slate-100 bg-slate-50 p-4"
+                    >
+                        <h3
+                            class="text-xs font-bold tracking-wider text-slate-700 uppercase"
+                        >
                             Order Items
                         </h3>
                         <span class="text-xs text-slate-400">
-                            {{ order.lines.length }} line{{ order.lines.length === 1 ? '' : 's' }}
+                            {{ order.lines.length }} line{{
+                                order.lines.length === 1 ? '' : 's'
+                            }}
                         </span>
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
-                            <thead class="border-b border-slate-100 text-slate-500">
+                            <thead
+                                class="border-b border-slate-100 text-slate-500"
+                            >
                                 <tr>
-                                    <th class="min-w-56 px-4 py-3 text-left font-semibold">Item</th>
-                                    <th class="px-4 py-3 text-right font-semibold">Ordered</th>
-                                    <th class="px-4 py-3 text-right font-semibold">Received</th>
-                                    <th class="px-4 py-3 text-right font-semibold">Remaining</th>
-                                    <th class="px-4 py-3 text-right font-semibold">Unit Cost</th>
-                                    <th class="px-4 py-3 text-right font-semibold">Line Total</th>
-                                    <th class="px-4 py-3 text-center font-semibold">Status</th>
+                                    <th
+                                        class="min-w-56 px-4 py-3 text-left font-semibold"
+                                    >
+                                        Item
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-right font-semibold"
+                                    >
+                                        Ordered
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-right font-semibold"
+                                    >
+                                        Received
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-right font-semibold"
+                                    >
+                                        Remaining
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-right font-semibold"
+                                    >
+                                        Unit Cost
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-right font-semibold"
+                                    >
+                                        Line Total
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-center font-semibold"
+                                    >
+                                        Status
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -289,31 +376,51 @@ function lineStatusClass(value: string) {
                                             {{ line.item_name ?? 'Item' }}
                                         </div>
                                         <p class="mt-1 text-xs text-slate-400">
-                                            {{ line.item_code ?? '-' }} / {{ line.unit_code ?? '-' }}
+                                            {{ line.item_code ?? '-' }} /
+                                            {{ line.unit_code ?? '-' }}
                                         </p>
-                                        <p v-if="line.note" class="mt-1 text-xs italic text-slate-400">
+                                        <p
+                                            v-if="line.note"
+                                            class="mt-1 text-xs text-slate-400 italic"
+                                        >
                                             {{ line.note }}
                                         </p>
                                     </td>
-                                    <td class="px-4 py-4 text-right font-bold text-[#2a4858]">
+                                    <td
+                                        class="px-4 py-4 text-right font-bold text-[#2a4858]"
+                                    >
                                         {{ numberValue(line.quantity_ordered) }}
                                     </td>
-                                    <td class="px-4 py-4 text-right font-bold text-[#23aa8f]">
-                                        {{ numberValue(line.quantity_received) }}
+                                    <td
+                                        class="px-4 py-4 text-right font-bold text-[#23aa8f]"
+                                    >
+                                        {{
+                                            numberValue(line.quantity_received)
+                                        }}
                                     </td>
-                                    <td class="px-4 py-4 text-right font-bold text-slate-500">
-                                        {{ numberValue(line.quantity_remaining) }}
+                                    <td
+                                        class="px-4 py-4 text-right font-bold text-slate-500"
+                                    >
+                                        {{
+                                            numberValue(line.quantity_remaining)
+                                        }}
                                     </td>
-                                    <td class="px-4 py-4 text-right font-mono font-bold text-slate-600">
+                                    <td
+                                        class="px-4 py-4 text-right font-mono font-bold text-slate-600"
+                                    >
                                         {{ money(line.unit_cost) }}
                                     </td>
-                                    <td class="px-4 py-4 text-right font-mono font-bold text-[#007882]">
+                                    <td
+                                        class="px-4 py-4 text-right font-mono font-bold text-[#007882]"
+                                    >
                                         {{ money(line.line_total) }}
                                     </td>
                                     <td class="px-4 py-4 text-center">
                                         <span
                                             class="rounded-full px-2.5 py-1 text-xs font-bold uppercase"
-                                            :class="lineStatusClass(line.status)"
+                                            :class="
+                                                lineStatusClass(line.status)
+                                            "
                                         >
                                             {{ statusLabel(line.status) }}
                                         </span>
@@ -328,16 +435,27 @@ function lineStatusClass(value: string) {
                 <div class="rounded-lg bg-[#2a4858] p-6 text-white shadow-lg">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-xs font-bold uppercase text-white/50">Supplier</p>
+                            <p
+                                class="text-xs font-bold text-white/50 uppercase"
+                            >
+                                Supplier
+                            </p>
                             <p class="mt-0.5 text-lg font-bold">
                                 {{ order.supplier_name ?? '-' }}
                             </p>
-                            <p v-if="order.supplier_phone" class="mt-0.5 text-xs text-white/60">
+                            <p
+                                v-if="order.supplier_phone"
+                                class="mt-0.5 text-xs text-white/60"
+                            >
                                 {{ order.supplier_phone }}
                             </p>
                         </div>
                         <div class="text-right">
-                            <p class="text-xs font-bold uppercase text-white/50">Grand Total</p>
+                            <p
+                                class="text-xs font-bold text-white/50 uppercase"
+                            >
+                                Grand Total
+                            </p>
                             <p class="mt-0.5 text-2xl font-bold text-[#fafa6e]">
                                 {{ money(order.grand_total) }}
                             </p>

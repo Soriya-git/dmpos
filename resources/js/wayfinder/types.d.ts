@@ -4,289 +4,1497 @@
 export namespace App {
     export namespace Models {
         /**
-         * @see [\App\Models\ActivityLog](\D:\Lar\dmpos\app\Models\ActivityLog.php)
+         * @see [\App\Models\Banknote](/home/runner/work/dmpos/dmpos/app/Models/Banknote.php)
          */
-        export type ActivityLog = { id: number, company_id: number | null, branch_id: number | null, user_id: number | null, module: string, action: string, reference_type: string | null, reference_id: number | null, reference_no: string | null, old_values: Record<string, unknown>, new_values: Record<string, unknown>, ip_address: string | null, user_agent: string | null, description: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, user?: App.Models.User | null }
+        export type Banknote = {
+            id: number;
+            currency_type: string;
+            denomination: number;
+            sort_order: number;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+        };
 
         /**
-         * @see [\App\Models\Company](\D:\Lar\dmpos\app\Models\Company.php)
+         * @see [\App\Models\Invoice](/home/runner/work/dmpos/dmpos/app/Models/Invoice.php)
          */
-        export type Company = { id: number, name: string, code: string | null, email: string | null, phone: string | null, address: string | null, logo: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, branches?: App.Models.Branch[], users?: App.Models.User[], pos_terminals?: App.Models.PosTerminal[], customers?: App.Models.Customer[], suppliers?: App.Models.Supplier[], dining_resources?: App.Models.DiningResource[], menus?: App.Models.Menu[], items?: App.Models.Item[], warehouses?: App.Models.Warehouse[], printers?: App.Models.Printer[] }
+        export type Invoice = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            pos_terminal_id: number | null;
+            pos_open_date: string | null;
+            dining_session_id: number;
+            customer_id: number | null;
+            invoice_no: string;
+            status: string;
+            currency: string;
+            exchange_rate_snapshot: number;
+            subtotal: number;
+            discount_amount: number;
+            tax_amount: number;
+            grand_total: number;
+            paid_amount: number;
+            balance_amount: number;
+            issued_at: string | null;
+            paid_at: string | null;
+            cancelled_at: string | null;
+            issued_by: number | null;
+            cancelled_by: number | null;
+            cancel_reason: string | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            stock_settlement_status: string;
+            stock_settled_quantity: number;
+            stock_settled_at: string | null;
+            stock_settled_by: number | null;
+            stock_rejected_at: string | null;
+            stock_rejected_by: number | null;
+            stock_settlement_note: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            pos_terminal?: App.Models.PosTerminal | null;
+            dining_session?: App.Models.DiningSession | null;
+            customer?: App.Models.Customer | null;
+            lines?: App.Models.InvoiceLine[];
+            payments?: App.Models.Payment[];
+            membership_card_transactions?: App.Models.MembershipCardTransaction[];
+            issuer?: App.Models.User | null;
+            stock_settler?: App.Models.User | null;
+            stock_rejecter?: App.Models.User | null;
+            canceller?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\Branch](\D:\Lar\dmpos\app\Models\Branch.php)
+         * @see [\App\Models\Company](/home/runner/work/dmpos/dmpos/app/Models/Company.php)
          */
-        export type Branch = { id: number, company_id: number, name: string, code: string | null, phone: string | null, vat_number: string | null, address: string | null, logo: string | null, payment_qrcode: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, pos_terminals?: App.Models.PosTerminal[], users?: App.Models.User[], customers?: App.Models.Customer[], suppliers?: App.Models.Supplier[], dining_resources?: App.Models.DiningResource[], dining_sessions?: App.Models.DiningSession[], resource_bookings?: App.Models.ResourceBooking[], menus?: App.Models.Menu[], menu_categories?: App.Models.MenuCategory[], warehouses?: App.Models.Warehouse[], payment_methods?: App.Models.PaymentMethod[], printers?: App.Models.Printer[] }
+        export type Company = {
+            id: number;
+            name: string;
+            code: string | null;
+            email: string | null;
+            phone: string | null;
+            address: string | null;
+            logo: string | null;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            branches?: App.Models.Branch[];
+            users?: App.Models.User[];
+            pos_terminals?: App.Models.PosTerminal[];
+            customers?: App.Models.Customer[];
+            suppliers?: App.Models.Supplier[];
+            dining_resources?: App.Models.DiningResource[];
+            menus?: App.Models.Menu[];
+            items?: App.Models.Item[];
+            warehouses?: App.Models.Warehouse[];
+            printers?: App.Models.Printer[];
+        };
 
         /**
-         * @see [\App\Models\PosTerminal](\D:\Lar\dmpos\app\Models\PosTerminal.php)
+         * @see [\App\Models\Branch](/home/runner/work/dmpos/dmpos/app/Models/Branch.php)
          */
-        export type PosTerminal = { id: number, company_id: number, branch_id: number, name: string, code: string | null, device_type: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, dining_sessions?: App.Models.DiningSession[], pos_sessions?: App.Models.PosSession[], invoices?: App.Models.Invoice[] }
+        export type Branch = {
+            id: number;
+            company_id: number;
+            name: string;
+            code: string | null;
+            phone: string | null;
+            address: string | null;
+            logo: string | null;
+            payment_qrcode: string | null;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            vat_number: string | null;
+            company?: App.Models.Company | null;
+            pos_terminals?: App.Models.PosTerminal[];
+            users?: App.Models.User[];
+            customers?: App.Models.Customer[];
+            suppliers?: App.Models.Supplier[];
+            dining_resources?: App.Models.DiningResource[];
+            dining_sessions?: App.Models.DiningSession[];
+            resource_bookings?: App.Models.ResourceBooking[];
+            menus?: App.Models.Menu[];
+            menu_categories?: App.Models.MenuCategory[];
+            warehouses?: App.Models.Warehouse[];
+            payment_methods?: App.Models.PaymentMethod[];
+            printers?: App.Models.Printer[];
+        };
 
         /**
-         * @see [\App\Models\DiningSession](\D:\Lar\dmpos\app\Models\DiningSession.php)
+         * @see [\App\Models\PosTerminal](/home/runner/work/dmpos/dmpos/app/Models/PosTerminal.php)
          */
-        export type DiningSession = { id: number, company_id: number, branch_id: number, pos_terminal_id: number | null, pos_session_id: number | null, pos_open_date: string | null, customer_id: number | null, dining_resource_id: number, resource_booking_id: number | null, menu_price_list_id: number | null, session_no: string, guest_count: number | null, status: string, opened_at: string | null, closed_at: string | null, opened_by: number | null, closed_by: number | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, pos_terminal?: App.Models.PosTerminal | null, customer?: App.Models.Customer | null, dining_resource?: App.Models.DiningResource | null, resource_booking?: App.Models.ResourceBooking | null, menu_price_list?: App.Models.MenuPriceList | null, orders?: App.Models.Order[], invoices?: App.Models.Invoice[], opener?: App.Models.User | null, closer?: App.Models.User | null, logs?: App.Models.SessionLog[], pos_session?: App.Models.PosSession | null }
+        export type PosTerminal = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            name: string;
+            code: string | null;
+            device_type: string | null;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            dining_sessions?: App.Models.DiningSession[];
+            pos_sessions?: App.Models.PosSession[];
+            invoices?: App.Models.Invoice[];
+        };
 
         /**
-         * @see [\App\Models\Customer](\D:\Lar\dmpos\app\Models\Customer.php)
+         * @see [\App\Models\DiningSession](/home/runner/work/dmpos/dmpos/app/Models/DiningSession.php)
          */
-        export type Customer = { id: number, company_id: number, branch_id: number | null, customer_group_id: number | null, name: string | null, phone_number: string, email: string | null, address: string | null, is_general_customer: boolean, note: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, customer_name: Illuminate.Database.Eloquent.Casts.Attribute, customer_phone: Illuminate.Database.Eloquent.Casts.Attribute, mobile: Illuminate.Database.Eloquent.Casts.Attribute, phone: Illuminate.Database.Eloquent.Casts.Attribute, company?: App.Models.Company | null, branch?: App.Models.Branch | null, customer_group?: App.Models.CustomerGroup | null, resource_bookings?: App.Models.ResourceBooking[], dining_sessions?: App.Models.DiningSession[], invoices?: App.Models.Invoice[], membership_cards?: App.Models.MembershipCard[] }
+        export type DiningSession = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            pos_terminal_id: number | null;
+            pos_open_date: string | null;
+            customer_id: number | null;
+            dining_resource_id: number;
+            resource_booking_id: number | null;
+            session_no: string;
+            guest_count: number | null;
+            status: string;
+            opened_at: string | null;
+            closed_at: string | null;
+            opened_by: number | null;
+            closed_by: number | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            pos_session_id: number | null;
+            menu_price_list_id: number | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            pos_terminal?: App.Models.PosTerminal | null;
+            customer?: App.Models.Customer | null;
+            dining_resource?: App.Models.DiningResource | null;
+            resource_booking?: App.Models.ResourceBooking | null;
+            menu_price_list?: App.Models.MenuPriceList | null;
+            orders?: App.Models.Order[];
+            invoices?: App.Models.Invoice[];
+            opener?: App.Models.User | null;
+            closer?: App.Models.User | null;
+            logs?: App.Models.SessionLog[];
+            pos_session?: App.Models.PosSession | null;
+        };
 
         /**
-         * @see [\App\Models\CustomerGroup](\D:\Lar\dmpos\app\Models\CustomerGroup.php)
+         * @see [\App\Models\Customer](/home/runner/work/dmpos/dmpos/app/Models/Customer.php)
          */
-        export type CustomerGroup = { id: number, name: string, code: string | null, description: string | null, created_at: string | null, updated_at: string | null, customers?: App.Models.Customer[] }
+        export type Customer = {
+            customer_name: Illuminate.Database.Eloquent.Casts.Attribute;
+            customer_phone: Illuminate.Database.Eloquent.Casts.Attribute;
+            mobile: string | null;
+            phone: string | null;
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            customer_group_id: number | null;
+            name: string | null;
+            phone_number: string;
+            email: string | null;
+            address: string | null;
+            is_general_customer: boolean;
+            note: string | null;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            customer_group?: App.Models.CustomerGroup | null;
+            resource_bookings?: App.Models.ResourceBooking[];
+            dining_sessions?: App.Models.DiningSession[];
+            invoices?: App.Models.Invoice[];
+            membership_cards?: App.Models.MembershipCard[];
+        };
 
         /**
-         * @see [\App\Models\ResourceBooking](\D:\Lar\dmpos\app\Models\ResourceBooking.php)
+         * @see [\App\Models\CustomerGroup](/home/runner/work/dmpos/dmpos/app/Models/CustomerGroup.php)
          */
-        export type ResourceBooking = { id: number, company_id: number, branch_id: number, customer_id: number, dining_resource_id: number, booking_start: string, booking_end: string, guest_count: number | null, status: string, note: string | null, created_by: number | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, customer?: App.Models.Customer | null, dining_resource?: App.Models.DiningResource | null, dining_session?: App.Models.DiningSession | null, creator?: App.Models.User | null }
+        export type CustomerGroup = {
+            id: number;
+            name: string;
+            code: string | null;
+            description: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            customers?: App.Models.Customer[];
+        };
 
         /**
-         * @see [\App\Models\DiningResource](\D:\Lar\dmpos\app\Models\DiningResource.php)
+         * @see [\App\Models\ResourceBooking](/home/runner/work/dmpos/dmpos/app/Models/ResourceBooking.php)
          */
-        export type DiningResource = { id: number, company_id: number, branch_id: number, dining_resource_type_id: number, name: string, code: string | null, capacity: number, status: string, image: string | null, description: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, dining_resource_type?: App.Models.DiningResourceType | null, bookings?: App.Models.ResourceBooking[], sessions?: App.Models.DiningSession[], active_session?: App.Models.DiningSession | null }
+        export type ResourceBooking = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            customer_id: number;
+            dining_resource_id: number;
+            booking_start: string;
+            booking_end: string;
+            guest_count: number | null;
+            status: string;
+            note: string | null;
+            created_by: number | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            customer?: App.Models.Customer | null;
+            dining_resource?: App.Models.DiningResource | null;
+            dining_session?: App.Models.DiningSession | null;
+            creator?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\DiningResourceType](\D:\Lar\dmpos\app\Models\DiningResourceType.php)
+         * @see [\App\Models\DiningResource](/home/runner/work/dmpos/dmpos/app/Models/DiningResource.php)
          */
-        export type DiningResourceType = { id: number, company_id: number, name: string, code: string | null, description: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, dining_resources?: App.Models.DiningResource[] }
+        export type DiningResource = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            dining_resource_type_id: number;
+            name: string;
+            code: string | null;
+            capacity: number;
+            status: string;
+            image: string | null;
+            description: string | null;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            dining_resource_type?: App.Models.DiningResourceType | null;
+            bookings?: App.Models.ResourceBooking[];
+            sessions?: App.Models.DiningSession[];
+            active_session?: App.Models.DiningSession | null;
+        };
 
         /**
-         * @see [\App\Models\User](\D:\Lar\dmpos\app\Models\User.php)
+         * @see [\App\Models\DiningResourceType](/home/runner/work/dmpos/dmpos/app/Models/DiningResourceType.php)
          */
-        export type User = { id: number, name: string, email: string, image: string | null, email_verified_at: string | null, password: string, remember_token: string | null, created_at: string | null, updated_at: string | null, company_id: number | null, branch_id: number | null, image_url: string | null, notes?: App.Models.Note[], company?: App.Models.Company | null, branch?: App.Models.Branch | null, branches?: App.Models.Branch[], permission_overrides?: Spatie.Permission.Models.Permission[], opened_dining_sessions?: App.Models.DiningSession[], closed_dining_sessions?: App.Models.DiningSession[], created_orders?: App.Models.Order[], issued_invoices?: App.Models.Invoice[], received_payments?: App.Models.Payment[], roles?: Spatie.Permission.Models.Role[], teams?: Spatie.Permission.Models.Permission[], permissions?: Spatie.Permission.Models.Permission[], notifications?: Illuminate.Notifications.DatabaseNotification[] }
+        export type DiningResourceType = {
+            id: number;
+            company_id: number;
+            name: string;
+            code: string | null;
+            description: string | null;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            dining_resources?: App.Models.DiningResource[];
+        };
 
         /**
-         * @see [\App\Models\Note](\D:\Lar\dmpos\app\Models\Note.php)
+         * @see [\App\Models\User](/home/runner/work/dmpos/dmpos/app/Models/User.php)
          */
-        export type Note = { id: number, body: string, contact_id: number, user_id: number, created_at: string | null, updated_at: string | null, contact?: App.Models.Contact | null, user?: App.Models.User | null }
+        export type User = {
+            id: number;
+            name: string;
+            email: string;
+            image: string | null;
+            email_verified_at: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company_id: number | null;
+            branch_id: number | null;
+            image_url: string | null;
+            notes?: App.Models.Note[];
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            branches?: App.Models.Branch[];
+            permission_overrides?: Spatie.Permission.Models.Permission[];
+            opened_dining_sessions?: App.Models.DiningSession[];
+            closed_dining_sessions?: App.Models.DiningSession[];
+            created_orders?: App.Models.Order[];
+            issued_invoices?: App.Models.Invoice[];
+            received_payments?: App.Models.Payment[];
+            roles?: Spatie.Permission.Models.Role[];
+            teams?: Spatie.Permission.Models.Permission[];
+            permissions?: Spatie.Permission.Models.Permission[];
+            notifications?: Illuminate.Notifications.DatabaseNotification[];
+        };
 
         /**
-         * @see [\App\Models\Contact](\D:\Lar\dmpos\app\Models\Contact.php)
+         * @see [\App\Models\Note](/home/runner/work/dmpos/dmpos/app/Models/Note.php)
          */
-        export type Contact = { id: number, first_name: string, last_name: string, email: string | null, phone: string | null, organization_id: number | null, is_favorite: boolean, created_at: string | null, updated_at: string | null, name: string, organization?: App.Models.Organization | null, notes?: App.Models.Note[] }
+        export type Note = {
+            id: number;
+            body: string;
+            contact_id: number;
+            user_id: number;
+            created_at: string | null;
+            updated_at: string | null;
+            contact?: App.Models.Contact | null;
+            user?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\Organization](\D:\Lar\dmpos\app\Models\Organization.php)
+         * @see [\App\Models\Contact](/home/runner/work/dmpos/dmpos/app/Models/Contact.php)
          */
-        export type Organization = { id: number, name: string, created_at: string | null, updated_at: string | null, contacts?: App.Models.Contact[] }
+        export type Contact = {
+            id: number;
+            first_name: string;
+            last_name: string;
+            email: string | null;
+            phone: string | null;
+            organization_id: number | null;
+            is_favorite: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            name: string;
+            organization?: App.Models.Organization | null;
+            notes?: App.Models.Note[];
+        };
 
         /**
-         * @see [\App\Models\Order](\D:\Lar\dmpos\app\Models\Order.php)
+         * @see [\App\Models\Organization](/home/runner/work/dmpos/dmpos/app/Models/Organization.php)
          */
-        export type Order = { id: number, company_id: number, branch_id: number, dining_session_id: number, menu_price_list_id: number | null, pos_open_date: string | null, order_no: string, status: string, sent_to_kitchen_at: string | null, created_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, dining_session?: App.Models.DiningSession | null, menu_price_list?: App.Models.MenuPriceList | null, order_lines?: App.Models.OrderLine[], kitchen_tickets?: App.Models.KitchenTicket[], creator?: App.Models.User | null, canceller?: App.Models.User | null }
+        export type Organization = {
+            id: number;
+            name: string;
+            created_at: string | null;
+            updated_at: string | null;
+            contacts?: App.Models.Contact[];
+        };
 
         /**
-         * @see [\App\Models\MenuPriceList](\D:\Lar\dmpos\app\Models\MenuPriceList.php)
+         * @see [\App\Models\Order](/home/runner/work/dmpos/dmpos/app/Models/Order.php)
          */
-        export type MenuPriceList = { id: number, company_id: number, branch_id: number | null, name: string, code: string, description: string | null, is_default: boolean, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, prices?: App.Models.MenuPrice[] }
+        export type Order = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            dining_session_id: number;
+            pos_open_date: string | null;
+            order_no: string;
+            status: string;
+            sent_to_kitchen_at: string | null;
+            created_by: number | null;
+            cancelled_by: number | null;
+            cancel_reason: string | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            menu_price_list_id: number | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            dining_session?: App.Models.DiningSession | null;
+            menu_price_list?: App.Models.MenuPriceList | null;
+            order_lines?: App.Models.OrderLine[];
+            kitchen_tickets?: App.Models.KitchenTicket[];
+            creator?: App.Models.User | null;
+            canceller?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\MenuPrice](\D:\Lar\dmpos\app\Models\MenuPrice.php)
+         * @see [\App\Models\MenuPriceList](/home/runner/work/dmpos/dmpos/app/Models/MenuPriceList.php)
          */
-        export type MenuPrice = { id: number, menu_id: number, branch_id: number | null, menu_price_list_id: number | null, price_name: string, price: number, effective_from: string | null, effective_to: string | null, is_default: boolean, is_active: boolean, created_at: string | null, updated_at: string | null, menu?: App.Models.Menu | null, branch?: App.Models.Branch | null, price_list?: App.Models.MenuPriceList | null }
+        export type MenuPriceList = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            name: string;
+            code: string;
+            description: string | null;
+            is_default: boolean;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            prices?: App.Models.MenuPrice[];
+        };
 
         /**
-         * @see [\App\Models\Menu](\D:\Lar\dmpos\app\Models\Menu.php)
+         * @see [\App\Models\MenuPrice](/home/runner/work/dmpos/dmpos/app/Models/MenuPrice.php)
          */
-        export type Menu = { id: number, company_id: number, branch_id: number | null, menu_category_id: number | null, item_id: number | null, bom_header_id: number | null, printer_id: number | null, print_route: string, name: string, code: string | null, menu_type: string, base_price: number, tax_id: number | null, image: string | null, description: string | null, is_available: boolean, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, menu_category?: App.Models.MenuCategory | null, tax?: App.Models.Tax | null, item?: App.Models.Item | null, prices?: App.Models.MenuPrice[], default_price?: App.Models.MenuPrice | null, bom_header?: App.Models.BomHeader | null, printer?: App.Models.Printer | null, active_bom?: App.Models.BomHeader | null, order_lines?: App.Models.OrderLine[] }
+        export type MenuPrice = {
+            id: number;
+            menu_id: number;
+            branch_id: number | null;
+            price_name: string;
+            price: number;
+            effective_from: string | null;
+            effective_to: string | null;
+            is_default: boolean;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            menu_price_list_id: number | null;
+            menu?: App.Models.Menu | null;
+            branch?: App.Models.Branch | null;
+            price_list?: App.Models.MenuPriceList | null;
+        };
 
         /**
-         * @see [\App\Models\MenuCategory](\D:\Lar\dmpos\app\Models\MenuCategory.php)
+         * @see [\App\Models\Menu](/home/runner/work/dmpos/dmpos/app/Models/Menu.php)
          */
-        export type MenuCategory = { id: number, company_id: number, branch_id: number | null, name: string, code: string | null, description: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, menus?: App.Models.Menu[] }
+        export type Menu = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            menu_category_id: number | null;
+            item_id: number | null;
+            bom_header_id: number | null;
+            name: string;
+            code: string | null;
+            menu_type: string;
+            base_price: number;
+            tax_id: number | null;
+            image: string | null;
+            description: string | null;
+            is_available: boolean;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            printer_id: number | null;
+            print_route: string;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            menu_category?: App.Models.MenuCategory | null;
+            tax?: App.Models.Tax | null;
+            item?: App.Models.Item | null;
+            prices?: App.Models.MenuPrice[];
+            default_price?: App.Models.MenuPrice | null;
+            bom_header?: App.Models.BomHeader | null;
+            printer?: App.Models.Printer | null;
+            active_bom?: App.Models.BomHeader | null;
+            order_lines?: App.Models.OrderLine[];
+        };
 
         /**
-         * @see [\App\Models\Tax](\D:\Lar\dmpos\app\Models\Tax.php)
+         * @see [\App\Models\MenuCategory](/home/runner/work/dmpos/dmpos/app/Models/MenuCategory.php)
          */
-        export type Tax = { id: number, company_id: number, name: string, code: string | null, rate: number, is_default: boolean, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, menus?: App.Models.Menu[], order_lines?: App.Models.OrderLine[] }
+        export type MenuCategory = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            name: string;
+            code: string | null;
+            description: string | null;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            menus?: App.Models.Menu[];
+        };
 
         /**
-         * @see [\App\Models\OrderLine](\D:\Lar\dmpos\app\Models\OrderLine.php)
+         * @see [\App\Models\Tax](/home/runner/work/dmpos/dmpos/app/Models/Tax.php)
          */
-        export type OrderLine = { id: number, order_id: number, menu_id: number, menu_name_snapshot: string, menu_type_snapshot: string, quantity: number, unit_price: number, discount_amount: number, tax_id: number | null, tax_rate_snapshot: number, tax_amount: number, line_subtotal: number, line_total: number, bill_group: string | null, assigned_dining_resource_id: number | null, status: string | null, note: string | null, created_at: string | null, updated_at: string | null, order?: App.Models.Order | null, menu?: App.Models.Menu | null, tax?: App.Models.Tax | null, kitchen_ticket_lines?: App.Models.KitchenTicketLine[], invoice_lines?: App.Models.InvoiceLine[] }
+        export type Tax = {
+            id: number;
+            company_id: number;
+            name: string;
+            code: string | null;
+            rate: number;
+            is_default: boolean;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            menus?: App.Models.Menu[];
+            order_lines?: App.Models.OrderLine[];
+        };
 
         /**
-         * @see [\App\Models\KitchenTicketLine](\D:\Lar\dmpos\app\Models\KitchenTicketLine.php)
+         * @see [\App\Models\OrderLine](/home/runner/work/dmpos/dmpos/app/Models/OrderLine.php)
          */
-        export type KitchenTicketLine = { id: number, kitchen_ticket_id: number, order_line_id: number, menu_id: number, menu_name_snapshot: string, quantity: number, status: string, note: string | null, created_at: string | null, updated_at: string | null, kitchen_ticket?: App.Models.KitchenTicket | null, order_line?: App.Models.OrderLine | null, menu?: App.Models.Menu | null }
+        export type OrderLine = {
+            id: number;
+            order_id: number;
+            menu_id: number;
+            menu_name_snapshot: string;
+            menu_type_snapshot: string;
+            quantity: number;
+            unit_price: number;
+            discount_amount: number;
+            tax_id: number | null;
+            tax_rate_snapshot: number;
+            tax_amount: number;
+            line_subtotal: number;
+            line_total: number;
+            bill_group: string | null;
+            assigned_dining_resource_id: number | null;
+            status: string;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            order?: App.Models.Order | null;
+            menu?: App.Models.Menu | null;
+            tax?: App.Models.Tax | null;
+            kitchen_ticket_lines?: App.Models.KitchenTicketLine[];
+            invoice_lines?: App.Models.InvoiceLine[];
+        };
 
         /**
-         * @see [\App\Models\KitchenTicket](\D:\Lar\dmpos\app\Models\KitchenTicket.php)
+         * @see [\App\Models\KitchenTicketLine](/home/runner/work/dmpos/dmpos/app/Models/KitchenTicketLine.php)
          */
-        export type KitchenTicket = { id: number, company_id: number, branch_id: number, order_id: number, dining_session_id: number, dining_resource_id: number, ticket_no: string, status: string, printed_at: string | null, print_count: number, created_by: number | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, order?: App.Models.Order | null, dining_session?: App.Models.DiningSession | null, dining_resource?: App.Models.DiningResource | null, lines?: App.Models.KitchenTicketLine[], creator?: App.Models.User | null }
+        export type KitchenTicketLine = {
+            id: number;
+            kitchen_ticket_id: number;
+            order_line_id: number;
+            menu_id: number;
+            menu_name_snapshot: string;
+            quantity: number;
+            status: string;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            kitchen_ticket?: App.Models.KitchenTicket | null;
+            order_line?: App.Models.OrderLine | null;
+            menu?: App.Models.Menu | null;
+        };
 
         /**
-         * @see [\App\Models\InvoiceLine](\D:\Lar\dmpos\app\Models\InvoiceLine.php)
+         * @see [\App\Models\KitchenTicket](/home/runner/work/dmpos/dmpos/app/Models/KitchenTicket.php)
          */
-        export type InvoiceLine = { id: number, invoice_id: number, order_id: number | null, order_line_id: number | null, menu_id: number | null, menu_name_snapshot: string, menu_type_snapshot: string, quantity: number, unit_price: number, discount_amount: number, tax_id: number | null, tax_name_snapshot: string | null, tax_rate_snapshot: number, tax_amount: number, line_subtotal: number, line_total: number, status: string, note: string | null, created_at: string | null, updated_at: string | null, invoice?: App.Models.Invoice | null, order?: App.Models.Order | null, order_line?: App.Models.OrderLine | null, menu?: App.Models.Menu | null, tax?: App.Models.Tax | null }
+        export type KitchenTicket = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            order_id: number;
+            dining_session_id: number;
+            dining_resource_id: number;
+            ticket_no: string;
+            status: string;
+            printed_at: string | null;
+            print_count: number;
+            created_by: number | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            order?: App.Models.Order | null;
+            dining_session?: App.Models.DiningSession | null;
+            dining_resource?: App.Models.DiningResource | null;
+            lines?: App.Models.KitchenTicketLine[];
+            creator?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\Invoice](\D:\Lar\dmpos\app\Models\Invoice.php)
+         * @see [\App\Models\InvoiceLine](/home/runner/work/dmpos/dmpos/app/Models/InvoiceLine.php)
          */
-        export type Invoice = { id: number, company_id: number, branch_id: number, pos_terminal_id: number | null, pos_open_date: string | null, dining_session_id: number, customer_id: number | null, invoice_no: string, status: string, stock_settlement_status: string, stock_settled_quantity: number, stock_settled_at: string | null, stock_settled_by: number | null, stock_rejected_at: string | null, stock_rejected_by: number | null, stock_settlement_note: string | null, currency: string, exchange_rate_snapshot: number, subtotal: number, discount_amount: number, tax_amount: number, grand_total: number, paid_amount: number, balance_amount: number, issued_at: string | null, paid_at: string | null, cancelled_at: string | null, issued_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, pos_terminal?: App.Models.PosTerminal | null, dining_session?: App.Models.DiningSession | null, customer?: App.Models.Customer | null, lines?: App.Models.InvoiceLine[], payments?: App.Models.Payment[], membership_card_transactions?: App.Models.MembershipCardTransaction[], issuer?: App.Models.User | null, stock_settler?: App.Models.User | null, stock_rejecter?: App.Models.User | null, canceller?: App.Models.User | null }
+        export type InvoiceLine = {
+            id: number;
+            invoice_id: number;
+            order_id: number | null;
+            order_line_id: number | null;
+            menu_id: number | null;
+            menu_name_snapshot: string;
+            menu_type_snapshot: string;
+            quantity: number;
+            unit_price: number;
+            discount_amount: number;
+            tax_id: number | null;
+            tax_name_snapshot: string | null;
+            tax_rate_snapshot: number;
+            tax_amount: number;
+            line_subtotal: number;
+            line_total: number;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            status: string;
+            invoice?: App.Models.Invoice | null;
+            order?: App.Models.Order | null;
+            order_line?: App.Models.OrderLine | null;
+            menu?: App.Models.Menu | null;
+            tax?: App.Models.Tax | null;
+        };
 
         /**
-         * @see [\App\Models\Payment](\D:\Lar\dmpos\app\Models\Payment.php)
+         * @see [\App\Models\Item](/home/runner/work/dmpos/dmpos/app/Models/Item.php)
          */
-        export type Payment = { id: number, company_id: number, branch_id: number, invoice_id: number, payment_method_id: number | null, payment_no: string, status: string, currency: string, amount_paid: number, received_amount: number, change_usd_amount: number, change_khr_amount: number, exchange_rate_snapshot: number, amount_usd_equivalent: number, amount_khr_equivalent: number, paid_at: string | null, received_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, invoice?: App.Models.Invoice | null, payment_method?: App.Models.PaymentMethod | null, receiver?: App.Models.User | null, canceller?: App.Models.User | null, membership_card_transactions?: App.Models.MembershipCardTransaction[] }
+        export type Item = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            unit_id: number;
+            name: string;
+            code: string | null;
+            size: string | null;
+            item_type: string;
+            cost: number;
+            minimum_stock_qty: number;
+            is_stockable: boolean;
+            is_active: boolean;
+            description: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            printer_id: number | null;
+            print_route: string;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            unit?: App.Models.Unit | null;
+            printer?: App.Models.Printer | null;
+            bom_lines?: App.Models.BomLine[];
+            menus?: App.Models.Menu[];
+            output_bom_headers?: App.Models.BomHeader[];
+            unit_conversions?: App.Models.ItemUnitConversion[];
+            stock_balances?: App.Models.StockBalance[];
+            stock_movements?: App.Models.StockMovement[];
+        };
 
         /**
-         * @see [\App\Models\PaymentMethod](\D:\Lar\dmpos\app\Models\PaymentMethod.php)
+         * @see [\App\Models\Unit](/home/runner/work/dmpos/dmpos/app/Models/Unit.php)
          */
-        export type PaymentMethod = { id: number, company_id: number, branch_id: number | null, name: string, code: string | null, method_type: string, currency: string, is_default: boolean, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, payments?: App.Models.Payment[] }
+        export type Unit = {
+            id: number;
+            name: string;
+            code: string;
+            category: string;
+            unit_type: string;
+            base_unit_id: number | null;
+            base_quantity: number;
+            description: string | null;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            base_unit?: App.Models.Unit | null;
+            derived_units?: App.Models.Unit[];
+            items?: App.Models.Item[];
+            bom_lines?: App.Models.BomLine[];
+            conversions_from?: App.Models.ItemUnitConversion[];
+            conversions_to?: App.Models.ItemUnitConversion[];
+        };
 
         /**
-         * @see [\App\Models\MembershipCardTransaction](\D:\Lar\dmpos\app\Models\MembershipCardTransaction.php)
+         * @see [\App\Models\BomLine](/home/runner/work/dmpos/dmpos/app/Models/BomLine.php)
          */
-        export type MembershipCardTransaction = { id: number, company_id: number, branch_id: number | null, membership_card_id: number, customer_id: number, invoice_id: number | null, payment_id: number | null, transaction_no: string, transaction_type: string, direction: string, currency: string, amount: number, promotion_amount: number, promotion_name: string | null, balance_before: number, balance_after: number, exchange_rate_snapshot: number, amount_usd_equivalent: number, amount_khr_equivalent: number, transacted_at: string | null, performed_by: number | null, payload: Record<string, unknown>, note: string | null, ledger_sequence: number | null, previous_hash: string | null, entry_hash: string | null, signature_version: number, created_at: string | null, updated_at: string | null, membership_card?: App.Models.MembershipCard | null, customer?: App.Models.Customer | null, invoice?: App.Models.Invoice | null, payment?: App.Models.Payment | null }
+        export type BomLine = {
+            id: number;
+            bom_header_id: number;
+            component_item_id: number;
+            unit_id: number;
+            quantity: number;
+            wastage_percent: number;
+            estimated_cost: number;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            bom_header?: App.Models.BomHeader | null;
+            component_item?: App.Models.Item | null;
+            unit?: App.Models.Unit | null;
+        };
 
         /**
-         * @see [\App\Models\MembershipCard](\D:\Lar\dmpos\app\Models\MembershipCard.php)
+         * @see [\App\Models\BomHeader](/home/runner/work/dmpos/dmpos/app/Models/BomHeader.php)
          */
-        export type MembershipCard = { id: number, company_id: number, branch_id: number | null, customer_id: number, card_no: string, card_name: string | null, status: string, issued_date: string | null, expired_date: string | null, remark: string | null, created_by: number | null, updated_by: number | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, customer?: App.Models.Customer | null, balances?: App.Models.MembershipCardBalance[], transactions?: App.Models.MembershipCardTransaction[] }
+        export type BomHeader = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            output_item_id: number | null;
+            bom_no: string;
+            name: string;
+            output_quantity: number;
+            status: string;
+            effective_from: string | null;
+            effective_to: string | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            output_item?: App.Models.Item | null;
+            menus?: App.Models.Menu[];
+            lines?: App.Models.BomLine[];
+        };
 
         /**
-         * @see [\App\Models\MembershipCardBalance](\D:\Lar\dmpos\app\Models\MembershipCardBalance.php)
+         * @see [\App\Models\ItemUnitConversion](/home/runner/work/dmpos/dmpos/app/Models/ItemUnitConversion.php)
          */
-        export type MembershipCardBalance = { id: number, membership_card_id: number, currency: string, balance: number, last_transaction_id: number | null, ledger_verified_at: string | null, created_at: string | null, updated_at: string | null, membership_card?: App.Models.MembershipCard | null }
+        export type ItemUnitConversion = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            item_id: number;
+            from_unit_id: number;
+            to_unit_id: number;
+            factor: number;
+            is_purchase_default: boolean;
+            is_sales_default: boolean;
+            is_inventory_default: boolean;
+            is_active: boolean;
+            description: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            item?: App.Models.Item | null;
+            from_unit?: App.Models.Unit | null;
+            to_unit?: App.Models.Unit | null;
+        };
 
         /**
-         * @see [\App\Models\Item](\D:\Lar\dmpos\app\Models\Item.php)
+         * @see [\App\Models\Printer](/home/runner/work/dmpos/dmpos/app/Models/Printer.php)
          */
-        export type Item = { id: number, company_id: number, branch_id: number | null, unit_id: number, printer_id: number | null, print_route: string, name: string, code: string | null, item_type: string, cost: number, minimum_stock_qty: number, is_stockable: boolean, is_active: boolean, description: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, unit?: App.Models.Unit | null, printer?: App.Models.Printer | null, bom_lines?: App.Models.BomLine[], menus?: App.Models.Menu[], output_bom_headers?: App.Models.BomHeader[], unit_conversions?: App.Models.ItemUnitConversion[], stock_balances?: App.Models.StockBalance[], stock_movements?: App.Models.StockMovement[] }
+        export type Printer = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            name: string;
+            code: string | null;
+            printer_type: string;
+            connection_type: string;
+            ip_address: string | null;
+            port: number | null;
+            paper_size: string;
+            is_default: boolean;
+            is_active: boolean;
+            settings: Record<string, unknown>;
+            created_at: string | null;
+            updated_at: string | null;
+            printer_role: string;
+            network_protocol: string;
+            host_name: string | null;
+            timeout_ms: number;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            print_jobs?: App.Models.PrintJob[];
+            menus?: App.Models.Menu[];
+            items?: App.Models.Item[];
+        };
 
         /**
-         * @see [\App\Models\Unit](\D:\Lar\dmpos\app\Models\Unit.php)
+         * @see [\App\Models\PrintJob](/home/runner/work/dmpos/dmpos/app/Models/PrintJob.php)
          */
-        export type Unit = { id: number, name: string, code: string, category: string, unit_type: string, base_unit_id: number | null, base_quantity: number, description: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, base_unit?: App.Models.Unit | null, derived_units?: App.Models.Unit[], items?: App.Models.Item[], bom_lines?: App.Models.BomLine[], conversions_from?: App.Models.ItemUnitConversion[], conversions_to?: App.Models.ItemUnitConversion[] }
+        export type PrintJob = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            printer_id: number | null;
+            print_template_id: number | null;
+            job_no: string;
+            job_type: string;
+            status: string;
+            reference_type: string | null;
+            reference_id: number | null;
+            reference_no: string | null;
+            print_count: number;
+            printed_at: string | null;
+            printed_by?: App.Models.User | null;
+            error_message: string | null;
+            payload: Record<string, unknown>;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            printer?: App.Models.Printer | null;
+            print_template?: App.Models.PrintTemplate | null;
+        };
 
         /**
-         * @see [\App\Models\BomLine](\D:\Lar\dmpos\app\Models\BomLine.php)
+         * @see [\App\Models\PrintTemplate](/home/runner/work/dmpos/dmpos/app/Models/PrintTemplate.php)
          */
-        export type BomLine = { id: number, bom_header_id: number, component_item_id: number, unit_id: number, quantity: number, wastage_percent: number, estimated_cost: number, note: string | null, created_at: string | null, updated_at: string | null, bom_header?: App.Models.BomHeader | null, component_item?: App.Models.Item | null, unit?: App.Models.Unit | null }
+        export type PrintTemplate = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            name: string;
+            code: string | null;
+            template_type: string;
+            paper_size: string;
+            logo: string | null;
+            layout_config: Record<string, unknown>;
+            template_html: string | null;
+            is_default: boolean;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            print_jobs?: App.Models.PrintJob[];
+        };
 
         /**
-         * @see [\App\Models\BomHeader](\D:\Lar\dmpos\app\Models\BomHeader.php)
+         * @see [\App\Models\StockBalance](/home/runner/work/dmpos/dmpos/app/Models/StockBalance.php)
          */
-        export type BomHeader = { id: number, company_id: number, branch_id: number | null, output_item_id: number | null, bom_no: string, name: string, output_quantity: number, status: string, effective_from: string | null, effective_to: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, output_item?: App.Models.Item | null, menus?: App.Models.Menu[], lines?: App.Models.BomLine[] }
+        export type StockBalance = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            warehouse_id: number;
+            stock_location_id: number;
+            item_id: number;
+            unit_id: number;
+            quantity_on_hand: number;
+            quantity_reserved: number;
+            quantity_available: number;
+            average_cost: number;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            warehouse?: App.Models.Warehouse | null;
+            stock_location?: App.Models.StockLocation | null;
+            item?: App.Models.Item | null;
+            unit?: App.Models.Unit | null;
+        };
 
         /**
-         * @see [\App\Models\ItemUnitConversion](\D:\Lar\dmpos\app\Models\ItemUnitConversion.php)
+         * @see [\App\Models\Warehouse](/home/runner/work/dmpos/dmpos/app/Models/Warehouse.php)
          */
-        export type ItemUnitConversion = { id: number, company_id: number, branch_id: number | null, item_id: number, from_unit_id: number, to_unit_id: number, factor: number, is_purchase_default: boolean, is_sales_default: boolean, is_inventory_default: boolean, is_active: boolean, description: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, item?: App.Models.Item | null, from_unit?: App.Models.Unit | null, to_unit?: App.Models.Unit | null }
+        export type Warehouse = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            name: string;
+            code: string | null;
+            address: string | null;
+            description: string | null;
+            is_default: boolean;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            stock_locations?: App.Models.StockLocation[];
+            stock_balances?: App.Models.StockBalance[];
+            stock_movements?: App.Models.StockMovement[];
+        };
 
         /**
-         * @see [\App\Models\Printer](\D:\Lar\dmpos\app\Models\Printer.php)
+         * @see [\App\Models\StockLocation](/home/runner/work/dmpos/dmpos/app/Models/StockLocation.php)
          */
-        export type Printer = { id: number, company_id: number, branch_id: number, name: string, code: string | null, printer_type: string, printer_role: string, connection_type: string, network_protocol: string, ip_address: string | null, host_name: string | null, port: number | null, timeout_ms: number, paper_size: string, is_default: boolean, is_active: boolean, settings: Record<string, unknown>, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, print_jobs?: App.Models.PrintJob[], menus?: App.Models.Menu[], items?: App.Models.Item[] }
+        export type StockLocation = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            warehouse_id: number;
+            name: string;
+            code: string | null;
+            location_type: string;
+            is_saleable: boolean;
+            description: string | null;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            warehouse?: App.Models.Warehouse | null;
+            stock_balances?: App.Models.StockBalance[];
+            stock_movements_from?: App.Models.StockMovement[];
+            stock_movements_to?: App.Models.StockMovement[];
+        };
 
         /**
-         * @see [\App\Models\PrintJob](\D:\Lar\dmpos\app\Models\PrintJob.php)
+         * @see [\App\Models\StockMovement](/home/runner/work/dmpos/dmpos/app/Models/StockMovement.php)
          */
-        export type PrintJob = { id: number, company_id: number, branch_id: number, printer_id: number | null, print_template_id: number | null, job_no: string, job_type: string, status: string, reference_type: string | null, reference_id: number | null, reference_no: string | null, print_count: number, printed_at: string | null, printed_by?: App.Models.User | null, error_message: string | null, payload: Record<string, unknown>, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, printer?: App.Models.Printer | null, print_template?: App.Models.PrintTemplate | null }
+        export type StockMovement = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            warehouse_id: number | null;
+            from_location_id: number | null;
+            to_location_id: number | null;
+            item_id: number;
+            unit_id: number;
+            movement_type: string;
+            quantity: number;
+            unit_cost: number;
+            total_cost: number;
+            reference_type: string | null;
+            reference_id: number | null;
+            reference_no: string | null;
+            movement_date: string | null;
+            created_by: number | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            warehouse?: App.Models.Warehouse | null;
+            from_location?: App.Models.StockLocation | null;
+            to_location?: App.Models.StockLocation | null;
+            item?: App.Models.Item | null;
+            unit?: App.Models.Unit | null;
+            creator?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\PrintTemplate](\D:\Lar\dmpos\app\Models\PrintTemplate.php)
+         * @see [\App\Models\Payment](/home/runner/work/dmpos/dmpos/app/Models/Payment.php)
          */
-        export type PrintTemplate = { id: number, company_id: number, branch_id: number | null, name: string, code: string | null, template_type: string, paper_size: string, logo: string | null, layout_config: Record<string, unknown>, template_html: string | null, is_default: boolean, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, print_jobs?: App.Models.PrintJob[] }
+        export type Payment = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            invoice_id: number;
+            payment_method_id: number | null;
+            payment_no: string;
+            status: string;
+            currency: string;
+            amount_paid: number;
+            received_amount: number;
+            change_usd_amount: number;
+            change_khr_amount: number;
+            exchange_rate_snapshot: number;
+            amount_usd_equivalent: number;
+            amount_khr_equivalent: number;
+            paid_at: string | null;
+            received_by: number | null;
+            cancelled_by: number | null;
+            cancel_reason: string | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            invoice?: App.Models.Invoice | null;
+            payment_method?: App.Models.PaymentMethod | null;
+            receiver?: App.Models.User | null;
+            canceller?: App.Models.User | null;
+            membership_card_transactions?: App.Models.MembershipCardTransaction[];
+        };
 
         /**
-         * @see [\App\Models\StockBalance](\D:\Lar\dmpos\app\Models\StockBalance.php)
+         * @see [\App\Models\PaymentMethod](/home/runner/work/dmpos/dmpos/app/Models/PaymentMethod.php)
          */
-        export type StockBalance = { id: number, company_id: number, branch_id: number, warehouse_id: number, stock_location_id: number, item_id: number, unit_id: number, quantity_on_hand: number, quantity_reserved: number, quantity_available: number, average_cost: number, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, warehouse?: App.Models.Warehouse | null, stock_location?: App.Models.StockLocation | null, item?: App.Models.Item | null, unit?: App.Models.Unit | null }
+        export type PaymentMethod = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            name: string;
+            code: string | null;
+            method_type: string;
+            currency: string;
+            is_default: boolean;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            payments?: App.Models.Payment[];
+        };
 
         /**
-         * @see [\App\Models\Warehouse](\D:\Lar\dmpos\app\Models\Warehouse.php)
+         * @see [\App\Models\MembershipCardTransaction](/home/runner/work/dmpos/dmpos/app/Models/MembershipCardTransaction.php)
          */
-        export type Warehouse = { id: number, company_id: number, branch_id: number, name: string, code: string | null, address: string | null, description: string | null, is_default: boolean, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, stock_locations?: App.Models.StockLocation[], stock_balances?: App.Models.StockBalance[], stock_movements?: App.Models.StockMovement[] }
+        export type MembershipCardTransaction = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            membership_card_id: number;
+            customer_id: number;
+            invoice_id: number | null;
+            payment_id: number | null;
+            transaction_no: string;
+            transaction_type: string;
+            direction: string;
+            currency: string;
+            amount: number;
+            promotion_amount: number;
+            promotion_name: string | null;
+            balance_before: number;
+            balance_after: number;
+            exchange_rate_snapshot: number;
+            amount_usd_equivalent: number;
+            amount_khr_equivalent: number;
+            transacted_at: string | null;
+            performed_by: number | null;
+            payload: Record<string, unknown>;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            ledger_sequence: number | null;
+            previous_hash: string | null;
+            entry_hash: string | null;
+            signature_version: number;
+            membership_card?: App.Models.MembershipCard | null;
+            customer?: App.Models.Customer | null;
+            invoice?: App.Models.Invoice | null;
+            payment?: App.Models.Payment | null;
+        };
 
         /**
-         * @see [\App\Models\StockLocation](\D:\Lar\dmpos\app\Models\StockLocation.php)
+         * @see [\App\Models\MembershipCard](/home/runner/work/dmpos/dmpos/app/Models/MembershipCard.php)
          */
-        export type StockLocation = { id: number, company_id: number, branch_id: number, warehouse_id: number, name: string, code: string | null, location_type: string, is_saleable: boolean, description: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, warehouse?: App.Models.Warehouse | null, stock_balances?: App.Models.StockBalance[], stock_movements_from?: App.Models.StockMovement[], stock_movements_to?: App.Models.StockMovement[] }
+        export type MembershipCard = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            customer_id: number;
+            card_no: string;
+            card_name: string | null;
+            status: string;
+            issued_date: string | null;
+            expired_date: string | null;
+            remark: string | null;
+            created_by: number | null;
+            updated_by: number | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            customer?: App.Models.Customer | null;
+            balances?: App.Models.MembershipCardBalance[];
+            transactions?: App.Models.MembershipCardTransaction[];
+        };
 
         /**
-         * @see [\App\Models\StockMovement](\D:\Lar\dmpos\app\Models\StockMovement.php)
+         * @see [\App\Models\MembershipCardBalance](/home/runner/work/dmpos/dmpos/app/Models/MembershipCardBalance.php)
          */
-        export type StockMovement = { id: number, company_id: number, branch_id: number, warehouse_id: number | null, from_location_id: number | null, to_location_id: number | null, item_id: number, unit_id: number, movement_type: string, quantity: number, unit_cost: number, total_cost: number, reference_type: string | null, reference_id: number | null, reference_no: string | null, movement_date: string | null, created_by: number | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, warehouse?: App.Models.Warehouse | null, from_location?: App.Models.StockLocation | null, to_location?: App.Models.StockLocation | null, item?: App.Models.Item | null, unit?: App.Models.Unit | null, creator?: App.Models.User | null }
+        export type MembershipCardBalance = {
+            id: number;
+            membership_card_id: number;
+            currency: string;
+            balance: number;
+            created_at: string | null;
+            updated_at: string | null;
+            last_transaction_id: number | null;
+            ledger_verified_at: string | null;
+            membership_card?: App.Models.MembershipCard | null;
+        };
 
         /**
-         * @see [\App\Models\SessionLog](\D:\Lar\dmpos\app\Models\SessionLog.php)
+         * @see [\App\Models\SessionLog](/home/runner/work/dmpos/dmpos/app/Models/SessionLog.php)
          */
-        export type SessionLog = { id: number, company_id: number, branch_id: number, dining_session_id: number, action: string, from_resource_id: number | null, to_resource_id: number | null, performed_by: number | null, payload: Record<string, unknown>, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, dining_session?: App.Models.DiningSession | null, source_resource?: App.Models.DiningResource | null, target_resource?: App.Models.DiningResource | null, performer?: App.Models.User | null }
+        export type SessionLog = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            dining_session_id: number;
+            action: string;
+            from_resource_id: number | null;
+            to_resource_id: number | null;
+            performed_by: number | null;
+            payload: Record<string, unknown>;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            dining_session?: App.Models.DiningSession | null;
+            source_resource?: App.Models.DiningResource | null;
+            target_resource?: App.Models.DiningResource | null;
+            performer?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\PosSession](\D:\Lar\dmpos\app\Models\PosSession.php)
+         * @see [\App\Models\PosSession](/home/runner/work/dmpos/dmpos/app/Models/PosSession.php)
          */
-        export type PosSession = { id: number, company_id: number, branch_id: number, pos_terminal_id: number, session_no: string, status: string, opening_cash_usd: number, opening_cash_khr: number, expected_cash_usd: number, expected_cash_khr: number, actual_cash_usd: number, actual_cash_khr: number, cash_variance_usd: number, cash_variance_khr: number, total_sales_usd: number, total_sales_khr: number, total_cash_usd: number, total_cash_khr: number, total_ebanking_usd: number, total_ebanking_khr: number, total_pay_later_usd: number, total_pay_later_khr: number, opened_at: string | null, closed_at: string | null, opened_by: number | null, closed_by: number | null, cancelled_by: number | null, opening_note: string | null, closing_note: string | null, cancel_reason: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, pos_terminal?: App.Models.PosTerminal | null, opener?: App.Models.User | null, closer?: App.Models.User | null, canceller?: App.Models.User | null, dining_sessions?: App.Models.DiningSession[] }
+        export type PosSession = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            pos_terminal_id: number;
+            session_no: string;
+            status: string;
+            opening_cash_usd: number;
+            opening_cash_khr: number;
+            expected_cash_usd: number;
+            expected_cash_khr: number;
+            actual_cash_usd: number;
+            actual_cash_khr: number;
+            cash_variance_usd: number;
+            cash_variance_khr: number;
+            total_sales_usd: number;
+            total_sales_khr: number;
+            total_cash_usd: number;
+            total_cash_khr: number;
+            total_ebanking_usd: number;
+            total_ebanking_khr: number;
+            total_pay_later_usd: number;
+            total_pay_later_khr: number;
+            opened_at: string | null;
+            closed_at: string | null;
+            opened_by: number | null;
+            closed_by: number | null;
+            cancelled_by: number | null;
+            opening_note: string | null;
+            closing_note: string | null;
+            cancel_reason: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            pos_terminal?: App.Models.PosTerminal | null;
+            opener?: App.Models.User | null;
+            closer?: App.Models.User | null;
+            canceller?: App.Models.User | null;
+            dining_sessions?: App.Models.DiningSession[];
+        };
 
         /**
-         * @see [\App\Models\Supplier](\D:\Lar\dmpos\app\Models\Supplier.php)
+         * @see [\App\Models\Supplier](/home/runner/work/dmpos/dmpos/app/Models/Supplier.php)
          */
-        export type Supplier = { id: number, company_id: number, branch_id: number | null, code: string, name: string, contact_person: string | null, phone_number: string | null, email: string | null, address: string | null, note: string | null, is_active: boolean, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null }
+        export type Supplier = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            code: string;
+            name: string;
+            contact_person: string | null;
+            phone_number: string | null;
+            email: string | null;
+            address: string | null;
+            note: string | null;
+            is_active: boolean;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+        };
 
         /**
-         * @see [\App\Models\Banknote](\D:\Lar\dmpos\app\Models\Banknote.php)
+         * @see [\App\Models\PurchaseOrder](/home/runner/work/dmpos/dmpos/app/Models/PurchaseOrder.php)
          */
-        export type Banknote = { id: number, currency_type: string, denomination: number, sort_order: number, is_active: boolean, created_at: string | null, updated_at: string | null }
+        export type PurchaseOrder = {
+            id: number;
+            company_id: number;
+            branch_id: number | null;
+            po_no: string;
+            purchase_scope: string;
+            supplier_name: string | null;
+            supplier_phone: string | null;
+            supplier_address: string | null;
+            status: string;
+            subtotal: number;
+            discount_amount: number;
+            tax_amount: number;
+            grand_total: number;
+            order_date: string | null;
+            expected_date: string | null;
+            created_by: number | null;
+            approved_by: number | null;
+            rejected_by: number | null;
+            cancelled_by: number | null;
+            approved_at: string | null;
+            rejected_at: string | null;
+            cancelled_at: string | null;
+            reject_reason: string | null;
+            cancel_reason: string | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            lines?: App.Models.PurchaseOrderLine[];
+            goods_receipts?: App.Models.GoodsReceipt[];
+            creator?: App.Models.User | null;
+            approver?: App.Models.User | null;
+            rejecter?: App.Models.User | null;
+            canceller?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\ExchangeRate](\D:\Lar\dmpos\app\Models\ExchangeRate.php)
+         * @see [\App\Models\PurchaseOrderLine](/home/runner/work/dmpos/dmpos/app/Models/PurchaseOrderLine.php)
          */
-        export type ExchangeRate = { id: number, company_id: number, from_currency: string, to_currency: string, rate: number, effective_date: string, is_active: boolean, created_by: number | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, creator?: App.Models.User | null }
+        export type PurchaseOrderLine = {
+            id: number;
+            purchase_order_id: number;
+            branch_id: number | null;
+            item_id: number;
+            unit_id: number;
+            quantity_ordered: number;
+            quantity_received: number;
+            quantity_remaining: number;
+            unit_cost: number;
+            discount_amount: number;
+            tax_amount: number;
+            line_total: number;
+            status: string;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            purchase_order?: App.Models.PurchaseOrder | null;
+            branch?: App.Models.Branch | null;
+            item?: App.Models.Item | null;
+            unit?: App.Models.Unit | null;
+            goods_receipt_lines?: App.Models.GoodsReceiptLine[];
+        };
 
         /**
-         * @see [\App\Models\GoodsReceipt](\D:\Lar\dmpos\app\Models\GoodsReceipt.php)
+         * @see [\App\Models\GoodsReceiptLine](/home/runner/work/dmpos/dmpos/app/Models/GoodsReceiptLine.php)
          */
-        export type GoodsReceipt = { id: number, company_id: number, branch_id: number, purchase_order_id: number | null, warehouse_id: number, stock_location_id: number, receipt_no: string, status: string, received_at: string | null, received_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, purchase_order?: App.Models.PurchaseOrder | null, warehouse?: App.Models.Warehouse | null, stock_location?: App.Models.StockLocation | null, lines?: App.Models.GoodsReceiptLine[], putaway_transfers?: App.Models.StockTransfer[], receiver?: App.Models.User | null, canceller?: App.Models.User | null }
+        export type GoodsReceiptLine = {
+            id: number;
+            goods_receipt_id: number;
+            purchase_order_line_id: number | null;
+            item_id: number;
+            unit_id: number;
+            stock_location_id: number | null;
+            quantity_received: number;
+            unit_cost: number;
+            total_cost: number;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            goods_receipt?: App.Models.GoodsReceipt | null;
+            purchase_order_line?: App.Models.PurchaseOrderLine | null;
+            item?: App.Models.Item | null;
+            unit?: App.Models.Unit | null;
+            stock_location?: App.Models.StockLocation | null;
+        };
 
         /**
-         * @see [\App\Models\PurchaseOrder](\D:\Lar\dmpos\app\Models\PurchaseOrder.php)
+         * @see [\App\Models\GoodsReceipt](/home/runner/work/dmpos/dmpos/app/Models/GoodsReceipt.php)
          */
-        export type PurchaseOrder = { id: number, company_id: number, branch_id: number | null, po_no: string, purchase_scope: string, supplier_name: string | null, supplier_phone: string | null, supplier_address: string | null, status: string, subtotal: number, discount_amount: number, tax_amount: number, grand_total: number, order_date: string | null, expected_date: string | null, created_by: number | null, approved_by: number | null, rejected_by: number | null, cancelled_by: number | null, approved_at: string | null, rejected_at: string | null, cancelled_at: string | null, reject_reason: string | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, lines?: App.Models.PurchaseOrderLine[], goods_receipts?: App.Models.GoodsReceipt[], creator?: App.Models.User | null, approver?: App.Models.User | null, rejecter?: App.Models.User | null, canceller?: App.Models.User | null }
+        export type GoodsReceipt = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            purchase_order_id: number | null;
+            warehouse_id: number;
+            stock_location_id: number;
+            receipt_no: string;
+            status: string;
+            received_at: string | null;
+            received_by: number | null;
+            cancelled_by: number | null;
+            cancel_reason: string | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            purchase_order?: App.Models.PurchaseOrder | null;
+            warehouse?: App.Models.Warehouse | null;
+            stock_location?: App.Models.StockLocation | null;
+            lines?: App.Models.GoodsReceiptLine[];
+            putaway_transfers?: App.Models.StockTransfer[];
+            receiver?: App.Models.User | null;
+            canceller?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\PurchaseOrderLine](\D:\Lar\dmpos\app\Models\PurchaseOrderLine.php)
+         * @see [\App\Models\StockTransfer](/home/runner/work/dmpos/dmpos/app/Models/StockTransfer.php)
          */
-        export type PurchaseOrderLine = { id: number, purchase_order_id: number, branch_id: number | null, item_id: number, unit_id: number, quantity_ordered: number, quantity_received: number, quantity_remaining: number, unit_cost: number, discount_amount: number, tax_amount: number, line_total: number, status: string, note: string | null, created_at: string | null, updated_at: string | null, purchase_order?: App.Models.PurchaseOrder | null, branch?: App.Models.Branch | null, item?: App.Models.Item | null, unit?: App.Models.Unit | null, goods_receipt_lines?: App.Models.GoodsReceiptLine[] }
+        export type StockTransfer = {
+            id: number;
+            company_id: number;
+            invoice_id: number | null;
+            from_branch_id: number;
+            to_branch_id: number;
+            from_warehouse_id: number;
+            to_warehouse_id: number;
+            from_location_id: number;
+            to_location_id: number;
+            transfer_no: string;
+            transfer_type: string;
+            status: string;
+            transfer_date: string | null;
+            approved_at: string | null;
+            dispatched_at: string | null;
+            received_at: string | null;
+            cancelled_at: string | null;
+            created_by: number | null;
+            approved_by: number | null;
+            dispatched_by: number | null;
+            received_by: number | null;
+            cancelled_by: number | null;
+            cancel_reason: string | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            goods_receipt_id: number | null;
+            company?: App.Models.Company | null;
+            goods_receipt?: App.Models.GoodsReceipt | null;
+            invoice?: App.Models.Invoice | null;
+            from_branch?: App.Models.Branch | null;
+            to_branch?: App.Models.Branch | null;
+            from_warehouse?: App.Models.Warehouse | null;
+            to_warehouse?: App.Models.Warehouse | null;
+            from_location?: App.Models.StockLocation | null;
+            to_location?: App.Models.StockLocation | null;
+            lines?: App.Models.StockTransferLine[];
+            creator?: App.Models.User | null;
+            approver?: App.Models.User | null;
+            canceller?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\GoodsReceiptLine](\D:\Lar\dmpos\app\Models\GoodsReceiptLine.php)
+         * @see [\App\Models\StockTransferLine](/home/runner/work/dmpos/dmpos/app/Models/StockTransferLine.php)
          */
-        export type GoodsReceiptLine = { id: number, goods_receipt_id: number, purchase_order_line_id: number | null, item_id: number, unit_id: number, stock_location_id: number | null, quantity_received: number, unit_cost: number, total_cost: number, note: string | null, created_at: string | null, updated_at: string | null, goods_receipt?: App.Models.GoodsReceipt | null, purchase_order_line?: App.Models.PurchaseOrderLine | null, item?: App.Models.Item | null, unit?: App.Models.Unit | null, stock_location?: App.Models.StockLocation | null }
+        export type StockTransferLine = {
+            id: number;
+            stock_transfer_id: number;
+            item_id: number;
+            unit_id: number;
+            quantity_requested: number;
+            quantity_dispatched: number;
+            quantity_received: number;
+            unit_cost: number;
+            total_cost: number;
+            status: string;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            to_location_id: number | null;
+            stock_transfer?: App.Models.StockTransfer | null;
+            item?: App.Models.Item | null;
+            unit?: App.Models.Unit | null;
+            to_location?: App.Models.StockLocation | null;
+        };
 
         /**
-         * @see [\App\Models\StockTransfer](\D:\Lar\dmpos\app\Models\StockTransfer.php)
+         * @see [\App\Models\ActivityLog](/home/runner/work/dmpos/dmpos/app/Models/ActivityLog.php)
          */
-        export type StockTransfer = { id: number, company_id: number, goods_receipt_id: number | null, invoice_id: number | null, from_branch_id: number, to_branch_id: number, from_warehouse_id: number, to_warehouse_id: number, from_location_id: number, to_location_id: number, transfer_no: string, transfer_type: string | null, status: string, transfer_date: string | null, approved_at: string | null, dispatched_at: string | null, received_at: string | null, cancelled_at: string | null, created_by: number | null, approved_by: number | null, dispatched_by: number | null, received_by: number | null, cancelled_by: number | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, goods_receipt?: App.Models.GoodsReceipt | null, invoice?: App.Models.Invoice | null, from_branch?: App.Models.Branch | null, to_branch?: App.Models.Branch | null, from_warehouse?: App.Models.Warehouse | null, to_warehouse?: App.Models.Warehouse | null, from_location?: App.Models.StockLocation | null, to_location?: App.Models.StockLocation | null, lines?: App.Models.StockTransferLine[], creator?: App.Models.User | null, approver?: App.Models.User | null, canceller?: App.Models.User | null }
+        export type ActivityLog = {
+            id: number;
+            company_id: number | null;
+            branch_id: number | null;
+            user_id: number | null;
+            module: string;
+            action: string;
+            reference_type: string | null;
+            reference_id: number | null;
+            reference_no: string | null;
+            old_values: Record<string, unknown>;
+            new_values: Record<string, unknown>;
+            ip_address: string | null;
+            user_agent: string | null;
+            description: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            user?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\StockTransferLine](\D:\Lar\dmpos\app\Models\StockTransferLine.php)
+         * @see [\App\Models\PaymentLog](/home/runner/work/dmpos/dmpos/app/Models/PaymentLog.php)
          */
-        export type StockTransferLine = { id: number, stock_transfer_id: number, item_id: number, unit_id: number, to_location_id: number | null, quantity_requested: number, quantity_dispatched: number, quantity_received: number, unit_cost: number, total_cost: number, status: string, note: string | null, created_at: string | null, updated_at: string | null, stock_transfer?: App.Models.StockTransfer | null, item?: App.Models.Item | null, unit?: App.Models.Unit | null, to_location?: App.Models.StockLocation | null }
+        export type PaymentLog = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            invoice_id: number | null;
+            payment_id: number | null;
+            action: string;
+            amount_before: number;
+            amount_after: number;
+            amount_changed: number;
+            currency: string;
+            exchange_rate_snapshot: number;
+            performed_by: number | null;
+            payload: Record<string, unknown>;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            invoice?: App.Models.Invoice | null;
+            payment?: App.Models.Payment | null;
+            performer?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\PaymentLog](\D:\Lar\dmpos\app\Models\PaymentLog.php)
+         * @see [\App\Models\StockAdjustmentLine](/home/runner/work/dmpos/dmpos/app/Models/StockAdjustmentLine.php)
          */
-        export type PaymentLog = { id: number, company_id: number, branch_id: number, invoice_id: number | null, payment_id: number | null, action: string, amount_before: number, amount_after: number, amount_changed: number, currency: string, exchange_rate_snapshot: number, performed_by: number | null, payload: Record<string, unknown>, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, invoice?: App.Models.Invoice | null, payment?: App.Models.Payment | null, performer?: App.Models.User | null }
+        export type StockAdjustmentLine = {
+            id: number;
+            stock_adjustment_id: number;
+            item_id: number;
+            unit_id: number;
+            system_quantity: number;
+            adjusted_quantity: number;
+            difference_quantity: number;
+            unit_cost: number;
+            total_cost: number;
+            menu_id: number | null;
+            bom_header_id: number | null;
+            reason: string | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            stock_location_id: number | null;
+            stock_adjustment?: App.Models.StockAdjustment | null;
+            item?: App.Models.Item | null;
+            unit?: App.Models.Unit | null;
+            stock_location?: App.Models.StockLocation | null;
+            menu?: App.Models.Menu | null;
+            bom_header?: App.Models.BomHeader | null;
+        };
 
         /**
-         * @see [\App\Models\StockAdjustment](\D:\Lar\dmpos\app\Models\StockAdjustment.php)
+         * @see [\App\Models\StockAdjustment](/home/runner/work/dmpos/dmpos/app/Models/StockAdjustment.php)
          */
-        export type StockAdjustment = { id: number, company_id: number, branch_id: number, warehouse_id: number, stock_location_id: number, adjustment_no: string, adjustment_type: string, status: string, adjustment_date: string | null, created_by: number | null, confirmed_by: number | null, cancelled_by: number | null, confirmed_at: string | null, cancelled_at: string | null, cancel_reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, warehouse?: App.Models.Warehouse | null, stock_location?: App.Models.StockLocation | null, lines?: App.Models.StockAdjustmentLine[], creator?: App.Models.User | null, confirmer?: App.Models.User | null, canceller?: App.Models.User | null }
+        export type StockAdjustment = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            warehouse_id: number;
+            stock_location_id: number;
+            adjustment_no: string;
+            adjustment_type: string;
+            status: string;
+            adjustment_date: string | null;
+            created_by: number | null;
+            confirmed_by: number | null;
+            cancelled_by: number | null;
+            confirmed_at: string | null;
+            cancelled_at: string | null;
+            cancel_reason: string | null;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            warehouse?: App.Models.Warehouse | null;
+            stock_location?: App.Models.StockLocation | null;
+            lines?: App.Models.StockAdjustmentLine[];
+            creator?: App.Models.User | null;
+            confirmer?: App.Models.User | null;
+            canceller?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\StockAdjustmentLine](\D:\Lar\dmpos\app\Models\StockAdjustmentLine.php)
+         * @see [\App\Models\ExchangeRate](/home/runner/work/dmpos/dmpos/app/Models/ExchangeRate.php)
          */
-        export type StockAdjustmentLine = { id: number, stock_adjustment_id: number, item_id: number, unit_id: number, stock_location_id: number | null, system_quantity: number, adjusted_quantity: number, difference_quantity: number, unit_cost: number, total_cost: number, menu_id: number | null, bom_header_id: number | null, reason: string | null, note: string | null, created_at: string | null, updated_at: string | null, stock_adjustment?: App.Models.StockAdjustment | null, item?: App.Models.Item | null, unit?: App.Models.Unit | null, stock_location?: App.Models.StockLocation | null, menu?: App.Models.Menu | null, bom_header?: App.Models.BomHeader | null }
+        export type ExchangeRate = {
+            id: number;
+            company_id: number;
+            from_currency: string;
+            to_currency: string;
+            rate: number;
+            effective_date: string;
+            is_active: boolean;
+            created_by: number | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            creator?: App.Models.User | null;
+        };
 
         /**
-         * @see [\App\Models\StockLog](\D:\Lar\dmpos\app\Models\StockLog.php)
+         * @see [\App\Models\StockLog](/home/runner/work/dmpos/dmpos/app/Models/StockLog.php)
          */
-        export type StockLog = { id: number, company_id: number, branch_id: number, stock_movement_id: number | null, item_id: number | null, action: string, quantity_before: number, quantity_after: number, quantity_changed: number, reference_type: string | null, reference_id: number | null, reference_no: string | null, performed_by: number | null, payload: Record<string, unknown>, note: string | null, created_at: string | null, updated_at: string | null, company?: App.Models.Company | null, branch?: App.Models.Branch | null, stock_movement?: App.Models.StockMovement | null, item?: App.Models.Item | null, performer?: App.Models.User | null }
+        export type StockLog = {
+            id: number;
+            company_id: number;
+            branch_id: number;
+            stock_movement_id: number | null;
+            item_id: number | null;
+            action: string;
+            quantity_before: number;
+            quantity_after: number;
+            quantity_changed: number;
+            reference_type: string | null;
+            reference_id: number | null;
+            reference_no: string | null;
+            performed_by: number | null;
+            payload: Record<string, unknown>;
+            note: string | null;
+            created_at: string | null;
+            updated_at: string | null;
+            company?: App.Models.Company | null;
+            branch?: App.Models.Branch | null;
+            stock_movement?: App.Models.StockMovement | null;
+            item?: App.Models.Item | null;
+            performer?: App.Models.User | null;
+        };
     }
 
     export namespace Http {
@@ -295,142 +1503,147 @@ export namespace App {
                 export namespace DashboardController {
                     export namespace __invoke {
                         /**
-                         * @see [\App\Http\Controllers\Crm\DashboardController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php)
+                         * @see [\App\Http\Controllers\Crm\DashboardController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php)
                          */
-                        export type Response = Inertia.Pages.Crm.Dashboard
+                        export type Response = Inertia.Pages.Crm.Dashboard;
 
                         /**
-                         * @see [\App\Http\Controllers\Crm\DashboardController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php)
+                         * @see [\App\Http\Controllers\Crm\DashboardController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace ContactController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Response = Inertia.Pages.Contacts.Index
+                        export type Response = Inertia.Pages.Contacts.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Create {
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::create](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Response = Inertia.Pages.Contacts.Create
+                        export type Response = Inertia.Pages.Contacts.Create;
 
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::create](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Show {
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Response = Inertia.Pages.Contacts.Show
+                        export type Response = Inertia.Pages.Contacts.Show;
 
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Edit {
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::edit](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::edit](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Response = Inertia.Pages.Contacts.Edit
+                        export type Response = Inertia.Pages.Contacts.Edit;
 
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::edit](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::edit](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::store](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Request = {    first_name: string;
+                        export type Request = {
+                            first_name: string;
                             last_name: string;
                             email?: string | null;
                             phone?: string | null;
-                            organization_id?: string | null;}
+                            organization_id?: string | null;
+                        };
                     }
 
                     export namespace Update {
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::update](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::update](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Request = {    first_name: string;
+                        export type Request = {
+                            first_name: string;
                             last_name: string;
                             email?: string | null;
                             phone?: string | null;
-                            organization_id?: string | null;}
+                            organization_id?: string | null;
+                        };
                     }
 
                     export namespace Destroy {
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::destroy](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::destroy](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Favorite {
                         /**
-                         * @see [\App\Http\Controllers\Crm\ContactController::favorite](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+                         * @see [\App\Http\Controllers\Crm\ContactController::favorite](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace OrganizationController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\Crm\OrganizationController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
+                         * @see [\App\Http\Controllers\Crm\OrganizationController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php)
                          */
-                        export type Response = Inertia.Pages.Organizations.Index
+                        export type Response =
+                            Inertia.Pages.Organizations.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\Crm\OrganizationController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
+                         * @see [\App\Http\Controllers\Crm\OrganizationController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Show {
                         /**
-                         * @see [\App\Http\Controllers\Crm\OrganizationController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
+                         * @see [\App\Http\Controllers\Crm\OrganizationController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php)
                          */
-                        export type Response = Inertia.Pages.Organizations.Show
+                        export type Response = Inertia.Pages.Organizations.Show;
 
                         /**
-                         * @see [\App\Http\Controllers\Crm\OrganizationController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
+                         * @see [\App\Http\Controllers\Crm\OrganizationController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Update {
                         /**
-                         * @see [\App\Http\Controllers\Crm\OrganizationController::update](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
+                         * @see [\App\Http\Controllers\Crm\OrganizationController::update](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php)
                          */
-                        export type Request = {    name: string;}
+                        export type Request = { name: string };
                     }
                 }
 
                 export namespace NoteController {
                     export namespace Store {
                         /**
-                         * @see [\App\Http\Controllers\Crm\NoteController::store](\D:\Lar\dmpos\app\Http\Controllers\Crm\NoteController.php)
+                         * @see [\App\Http\Controllers\Crm\NoteController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/NoteController.php)
                          */
-                        export type Request = {    body: string;}
+                        export type Request = { body: string };
                     }
                 }
             }
@@ -439,33 +1652,91 @@ export namespace App {
                 export namespace UserController {
                     export namespace __invoke {
                         /**
-                         * @see [\App\Http\Controllers\Users\UserController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Users\UserController.php)
+                         * @see [\App\Http\Controllers\Users\UserController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Users/UserController.php)
                          */
-                        export type Response = Inertia.Pages.Users.Index
+                        export type Response = Inertia.Pages.Users.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\Users\UserController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Users\UserController.php)
+                         * @see [\App\Http\Controllers\Users\UserController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Users/UserController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StoreRole {
                         /**
-                         * @see [\App\Http\Controllers\Users\UserController::storeRole](\D:\Lar\dmpos\app\Http\Controllers\Users\UserController.php)
+                         * @see [\App\Http\Controllers\Users\UserController::storeRole](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Users/UserController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             permission_ids?: unknown[];
-                            "permission_ids.*"?: number;}
+                            'permission_ids.*'?: number;
+                        };
                     }
 
                     export namespace UpdatePermissions {
                         /**
-                         * @see [\App\Http\Controllers\Users\UserController::updatePermissions](\D:\Lar\dmpos\app\Http\Controllers\Users\UserController.php)
+                         * @see [\App\Http\Controllers\Users\UserController::updatePermissions](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Users/UserController.php)
                          */
-                        export type Request = {    permission_names?: unknown[];
-                            "permission_names.*"?: string;
+                        export type Request = {
+                            permission_names?: unknown[];
+                            'permission_names.*'?: string;
                             permission_scope?: unknown[];
-                            "permission_scope.*"?: string;}
+                            'permission_scope.*'?: string;
+                        };
+                    }
+                }
+            }
+
+            export namespace AccessControl {
+                export namespace PrinterController {
+                    export namespace Index {
+                        /**
+                         * @see [\App\Http\Controllers\AccessControl\PrinterController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/AccessControl/PrinterController.php)
+                         */
+                        export type Response =
+                            Inertia.Pages.AccessControl.PrinterIndex;
+
+                        /**
+                         * @see [\App\Http\Controllers\AccessControl\PrinterController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/AccessControl/PrinterController.php)
+                         */
+                        export type Request = Record<string, unknown>;
+                    }
+
+                    export namespace Logs {
+                        /**
+                         * @see [\App\Http\Controllers\AccessControl\PrinterController::logs](/home/runner/work/dmpos/dmpos/app/Http/Controllers/AccessControl/PrinterController.php)
+                         */
+                        export type Response =
+                            Inertia.Pages.AccessControl.PrinterLogs;
+
+                        /**
+                         * @see [\App\Http\Controllers\AccessControl\PrinterController::logs](/home/runner/work/dmpos/dmpos/app/Http/Controllers/AccessControl/PrinterController.php)
+                         */
+                        export type Request = Record<string, unknown>;
+                    }
+
+                    export namespace DestroyLogs {
+                        /**
+                         * @see [\App\Http\Controllers\AccessControl\PrinterController::destroyLogs](/home/runner/work/dmpos/dmpos/app/Http/Controllers/AccessControl/PrinterController.php)
+                         */
+                        export type Request = {
+                            ids: unknown[];
+                            'ids.*'?: number;
+                        };
+                    }
+
+                    export namespace Store {
+                        /**
+                         * @see [\App\Http\Controllers\AccessControl\PrinterController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/AccessControl/PrinterController.php)
+                         */
+                        export type Request = Record<string, unknown>;
+                    }
+
+                    export namespace Update {
+                        /**
+                         * @see [\App\Http\Controllers\AccessControl\PrinterController::update](/home/runner/work/dmpos/dmpos/app/Http/Controllers/AccessControl/PrinterController.php)
+                         */
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -474,33 +1745,37 @@ export namespace App {
                 export namespace PosSessionController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\POS\PosSessionController::index](\D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php)
+                         * @see [\App\Http\Controllers\POS\PosSessionController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/POS/PosSessionController.php)
                          */
-                        export type Response = Inertia.Pages.POS.Index
+                        export type Response = Inertia.Pages.POS.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\POS\PosSessionController::index](\D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php)
+                         * @see [\App\Http\Controllers\POS\PosSessionController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/POS/PosSessionController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Open {
                         /**
-                         * @see [\App\Http\Controllers\POS\PosSessionController::open](\D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php)
+                         * @see [\App\Http\Controllers\POS\PosSessionController::open](/home/runner/work/dmpos/dmpos/app/Http/Controllers/POS/PosSessionController.php)
                          */
-                        export type Request = {    pos_terminal_id: string;
+                        export type Request = {
+                            pos_terminal_id: string;
                             opening_banknotes: unknown[];
-                            "opening_banknotes.*"?: number | null;
-                            opening_note?: string | null;}
+                            'opening_banknotes.*'?: number | null;
+                            opening_note?: string | null;
+                        };
                     }
 
                     export namespace Close {
                         /**
-                         * @see [\App\Http\Controllers\POS\PosSessionController::close](\D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php)
+                         * @see [\App\Http\Controllers\POS\PosSessionController::close](/home/runner/work/dmpos/dmpos/app/Http/Controllers/POS/PosSessionController.php)
                          */
-                        export type Request = {    actual_banknotes: unknown[];
-                            "actual_banknotes.*"?: number | null;
-                            closing_note?: string | null;}
+                        export type Request = {
+                            actual_banknotes: unknown[];
+                            'actual_banknotes.*'?: number | null;
+                            closing_note?: string | null;
+                        };
                     }
                 }
             }
@@ -509,51 +1784,55 @@ export namespace App {
                 export namespace SaleInvoiceController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::index](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
+                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Sales/SaleInvoiceController.php)
                          */
-                        export type Response = Inertia.Pages.Sales.Index
+                        export type Response = Inertia.Pages.Sales.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::index](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
+                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Sales/SaleInvoiceController.php)
                          */
-                        export type Request = {    start_date?: string | null;
+                        export type Request = {
+                            start_date?: string | null;
                             end_date?: string | null;
-                            search?: string | null;}
+                            search?: string | null;
+                        };
                     }
 
                     export namespace Receive {
                         /**
-                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::receive](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
+                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::receive](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Sales/SaleInvoiceController.php)
                          */
-                        export type Request = {    method: string;
+                        export type Request = {
+                            method: string;
                             payment_method_id?: string | null;
                             membership_card_id?: string | null;
-                            currency: "USD" | "KHR";
+                            currency: 'USD' | 'KHR';
                             received_amount?: number | null;
-                            operation_status: "invoice_receipt_done";
+                            operation_status: 'invoice_receipt_done';
                             change_usd_amount?: number | null;
-                            change_khr_amount?: number | null;}
+                            change_khr_amount?: number | null;
+                        };
                     }
 
                     export namespace Cancel {
                         /**
-                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::cancel](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
+                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::cancel](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Sales/SaleInvoiceController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace CancelInvoicePayments {
                         /**
-                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::cancelInvoicePayments](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
+                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::cancelInvoicePayments](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Sales/SaleInvoiceController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace CancelPayment {
                         /**
-                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::cancelPayment](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
+                         * @see [\App\Http\Controllers\Sales\SaleInvoiceController::cancelPayment](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Sales/SaleInvoiceController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -562,54 +1841,78 @@ export namespace App {
                 export namespace PurchaseOrderController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::index](\D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php)
+                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php)
                          */
-                        export type Response = Inertia.Pages.Purchase.Index
+                        export type Response = Inertia.Pages.Purchase.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::index](\D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php)
+                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php)
                          */
-                        export type Request = {    search?: string | null;
-                            status?: string | null;}
+                        export type Request = {
+                            search?: string | null;
+                            status?: string | null;
+                        };
                     }
 
                     export namespace Store {
                         /**
-                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::store](\D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php)
+                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php)
                          */
-                        export type Request = {    supplier_name: string;
+                        export type Request = {
+                            supplier_name: string;
                             supplier_phone?: string | null;
                             supplier_address?: string | null;
                             order_date: string;
                             expected_date?: string | null;
                             note?: string | null;
                             lines: unknown[];
-                            "lines.*.item_id": string;
-                            "lines.*.unit_id": string;
-                            "lines.*.quantity_ordered": number;
-                            "lines.*.unit_cost": number;
-                            "lines.*.note"?: string | null;}
+                            'lines.*.item_id': string;
+                            'lines.*.unit_id': string;
+                            'lines.*.quantity_ordered': number;
+                            'lines.*.unit_cost': number;
+                            'lines.*.note'?: string | null;
+                        };
+                    }
+
+                    export namespace Update {
+                        /**
+                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::update](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php)
+                         */
+                        export type Request = {
+                            supplier_name: string;
+                            supplier_phone?: string | null;
+                            supplier_address?: string | null;
+                            order_date: string;
+                            expected_date?: string | null;
+                            note?: string | null;
+                            lines: unknown[];
+                            'lines.*.item_id': string;
+                            'lines.*.unit_id': string;
+                            'lines.*.quantity_ordered': number;
+                            'lines.*.unit_cost': number;
+                            'lines.*.note'?: string | null;
+                        };
                     }
 
                     export namespace Approve {
                         /**
-                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::approve](\D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php)
+                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::approve](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Reject {
                         /**
-                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::reject](\D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php)
+                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::reject](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Cancel {
                         /**
-                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::cancel](\D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php)
+                         * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::cancel](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -618,71 +1921,88 @@ export namespace App {
                 export namespace GoodsReceiptController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
                          */
-                        export type Response = Inertia.Pages.GoodsReceipt.Index
+                        export type Response = Inertia.Pages.GoodsReceipt.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Create {
                         /**
-                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
                          */
-                        export type Response = Inertia.Pages.GoodsReceipt.CreateGoodsReceipt
+                        export type Response =
+                            Inertia.Pages.GoodsReceipt.CreateGoodsReceipt;
 
                         /**
-                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace ApprovedPurchaseOrders {
                         /**
-                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
                          */
-                        export type Response = Inertia.Pages.GoodsReceipt.ApprovedPOForGR
+                        export type Response =
+                            Inertia.Pages.GoodsReceipt.ApprovedPOForGR;
 
                         /**
-                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
-                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::store](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
                          */
-                        export type Request = {    purchase_order_id: string;
+                        export type Request = {
+                            purchase_order_id: string;
                             note?: string | null;
                             lines: unknown[];
-                            "lines.*.purchase_order_line_id": number;
-                            "lines.*.stock_location_id": string;
-                            "lines.*.quantity_received": number;}
+                            'lines.*.purchase_order_line_id': number;
+                            'lines.*.stock_location_id': string;
+                            'lines.*.quantity_received': number;
+                        };
+                    }
+
+                    export namespace Update {
+                        /**
+                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::update](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
+                         */
+                        export type Request = {
+                            note?: string | null;
+                            lines: unknown[];
+                            'lines.*.purchase_order_line_id': number;
+                            'lines.*.stock_location_id': string;
+                            'lines.*.quantity_received': number;
+                        };
                     }
 
                     export namespace Approve {
                         /**
-                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approve](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approve](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Reject {
                         /**
-                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::reject](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::reject](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Cancel {
                         /**
-                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::cancel](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+                         * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::cancel](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -691,73 +2011,75 @@ export namespace App {
                 export namespace PutawayController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\Putaway\PutawayController::index](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+                         * @see [\App\Http\Controllers\Putaway\PutawayController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
                          */
-                        export type Response = Inertia.Pages.Putaway.Index
+                        export type Response = Inertia.Pages.Putaway.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\Putaway\PutawayController::index](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+                         * @see [\App\Http\Controllers\Putaway\PutawayController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Create {
                         /**
-                         * @see [\App\Http\Controllers\Putaway\PutawayController::create](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+                         * @see [\App\Http\Controllers\Putaway\PutawayController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
                          */
-                        export type Response = Inertia.Pages.Putaway.CreatePutaway
+                        export type Response =
+                            Inertia.Pages.Putaway.CreatePutaway;
 
                         /**
-                         * @see [\App\Http\Controllers\Putaway\PutawayController::create](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+                         * @see [\App\Http\Controllers\Putaway\PutawayController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Receipts {
                         /**
-                         * @see [\App\Http\Controllers\Putaway\PutawayController::receipts](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+                         * @see [\App\Http\Controllers\Putaway\PutawayController::receipts](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
                          */
-                        export type Response = Inertia.Pages.Putaway.CompleteGRForPutaway
+                        export type Response =
+                            Inertia.Pages.Putaway.CompleteGRForPutaway;
 
                         /**
-                         * @see [\App\Http\Controllers\Putaway\PutawayController::receipts](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+                         * @see [\App\Http\Controllers\Putaway\PutawayController::receipts](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
-                         * @see [\App\Http\Controllers\Putaway\PutawayController::store](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+                         * @see [\App\Http\Controllers\Putaway\PutawayController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Update {
                         /**
-                         * @see [\App\Http\Controllers\Putaway\PutawayController::update](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+                         * @see [\App\Http\Controllers\Putaway\PutawayController::update](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Approve {
                         /**
-                         * @see [\App\Http\Controllers\Putaway\PutawayController::approve](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+                         * @see [\App\Http\Controllers\Putaway\PutawayController::approve](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Reject {
                         /**
-                         * @see [\App\Http\Controllers\Putaway\PutawayController::reject](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+                         * @see [\App\Http\Controllers\Putaway\PutawayController::reject](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Cancel {
                         /**
-                         * @see [\App\Http\Controllers\Putaway\PutawayController::cancel](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+                         * @see [\App\Http\Controllers\Putaway\PutawayController::cancel](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -766,85 +2088,88 @@ export namespace App {
                 export namespace StockCustomerController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::index](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Response = Inertia.Pages.StockCustomer.Index
+                        export type Response =
+                            Inertia.Pages.StockCustomer.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::index](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Create {
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::create](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Response = Inertia.Pages.StockCustomer.CreateStockCus
+                        export type Response =
+                            Inertia.Pages.StockCustomer.CreateStockCus;
 
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::create](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Invoices {
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::invoices](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::invoices](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Response = Inertia.Pages.StockCustomer.CompleteStockCus
+                        export type Response =
+                            Inertia.Pages.StockCustomer.CompleteStockCus;
 
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::invoices](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::invoices](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Item {
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::item](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::item](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Response = Inertia.Pages.StockCustomer.View
+                        export type Response = Inertia.Pages.StockCustomer.View;
 
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::item](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::item](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::store](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Update {
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::update](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::update](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Approve {
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::approve](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::approve](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Reject {
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::reject](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::reject](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Cancel {
                         /**
-                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::cancel](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+                         * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::cancel](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -853,26 +2178,27 @@ export namespace App {
                 export namespace BalanceOnHandController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index](\D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php)
+                         * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php)
                          */
-                        export type Response = Inertia.Pages.BalanceOnHand.Index
+                        export type Response =
+                            Inertia.Pages.BalanceOnHand.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index](\D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php)
+                         * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Show {
                         /**
-                         * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show](\D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php)
+                         * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php)
                          */
-                        export type Response = Inertia.Pages.BalanceOnHand.View
+                        export type Response = Inertia.Pages.BalanceOnHand.View;
 
                         /**
-                         * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show](\D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php)
+                         * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -881,28 +2207,30 @@ export namespace App {
                 export namespace DailySessionStockController {
                     export namespace __invoke {
                         /**
-                         * @see [\App\Http\Controllers\OperationsReport\DailySessionStockController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionStockController.php)
+                         * @see [\App\Http\Controllers\OperationsReport\DailySessionStockController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/OperationsReport/DailySessionStockController.php)
                          */
-                        export type Response = Inertia.Pages.OperationsReport.DailySessionStock
+                        export type Response =
+                            Inertia.Pages.OperationsReport.DailySessionStock;
 
                         /**
-                         * @see [\App\Http\Controllers\OperationsReport\DailySessionStockController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionStockController.php)
+                         * @see [\App\Http\Controllers\OperationsReport\DailySessionStockController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/OperationsReport/DailySessionStockController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace DailySessionMenuController {
                     export namespace __invoke {
                         /**
-                         * @see [\App\Http\Controllers\OperationsReport\DailySessionMenuController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionMenuController.php)
+                         * @see [\App\Http\Controllers\OperationsReport\DailySessionMenuController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/OperationsReport/DailySessionMenuController.php)
                          */
-                        export type Response = Inertia.Pages.OperationsReport.DailySessionMenu
+                        export type Response =
+                            Inertia.Pages.OperationsReport.DailySessionMenu;
 
                         /**
-                         * @see [\App\Http\Controllers\OperationsReport\DailySessionMenuController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionMenuController.php)
+                         * @see [\App\Http\Controllers\OperationsReport\DailySessionMenuController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/OperationsReport/DailySessionMenuController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -911,241 +2239,259 @@ export namespace App {
                 export namespace InternalTransferController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php)
+                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/InternalTransferController.php)
                          */
-                        export type Response = Inertia.Pages.InternalTransfer.Index
+                        export type Response =
+                            Inertia.Pages.InternalTransfer.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php)
+                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/InternalTransferController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Create {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::create](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php)
+                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/InternalTransferController.php)
                          */
-                        export type Response = Inertia.Pages.InternalTransfer.Create
+                        export type Response =
+                            Inertia.Pages.InternalTransfer.Create;
 
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::create](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php)
+                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/InternalTransferController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::store](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php)
+                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/InternalTransferController.php)
                          */
-                        export type Request = {    transfer_date: string;
+                        export type Request = {
+                            transfer_date: string;
                             note?: string | null;
                             lines: unknown[];
-                            "lines.*.item_id": string;
-                            "lines.*.from_warehouse_id": string;
-                            "lines.*.stock_balance_id": string;
-                            "lines.*.quantity": number;
-                            "lines.*.to_warehouse_id": string;
-                            "lines.*.to_location_id": string;
-                            "lines.*.note"?: string | null;}
+                            'lines.*.item_id': string;
+                            'lines.*.from_warehouse_id': string;
+                            'lines.*.stock_balance_id': string;
+                            'lines.*.quantity': number;
+                            'lines.*.to_warehouse_id': string;
+                            'lines.*.to_location_id': string;
+                            'lines.*.note'?: string | null;
+                        };
                     }
 
                     export namespace Approve {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::approve](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php)
+                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::approve](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/InternalTransferController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Reject {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::reject](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php)
+                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::reject](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/InternalTransferController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Cancel {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::cancel](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php)
+                         * @see [\App\Http\Controllers\StockMovements\InternalTransferController::cancel](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/InternalTransferController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace StockAdjustmentController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockAdjustmentController.php)
                          */
-                        export type Response = Inertia.Pages.StockAdjustment.Index
+                        export type Response =
+                            Inertia.Pages.StockAdjustment.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockAdjustmentController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Create {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::create](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockAdjustmentController.php)
                          */
-                        export type Response = Inertia.Pages.StockAdjustment.Create
+                        export type Response =
+                            Inertia.Pages.StockAdjustment.Create;
 
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::create](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockAdjustmentController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::store](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockAdjustmentController.php)
                          */
-                        export type Request = {    warehouse_id: string;
+                        export type Request = {
+                            warehouse_id: string;
                             adjustment_type: string;
                             adjustment_date: string;
                             reason: string;
                             note?: string | null;
                             lines: unknown[];
-                            "lines.*.item_id": string;
-                            "lines.*.stock_location_id": string;
-                            "lines.*.stock_balance_id": string;
-                            "lines.*.quantity": number;
-                            "lines.*.unit_cost"?: number | null;
-                            "lines.*.note"?: string | null;}
+                            'lines.*.item_id': string;
+                            'lines.*.stock_location_id': string;
+                            'lines.*.stock_balance_id': string;
+                            'lines.*.quantity': number;
+                            'lines.*.unit_cost'?: number | null;
+                            'lines.*.note'?: string | null;
+                        };
                     }
 
                     export namespace Approve {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::approve](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::approve](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockAdjustmentController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Reject {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::reject](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::reject](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockAdjustmentController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Cancel {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::cancel](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::cancel](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockAdjustmentController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace StockSettlementController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockSettlementController.php)
                          */
-                        export type Response = Inertia.Pages.StockSettlements.Index
+                        export type Response =
+                            Inertia.Pages.StockSettlements.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockSettlementController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Show {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::show](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockSettlementController.php)
                          */
-                        export type Response = Inertia.Pages.StockSettlements.View
+                        export type Response =
+                            Inertia.Pages.StockSettlements.View;
 
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::show](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockSettlementController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Approve {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::approve](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::approve](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockSettlementController.php)
                          */
-                        export type Request = {    invoice_ids: unknown[];
-                            "invoice_ids.*"?: number;
+                        export type Request = {
+                            invoice_ids: unknown[];
+                            'invoice_ids.*'?: number;
                             quantities?: unknown[] | null;
-                            "quantities.*"?: number | null;
+                            'quantities.*'?: number | null;
                             allocations?: unknown[] | null;
-                            "allocations.*"?: unknown[] | null;
-                            "allocations.*.*"?: unknown[] | null;
-                            "allocations.*.*.*.stock_balance_id"?: number;
-                            "allocations.*.*.*.quantity"?: number;
-                            note?: string | null;}
+                            'allocations.*'?: unknown[] | null;
+                            'allocations.*.*'?: unknown[] | null;
+                            'allocations.*.*.*.stock_balance_id'?: number;
+                            'allocations.*.*.*.quantity'?: number;
+                            note?: string | null;
+                        };
                     }
 
                     export namespace Reject {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::reject](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockSettlementController::reject](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockSettlementController.php)
                          */
-                        export type Request = {    invoice_ids: unknown[];
-                            "invoice_ids.*"?: number;
-                            note?: string | null;}
+                        export type Request = {
+                            invoice_ids: unknown[];
+                            'invoice_ids.*'?: number;
+                            note?: string | null;
+                        };
                     }
                 }
 
                 export namespace StockWriteOffController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockWriteOffController.php)
                          */
-                        export type Response = Inertia.Pages.StockWriteOff.Index
+                        export type Response =
+                            Inertia.Pages.StockWriteOff.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockWriteOffController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Create {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::create](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockWriteOffController.php)
                          */
-                        export type Response = Inertia.Pages.StockWriteOff.Create
+                        export type Response =
+                            Inertia.Pages.StockWriteOff.Create;
 
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::create](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockWriteOffController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::store](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockWriteOffController.php)
                          */
-                        export type Request = {    warehouse_id: string;
+                        export type Request = {
+                            warehouse_id: string;
                             adjustment_date: string;
                             reason: string;
                             note?: string | null;
                             lines: unknown[];
-                            "lines.*.item_id": string;
-                            "lines.*.stock_balance_id": string;
-                            "lines.*.quantity": number;
-                            "lines.*.note"?: string | null;}
+                            'lines.*.item_id': string;
+                            'lines.*.stock_balance_id': string;
+                            'lines.*.quantity': number;
+                            'lines.*.note'?: string | null;
+                        };
                     }
 
                     export namespace Approve {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::approve](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::approve](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockWriteOffController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Reject {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::reject](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::reject](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockWriteOffController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Cancel {
                         /**
-                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::cancel](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php)
+                         * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::cancel](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockWriteOffController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -1154,21 +2500,23 @@ export namespace App {
                 export namespace ProductController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\ProductController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php)
+                         * @see [\App\Http\Controllers\MasterData\ProductController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php)
                          */
-                        export type Response = Inertia.Pages.MasterData.Products
+                        export type Response =
+                            Inertia.Pages.MasterData.Products;
 
                         /**
-                         * @see [\App\Http\Controllers\MasterData\ProductController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php)
+                         * @see [\App\Http\Controllers\MasterData\ProductController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StoreItem {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\ProductController::storeItem](\D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php)
+                         * @see [\App\Http\Controllers\MasterData\ProductController::storeItem](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             code?: string | null;
                             branch_id?: string | null;
                             unit_id: string;
@@ -1176,14 +2524,16 @@ export namespace App {
                             cost: number;
                             minimum_stock_qty?: number | null;
                             is_stockable?: boolean;
-                            description?: string | null;}
+                            description?: string | null;
+                        };
                     }
 
                     export namespace StoreBom {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\ProductController::storeBom](\D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php)
+                         * @see [\App\Http\Controllers\MasterData\ProductController::storeBom](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             bom_no?: string | null;
                             branch_id?: string | null;
                             output_item_id: string;
@@ -1191,33 +2541,36 @@ export namespace App {
                             status: string;
                             note?: string | null;
                             lines: unknown[];
-                            "lines.*.component_item_id": string;
-                            "lines.*.unit_id": string;
-                            "lines.*.quantity": number;
-                            "lines.*.wastage_percent"?: number | null;
-                            "lines.*.estimated_cost"?: number | null;
-                            "lines.*.note"?: string | null;}
+                            'lines.*.component_item_id': string;
+                            'lines.*.unit_id': string;
+                            'lines.*.quantity': number;
+                            'lines.*.wastage_percent'?: number | null;
+                            'lines.*.estimated_cost'?: number | null;
+                            'lines.*.note'?: string | null;
+                        };
                     }
                 }
 
                 export namespace CompanyBranchController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\CompanyBranchController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php)
+                         * @see [\App\Http\Controllers\MasterData\CompanyBranchController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/CompanyBranchController.php)
                          */
-                        export type Response = Inertia.Pages.MasterData.CompanyBranches
+                        export type Response =
+                            Inertia.Pages.MasterData.CompanyBranches;
 
                         /**
-                         * @see [\App\Http\Controllers\MasterData\CompanyBranchController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php)
+                         * @see [\App\Http\Controllers\MasterData\CompanyBranchController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/CompanyBranchController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace UpdateBranch {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\CompanyBranchController::updateBranch](\D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php)
+                         * @see [\App\Http\Controllers\MasterData\CompanyBranchController::updateBranch](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/CompanyBranchController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             code?: string | null;
                             company_id: string;
                             phone?: string | null;
@@ -1225,70 +2578,74 @@ export namespace App {
                             address?: string | null;
                             is_active?: boolean;
                             logo?: string | null;
-                            payment_qrcode?: string | null;}
+                            payment_qrcode?: string | null;
+                        };
                     }
                 }
 
                 export namespace CustomerController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\CustomerController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php)
+                         * @see [\App\Http\Controllers\MasterData\CustomerController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/CustomerController.php)
                          */
-                        export type Response = Inertia.Pages.MasterData.Customers
+                        export type Response =
+                            Inertia.Pages.MasterData.Customers;
 
                         /**
-                         * @see [\App\Http\Controllers\MasterData\CustomerController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php)
+                         * @see [\App\Http\Controllers\MasterData\CustomerController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/CustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StoreMembershipCard {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\CustomerController::storeMembershipCard](\D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php)
+                         * @see [\App\Http\Controllers\MasterData\CustomerController::storeMembershipCard](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/CustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace UpdateMembershipCard {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\CustomerController::updateMembershipCard](\D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php)
+                         * @see [\App\Http\Controllers\MasterData\CustomerController::updateMembershipCard](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/CustomerController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace ExchangeRateController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\ExchangeRateController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php)
+                         * @see [\App\Http\Controllers\MasterData\ExchangeRateController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ExchangeRateController.php)
                          */
-                        export type Response = Inertia.Pages.MasterData.ExchangeRate
+                        export type Response =
+                            Inertia.Pages.MasterData.ExchangeRate;
 
                         /**
-                         * @see [\App\Http\Controllers\MasterData\ExchangeRateController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php)
+                         * @see [\App\Http\Controllers\MasterData\ExchangeRateController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ExchangeRateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace MenuController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php)
                          */
-                        export type Response = Inertia.Pages.MasterData.Menu
+                        export type Response = Inertia.Pages.MasterData.Menu;
 
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StoreMenu {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuController::storeMenu](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuController::storeMenu](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             code?: string | null;
                             menu_category_id?: string | null;
                             branch_id?: string | null;
@@ -1299,168 +2656,222 @@ export namespace App {
                             printer_id?: string | null;
                             print_route: string;
                             description?: string | null;
-                            is_available?: boolean;}
+                            is_available?: boolean;
+                        };
                     }
 
                     export namespace UpdateMenu {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuController::updateMenu](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuController::updateMenu](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php)
                          */
-                        export type Request = {    printer_id?: string | null;
-                            print_route: string;}
+                        export type Request = {
+                            printer_id?: string | null;
+                            print_route: string;
+                        };
                     }
 
                     export namespace StoreCategory {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuController::storeCategory](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuController::storeCategory](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             code?: string | null;
                             branch_id?: string | null;
-                            description?: string | null;}
+                            description?: string | null;
+                        };
                     }
 
                     export namespace StorePrice {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuController::storePrice](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuController::storePrice](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php)
                          */
-                        export type Request = {    menu_id: string;
+                        export type Request = {
+                            menu_id: string;
                             branch_id?: string | null;
                             price_name: string;
                             price: number;
-                            is_default?: boolean;}
+                            is_default?: boolean;
+                        };
                     }
                 }
 
                 export namespace MenuPriceListController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuPriceListController.php)
                          */
-                        export type Response = Inertia.Pages.MasterData.MenuPriceList
+                        export type Response =
+                            Inertia.Pages.MasterData.MenuPriceList;
 
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuPriceListController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::store](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuPriceListController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             code: string;
                             branch_id?: string | null;
                             description?: string | null;
                             is_default?: boolean;
-                            is_active?: boolean;}
+                            is_active?: boolean;
+                        };
                     }
 
                     export namespace Update {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::update](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::update](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuPriceListController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             code: string;
                             branch_id?: string | null;
                             description?: string | null;
                             is_default?: boolean;
-                            is_active?: boolean;}
+                            is_active?: boolean;
+                        };
                     }
 
                     export namespace StorePrice {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::storePrice](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::storePrice](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuPriceListController.php)
                          */
-                        export type Request = {    menu_price_list_id: string;
+                        export type Request = {
+                            menu_price_list_id: string;
                             menu_id: string;
                             branch_id?: string | null;
                             price: number;
                             is_default?: boolean;
-                            is_active?: boolean;}
+                            is_active?: boolean;
+                        };
                     }
 
                     export namespace UpdatePrice {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::updatePrice](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php)
+                         * @see [\App\Http\Controllers\MasterData\MenuPriceListController::updatePrice](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuPriceListController.php)
                          */
-                        export type Request = {    menu_price_list_id: string;
+                        export type Request = {
+                            menu_price_list_id: string;
                             menu_id: string;
                             branch_id?: string | null;
                             price: number;
                             is_default?: boolean;
-                            is_active?: boolean;}
+                            is_active?: boolean;
+                        };
                     }
                 }
 
                 export namespace PosTerminalController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\PosTerminalController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\PosTerminalController.php)
+                         * @see [\App\Http\Controllers\MasterData\PosTerminalController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/PosTerminalController.php)
                          */
-                        export type Response = Inertia.Pages.MasterData.POS
+                        export type Response = Inertia.Pages.MasterData.POS;
 
                         /**
-                         * @see [\App\Http\Controllers\MasterData\PosTerminalController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\PosTerminalController.php)
+                         * @see [\App\Http\Controllers\MasterData\PosTerminalController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/PosTerminalController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace DiningResourceController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\DiningResourceController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\DiningResourceController.php)
+                         * @see [\App\Http\Controllers\MasterData\DiningResourceController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/DiningResourceController.php)
                          */
-                        export type Response = Inertia.Pages.MasterData.Seats
+                        export type Response = Inertia.Pages.MasterData.Seats;
 
                         /**
-                         * @see [\App\Http\Controllers\MasterData\DiningResourceController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\DiningResourceController.php)
+                         * @see [\App\Http\Controllers\MasterData\DiningResourceController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/DiningResourceController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace SupplierController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\SupplierController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\SupplierController.php)
+                         * @see [\App\Http\Controllers\MasterData\SupplierController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/SupplierController.php)
                          */
-                        export type Response = Inertia.Pages.MasterData.Suppliers
+                        export type Response =
+                            Inertia.Pages.MasterData.Suppliers;
 
                         /**
-                         * @see [\App\Http\Controllers\MasterData\SupplierController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\SupplierController.php)
+                         * @see [\App\Http\Controllers\MasterData\SupplierController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/SupplierController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
+                    }
+
+                    export namespace Store {
+                        /**
+                         * @see [\App\Http\Controllers\MasterData\SupplierController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/SupplierController.php)
+                         */
+                        export type Request = {
+                            code?: string | null;
+                            name: string;
+                            contact_person?: string | null;
+                            phone?: string | null;
+                            email?: string | null;
+                            address?: string | null;
+                            status?: 'draft' | 'pending' | 'approved' | null;
+                        };
+                    }
+
+                    export namespace Approve {
+                        /**
+                         * @see [\App\Http\Controllers\MasterData\SupplierController::approve](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/SupplierController.php)
+                         */
+                        export type Request = Record<string, unknown>;
+                    }
+
+                    export namespace Reject {
+                        /**
+                         * @see [\App\Http\Controllers\MasterData\SupplierController::reject](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/SupplierController.php)
+                         */
+                        export type Request = Record<string, unknown>;
+                    }
+
+                    export namespace Cancel {
+                        /**
+                         * @see [\App\Http\Controllers\MasterData\SupplierController::cancel](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/SupplierController.php)
+                         */
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace TaxController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\TaxController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\TaxController.php)
+                         * @see [\App\Http\Controllers\MasterData\TaxController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/TaxController.php)
                          */
-                        export type Response = Inertia.Pages.MasterData.Tax
+                        export type Response = Inertia.Pages.MasterData.Tax;
 
                         /**
-                         * @see [\App\Http\Controllers\MasterData\TaxController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\TaxController.php)
+                         * @see [\App\Http\Controllers\MasterData\TaxController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/TaxController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace WarehouseLocationController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MasterData\WarehouseLocationController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\WarehouseLocationController.php)
+                         * @see [\App\Http\Controllers\MasterData\WarehouseLocationController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/WarehouseLocationController.php)
                          */
-                        export type Response = Inertia.Pages.MasterData.WarehouseLocation
+                        export type Response =
+                            Inertia.Pages.MasterData.WarehouseLocation;
 
                         /**
-                         * @see [\App\Http\Controllers\MasterData\WarehouseLocationController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\WarehouseLocationController.php)
+                         * @see [\App\Http\Controllers\MasterData\WarehouseLocationController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/WarehouseLocationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -1469,74 +2880,87 @@ export namespace App {
                 export namespace CustomerCardController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::index](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
                          */
-                        export type Response = Inertia.Pages.MembershipCard.CustomerCard
+                        export type Response =
+                            Inertia.Pages.MembershipCard.CustomerCard;
 
                         /**
-                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::index](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Create {
                         /**
-                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::create](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
                          */
-                        export type Response = Inertia.Pages.MembershipCard.Create
+                        export type Response =
+                            Inertia.Pages.MembershipCard.Create;
 
                         /**
-                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::create](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Transactions {
                         /**
-                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::transactions](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::transactions](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
                          */
-                        export type Response = Inertia.Pages.MembershipCard.CustomerTransactionDetial
+                        export type Response =
+                            Inertia.Pages.MembershipCard.CustomerTransactionDetial;
 
                         /**
-                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::transactions](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::transactions](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Topup {
                         /**
-                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::topup](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::topup](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
                          */
-                        export type Response = Inertia.Pages.MembershipCard.CustomerCardTopup
+                        export type Response =
+                            Inertia.Pages.MembershipCard.CustomerCardTopup;
 
                         /**
-                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::topup](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::topup](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
-                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::store](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::store](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
                          */
-                        export type Request = {    customer_id: number;
+                        export type Request = {
+                            customer_id: number;
                             card_no: string;
                             card_name?: string | null;
-                            status: "active" | "inactive" | "blocked" | "expired" | "cancelled";
+                            status:
+                                | 'active'
+                                | 'inactive'
+                                | 'blocked'
+                                | 'expired'
+                                | 'cancelled';
                             issued_date?: string | null;
                             expired_date?: string | null;
-                            remark?: string | null;}
+                            remark?: string | null;
+                        };
                     }
 
                     export namespace StoreTopup {
                         /**
-                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::storeTopup](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+                         * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::storeTopup](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
                          */
-                        export type Request = {    currency: string;
+                        export type Request = {
+                            currency: string;
                             amount: number;
                             promotion_amount?: number | null;
                             promotion_name?: string | null;
-                            note?: string | null;}
+                            note?: string | null;
+                        };
                     }
                 }
             }
@@ -1545,177 +2969,193 @@ export namespace App {
                 export namespace SeatController {
                     export namespace Index {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatController::index](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatController.php)
                          */
-                        export type Response = Inertia.Pages.Seats.Index
+                        export type Response = Inertia.Pages.Seats.Index;
 
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatController::index](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace CheckIn {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatController::checkIn](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatController::checkIn](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatController.php)
                          */
-                        export type Request = {    guest_count?: number | null;
+                        export type Request = {
+                            guest_count?: number | null;
                             customer_id?: number | null;
                             customer_phone?: string | null;
                             customer_name?: string | null;
                             note?: string | null;
-                            menu_price_list_id?: number | null;}
+                            menu_price_list_id?: number | null;
+                        };
                     }
                 }
 
                 export namespace SeatOrderController {
                     export namespace Show {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::show](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Response = Inertia.Pages.Seats.Orders
+                        export type Response = Inertia.Pages.Seats.Orders;
 
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::show](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Manage {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::manage](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::manage](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Response = Inertia.Pages.Seats.ManageOrders
+                        export type Response = Inertia.Pages.Seats.ManageOrders;
 
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::manage](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::manage](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace SaveManage {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::saveManage](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::saveManage](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = {    assignments: unknown[];
-                            "assignments.*.line_id": number;
-                            "assignments.*.bill_group": string;
-                            "assignments.*.dining_resource_id": number;}
+                        export type Request = {
+                            assignments: unknown[];
+                            'assignments.*.line_id': number;
+                            'assignments.*.bill_group': string;
+                            'assignments.*.dining_resource_id': number;
+                        };
                     }
 
                     export namespace AddItem {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::addItem](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::addItem](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = {    menu_id: string;
+                        export type Request = {
+                            menu_id: string;
                             qty?: number | null;
-                            note?: string | null;}
+                            note?: string | null;
+                        };
                     }
 
                     export namespace UpdateItem {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::updateItem](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::updateItem](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = {    qty: number;
-                            note?: string | null;}
+                        export type Request = {
+                            qty: number;
+                            note?: string | null;
+                        };
                     }
 
                     export namespace SendToKitchen {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::sendToKitchen](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::sendToKitchen](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = {    lines?: unknown[] | null;
-                            "lines.*.menu_id"?: string;
-                            "lines.*.qty"?: number;
-                            "lines.*.note"?: string | null;}
+                        export type Request = {
+                            lines?: unknown[] | null;
+                            'lines.*.menu_id'?: string;
+                            'lines.*.qty'?: number;
+                            'lines.*.note'?: string | null;
+                        };
                     }
 
                     export namespace ReturnPrintedLine {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::returnPrintedLine](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = {    quantity?: number | null;}
+                        export type Request = { quantity?: number | null };
                     }
 
                     export namespace Settle {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::settle](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::settle](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = {    method: string;
+                        export type Request = {
+                            method: string;
                             payment_method_id?: string | null;
                             membership_card_id?: string | null;
-                            currency: "USD" | "KHR";
+                            currency: 'USD' | 'KHR';
                             received_amount?: number | null;
-                            operation_status: "invoice" | "invoice_receipt_done";
+                            operation_status:
+                                | 'invoice'
+                                | 'invoice_receipt_done';
                             discount_amount?: number | null;
                             change_usd_amount?: number | null;
                             change_khr_amount?: number | null;
-                            bill_group?: string | null;}
+                            bill_group?: string | null;
+                        };
                     }
 
                     export namespace UpdateCustomer {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::updateCustomer](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::updateCustomer](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = {    customer_id?: number | null;
+                        export type Request = {
+                            customer_id?: number | null;
                             customer_phone?: string | null;
-                            customer_name?: string | null;}
+                            customer_name?: string | null;
+                        };
                     }
 
                     export namespace ClearItems {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::clearItems](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::clearItems](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace RemoveItem {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::removeItem](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::removeItem](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Reprint {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::reprint](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::reprint](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PreviewPrintJob {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::previewPrintJob](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::previewPrintJob](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace CancelPrintedLine {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::cancelPrintedLine](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PreviewCurrentInvoice {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::previewCurrentInvoice](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::previewCurrentInvoice](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PreviewInvoiceDocument {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::previewInvoiceDocument](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace CloseOrder {
                         /**
-                         * @see [\App\Http\Controllers\Seats\SeatOrderController::closeOrder](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+                         * @see [\App\Http\Controllers\Seats\SeatOrderController::closeOrder](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -1724,815 +3164,884 @@ export namespace App {
                 export namespace FormController {
                     export namespace UseForm {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::useForm](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::useForm](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.UseForm
+                        export type Response =
+                            Inertia.Pages.Features.Forms.UseForm;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::useForm](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::useForm](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace FormComponent {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::formComponent](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::formComponent](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.FormComponent
+                        export type Response =
+                            Inertia.Pages.Features.Forms.FormComponent;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::formComponent](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::formComponent](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace FileUploads {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::fileUploads](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::fileUploads](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.FileUploads
+                        export type Response =
+                            Inertia.Pages.Features.Forms.FileUploads;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::fileUploads](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::fileUploads](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Validation {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::validation](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::validation](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.Validation
+                        export type Response =
+                            Inertia.Pages.Features.Forms.Validation;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::validation](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::validation](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Precognition {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::precognition](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::precognition](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.Precognition
+                        export type Response =
+                            Inertia.Pages.Features.Forms.Precognition;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::precognition](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::precognition](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace OptimisticUpdates {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::optimisticUpdates](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::optimisticUpdates](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.OptimisticUpdates
+                        export type Response =
+                            Inertia.Pages.Features.Forms.OptimisticUpdates;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::optimisticUpdates](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::optimisticUpdates](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace UseFormContext {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::useFormContext](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::useFormContext](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.UseFormContext
+                        export type Response =
+                            Inertia.Pages.Features.Forms.UseFormContext;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::useFormContext](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::useFormContext](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace DottedKeys {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::dottedKeys](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::dottedKeys](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.DottedKeys
+                        export type Response =
+                            Inertia.Pages.Features.Forms.DottedKeys;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::dottedKeys](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::dottedKeys](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Wayfinder {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::wayfinder](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::wayfinder](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Forms.Wayfinder
+                        export type Response =
+                            Inertia.Pages.Features.Forms.Wayfinder;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::wayfinder](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::wayfinder](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace SubmitUseForm {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::submitUseForm](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::submitUseForm](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             email: string;
                             bio?: string | null;
-                            role: "developer" | "designer" | "manager" | "other";
-                            subscribe?: boolean;}
+                            role:
+                                | 'developer'
+                                | 'designer'
+                                | 'manager'
+                                | 'other';
+                            subscribe?: boolean;
+                        };
                     }
 
                     export namespace SubmitFormComponent {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::submitFormComponent](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::submitFormComponent](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             email: string;
                             bio?: string | null;
-                            role: "developer" | "designer" | "manager" | "other";
-                            subscribe?: boolean;}
+                            role:
+                                | 'developer'
+                                | 'designer'
+                                | 'manager'
+                                | 'other';
+                            subscribe?: boolean;
+                        };
                     }
 
                     export namespace SubmitFileUploads {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::submitFileUploads](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::submitFileUploads](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = {    photo?: string | null;
+                        export type Request = {
+                            photo?: string | null;
                             files?: unknown[] | null;
-                            "files.*"?: string;}
+                            'files.*'?: string;
+                        };
                     }
 
                     export namespace SubmitValidation {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::submitValidation](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::submitValidation](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = {    name: string;
+                        export type Request = {
+                            name: string;
                             email: string;
                             age: number;
-                            website?: string | null;}
+                            website?: string | null;
+                        };
                     }
 
                     export namespace SubmitValidationSecondary {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::submitValidationSecondary](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::submitValidationSecondary](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = {    title: string;
-                            body: string;}
+                        export type Request = { title: string; body: string };
                     }
 
                     export namespace StoreAccount {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::storeAccount](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::storeAccount](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = {    username: string;
+                        export type Request = {
+                            username: string;
                             email: string;
                             password: string;
-                            password_confirmation: string;}
+                            password_confirmation: string;
+                        };
                     }
 
                     export namespace SubmitDottedKeys {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::submitDottedKeys](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::submitDottedKeys](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = {    "user.name": string;
-                            "user.email": string;
-                            "address.street": string;
-                            "address.city": string;
+                        export type Request = {
+                            'user.name': string;
+                            'user.email': string;
+                            'address.street': string;
+                            'address.city': string;
                             tags?: unknown[] | null;
-                            "tags.*"?: string | null;}
+                            'tags.*'?: string | null;
+                        };
                     }
 
                     export namespace ToggleFavorite {
                         /**
-                         * @see [\App\Http\Controllers\Feature\FormController::toggleFavorite](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                         * @see [\App\Http\Controllers\Feature\FormController::toggleFavorite](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace NavigationController {
                     export namespace Links {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::links](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::links](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.Links
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.Links;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::links](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::links](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PreserveState {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveState](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveState](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.PreserveState
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.PreserveState;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveState](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveState](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PreserveScroll {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveScroll](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.PreserveScroll
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.PreserveScroll;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveScroll](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace ViewTransitions {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::viewTransitions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::viewTransitions](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.ViewTransitions
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.ViewTransitions;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::viewTransitions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::viewTransitions](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HistoryManagement {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::historyManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::historyManagement](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.HistoryManagement
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.HistoryManagement;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::historyManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::historyManagement](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace AsyncRequests {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::asyncRequests](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::asyncRequests](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.AsyncRequests
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.AsyncRequests;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::asyncRequests](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::asyncRequests](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace AsyncSlow {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::asyncSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::asyncSlow](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.AsyncRequests
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.AsyncRequests;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::asyncSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::asyncSlow](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace ManualVisits {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::manualVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::manualVisits](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.ManualVisits
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.ManualVisits;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::manualVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::manualVisits](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace RedirectDemo {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectDemo](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectDemo](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.Redirects
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.Redirects;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectDemo](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectDemo](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace ScrollManagement {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::scrollManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::scrollManagement](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.ScrollManagement
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.ScrollManagement;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::scrollManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::scrollManagement](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace InstantVisits {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::instantVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::instantVisits](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.InstantVisits
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.InstantVisits;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::instantVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::instantVisits](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace InstantVisitTarget {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::instantVisitTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::instantVisitTarget](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.InstantVisitTarget
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.InstantVisitTarget;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::instantVisitTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::instantVisitTarget](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace UrlFragments {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::urlFragments](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::urlFragments](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.UrlFragments
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.UrlFragments;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::urlFragments](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::urlFragments](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PreserveFragmentTarget {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentTarget](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Navigation.UrlFragments
+                        export type Response =
+                            Inertia.Pages.Features.Navigation.UrlFragments;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentTarget](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace LinksAction {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::linksAction](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::linksAction](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HistoryAction {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::historyAction](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::historyAction](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace RedirectStandard {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectStandard](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectStandard](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace RedirectToRoute {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectToRoute](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectToRoute](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace RedirectExternal {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectExternal](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectExternal](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace RedirectWithHash {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectWithHash](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::redirectWithHash](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PreserveFragmentRedirect {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentRedirect](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                         * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentRedirect](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace DataLoadingController {
                     export namespace DeferredProps {
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::deferredProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::deferredProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.DeferredProps
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.DeferredProps;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::deferredProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::deferredProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PartialReloads {
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::partialReloads](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::partialReloads](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.PartialReloads
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.PartialReloads;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::partialReloads](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::partialReloads](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace InfiniteScroll {
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::infiniteScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::infiniteScroll](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.InfiniteScroll
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.InfiniteScroll;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::infiniteScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::infiniteScroll](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace WhenVisible {
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::whenVisible](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::whenVisible](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.WhenVisible
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.WhenVisible;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::whenVisible](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::whenVisible](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Polling {
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::polling](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::polling](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.Polling
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.Polling;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::polling](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::polling](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PropMerging {
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::propMerging](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::propMerging](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.PropMerging
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.PropMerging;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::propMerging](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::propMerging](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace OnceProps {
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::onceProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::onceProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.OnceProps
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.OnceProps;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::onceProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::onceProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace OptionalProps {
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::optionalProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::optionalProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.DataLoading.OptionalProps
+                        export type Response =
+                            Inertia.Pages.Features.DataLoading.OptionalProps;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\DataLoadingController::optionalProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                         * @see [\App\Http\Controllers\Feature\DataLoadingController::optionalProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace PrefetchingController {
                     export namespace LinkPrefetch {
                         /**
-                         * @see [\App\Http\Controllers\Feature\PrefetchingController::linkPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                         * @see [\App\Http\Controllers\Feature\PrefetchingController::linkPrefetch](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Prefetching.LinkPrefetch
+                        export type Response =
+                            Inertia.Pages.Features.Prefetching.LinkPrefetch;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\PrefetchingController::linkPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                         * @see [\App\Http\Controllers\Feature\PrefetchingController::linkPrefetch](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StaleWhileRevalidate {
                         /**
-                         * @see [\App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                         * @see [\App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Prefetching.StaleWhileRevalidate
+                        export type Response =
+                            Inertia.Pages.Features.Prefetching.StaleWhileRevalidate;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                         * @see [\App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace ManualPrefetch {
                         /**
-                         * @see [\App\Http\Controllers\Feature\PrefetchingController::manualPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                         * @see [\App\Http\Controllers\Feature\PrefetchingController::manualPrefetch](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Prefetching.ManualPrefetch
+                        export type Response =
+                            Inertia.Pages.Features.Prefetching.ManualPrefetch;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\PrefetchingController::manualPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                         * @see [\App\Http\Controllers\Feature\PrefetchingController::manualPrefetch](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace CacheManagement {
                         /**
-                         * @see [\App\Http\Controllers\Feature\PrefetchingController::cacheManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                         * @see [\App\Http\Controllers\Feature\PrefetchingController::cacheManagement](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Prefetching.CacheManagement
+                        export type Response =
+                            Inertia.Pages.Features.Prefetching.CacheManagement;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\PrefetchingController::cacheManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                         * @see [\App\Http\Controllers\Feature\PrefetchingController::cacheManagement](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace StateController {
                     export namespace Remember {
                         /**
-                         * @see [\App\Http\Controllers\Feature\StateController::remember](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                         * @see [\App\Http\Controllers\Feature\StateController::remember](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                          */
-                        export type Response = Inertia.Pages.Features.State.Remember
+                        export type Response =
+                            Inertia.Pages.Features.State.Remember;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\StateController::remember](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                         * @see [\App\Http\Controllers\Feature\StateController::remember](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace FlashData {
                         /**
-                         * @see [\App\Http\Controllers\Feature\StateController::flashData](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                         * @see [\App\Http\Controllers\Feature\StateController::flashData](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                          */
-                        export type Response = Inertia.Pages.Features.State.FlashData
+                        export type Response =
+                            Inertia.Pages.Features.State.FlashData;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\StateController::flashData](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                         * @see [\App\Http\Controllers\Feature\StateController::flashData](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace SharedProps {
                         /**
-                         * @see [\App\Http\Controllers\Feature\StateController::sharedProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                         * @see [\App\Http\Controllers\Feature\StateController::sharedProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                          */
-                        export type Response = Inertia.Pages.Features.State.SharedProps
+                        export type Response =
+                            Inertia.Pages.Features.State.SharedProps;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\StateController::sharedProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                         * @see [\App\Http\Controllers\Feature\StateController::sharedProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StoreFlashData {
                         /**
-                         * @see [\App\Http\Controllers\Feature\StateController::storeFlashData](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                         * @see [\App\Http\Controllers\Feature\StateController::storeFlashData](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StoreFlashDataError {
                         /**
-                         * @see [\App\Http\Controllers\Feature\StateController::storeFlashDataError](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                         * @see [\App\Http\Controllers\Feature\StateController::storeFlashDataError](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace StoreFlashDataWarning {
                         /**
-                         * @see [\App\Http\Controllers\Feature\StateController::storeFlashDataWarning](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                         * @see [\App\Http\Controllers\Feature\StateController::storeFlashDataWarning](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace LayoutController {
                     export namespace PersistentLayouts {
                         /**
-                         * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                         * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayouts](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Layouts.PersistentLayouts
+                        export type Response =
+                            Inertia.Pages.Features.Layouts.PersistentLayouts;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                         * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayouts](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace PersistentLayoutsPageTwo {
                         /**
-                         * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                         * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Layouts.PersistentLayoutsPageTwo
+                        export type Response =
+                            Inertia.Pages.Features.Layouts.PersistentLayoutsPageTwo;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                         * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace NestedLayouts {
                         /**
-                         * @see [\App\Http\Controllers\Feature\LayoutController::nestedLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                         * @see [\App\Http\Controllers\Feature\LayoutController::nestedLayouts](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Layouts.NestedLayouts
+                        export type Response =
+                            Inertia.Pages.Features.Layouts.NestedLayouts;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\LayoutController::nestedLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                         * @see [\App\Http\Controllers\Feature\LayoutController::nestedLayouts](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Head {
                         /**
-                         * @see [\App\Http\Controllers\Feature\LayoutController::head](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                         * @see [\App\Http\Controllers\Feature\LayoutController::head](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Layouts.Head
+                        export type Response =
+                            Inertia.Pages.Features.Layouts.Head;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\LayoutController::head](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                         * @see [\App\Http\Controllers\Feature\LayoutController::head](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace LayoutProps {
                         /**
-                         * @see [\App\Http\Controllers\Feature\LayoutController::layoutProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                         * @see [\App\Http\Controllers\Feature\LayoutController::layoutProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Layouts.LayoutProps
+                        export type Response =
+                            Inertia.Pages.Features.Layouts.LayoutProps;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\LayoutController::layoutProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                         * @see [\App\Http\Controllers\Feature\LayoutController::layoutProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace EventController {
                     export namespace GlobalEvents {
                         /**
-                         * @see [\App\Http\Controllers\Feature\EventController::globalEvents](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                         * @see [\App\Http\Controllers\Feature\EventController::globalEvents](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Events.GlobalEvents
+                        export type Response =
+                            Inertia.Pages.Features.Events.GlobalEvents;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\EventController::globalEvents](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                         * @see [\App\Http\Controllers\Feature\EventController::globalEvents](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace VisitCallbacks {
                         /**
-                         * @see [\App\Http\Controllers\Feature\EventController::visitCallbacks](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                         * @see [\App\Http\Controllers\Feature\EventController::visitCallbacks](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Events.VisitCallbacks
+                        export type Response =
+                            Inertia.Pages.Features.Events.VisitCallbacks;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\EventController::visitCallbacks](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                         * @see [\App\Http\Controllers\Feature\EventController::visitCallbacks](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Progress {
                         /**
-                         * @see [\App\Http\Controllers\Feature\EventController::progress](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                         * @see [\App\Http\Controllers\Feature\EventController::progress](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Events.Progress
+                        export type Response =
+                            Inertia.Pages.Features.Events.Progress;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\EventController::progress](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                         * @see [\App\Http\Controllers\Feature\EventController::progress](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace ProgressSlow {
                         /**
-                         * @see [\App\Http\Controllers\Feature\EventController::progressSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                         * @see [\App\Http\Controllers\Feature\EventController::progressSlow](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Events.Progress
+                        export type Response =
+                            Inertia.Pages.Features.Events.Progress;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\EventController::progressSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                         * @see [\App\Http\Controllers\Feature\EventController::progressSlow](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace GlobalEventsAction {
                         /**
-                         * @see [\App\Http\Controllers\Feature\EventController::globalEventsAction](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                         * @see [\App\Http\Controllers\Feature\EventController::globalEventsAction](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace VisitCallbacksAction {
                         /**
-                         * @see [\App\Http\Controllers\Feature\EventController::visitCallbacksAction](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                         * @see [\App\Http\Controllers\Feature\EventController::visitCallbacksAction](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace NetworkErrorController {
                     export namespace HttpExceptions {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
+                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptions](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Errors.HttpExceptions
+                        export type Response =
+                            Inertia.Pages.Features.Errors.HttpExceptions;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
+                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptions](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace NetworkErrors {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::networkErrors](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
+                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::networkErrors](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Errors.NetworkErrors
+                        export type Response =
+                            Inertia.Pages.Features.Errors.NetworkErrors;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::networkErrors](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
+                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::networkErrors](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HttpException403 {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpException403](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
+                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpException403](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HttpException404 {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpException404](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
+                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpException404](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HttpException500 {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpException500](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
+                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpException500](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace HttpExceptionUnhandled {
                         /**
-                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptionUnhandled](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
+                         * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptionUnhandled](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace HttpController {
                     export namespace UseHttp {
                         /**
-                         * @see [\App\Http\Controllers\Feature\HttpController::useHttp](\D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php)
+                         * @see [\App\Http\Controllers\Feature\HttpController::useHttp](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/HttpController.php)
                          */
-                        export type Response = Inertia.Pages.Features.Http.UseHttp
+                        export type Response =
+                            Inertia.Pages.Features.Http.UseHttp;
 
                         /**
-                         * @see [\App\Http\Controllers\Feature\HttpController::useHttp](\D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php)
+                         * @see [\App\Http\Controllers\Feature\HttpController::useHttp](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/HttpController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace UseHttpApi {
                         /**
-                         * @see [\App\Http\Controllers\Feature\HttpController::useHttpApi](\D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php)
+                         * @see [\App\Http\Controllers\Feature\HttpController::useHttpApi](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/HttpController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -2540,9 +4049,9 @@ export namespace App {
             export namespace ProfilePictureController {
                 export namespace Update {
                     /**
-                     * @see [\App\Http\Controllers\ProfilePictureController::update](\D:\Lar\dmpos\app\Http\Controllers\ProfilePictureController.php)
+                     * @see [\App\Http\Controllers\ProfilePictureController::update](/home/runner/work/dmpos/dmpos/app/Http/Controllers/ProfilePictureController.php)
                      */
-                    export type Request = {    image: string;}
+                    export type Request = { image: string };
                 }
             }
         }
@@ -2553,14 +4062,30 @@ export namespace Spatie {
     export namespace Permission {
         export namespace Models {
             /**
-             * @see [\Spatie\Permission\Models\Permission](\D:\Lar\dmpos\vendor\spatie\laravel-permission\src\Models\Permission.php)
+             * @see [\Spatie\Permission\Models\Permission](/home/runner/work/dmpos/dmpos/vendor/spatie/laravel-permission/src/Models/Permission.php)
              */
-            export type Permission = { id: number, name: string, guard_name: string, created_at: string | null, updated_at: string | null, roles?: Spatie.Permission.Models.Role[], teams?: Spatie.Permission.Models.Permission[], permissions?: Spatie.Permission.Models.Permission[] }
+            export type Permission = {
+                id: number;
+                name: string;
+                guard_name: string;
+                created_at: string | null;
+                updated_at: string | null;
+                roles?: Spatie.Permission.Models.Role[];
+                teams?: Spatie.Permission.Models.Permission[];
+                permissions?: Spatie.Permission.Models.Permission[];
+            };
 
             /**
-             * @see [\Spatie\Permission\Models\Role](\D:\Lar\dmpos\vendor\spatie\laravel-permission\src\Models\Role.php)
+             * @see [\Spatie\Permission\Models\Role](/home/runner/work/dmpos/dmpos/vendor/spatie/laravel-permission/src/Models/Role.php)
              */
-            export type Role = { id: number, name: string, guard_name: string, created_at: string | null, updated_at: string | null, permissions?: Spatie.Permission.Models.Permission[] }
+            export type Role = {
+                id: number;
+                name: string;
+                guard_name: string;
+                created_at: string | null;
+                updated_at: string | null;
+                permissions?: Spatie.Permission.Models.Permission[];
+            };
         }
     }
 }
@@ -2568,575 +4093,1027 @@ export namespace Spatie {
 export namespace Illuminate {
     export namespace Notifications {
         /**
-         * @see [\Illuminate\Notifications\DatabaseNotification](\D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Notifications\DatabaseNotification.php)
+         * @see [\Illuminate\Notifications\DatabaseNotification](/home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Notifications/DatabaseNotification.php)
          */
-        export type DatabaseNotification = { incrementing: boolean, notifiable?: Illuminate.Notifications.DatabaseNotification | null }
+        export type DatabaseNotification = {
+            incrementing: boolean;
+            notifiable?: Illuminate.Notifications.DatabaseNotification | null;
+        };
     }
 
     export namespace Routing {
         export namespace RedirectController {
             export namespace __invoke {
                 /**
-                 * @see [\Illuminate\Routing\RedirectController::__invoke](\D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Routing\RedirectController.php)
+                 * @see [\Illuminate\Routing\RedirectController::__invoke](/home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Routing/RedirectController.php)
                  */
-                export type Request = Record<string, unknown>
+                export type Request = Record<string, unknown>;
             }
         }
     }
 }
 
 export namespace Inertia {
-    export type SharedData = {name: unknown, auth: {user: App.Models.User | null }, sidebarOpen: boolean }
+    export type SharedData = {
+        name: unknown;
+        auth: { user: App.Models.User | null };
+        sidebarOpen: boolean;
+    };
 
     export namespace Pages {
         export namespace Crm {
             /**
-             * @see [\App\Http\Controllers\Crm\DashboardController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Crm\DashboardController.php)
+             * @see [\App\Http\Controllers\Crm\DashboardController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/DashboardController.php)
              */
-            export type Dashboard = Inertia.SharedData & { totalContacts: unknown, totalOrganizations: unknown, recentNotesCount: unknown, recentActivity: Illuminate.Http.Resources.Json.AnonymousResourceCollection }
+            export type Dashboard = Inertia.SharedData & {
+                operationDashboard: {
+                    generatedAt: unknown;
+                    scope: {
+                        companyId: unknown;
+                        branchIds: unknown;
+                        branchNames: unknown;
+                    };
+                    kpis: [];
+                    salesStatus: [];
+                    procurementStatus: [];
+                    stockStatus: [];
+                    recentQueues: [];
+                    recentMovements: unknown[];
+                };
+            };
         }
 
         export namespace Users {
             /**
-             * @see [\App\Http\Controllers\Users\UserController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\Users\UserController.php)
+             * @see [\App\Http\Controllers\Users\UserController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Users/UserController.php)
              */
-            export type Index = Inertia.SharedData & { users: unknown, roles: unknown, permissions: unknown, branches: unknown, summary: {users: unknown, roles: unknown, permissions: unknown } }
+            export type Index = Inertia.SharedData & {
+                users: unknown;
+                roles: unknown;
+                permissions: unknown;
+                branches: unknown;
+                summary: {
+                    users: unknown;
+                    roles: unknown;
+                    permissions: unknown;
+                };
+            };
+        }
+
+        export namespace AccessControl {
+            /**
+             * @see [\App\Http\Controllers\AccessControl\PrinterController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/AccessControl/PrinterController.php)
+             */
+            export type PrinterIndex = Inertia.SharedData & {
+                printers: unknown;
+                branchOptions: unknown;
+                defaultBranchId: number | null;
+            };
+
+            /**
+             * @see [\App\Http\Controllers\AccessControl\PrinterController::logs](/home/runner/work/dmpos/dmpos/app/Http/Controllers/AccessControl/PrinterController.php)
+             */
+            export type PrinterLogs = Inertia.SharedData & { logs: unknown };
         }
 
         export namespace POS {
             /**
-             * @see [\App\Http\Controllers\POS\PosSessionController::index](\D:\Lar\dmpos\app\Http\Controllers\POS\PosSessionController.php)
+             * @see [\App\Http\Controllers\POS\PosSessionController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/POS/PosSessionController.php)
              */
-            export type Index = Inertia.SharedData & { sessions: unknown, terminals: unknown, currentSession: App.Models.PosSession | null, banknotes: unknown }
+            export type Index = Inertia.SharedData & {
+                sessions: unknown;
+                terminals: unknown;
+                currentSession: App.Models.PosSession | null;
+                banknotes: unknown;
+            };
         }
 
         export namespace Sales {
             /**
-             * @see [\App\Http\Controllers\Sales\SaleInvoiceController::index](\D:\Lar\dmpos\app\Http\Controllers\Sales\SaleInvoiceController.php)
+             * @see [\App\Http\Controllers\Sales\SaleInvoiceController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Sales/SaleInvoiceController.php)
              */
-            export type Index = Inertia.SharedData & { posSession: {id: number, session_no: string, opening_cash_usd: number, opening_cash_khr: number }, invoices: unknown, paymentMethods: [], membershipCards: [], paymentSummary: [], filters: {start_date: unknown, end_date: unknown, search: unknown } }
+            export type Index = Inertia.SharedData & {
+                posSession: {
+                    id: number;
+                    session_no: string;
+                    opening_cash_usd: number;
+                    opening_cash_khr: number;
+                };
+                invoices: unknown;
+                paymentMethods: [];
+                membershipCards: [];
+                paymentSummary: [];
+                filters: {
+                    start_date: unknown;
+                    end_date: unknown;
+                    search: unknown;
+                };
+            };
         }
 
         export namespace Purchase {
             /**
-             * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::index](\D:\Lar\dmpos\app\Http\Controllers\Purchase\PurchaseOrderController.php)
+             * @see [\App\Http\Controllers\Purchase\PurchaseOrderController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php)
              */
-            export type Index = Inertia.SharedData & { orders: unknown, items: unknown, units: unknown, nextPoNo: string, filters: {search: unknown, status: unknown } }
+            export type Index = Inertia.SharedData & {
+                orders: unknown;
+                items: unknown;
+                units: unknown;
+                suppliers: unknown;
+                nextPoNo: string;
+                filters: { search: unknown; status: unknown };
+            };
         }
 
         export namespace GoodsReceipt {
             /**
-             * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+             * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
              */
-            export type Index = Inertia.SharedData & { receipts: unknown, stats: {waitingPurchaseOrders: unknown, awaitingStaging: unknown, readyForPutaway: unknown } }
+            export type Index = Inertia.SharedData & {
+                receipts: unknown;
+                stagingLocations: unknown;
+                stats: {
+                    waitingPurchaseOrders: unknown;
+                    awaitingStaging: unknown;
+                    readyForPutaway: unknown;
+                };
+            };
 
             /**
-             * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+             * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
              */
-            export type CreateGoodsReceipt = Inertia.SharedData & { nextReceiptNo: string, purchaseOrder: unknown, purchaseOrders: unknown, stagingLocations: unknown }
+            export type CreateGoodsReceipt = Inertia.SharedData & {
+                nextReceiptNo: string;
+                purchaseOrder: unknown;
+                purchaseOrders: unknown;
+                stagingLocations: unknown;
+            };
 
             /**
-             * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders](\D:\Lar\dmpos\app\Http\Controllers\GoodsReceipt\GoodsReceiptController.php)
+             * @see [\App\Http\Controllers\GoodsReceipt\GoodsReceiptController::approvedPurchaseOrders](/home/runner/work/dmpos/dmpos/app/Http/Controllers/GoodsReceipt/GoodsReceiptController.php)
              */
-            export type ApprovedPOForGR = Inertia.SharedData & { orders: unknown }
+            export type ApprovedPOForGR = Inertia.SharedData & {
+                orders: unknown;
+            };
         }
 
         export namespace Putaway {
             /**
-             * @see [\App\Http\Controllers\Putaway\PutawayController::index](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+             * @see [\App\Http\Controllers\Putaway\PutawayController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
              */
-            export type Index = Inertia.SharedData & { putaways: unknown, stats: {pendingReceipts: unknown, activeTasks: unknown, todayGoal: number, averageMinutes: number } }
+            export type Index = Inertia.SharedData & {
+                putaways: unknown;
+                storageLocations: unknown;
+                staff: unknown;
+                stats: {
+                    pendingReceipts: unknown;
+                    activeTasks: unknown;
+                    todayGoal: number;
+                    averageMinutes: number;
+                };
+            };
 
             /**
-             * @see [\App\Http\Controllers\Putaway\PutawayController::create](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+             * @see [\App\Http\Controllers\Putaway\PutawayController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
              */
-            export type CreatePutaway = Inertia.SharedData & { nextTransferNo: string, putaway: unknown, receipt: unknown, receipts: unknown[], storageLocations: unknown, staff: unknown }
+            export type CreatePutaway = Inertia.SharedData & {
+                nextTransferNo: string;
+                putaway: unknown;
+                receipt: unknown;
+                receipts: unknown[];
+                storageLocations: unknown;
+                staff: unknown;
+            };
 
             /**
-             * @see [\App\Http\Controllers\Putaway\PutawayController::receipts](\D:\Lar\dmpos\app\Http\Controllers\Putaway\PutawayController.php)
+             * @see [\App\Http\Controllers\Putaway\PutawayController::receipts](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Putaway/PutawayController.php)
              */
-            export type CompleteGRForPutaway = Inertia.SharedData & { receipts: unknown[] }
+            export type CompleteGRForPutaway = Inertia.SharedData & {
+                receipts: unknown[];
+            };
         }
 
         export namespace StockCustomer {
             /**
-             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::index](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
              */
-            export type Index = Inertia.SharedData & { keeps: unknown, stats: {pendingInvoices: unknown, activeKeeps: unknown, receivedKeeps: unknown, totalQuantity: unknown } }
+            export type Index = Inertia.SharedData & {
+                keeps: unknown;
+                stats: {
+                    pendingInvoices: unknown;
+                    activeKeeps: unknown;
+                    receivedKeeps: unknown;
+                    totalQuantity: unknown;
+                };
+            };
 
             /**
-             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::create](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
              */
-            export type CreateStockCus = Inertia.SharedData & { nextTransferNo: string, keep: unknown, invoice: unknown, invoices: unknown[], customerLocations: unknown[] }
+            export type CreateStockCus = Inertia.SharedData & {
+                nextTransferNo: string;
+                keep: unknown;
+                invoice: unknown;
+                invoices: unknown[];
+                customerLocations: unknown[];
+            };
 
             /**
-             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::invoices](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::invoices](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
              */
-            export type CompleteStockCus = Inertia.SharedData & { invoices: unknown[] }
+            export type CompleteStockCus = Inertia.SharedData & {
+                invoices: unknown[];
+            };
 
             /**
-             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::item](\D:\Lar\dmpos\app\Http\Controllers\StockCustomer\StockCustomerController.php)
+             * @see [\App\Http\Controllers\StockCustomer\StockCustomerController::item](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockCustomer/StockCustomerController.php)
              */
-            export type View = Inertia.SharedData & { item: {id: number, code: string, name: string, unit: string, totalQuantity: unknown }, keeps: unknown }
+            export type View = Inertia.SharedData & {
+                item: {
+                    id: number;
+                    code: string;
+                    name: string;
+                    unit: string;
+                    totalQuantity: unknown;
+                };
+                keeps: unknown;
+            };
         }
 
         export namespace BalanceOnHand {
             /**
-             * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index](\D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php)
+             * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php)
              */
-            export type Index = Inertia.SharedData & { items: unknown, stats: {allItems: unknown, goodStock: unknown, lowStock: unknown, noStock: unknown } }
+            export type Index = Inertia.SharedData & {
+                items: unknown;
+                stats: {
+                    allItems: unknown;
+                    goodStock: unknown;
+                    lowStock: unknown;
+                    noStock: unknown;
+                };
+            };
 
             /**
-             * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show](\D:\Lar\dmpos\app\Http\Controllers\BalanceOnHand\BalanceOnHandController.php)
+             * @see [\App\Http\Controllers\BalanceOnHand\BalanceOnHandController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/BalanceOnHand/BalanceOnHandController.php)
              */
-            export type View = Inertia.SharedData & { item: {id: number, code: string, name: string, itemType: string, unit: string, minimumStockQty: number, quantityOnHand: unknown, quantityAvailable: unknown, quantityReserved: unknown, stockValue: unknown, status: string }, balances: unknown }
+            export type View = Inertia.SharedData & {
+                item: {
+                    id: number;
+                    code: string;
+                    name: string;
+                    itemType: string;
+                    unit: string;
+                    minimumStockQty: number;
+                    quantityOnHand: unknown;
+                    quantityAvailable: unknown;
+                    quantityReserved: unknown;
+                    stockValue: unknown;
+                    status: string;
+                };
+                balances: unknown;
+            };
         }
 
         export namespace OperationsReport {
             /**
-             * @see [\App\Http\Controllers\OperationsReport\DailySessionStockController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionStockController.php)
+             * @see [\App\Http\Controllers\OperationsReport\DailySessionStockController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/OperationsReport/DailySessionStockController.php)
              */
-            export type DailySessionStock = Inertia.SharedData & { session: {date: string, status: string, sessionNo: unknown, branchName: unknown, terminalName: unknown, openedAt: unknown }, rows: unknown, stats: {stockMenus: unknown, confirmedQty: unknown, invoicedQty: unknown, paidQty: unknown, pendingQty: number } }
+            export type DailySessionStock = Inertia.SharedData & {
+                session: {
+                    date: string;
+                    status: string;
+                    sessionNo: unknown;
+                    branchName: unknown;
+                    terminalName: unknown;
+                    openedAt: unknown;
+                };
+                rows: unknown;
+                stats: {
+                    stockMenus: unknown;
+                    confirmedQty: unknown;
+                    invoicedQty: unknown;
+                    paidQty: unknown;
+                    pendingQty: number;
+                };
+            };
 
             /**
-             * @see [\App\Http\Controllers\OperationsReport\DailySessionMenuController::__invoke](\D:\Lar\dmpos\app\Http\Controllers\OperationsReport\DailySessionMenuController.php)
+             * @see [\App\Http\Controllers\OperationsReport\DailySessionMenuController::__invoke](/home/runner/work/dmpos/dmpos/app/Http/Controllers/OperationsReport/DailySessionMenuController.php)
              */
-            export type DailySessionMenu = Inertia.SharedData & { session: {date: string, status: string, sessionNo: unknown, branchName: unknown, terminalName: unknown, openedAt: unknown }, rows: unknown, stats: {menuItems: unknown, confirmedQty: unknown, invoicedQty: unknown, paidQty: unknown, pendingQty: number } }
+            export type DailySessionMenu = Inertia.SharedData & {
+                session: {
+                    date: string;
+                    status: string;
+                    sessionNo: unknown;
+                    branchName: unknown;
+                    terminalName: unknown;
+                    openedAt: unknown;
+                };
+                rows: unknown;
+                stats: {
+                    menuItems: unknown;
+                    confirmedQty: unknown;
+                    invoicedQty: unknown;
+                    paidQty: unknown;
+                    pendingQty: number;
+                };
+            };
         }
 
         export namespace InternalTransfer {
             /**
-             * @see [\App\Http\Controllers\StockMovements\InternalTransferController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php)
+             * @see [\App\Http\Controllers\StockMovements\InternalTransferController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/InternalTransferController.php)
              */
-            export type Index = Inertia.SharedData
+            export type Index = Inertia.SharedData;
 
             /**
-             * @see [\App\Http\Controllers\StockMovements\InternalTransferController::create](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\InternalTransferController.php)
+             * @see [\App\Http\Controllers\StockMovements\InternalTransferController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/InternalTransferController.php)
              */
-            export type Create = Inertia.SharedData
+            export type Create = Inertia.SharedData;
         }
 
         export namespace StockAdjustment {
             /**
-             * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php)
+             * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockAdjustmentController.php)
              */
-            export type Index = Inertia.SharedData
+            export type Index = Inertia.SharedData;
 
             /**
-             * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::create](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockAdjustmentController.php)
+             * @see [\App\Http\Controllers\StockMovements\StockAdjustmentController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockAdjustmentController.php)
              */
-            export type Create = Inertia.SharedData
+            export type Create = Inertia.SharedData;
         }
 
         export namespace StockSettlements {
             /**
-             * @see [\App\Http\Controllers\StockMovements\StockSettlementController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php)
+             * @see [\App\Http\Controllers\StockMovements\StockSettlementController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockSettlementController.php)
              */
-            export type Index = Inertia.SharedData & { settlements: unknown, filters: [] }
+            export type Index = Inertia.SharedData & {
+                settlements: unknown;
+                filters: [];
+            };
 
             /**
-             * @see [\App\Http\Controllers\StockMovements\StockSettlementController::show](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockSettlementController.php)
+             * @see [\App\Http\Controllers\StockMovements\StockSettlementController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockSettlementController.php)
              */
-            export type View = Inertia.SharedData & { settlement: [], balancesByItem: [] }
+            export type View = Inertia.SharedData & {
+                settlement: [];
+                balancesByItem: [];
+            };
         }
 
         export namespace StockWriteOff {
             /**
-             * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::index](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php)
+             * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockWriteOffController.php)
              */
-            export type Index = Inertia.SharedData
+            export type Index = Inertia.SharedData;
 
             /**
-             * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::create](\D:\Lar\dmpos\app\Http\Controllers\StockMovements\StockWriteOffController.php)
+             * @see [\App\Http\Controllers\StockMovements\StockWriteOffController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/StockMovements/StockWriteOffController.php)
              */
-            export type Create = Inertia.SharedData
+            export type Create = Inertia.SharedData;
         }
 
         export namespace MasterData {
             /**
-             * @see [\App\Http\Controllers\MasterData\ProductController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\ProductController.php)
+             * @see [\App\Http\Controllers\MasterData\ProductController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php)
              */
-            export type Products = Inertia.SharedData & { items: unknown, bom: unknown, units: unknown, itemOptions: unknown, unitOptions: unknown, branchOptions: unknown }
+            export type Products = Inertia.SharedData & {
+                items: unknown;
+                bom: unknown;
+                units: unknown;
+                itemOptions: unknown;
+                unitOptions: unknown;
+                branchOptions: unknown;
+            };
 
             /**
-             * @see [\App\Http\Controllers\MasterData\CompanyBranchController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\CompanyBranchController.php)
+             * @see [\App\Http\Controllers\MasterData\CompanyBranchController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/CompanyBranchController.php)
              */
-            export type CompanyBranches = Inertia.SharedData & { companies: unknown, branches: unknown }
+            export type CompanyBranches = Inertia.SharedData & {
+                companies: unknown;
+                branches: unknown;
+            };
 
             /**
-             * @see [\App\Http\Controllers\MasterData\CustomerController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\CustomerController.php)
+             * @see [\App\Http\Controllers\MasterData\CustomerController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/CustomerController.php)
              */
-            export type Customers = Inertia.SharedData & { customers: unknown, groups: unknown }
+            export type Customers = Inertia.SharedData & {
+                customers: unknown;
+                groups: unknown;
+            };
 
             /**
-             * @see [\App\Http\Controllers\MasterData\ExchangeRateController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\ExchangeRateController.php)
+             * @see [\App\Http\Controllers\MasterData\ExchangeRateController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ExchangeRateController.php)
              */
-            export type ExchangeRate = Inertia.SharedData & { rates: unknown }
+            export type ExchangeRate = Inertia.SharedData & { rates: unknown };
 
             /**
-             * @see [\App\Http\Controllers\MasterData\MenuController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuController.php)
+             * @see [\App\Http\Controllers\MasterData\MenuController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php)
              */
-            export type Menu = Inertia.SharedData & { menus: unknown, categories: unknown, prices: unknown, itemOptions: unknown, bomOptions: unknown, branchOptions: unknown, printerOptions: unknown }
+            export type Menu = Inertia.SharedData & {
+                menus: unknown;
+                categories: unknown;
+                prices: unknown;
+                itemOptions: unknown;
+                bomOptions: unknown;
+                branchOptions: unknown;
+                printerOptions: unknown;
+            };
 
             /**
-             * @see [\App\Http\Controllers\MasterData\MenuPriceListController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\MenuPriceListController.php)
+             * @see [\App\Http\Controllers\MasterData\MenuPriceListController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuPriceListController.php)
              */
-            export type MenuPriceList = Inertia.SharedData & { priceLists: unknown, prices: unknown, menus: unknown, branchOptions: unknown }
+            export type MenuPriceList = Inertia.SharedData & {
+                priceLists: unknown;
+                prices: unknown;
+                menus: unknown;
+                branchOptions: unknown;
+            };
 
             /**
-             * @see [\App\Http\Controllers\MasterData\PosTerminalController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\PosTerminalController.php)
+             * @see [\App\Http\Controllers\MasterData\PosTerminalController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/PosTerminalController.php)
              */
-            export type POS = Inertia.SharedData & { terminals: unknown, sessions: unknown }
+            export type POS = Inertia.SharedData & {
+                terminals: unknown;
+                sessions: unknown;
+            };
 
             /**
-             * @see [\App\Http\Controllers\MasterData\DiningResourceController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\DiningResourceController.php)
+             * @see [\App\Http\Controllers\MasterData\DiningResourceController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/DiningResourceController.php)
              */
-            export type Seats = Inertia.SharedData & { resources: unknown, types: unknown }
+            export type Seats = Inertia.SharedData & {
+                resources: unknown;
+                types: unknown;
+            };
 
             /**
-             * @see [\App\Http\Controllers\MasterData\SupplierController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\SupplierController.php)
+             * @see [\App\Http\Controllers\MasterData\SupplierController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/SupplierController.php)
              */
-            export type Suppliers = Inertia.SharedData & { suppliers: unknown }
+            export type Suppliers = Inertia.SharedData & { suppliers: unknown };
 
             /**
-             * @see [\App\Http\Controllers\MasterData\TaxController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\TaxController.php)
+             * @see [\App\Http\Controllers\MasterData\TaxController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/TaxController.php)
              */
-            export type Tax = Inertia.SharedData & { taxes: unknown }
+            export type Tax = Inertia.SharedData & { taxes: unknown };
 
             /**
-             * @see [\App\Http\Controllers\MasterData\WarehouseLocationController::index](\D:\Lar\dmpos\app\Http\Controllers\MasterData\WarehouseLocationController.php)
+             * @see [\App\Http\Controllers\MasterData\WarehouseLocationController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/WarehouseLocationController.php)
              */
-            export type WarehouseLocation = Inertia.SharedData & { warehouses: unknown, locations: unknown }
+            export type WarehouseLocation = Inertia.SharedData & {
+                warehouses: unknown;
+                locations: unknown;
+            };
         }
 
         export namespace MembershipCard {
             /**
-             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::index](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
              */
-            export type CustomerCard = Inertia.SharedData & { cards: unknown, filters: {card: null } }
+            export type CustomerCard = Inertia.SharedData & {
+                cards: unknown;
+                filters: { card: null };
+            };
 
             /**
-             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::create](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
              */
-            export type Create = Inertia.SharedData & { customers: unknown }
+            export type Create = Inertia.SharedData & { customers: unknown };
 
             /**
-             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::transactions](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::transactions](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
              */
-            export type CustomerTransactionDetial = Inertia.SharedData & { card: [], transactions: unknown }
+            export type CustomerTransactionDetial = Inertia.SharedData & {
+                card: [];
+                transactions: unknown;
+            };
 
             /**
-             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::topup](\D:\Lar\dmpos\app\Http\Controllers\MembershipCard\CustomerCardController.php)
+             * @see [\App\Http\Controllers\MembershipCard\CustomerCardController::topup](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MembershipCard/CustomerCardController.php)
              */
-            export type CustomerCardTopup = Inertia.SharedData & { card: [] }
+            export type CustomerCardTopup = Inertia.SharedData & { card: [] };
         }
 
         export namespace Seats {
             /**
-             * @see [\App\Http\Controllers\Seats\SeatController::index](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatController.php)
+             * @see [\App\Http\Controllers\Seats\SeatController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatController.php)
              */
-            export type Index = Inertia.SharedData & { posSession: App.Models.PosSession | null, openPosSessions: unknown, availablePosTerminals: unknown, requiresPosSessionSelection: boolean, resources: unknown, types: unknown, customers: unknown, priceLists: unknown, filters: {status: string | null | [] | null, type_id: string | null | [] | null, search: string | null | [] | null } }
+            export type Index = Inertia.SharedData & {
+                posSession: App.Models.PosSession | null;
+                openPosSessions: unknown;
+                availablePosTerminals: unknown;
+                requiresPosSessionSelection: boolean;
+                resources: unknown;
+                types: unknown;
+                customers: unknown;
+                priceLists: unknown;
+                filters: {
+                    status: string | null | [] | null;
+                    type_id: string | null | [] | null;
+                    search: string | null | [] | null;
+                };
+            };
 
             /**
-             * @see [\App\Http\Controllers\Seats\SeatOrderController::show](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+             * @see [\App\Http\Controllers\Seats\SeatOrderController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
              */
-            export type Orders = Inertia.SharedData & { posSession: {id: number, session_no: string }, diningSession: {id: number, session_no: string, customer_id: number | null, status: string, invoice_no: unknown, invoice_status: unknown, invoice_total: unknown, seat_name: string, seat_type: unknown, customer_name: string, customer_phone: string | null, price_list_name: string }, menus: unknown, categories: unknown, cart: [], exchangeRate: number, paymentMethods: [], membershipCards: [], customers: [], historyOrders: unknown, printOrders: [], invoices: unknown, filters: {category_id: string | null | [] | null, search: string | null | [] | null } }
+            export type Orders = Inertia.SharedData & {
+                posSession: { id: number; session_no: string };
+                diningSession: {
+                    id: number;
+                    session_no: string;
+                    customer_id: number | null;
+                    status: string;
+                    invoice_no: unknown;
+                    invoice_status: unknown;
+                    invoice_total: unknown;
+                    seat_name: string;
+                    seat_type: unknown;
+                    customer_name: string;
+                    customer_phone: string | null;
+                    price_list_name: string;
+                };
+                menus: unknown;
+                categories: unknown;
+                cart: [];
+                exchangeRate: number;
+                paymentMethods: [];
+                membershipCards: [];
+                customers: [];
+                historyOrders: unknown;
+                printOrders: [];
+                invoices: unknown;
+                filters: {
+                    category_id: string | null | [] | null;
+                    search: string | null | [] | null;
+                };
+            };
 
             /**
-             * @see [\App\Http\Controllers\Seats\SeatOrderController::manage](\D:\Lar\dmpos\app\Http\Controllers\Seats\SeatOrderController.php)
+             * @see [\App\Http\Controllers\Seats\SeatOrderController::manage](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Seats/SeatOrderController.php)
              */
-            export type ManageOrders = Inertia.SharedData & { diningSession: {id: number, sessionNo: string, seatName: string, diningResourceId: number }, lines: unknown, resources: unknown }
+            export type ManageOrders = Inertia.SharedData & {
+                diningSession: {
+                    id: number;
+                    sessionNo: string;
+                    seatName: string;
+                    diningResourceId: number;
+                };
+                lines: unknown;
+                resources: unknown;
+            };
         }
 
         export namespace Contacts {
             /**
-             * @see [\App\Http\Controllers\Crm\ContactController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+             * @see [\App\Http\Controllers\Crm\ContactController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
              */
-            export type Index = Inertia.SharedData & { contacts: unknown, filters: {search: unknown, favorite: boolean } }
+            export type Index = Inertia.SharedData & {
+                contacts: Inertia.ScrollProp;
+                filters: { search: unknown; favorite: boolean };
+            };
 
             /**
-             * @see [\App\Http\Controllers\Crm\ContactController::create](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+             * @see [\App\Http\Controllers\Crm\ContactController::create](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
              */
-            export type Create = Inertia.SharedData & { organizations: Illuminate.Http.Resources.Json.AnonymousResourceCollection }
+            export type Create = Inertia.SharedData & {
+                organizations: {
+                    id: number;
+                    name: string;
+                    contacts_count?: number;
+                    created_at: string | null;
+                }[];
+            };
 
             /**
-             * @see [\App\Http\Controllers\Crm\ContactController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+             * @see [\App\Http\Controllers\Crm\ContactController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
              */
-            export type Show = Inertia.SharedData & { contact: App.Http.Resources.ContactResource, notes: unknown }
+            export type Show = Inertia.SharedData & {
+                contact: {
+                    id: number;
+                    first_name: string;
+                    last_name: string;
+                    email: string | null;
+                    phone: string | null;
+                    organization: {
+                        id: number;
+                        name: string;
+                        contacts_count?: number;
+                        created_at: string | null;
+                    };
+                    is_favorite: boolean | null;
+                    created_at: string | null;
+                };
+                notes: Inertia.DeferProp;
+            };
 
             /**
-             * @see [\App\Http\Controllers\Crm\ContactController::edit](\D:\Lar\dmpos\app\Http\Controllers\Crm\ContactController.php)
+             * @see [\App\Http\Controllers\Crm\ContactController::edit](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/ContactController.php)
              */
-            export type Edit = Inertia.SharedData & { contact: App.Http.Resources.ContactResource, organizations: Illuminate.Http.Resources.Json.AnonymousResourceCollection }
+            export type Edit = Inertia.SharedData & {
+                contact: {
+                    id: number;
+                    first_name: string;
+                    last_name: string;
+                    email: string | null;
+                    phone: string | null;
+                    organization: {
+                        id: number;
+                        name: string;
+                        contacts_count?: number;
+                        created_at: string | null;
+                    };
+                    is_favorite: boolean | null;
+                    created_at: string | null;
+                };
+                organizations: {
+                    id: number;
+                    name: string;
+                    contacts_count?: number;
+                    created_at: string | null;
+                }[];
+            };
         }
 
         export namespace Organizations {
             /**
-             * @see [\App\Http\Controllers\Crm\OrganizationController::index](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
+             * @see [\App\Http\Controllers\Crm\OrganizationController::index](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php)
              */
-            export type Index = Inertia.SharedData & { organizations: Illuminate.Http.Resources.Json.AnonymousResourceCollection, filters: {search: unknown } }
+            export type Index = Inertia.SharedData & {
+                organizations: {
+                    id: number;
+                    name: string;
+                    contacts_count?: number;
+                    created_at: string | null;
+                }[];
+                filters: { search: unknown };
+            };
 
             /**
-             * @see [\App\Http\Controllers\Crm\OrganizationController::show](\D:\Lar\dmpos\app\Http\Controllers\Crm\OrganizationController.php)
+             * @see [\App\Http\Controllers\Crm\OrganizationController::show](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Crm/OrganizationController.php)
              */
-            export type Show = Inertia.SharedData & { organization: App.Http.Resources.OrganizationResource, contacts: unknown }
+            export type Show = Inertia.SharedData & {
+                organization: {
+                    id: number;
+                    name: string;
+                    contacts_count?: number;
+                    created_at: string | null;
+                };
+                contacts: Inertia.ScrollProp;
+            };
         }
 
         export namespace Features {
             export namespace Forms {
                 /**
-                 * @see [\App\Http\Controllers\Feature\FormController::useForm](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                 * @see [\App\Http\Controllers\Feature\FormController::useForm](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                  */
-                export type UseForm = Inertia.SharedData
+                export type UseForm = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\FormController::formComponent](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                 * @see [\App\Http\Controllers\Feature\FormController::formComponent](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                  */
-                export type FormComponent = Inertia.SharedData
+                export type FormComponent = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\FormController::fileUploads](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                 * @see [\App\Http\Controllers\Feature\FormController::fileUploads](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                  */
-                export type FileUploads = Inertia.SharedData
+                export type FileUploads = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\FormController::validation](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                 * @see [\App\Http\Controllers\Feature\FormController::validation](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                  */
-                export type Validation = Inertia.SharedData
+                export type Validation = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\FormController::precognition](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                 * @see [\App\Http\Controllers\Feature\FormController::precognition](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                  */
-                export type Precognition = Inertia.SharedData
+                export type Precognition = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\FormController::optimisticUpdates](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                 * @see [\App\Http\Controllers\Feature\FormController::optimisticUpdates](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                  */
-                export type OptimisticUpdates = Inertia.SharedData & { contacts: Illuminate.Http.Resources.Json.AnonymousResourceCollection }
+                export type OptimisticUpdates = Inertia.SharedData & {
+                    contacts: {
+                        id: number;
+                        first_name: string;
+                        last_name: string;
+                        email: string | null;
+                        phone: string | null;
+                        organization: {
+                            id: number;
+                            name: string;
+                            contacts_count?: number;
+                            created_at: string | null;
+                        };
+                        is_favorite: boolean | null;
+                        created_at: string | null;
+                    }[];
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\FormController::useFormContext](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                 * @see [\App\Http\Controllers\Feature\FormController::useFormContext](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                  */
-                export type UseFormContext = Inertia.SharedData
+                export type UseFormContext = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\FormController::dottedKeys](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                 * @see [\App\Http\Controllers\Feature\FormController::dottedKeys](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                  */
-                export type DottedKeys = Inertia.SharedData
+                export type DottedKeys = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\FormController::wayfinder](\D:\Lar\dmpos\app\Http\Controllers\Feature\FormController.php)
+                 * @see [\App\Http\Controllers\Feature\FormController::wayfinder](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/FormController.php)
                  */
-                export type Wayfinder = Inertia.SharedData & { sampleContact: App.Http.Resources.ContactResource }
+                export type Wayfinder = Inertia.SharedData & {
+                    sampleContact: {
+                        id: number;
+                        first_name: string;
+                        last_name: string;
+                        email: string | null;
+                        phone: string | null;
+                        organization: {
+                            id: number;
+                            name: string;
+                            contacts_count?: number;
+                            created_at: string | null;
+                        };
+                        is_favorite: boolean | null;
+                        created_at: string | null;
+                    };
+                };
             }
 
             export namespace Navigation {
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::links](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::links](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type Links = Inertia.SharedData & { timestamp: string }
+                export type Links = Inertia.SharedData & { timestamp: string };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::preserveState](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::preserveState](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type PreserveState = Inertia.SharedData & { serverCounter: number, timestamp: string }
+                export type PreserveState = Inertia.SharedData & {
+                    serverCounter: number;
+                    timestamp: string;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::preserveScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::preserveScroll](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type PreserveScroll = Inertia.SharedData & { timestamp: string }
+                export type PreserveScroll = Inertia.SharedData & {
+                    timestamp: string;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::viewTransitions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::viewTransitions](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type ViewTransitions = Inertia.SharedData
+                export type ViewTransitions = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::historyManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::historyManagement](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type HistoryManagement = Inertia.SharedData & { visit: unknown, timestamp: string }
+                export type HistoryManagement = Inertia.SharedData & {
+                    visit: unknown;
+                    timestamp: string;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::asyncRequests](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
-                 * @see [\App\Http\Controllers\Feature\NavigationController::asyncSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::asyncRequests](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::asyncSlow](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type AsyncRequests = Inertia.SharedData & { timestamp: string }
+                export type AsyncRequests = Inertia.SharedData & {
+                    timestamp: string;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::manualVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::manualVisits](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type ManualVisits = Inertia.SharedData & { timestamp: string, counter: number }
+                export type ManualVisits = Inertia.SharedData & {
+                    timestamp: string;
+                    counter: number;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::redirectDemo](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::redirectDemo](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type Redirects = Inertia.SharedData & { timestamp: string }
+                export type Redirects = Inertia.SharedData & {
+                    timestamp: string;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::scrollManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::scrollManagement](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type ScrollManagement = Inertia.SharedData & { timestamp: string, items: Record<string, string> }
+                export type ScrollManagement = Inertia.SharedData & {
+                    timestamp: string;
+                    items: Record<string, string>;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::instantVisits](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::instantVisits](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type InstantVisits = Inertia.SharedData & { sourceTimestamp: string, message: string }
+                export type InstantVisits = Inertia.SharedData & {
+                    sourceTimestamp: string;
+                    message: string;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::instantVisitTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::instantVisitTarget](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type InstantVisitTarget = Inertia.SharedData & { greeting: string, serverTimestamp: string, items: {id: number, name: string }[] }
+                export type InstantVisitTarget = Inertia.SharedData & {
+                    greeting: string;
+                    serverTimestamp: string;
+                    items: { id: number; name: string }[];
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NavigationController::urlFragments](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
-                 * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentTarget](\D:\Lar\dmpos\app\Http\Controllers\Feature\NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::urlFragments](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
+                 * @see [\App\Http\Controllers\Feature\NavigationController::preserveFragmentTarget](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NavigationController.php)
                  */
-                export type UrlFragments = Inertia.SharedData & { timestamp: string, redirectedFrom?: string }
+                export type UrlFragments = Inertia.SharedData & {
+                    timestamp: string;
+                    redirectedFrom?: string;
+                };
             }
 
             export namespace DataLoading {
                 /**
-                 * @see [\App\Http\Controllers\Feature\DataLoadingController::deferredProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                 * @see [\App\Http\Controllers\Feature\DataLoadingController::deferredProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                  */
-                export type DeferredProps = Inertia.SharedData & { quickStat: string, slowStats: unknown, heavyData: unknown }
+                export type DeferredProps = Inertia.SharedData & {
+                    quickStat: string;
+                    slowStats: Inertia.DeferProp;
+                    heavyData: Inertia.DeferProp;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\DataLoadingController::partialReloads](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                 * @see [\App\Http\Controllers\Feature\DataLoadingController::partialReloads](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                  */
-                export type PartialReloads = Inertia.SharedData & { users: {id: number, name: string, role: string }[], stats: {total: unknown, favorites: unknown }, timestamp: string, randomNumber: number }
+                export type PartialReloads = Inertia.SharedData & {
+                    users: { id: number; name: string; role: string }[];
+                    stats: { total: unknown; favorites: unknown };
+                    timestamp: string;
+                    randomNumber: number;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\DataLoadingController::infiniteScroll](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                 * @see [\App\Http\Controllers\Feature\DataLoadingController::infiniteScroll](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                  */
-                export type InfiniteScroll = Inertia.SharedData & { contacts: unknown }
+                export type InfiniteScroll = Inertia.SharedData & {
+                    contacts: Inertia.ScrollProp;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\DataLoadingController::whenVisible](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                 * @see [\App\Http\Controllers\Feature\DataLoadingController::whenVisible](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                  */
-                export type WhenVisible = Inertia.SharedData & { section1: unknown, section2: unknown, section3: unknown }
+                export type WhenVisible = Inertia.SharedData & {
+                    section1: Inertia.OptionalProp;
+                    section2: Inertia.OptionalProp;
+                    section3: Inertia.OptionalProp;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\DataLoadingController::polling](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                 * @see [\App\Http\Controllers\Feature\DataLoadingController::polling](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                  */
-                export type Polling = Inertia.SharedData & { currentTime: string, randomNumber: number, contactCount: unknown }
+                export type Polling = Inertia.SharedData & {
+                    currentTime: string;
+                    randomNumber: number;
+                    contactCount: unknown;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\DataLoadingController::propMerging](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                 * @see [\App\Http\Controllers\Feature\DataLoadingController::propMerging](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                  */
-                export type PropMerging = Inertia.SharedData & { notifications: unknown, activities: unknown, contacts: unknown, timestamp: string }
+                export type PropMerging = Inertia.SharedData & {
+                    notifications: Inertia.MergeProp;
+                    activities: Inertia.MergeProp;
+                    contacts: Inertia.MergeProp;
+                    timestamp: string;
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\DataLoadingController::onceProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                 * @see [\App\Http\Controllers\Feature\DataLoadingController::onceProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                  */
-                export type OnceProps = Inertia.SharedData & { page: number, staticData: unknown, freshData: unknown, expiringData: unknown, aliasedData: unknown, dynamicData: {timestamp: string, randomNumber: number } }
+                export type OnceProps = Inertia.SharedData & {
+                    page: number;
+                    staticData: Inertia.OnceProp;
+                    freshData: Inertia.OnceProp;
+                    expiringData: Inertia.OnceProp;
+                    aliasedData: Inertia.OnceProp;
+                    dynamicData: { timestamp: string; randomNumber: number };
+                };
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\DataLoadingController::optionalProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\DataLoadingController.php)
+                 * @see [\App\Http\Controllers\Feature\DataLoadingController::optionalProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/DataLoadingController.php)
                  */
-                export type OptionalProps = Inertia.SharedData & { regularData: {timestamp: string, message: string }, optionalData: unknown, deferredData: unknown }
+                export type OptionalProps = Inertia.SharedData & {
+                    regularData: { timestamp: string; message: string };
+                    optionalData: Inertia.OptionalProp;
+                    deferredData: Inertia.DeferProp;
+                };
             }
 
             export namespace Prefetching {
                 /**
-                 * @see [\App\Http\Controllers\Feature\PrefetchingController::linkPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                 * @see [\App\Http\Controllers\Feature\PrefetchingController::linkPrefetch](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                  */
-                export type LinkPrefetch = Inertia.SharedData
+                export type LinkPrefetch = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                 * @see [\App\Http\Controllers\Feature\PrefetchingController::staleWhileRevalidate](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                  */
-                export type StaleWhileRevalidate = Inertia.SharedData
+                export type StaleWhileRevalidate = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\PrefetchingController::manualPrefetch](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                 * @see [\App\Http\Controllers\Feature\PrefetchingController::manualPrefetch](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                  */
-                export type ManualPrefetch = Inertia.SharedData
+                export type ManualPrefetch = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\PrefetchingController::cacheManagement](\D:\Lar\dmpos\app\Http\Controllers\Feature\PrefetchingController.php)
+                 * @see [\App\Http\Controllers\Feature\PrefetchingController::cacheManagement](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/PrefetchingController.php)
                  */
-                export type CacheManagement = Inertia.SharedData
+                export type CacheManagement = Inertia.SharedData;
             }
 
             export namespace State {
                 /**
-                 * @see [\App\Http\Controllers\Feature\StateController::remember](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                 * @see [\App\Http\Controllers\Feature\StateController::remember](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                  */
-                export type Remember = Inertia.SharedData
+                export type Remember = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\StateController::flashData](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                 * @see [\App\Http\Controllers\Feature\StateController::flashData](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                  */
-                export type FlashData = Inertia.SharedData
+                export type FlashData = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\StateController::sharedProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\StateController.php)
+                 * @see [\App\Http\Controllers\Feature\StateController::sharedProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/StateController.php)
                  */
-                export type SharedProps = Inertia.SharedData
+                export type SharedProps = Inertia.SharedData;
             }
 
             export namespace Layouts {
                 /**
-                 * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                 * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayouts](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                  */
-                export type PersistentLayouts = Inertia.SharedData
+                export type PersistentLayouts = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                 * @see [\App\Http\Controllers\Feature\LayoutController::persistentLayoutsPageTwo](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                  */
-                export type PersistentLayoutsPageTwo = Inertia.SharedData
+                export type PersistentLayoutsPageTwo = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\LayoutController::nestedLayouts](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                 * @see [\App\Http\Controllers\Feature\LayoutController::nestedLayouts](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                  */
-                export type NestedLayouts = Inertia.SharedData
+                export type NestedLayouts = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\LayoutController::head](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                 * @see [\App\Http\Controllers\Feature\LayoutController::head](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                  */
-                export type Head = Inertia.SharedData
+                export type Head = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\LayoutController::layoutProps](\D:\Lar\dmpos\app\Http\Controllers\Feature\LayoutController.php)
+                 * @see [\App\Http\Controllers\Feature\LayoutController::layoutProps](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/LayoutController.php)
                  */
-                export type LayoutProps = Inertia.SharedData
+                export type LayoutProps = Inertia.SharedData;
             }
 
             export namespace Events {
                 /**
-                 * @see [\App\Http\Controllers\Feature\EventController::globalEvents](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                 * @see [\App\Http\Controllers\Feature\EventController::globalEvents](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                  */
-                export type GlobalEvents = Inertia.SharedData
+                export type GlobalEvents = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\EventController::visitCallbacks](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                 * @see [\App\Http\Controllers\Feature\EventController::visitCallbacks](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                  */
-                export type VisitCallbacks = Inertia.SharedData
+                export type VisitCallbacks = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\EventController::progress](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
-                 * @see [\App\Http\Controllers\Feature\EventController::progressSlow](\D:\Lar\dmpos\app\Http\Controllers\Feature\EventController.php)
+                 * @see [\App\Http\Controllers\Feature\EventController::progress](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
+                 * @see [\App\Http\Controllers\Feature\EventController::progressSlow](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/EventController.php)
                  */
-                export type Progress = Inertia.SharedData
+                export type Progress = Inertia.SharedData;
             }
 
             export namespace Errors {
                 /**
-                 * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptions](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
+                 * @see [\App\Http\Controllers\Feature\NetworkErrorController::httpExceptions](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php)
                  */
-                export type HttpExceptions = Inertia.SharedData
+                export type HttpExceptions = Inertia.SharedData;
 
                 /**
-                 * @see [\App\Http\Controllers\Feature\NetworkErrorController::networkErrors](\D:\Lar\dmpos\app\Http\Controllers\Feature\NetworkErrorController.php)
+                 * @see [\App\Http\Controllers\Feature\NetworkErrorController::networkErrors](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/NetworkErrorController.php)
                  */
-                export type NetworkErrors = Inertia.SharedData
+                export type NetworkErrors = Inertia.SharedData;
             }
 
             export namespace Http {
                 /**
-                 * @see [\App\Http\Controllers\Feature\HttpController::useHttp](\D:\Lar\dmpos\app\Http\Controllers\Feature\HttpController.php)
+                 * @see [\App\Http\Controllers\Feature\HttpController::useHttp](/home/runner/work/dmpos/dmpos/app/Http/Controllers/Feature/HttpController.php)
                  */
-                export type UseHttp = Inertia.SharedData
+                export type UseHttp = Inertia.SharedData;
             }
         }
     }
@@ -3149,50 +5126,52 @@ export namespace Laravel {
                 export namespace AuthenticatedSessionController {
                     export namespace Store {
                         /**
-                         * @see [\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php)
+                         * @see [\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::store](/home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php)
                          */
-                        export type Request = {    "": string;
+                        export type Request = {
+                            '': string;
                             password: string;
-                            remember?: string;}
+                            remember?: string;
+                        };
                     }
 
                     export namespace Create {
                         /**
-                         * @see [\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php)
+                         * @see [\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::create](/home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Destroy {
                         /**
-                         * @see [\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\AuthenticatedSessionController.php)
+                         * @see [\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::destroy](/home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/AuthenticatedSessionController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace ConfirmablePasswordController {
                     export namespace Show {
                         /**
-                         * @see [\Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php)
+                         * @see [\Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::show](/home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
 
                     export namespace Store {
                         /**
-                         * @see [\Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::store](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmablePasswordController.php)
+                         * @see [\Laravel\Fortify\Http\Controllers\ConfirmablePasswordController::store](/home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmablePasswordController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
 
                 export namespace ConfirmedPasswordStatusController {
                     export namespace Show {
                         /**
-                         * @see [\Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController::show](\D:\Lar\dmpos\vendor\laravel\fortify\src\Http\Controllers\ConfirmedPasswordStatusController.php)
+                         * @see [\Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController::show](/home/runner/work/dmpos/dmpos/vendor/laravel/fortify/src/Http/Controllers/ConfirmedPasswordStatusController.php)
                          */
-                        export type Request = Record<string, unknown>
+                        export type Request = Record<string, unknown>;
                     }
                 }
             }
@@ -3203,8 +5182,8 @@ export namespace Laravel {
 export namespace Closure {
     export namespace __invoke {
         /**
-         * @see [\Closure::__invoke](\D:\Lar\dmpos\vendor\laravel\framework\src\Illuminate\Foundation\Configuration\ApplicationBuilder.php)
+         * @see [\Closure::__invoke](/home/runner/work/dmpos/dmpos/vendor/laravel/framework/src/Illuminate/Foundation/Configuration/ApplicationBuilder.php)
          */
-        export type Request = Record<string, unknown>
+        export type Request = Record<string, unknown>;
     }
 }

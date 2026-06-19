@@ -11,6 +11,7 @@ use App\Models\PurchaseOrderLine;
 use App\Models\Supplier;
 use App\Models\Unit;
 use App\Support\DocumentNumber;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -78,19 +79,19 @@ class PurchaseOrderController extends Controller
             ->orderBy('name')
             ->get()
             ->map(fn (Supplier $supplier) => [
-                'id'      => $supplier->id,
-                'name'    => $supplier->name,
-                'phone'   => $supplier->phone_number,
+                'id' => $supplier->id,
+                'name' => $supplier->name,
+                'phone' => $supplier->phone_number,
                 'address' => $supplier->address,
             ]);
 
         return Inertia::render('Purchase/Index', [
-            'orders'    => $orders,
-            'items'     => $items,
-            'units'     => $units,
+            'orders' => $orders,
+            'items' => $items,
+            'units' => $units,
             'suppliers' => $suppliers,
-            'nextPoNo'  => DocumentNumber::make(PurchaseOrder::class, 'po_no', 'PO'),
-            'filters'   => [
+            'nextPoNo' => DocumentNumber::make(PurchaseOrder::class, 'po_no', 'PO'),
+            'filters' => [
                 'search' => $filters['search'] ?? null,
                 'status' => $filters['status'] ?? null,
             ],
@@ -271,7 +272,7 @@ class PurchaseOrderController extends Controller
         ];
     }
 
-    public function update(Request $request, PurchaseOrder $purchaseOrder): \Illuminate\Http\RedirectResponse
+    public function update(Request $request, PurchaseOrder $purchaseOrder): RedirectResponse
     {
         $user = $request->user();
         $companyId = $user->company_id ?? Company::query()->value('id');
@@ -280,18 +281,18 @@ class PurchaseOrderController extends Controller
         abort_if($purchaseOrder->status !== 'created', 422, 'Only pending purchase orders can be edited.');
 
         $data = $request->validate([
-            'supplier_name'   => ['required', 'string', 'max:255'],
-            'supplier_phone'  => ['nullable', 'string', 'max:255'],
+            'supplier_name' => ['required', 'string', 'max:255'],
+            'supplier_phone' => ['nullable', 'string', 'max:255'],
             'supplier_address' => ['nullable', 'string', 'max:255'],
-            'order_date'      => ['required', 'date'],
-            'expected_date'   => ['nullable', 'date'],
-            'note'            => ['nullable', 'string'],
-            'lines'           => ['required', 'array', 'min:1'],
+            'order_date' => ['required', 'date'],
+            'expected_date' => ['nullable', 'date'],
+            'note' => ['nullable', 'string'],
+            'lines' => ['required', 'array', 'min:1'],
             'lines.*.item_id' => ['required', Rule::exists('items', 'id')->where('company_id', $companyId)],
             'lines.*.unit_id' => ['required', Rule::exists('units', 'id')],
             'lines.*.quantity_ordered' => ['required', 'numeric', 'gt:0'],
-            'lines.*.unit_cost'        => ['required', 'numeric', 'min:0'],
-            'lines.*.note'             => ['nullable', 'string'],
+            'lines.*.unit_cost' => ['required', 'numeric', 'min:0'],
+            'lines.*.note' => ['nullable', 'string'],
         ]);
 
         DB::transaction(function () use ($data, $purchaseOrder) {
@@ -300,16 +301,16 @@ class PurchaseOrderController extends Controller
             );
 
             $purchaseOrder->update([
-                'supplier_name'    => $data['supplier_name'],
-                'supplier_phone'   => $data['supplier_phone'] ?? null,
+                'supplier_name' => $data['supplier_name'],
+                'supplier_phone' => $data['supplier_phone'] ?? null,
                 'supplier_address' => $data['supplier_address'] ?? null,
-                'order_date'       => $data['order_date'],
-                'expected_date'    => $data['expected_date'] ?? null,
-                'note'             => $data['note'] ?? null,
-                'subtotal'         => $subtotal,
-                'discount_amount'  => 0,
-                'tax_amount'       => 0,
-                'grand_total'      => $subtotal,
+                'order_date' => $data['order_date'],
+                'expected_date' => $data['expected_date'] ?? null,
+                'note' => $data['note'] ?? null,
+                'subtotal' => $subtotal,
+                'discount_amount' => 0,
+                'tax_amount' => 0,
+                'grand_total' => $subtotal,
             ]);
 
             $purchaseOrder->lines()->delete();
@@ -320,18 +321,18 @@ class PurchaseOrderController extends Controller
 
                 PurchaseOrderLine::create([
                     'purchase_order_id' => $purchaseOrder->id,
-                    'branch_id'         => $purchaseOrder->branch_id,
-                    'item_id'           => $line['item_id'],
-                    'unit_id'           => $line['unit_id'],
-                    'quantity_ordered'  => $quantity,
+                    'branch_id' => $purchaseOrder->branch_id,
+                    'item_id' => $line['item_id'],
+                    'unit_id' => $line['unit_id'],
+                    'quantity_ordered' => $quantity,
                     'quantity_received' => 0,
                     'quantity_remaining' => $quantity,
-                    'unit_cost'         => $unitCost,
-                    'discount_amount'   => 0,
-                    'tax_amount'        => 0,
-                    'line_total'        => $quantity * $unitCost,
-                    'status'            => 'open',
-                    'note'              => $line['note'] ?? null,
+                    'unit_cost' => $unitCost,
+                    'discount_amount' => 0,
+                    'tax_amount' => 0,
+                    'line_total' => $quantity * $unitCost,
+                    'status' => 'open',
+                    'note' => $line['note'] ?? null,
                 ]);
             }
         });

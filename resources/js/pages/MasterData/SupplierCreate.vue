@@ -190,25 +190,27 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                 </div>
 
                 <!-- Summary bar matching CreatePO grand total style -->
-                <div
-                    class="rounded-lg bg-[#2a4858] p-6 text-white shadow-lg"
-                >
+                <div class="rounded-lg bg-[#2a4858] p-6 text-white shadow-lg">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-xs font-bold uppercase text-white/50">
+                            <p
+                                class="text-xs font-bold text-white/50 uppercase"
+                            >
                                 Registering as
                             </p>
                             <p class="mt-0.5 text-lg font-bold">
-                                {{
-                                    form.name.trim() || 'New Supplier'
-                                }}
+                                {{ form.name.trim() || 'New Supplier' }}
                             </p>
                         </div>
                         <div class="text-right">
-                            <p class="text-xs font-bold uppercase text-white/50">
+                            <p
+                                class="text-xs font-bold text-white/50 uppercase"
+                            >
                                 Status
                             </p>
-                            <p class="mt-0.5 text-lg font-bold text-[#fafa6e] capitalize">
+                            <p
+                                class="mt-0.5 text-lg font-bold text-[#fafa6e] capitalize"
+                            >
                                 {{ form.status }}
                             </p>
                         </div>

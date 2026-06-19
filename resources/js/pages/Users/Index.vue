@@ -9,9 +9,9 @@ import {
     X,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
-import UserAvatar from '@/components/UserAvatar.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import UserAvatar from '@/components/UserAvatar.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import RoleTab from '@/pages/Users/Role.vue';
 import UserPermissionTab from '@/pages/Users/UserPermission.vue';

@@ -119,21 +119,96 @@ function flipCard() {
                                 xmlns="http://www.w3.org/2000/svg"
                                 aria-hidden="true"
                             >
-                                <rect x="2" width="4" height="30" fill="black" />
-                                <rect x="8" width="2" height="30" fill="black" />
-                                <rect x="12" width="6" height="30" fill="black" />
-                                <rect x="20" width="2" height="30" fill="black" />
-                                <rect x="24" width="4" height="30" fill="black" />
-                                <rect x="30" width="8" height="30" fill="black" />
-                                <rect x="40" width="2" height="30" fill="black" />
-                                <rect x="44" width="6" height="30" fill="black" />
-                                <rect x="52" width="2" height="30" fill="black" />
-                                <rect x="56" width="8" height="30" fill="black" />
-                                <rect x="66" width="4" height="30" fill="black" />
-                                <rect x="72" width="2" height="30" fill="black" />
-                                <rect x="76" width="6" height="30" fill="black" />
-                                <rect x="84" width="4" height="30" fill="black" />
-                                <rect x="90" width="8" height="30" fill="black" />
+                                <rect
+                                    x="2"
+                                    width="4"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="8"
+                                    width="2"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="12"
+                                    width="6"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="20"
+                                    width="2"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="24"
+                                    width="4"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="30"
+                                    width="8"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="40"
+                                    width="2"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="44"
+                                    width="6"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="52"
+                                    width="2"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="56"
+                                    width="8"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="66"
+                                    width="4"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="72"
+                                    width="2"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="76"
+                                    width="6"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="84"
+                                    width="4"
+                                    height="30"
+                                    fill="black"
+                                />
+                                <rect
+                                    x="90"
+                                    width="8"
+                                    height="30"
+                                    fill="black"
+                                />
                             </svg>
                             <span
                                 class="mt-0.5 font-mono text-[7px] tracking-widest text-slate-700"
@@ -187,15 +262,22 @@ function flipCard() {
                             >
                                 Remarks / Rules
                             </span>
-                            <p class="line-clamp-3 text-[9px] leading-normal text-white/60">
-                                {{ remark || 'Insert custom card terms and privileges.' }}
+                            <p
+                                class="line-clamp-3 text-[9px] leading-normal text-white/60"
+                            >
+                                {{
+                                    remark ||
+                                    'Insert custom card terms and privileges.'
+                                }}
                             </p>
                         </div>
 
                         <div
                             class="flex items-center justify-between border-t border-white/5 pt-2"
                         >
-                            <span class="font-mono text-[8px] text-white/30 uppercase">
+                            <span
+                                class="font-mono text-[8px] text-white/30 uppercase"
+                            >
                                 Membership Pass
                             </span>
                             <span

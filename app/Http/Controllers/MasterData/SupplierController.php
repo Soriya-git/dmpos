@@ -13,24 +13,24 @@ class SupplierController
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'code'           => ['nullable', 'string', 'max:50'],
-            'name'           => ['required', 'string', 'max:255'],
+            'code' => ['nullable', 'string', 'max:50'],
+            'name' => ['required', 'string', 'max:255'],
             'contact_person' => ['nullable', 'string', 'max:255'],
-            'phone'          => ['nullable', 'string', 'max:50'],
-            'email'          => ['nullable', 'email', 'max:255'],
-            'address'        => ['nullable', 'string', 'max:500'],
-            'status'         => ['nullable', 'string', 'in:draft,pending,approved'],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'address' => ['nullable', 'string', 'max:500'],
+            'status' => ['nullable', 'string', 'in:draft,pending,approved'],
         ]);
 
         Supplier::create([
-            'company_id'     => $request->user()?->company_id,
-            'code'           => $validated['code'] ?? null,
-            'name'           => $validated['name'],
+            'company_id' => $request->user()?->company_id,
+            'code' => $validated['code'] ?? null,
+            'name' => $validated['name'],
             'contact_person' => $validated['contact_person'] ?? null,
-            'phone_number'   => $validated['phone'] ?? null,
-            'email'          => $validated['email'] ?? null,
-            'address'        => $validated['address'] ?? null,
-            'is_active'      => ($validated['status'] ?? 'pending') === 'approved',
+            'phone_number' => $validated['phone'] ?? null,
+            'email' => $validated['email'] ?? null,
+            'address' => $validated['address'] ?? null,
+            'is_active' => ($validated['status'] ?? 'pending') === 'approved',
         ]);
 
         return redirect()

@@ -74,7 +74,10 @@ const search = ref('');
 const statusFilter = ref('');
 
 const breadcrumbs = computed<BreadcrumbItem[]>(() => {
-    if ((view.value === 'detail' || view.value === 'edit') && detailReceipt.value) {
+    if (
+        (view.value === 'detail' || view.value === 'edit') &&
+        detailReceipt.value
+    ) {
         const crumbs: BreadcrumbItem[] = [
             { title: 'Stock Operations' },
             { title: 'Goods Receipt', href: '/goods-receipts' },
@@ -113,7 +116,8 @@ const filteredReceipts = computed(() => {
                 .filter(Boolean)
                 .some((v) => String(v).toLowerCase().includes(term));
 
-        const matchesStatus = !statusFilter.value || r.status === statusFilter.value;
+        const matchesStatus =
+            !statusFilter.value || r.status === statusFilter.value;
 
         return matchesSearch && matchesStatus;
     });
@@ -242,7 +246,10 @@ function updateReceiptStatus(
                         type="button"
                         variant="ghost"
                         class="h-9 font-semibold text-slate-600 hover:text-red-500"
-                        @click="view = 'detail'; window.scrollTo({ top: 0, behavior: 'smooth' })"
+                        @click="
+                            view = 'detail';
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        "
                     >
                         Cancel
                     </Button>
@@ -252,7 +259,11 @@ function updateReceiptStatus(
                         :disabled="!editGRRef?.canSubmit"
                         @click="editGRRef?.submit()"
                     >
-                        {{ editGRRef?.isProcessing ? 'Saving...' : 'Save Changes' }}
+                        {{
+                            editGRRef?.isProcessing
+                                ? 'Saving...'
+                                : 'Save Changes'
+                        }}
                     </Button>
                 </div>
             </template>
@@ -270,14 +281,28 @@ function updateReceiptStatus(
                 </div>
 
                 <!-- Stat cards -->
-                <div class="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:gap-6">
-                    <div class="rounded-lg border-l-4 border-[#007882] bg-white p-5 shadow-sm">
-                        <p class="text-xs font-bold text-slate-500 uppercase">Total Receipts</p>
-                        <h3 class="mt-1 text-2xl font-bold">{{ totalReceipts }}</h3>
-                        <p class="mt-1.5 text-xs text-slate-400">Loaded receipts</p>
+                <div
+                    class="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:gap-6"
+                >
+                    <div
+                        class="rounded-lg border-l-4 border-[#007882] bg-white p-5 shadow-sm"
+                    >
+                        <p class="text-xs font-bold text-slate-500 uppercase">
+                            Total Receipts
+                        </p>
+                        <h3 class="mt-1 text-2xl font-bold">
+                            {{ totalReceipts }}
+                        </h3>
+                        <p class="mt-1.5 text-xs text-slate-400">
+                            Loaded receipts
+                        </p>
                     </div>
-                    <div class="rounded-lg border-l-4 border-amber-400 bg-white p-5 shadow-sm">
-                        <p class="text-xs font-bold text-slate-500 uppercase">Awaiting Staging</p>
+                    <div
+                        class="rounded-lg border-l-4 border-amber-400 bg-white p-5 shadow-sm"
+                    >
+                        <p class="text-xs font-bold text-slate-500 uppercase">
+                            Awaiting Staging
+                        </p>
                         <h3 class="mt-1 text-2xl font-bold text-amber-600">
                             {{ stats.awaitingStaging }}
                         </h3>
@@ -285,8 +310,12 @@ function updateReceiptStatus(
                             {{ awaitingPercent }}% of total receipts
                         </p>
                     </div>
-                    <div class="rounded-lg border-l-4 border-[#23aa8f] bg-white p-5 shadow-sm">
-                        <p class="text-xs font-bold text-slate-500 uppercase">Ready for Putaway</p>
+                    <div
+                        class="rounded-lg border-l-4 border-[#23aa8f] bg-white p-5 shadow-sm"
+                    >
+                        <p class="text-xs font-bold text-slate-500 uppercase">
+                            Ready for Putaway
+                        </p>
                         <h3 class="mt-1 text-2xl font-bold text-[#23aa8f]">
                             {{ stats.readyForPutaway }}
                         </h3>
@@ -296,9 +325,15 @@ function updateReceiptStatus(
                     </div>
                     <div
                         class="cursor-pointer rounded-lg border-l-4 border-sky-400 bg-white p-5 shadow-sm transition hover:shadow-md"
-                        @click="router.visit('/goods-receipts/approved-purchase-orders')"
+                        @click="
+                            router.visit(
+                                '/goods-receipts/approved-purchase-orders',
+                            )
+                        "
                     >
-                        <p class="text-xs font-bold text-slate-500 uppercase">Waiting POs</p>
+                        <p class="text-xs font-bold text-slate-500 uppercase">
+                            Waiting POs
+                        </p>
                         <h3 class="mt-1 text-2xl font-bold text-sky-500">
                             {{ stats.waitingPurchaseOrders }}
                         </h3>
@@ -310,9 +345,13 @@ function updateReceiptStatus(
 
                 <!-- Filters -->
                 <div class="mb-6">
-                    <div class="grid w-full grid-cols-1 gap-2 md:grid-cols-[minmax(20rem,32rem)_14rem_2.5rem]">
+                    <div
+                        class="grid w-full grid-cols-1 gap-2 md:grid-cols-[minmax(20rem,32rem)_14rem_2.5rem]"
+                    >
                         <div class="relative w-full">
-                            <Search class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+                            <Search
+                                class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
+                            />
                             <Input
                                 v-model="search"
                                 type="text"
@@ -328,7 +367,9 @@ function updateReceiptStatus(
                             <option value="draft">Draft</option>
                             <option value="in_progress">In Progress</option>
                             <option value="approved">Approved</option>
-                            <option value="partially_received">Partially Received</option>
+                            <option value="partially_received">
+                                Partially Received
+                            </option>
                             <option value="received">Received</option>
                             <option value="cancelled">Cancelled</option>
                         </select>
@@ -345,10 +386,17 @@ function updateReceiptStatus(
                 </div>
 
                 <!-- Table -->
-                <div class="min-h-[56vh] overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm">
-                    <div v-if="filteredReceipts.length > 0" class="overflow-x-auto">
+                <div
+                    class="min-h-[56vh] overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm"
+                >
+                    <div
+                        v-if="filteredReceipts.length > 0"
+                        class="overflow-x-auto"
+                    >
                         <table class="w-full border-collapse text-left">
-                            <thead class="bg-slate-50 text-xs font-bold text-slate-600 uppercase">
+                            <thead
+                                class="bg-slate-50 text-xs font-bold text-slate-600 uppercase"
+                            >
                                 <tr>
                                     <th class="px-6 py-4">GR Number</th>
                                     <th class="px-6 py-4">Source PO</th>
@@ -357,7 +405,9 @@ function updateReceiptStatus(
                                     <th class="px-6 py-4">Received Date</th>
                                     <th class="px-6 py-4 text-center">Items</th>
                                     <th class="px-6 py-4">Status</th>
-                                    <th class="px-6 py-4 text-center">Action</th>
+                                    <th class="px-6 py-4 text-center">
+                                        Action
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-sm">
@@ -366,26 +416,47 @@ function updateReceiptStatus(
                                     :key="receipt.id"
                                     class="transition hover:bg-slate-50/50"
                                 >
-                                    <td class="px-6 py-4 font-mono font-bold text-[#007882]">
+                                    <td
+                                        class="px-6 py-4 font-mono font-bold text-[#007882]"
+                                    >
                                         {{ receipt.receipt_no }}
                                     </td>
-                                    <td class="px-6 py-4 font-semibold text-slate-700">
-                                        {{ receipt.purchase_order_no ?? 'Direct' }}
+                                    <td
+                                        class="px-6 py-4 font-semibold text-slate-700"
+                                    >
+                                        {{
+                                            receipt.purchase_order_no ??
+                                            'Direct'
+                                        }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        <span class="rounded bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
-                                            {{ receipt.staging_area ?? 'INBOUND' }}
+                                        <span
+                                            class="rounded bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600"
+                                        >
+                                            {{
+                                                receipt.staging_area ??
+                                                'INBOUND'
+                                            }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-slate-500">
                                         {{ receipt.operator ?? '-' }}
                                     </td>
                                     <td class="px-6 py-4 text-slate-500">
-                                        {{ receipt.received_at ?? receipt.created_at ?? '-' }}
+                                        {{
+                                            receipt.received_at ??
+                                            receipt.created_at ??
+                                            '-'
+                                        }}
                                     </td>
-                                    <td class="px-6 py-4 text-center font-bold text-slate-700">
+                                    <td
+                                        class="px-6 py-4 text-center font-bold text-slate-700"
+                                    >
                                         {{ receipt.line_count }}
-                                        <span class="text-xs font-normal text-slate-400">SKU</span>
+                                        <span
+                                            class="text-xs font-normal text-slate-400"
+                                            >SKU</span
+                                        >
                                     </td>
                                     <td class="px-6 py-4">
                                         <span
@@ -401,9 +472,24 @@ function updateReceiptStatus(
                                             view-label="View"
                                             :actionable-statuses="['draft']"
                                             @view="openDetail(receipt)"
-                                            @approve="updateReceiptStatus(receipt, 'approve')"
-                                            @reject="updateReceiptStatus(receipt, 'reject')"
-                                            @cancel="updateReceiptStatus(receipt, 'cancel')"
+                                            @approve="
+                                                updateReceiptStatus(
+                                                    receipt,
+                                                    'approve',
+                                                )
+                                            "
+                                            @reject="
+                                                updateReceiptStatus(
+                                                    receipt,
+                                                    'reject',
+                                                )
+                                            "
+                                            @cancel="
+                                                updateReceiptStatus(
+                                                    receipt,
+                                                    'cancel',
+                                                )
+                                            "
                                         />
                                     </td>
                                 </tr>
@@ -422,11 +508,18 @@ function updateReceiptStatus(
                         @update-rows-per-page="setRowsPerPage"
                     />
 
-                    <div v-if="filteredReceipts.length === 0" class="p-16 text-center">
-                        <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-50">
+                    <div
+                        v-if="filteredReceipts.length === 0"
+                        class="p-16 text-center"
+                    >
+                        <div
+                            class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-50"
+                        >
                             <Filter class="size-6 text-slate-300" />
                         </div>
-                        <h3 class="font-bold text-[#2a4858]">No goods receipts found</h3>
+                        <h3 class="font-bold text-[#2a4858]">
+                            No goods receipts found
+                        </h3>
                         <p class="mt-1 text-sm text-slate-500">
                             Create a new goods receipt or adjust your filters.
                         </p>
