@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import contacts from '@/wayfinder/routes/contacts';
+import contacts from '@/routes/contacts';
 import type { Inertia } from '@/wayfinder/types';
 
 defineProps<Inertia.Pages.Contacts.Create>();

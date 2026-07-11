@@ -13,7 +13,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import contacts from '@/wayfinder/routes/contacts';
+import contacts from '@/routes/contacts';
 import type { App, Inertia } from '@/wayfinder/types';
 
 const props = defineProps<

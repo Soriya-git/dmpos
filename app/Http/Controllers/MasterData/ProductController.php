@@ -32,6 +32,16 @@ class ProductController extends Controller
                     'id' => $item->id,
                     'code' => $item->code ?: 'ITEM-'.str_pad((string) $item->id, 4, '0', STR_PAD_LEFT),
                     'name' => $item->name,
+                    'nameKh' => $item->name_kh,
+                    'nameOther' => $item->name_other,
+                    'nickname' => $item->nickname,
+                    'branchId' => $item->branch_id,
+                    'unitId' => $item->unit_id,
+                    'itemType' => $item->item_type,
+                    'cost' => (string) $item->cost,
+                    'minimumStockQty' => (string) $item->minimum_stock_qty,
+                    'isStockable' => $item->is_stockable,
+                    'description' => $item->description,
                     'category' => str($item->item_type)->replace('_', ' ')->title()->toString(),
                     'primaryUnit' => $item->unit?->code ?? $item->unit?->name ?? '-',
                     'status' => $item->is_active ? 'approved' : 'cancelled',
@@ -84,6 +94,9 @@ class ProductController extends Controller
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'name_kh' => ['nullable', 'string', 'max:255'],
+            'name_other' => ['nullable', 'string', 'max:255'],
+            'nickname' => ['nullable', 'string', 'max:255'],
             'code' => ['nullable', 'string', 'max:255'],
             'branch_id' => ['nullable', Rule::exists('branches', 'id')->where('company_id', $companyId)],
             'unit_id' => ['required', Rule::exists('units', 'id')],
@@ -112,6 +125,35 @@ class ProductController extends Controller
         ]);
 
         return back()->with('success', 'Item has been created.');
+    }
+
+    public function updateItem(Request $request, Item $item)
+    {
+        [$companyId] = $this->scope($request);
+
+        abort_if($item->company_id !== $companyId, 404);
+
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'name_kh' => ['nullable', 'string', 'max:255'],
+            'name_other' => ['nullable', 'string', 'max:255'],
+            'nickname' => ['nullable', 'string', 'max:255'],
+            'code' => ['nullable', 'string', 'max:255'],
+            'branch_id' => ['nullable', Rule::exists('branches', 'id')->where('company_id', $companyId)],
+            'unit_id' => ['required', Rule::exists('units', 'id')],
+            'item_type' => ['required', Rule::in([
+                'raw_material', 'ingredient', 'drink', 'finished_product',
+                'packaging', 'service_material', 'other',
+            ])],
+            'cost' => ['required', 'numeric', 'min:0'],
+            'minimum_stock_qty' => ['nullable', 'numeric', 'min:0'],
+            'is_stockable' => ['boolean'],
+            'description' => ['nullable', 'string'],
+        ]);
+
+        $item->update($data);
+
+        return back()->with('success', 'Item has been updated.');
     }
 
     public function storeBom(Request $request)

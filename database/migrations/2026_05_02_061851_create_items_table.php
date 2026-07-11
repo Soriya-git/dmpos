@@ -19,6 +19,9 @@ return new class extends Migration
             $table->foreignId('unit_id')->constrained()->restrictOnDelete();
 
             $table->string('name');
+            $table->string('name_kh')->nullable();
+            $table->string('name_other')->nullable();
+            $table->string('nickname')->nullable();
             $table->string('code')->nullable();
             $table->text('size')->nullable();
 

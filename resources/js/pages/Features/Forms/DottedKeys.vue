@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { submitDottedKeys } from '@/wayfinder/App/Http/Controllers/Feature/FormController';
+import { submitDottedKeys } from '@/actions/App/Http/Controllers/Feature/FormController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Forms' },
@@ -60,7 +60,7 @@ const parsedData = computed(
                     </template>
 
                     <Form
-                        v-bind="submitDottedKeys.form()"
+                        :action="submitDottedKeys()"
                         class="space-y-6"
                         #default="{
                             errors,

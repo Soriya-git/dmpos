@@ -162,6 +162,16 @@ function goTransactions(card: CustomerCard | null = selectedCard.value) {
     <Head title="Membership Cards" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <Button
+                class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
+                @click="router.get('/membership-cards/create')"
+            >
+                <Plus class="size-4" />
+                Issue New Card
+            </Button>
+        </template>
+
         <div
             class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
@@ -185,13 +195,6 @@ function goTransactions(card: CustomerCard | null = selectedCard.value) {
                                 </p>
                             </div>
 
-                            <Button
-                                class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
-                                @click="router.get('/membership-cards/create')"
-                            >
-                                <Plus class="size-4" />
-                                Issue New Card
-                            </Button>
                         </div>
 
                         <div class="mt-5 grid gap-3 md:grid-cols-[1fr_180px]">

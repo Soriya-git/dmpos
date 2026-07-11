@@ -35,7 +35,7 @@ import UserMenuContent from '@/components/UserMenuContent.vue';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
 import { toUrl } from '@/lib/utils';
 import type { BreadcrumbItem, NavItem } from '@/types';
-import { dashboard } from '@/wayfinder/routes';
+import { dashboard } from '@/routes';
 
 type Props = {
     breadcrumbs?: BreadcrumbItem[];

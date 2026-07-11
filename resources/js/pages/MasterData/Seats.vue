@@ -206,45 +206,19 @@ function setSeatTypeStatus(record: SeatTypeRecord, status: ApprovalStatus) {
     <Head title="Seats" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <Button
+                class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
+                @click="openPanel()"
+            >
+                <Plus class="size-4" />
+                New
+            </Button>
+        </template>
+
         <div
             class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
-            <div
-                class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
-            >
-                <div>
-                    <h1
-                        class="text-2xl font-semibold tracking-tight text-[#2A4858]"
-                    >
-                        Seats
-                    </h1>
-                    <p class="mt-1 text-sm text-slate-500">
-                        Dining tables, rooms, seat capacity, and current dining
-                        sessions.
-                    </p>
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <div class="relative">
-                        <Search
-                            class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
-                        />
-                        <Input
-                            v-model="search"
-                            placeholder="Search seat data..."
-                            class="h-9 w-52 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] lg:w-64"
-                        />
-                    </div>
-                    <Button
-                        class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
-                        @click="openPanel()"
-                    >
-                        <Plus class="size-4" />
-                        New
-                    </Button>
-                </div>
-            </div>
-
             <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <div
                     class="rounded-lg border-l-4 border-[#007882] bg-white p-4 shadow-sm"
@@ -305,6 +279,17 @@ function setSeatTypeStatus(record: SeatTypeRecord, status: ApprovalStatus) {
                     <component :is="tab.icon" class="size-4" />
                     {{ tab.label }}
                 </button>
+            </div>
+
+            <div class="relative w-full max-w-sm">
+                <Search
+                    class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
+                />
+                <Input
+                    v-model="search"
+                    placeholder="Search seat data..."
+                    class="h-9 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882]"
+                />
             </div>
 
             <MasterDataTable

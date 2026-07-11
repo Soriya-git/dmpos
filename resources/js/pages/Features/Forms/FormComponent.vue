@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { submitFormComponent } from '@/wayfinder/App/Http/Controllers/Feature/FormController';
+import { submitFormComponent } from '@/actions/App/Http/Controllers/Feature/FormController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Forms' },
@@ -70,7 +70,7 @@ const setDefaultsOnSuccess = ref(true);
 
                     <Form
                         ref="formRef"
-                        v-bind="submitFormComponent.form()"
+                        :action="submitFormComponent()"
                         :reset-on-success="resetOnSuccess"
                         :set-defaults-on-success="setDefaultsOnSuccess"
                         class="space-y-4"

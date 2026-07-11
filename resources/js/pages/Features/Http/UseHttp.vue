@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { useHttpApi } from '@/wayfinder/App/Http/Controllers/Feature/HttpController';
+import { useHttpApi } from '@/actions/App/Http/Controllers/Feature/HttpController';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'HTTP' }, { title: 'useHttp' }];
 

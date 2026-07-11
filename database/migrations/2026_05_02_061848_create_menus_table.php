@@ -21,6 +21,9 @@ return new class extends Migration
             $table->unsignedBigInteger('bom_header_id')->nullable();
 
             $table->string('name');
+            $table->string('name_kh')->nullable();
+            $table->string('name_other')->nullable();
+            $table->string('nickname')->nullable();
             $table->string('code')->nullable();
 
             $table->enum('menu_type', [

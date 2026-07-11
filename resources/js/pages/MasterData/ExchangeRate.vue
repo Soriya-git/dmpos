@@ -105,45 +105,19 @@ function setRateStatus(record: ExchangeRateRecord, status: ApprovalStatus) {
     <Head title="Exchange Rate" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <Button
+                class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
+                @click="openPanel()"
+            >
+                <Plus class="size-4" />
+                New
+            </Button>
+        </template>
+
         <div
             class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
-            <div
-                class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
-            >
-                <div>
-                    <h1
-                        class="text-2xl font-semibold tracking-tight text-[#2A4858]"
-                    >
-                        Exchange Rate
-                    </h1>
-                    <p class="mt-1 text-sm text-slate-500">
-                        Currency pairs, effective dates, and active exchange
-                        rates.
-                    </p>
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <div class="relative">
-                        <Search
-                            class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
-                        />
-                        <Input
-                            v-model="search"
-                            placeholder="Search rates..."
-                            class="h-9 w-52 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] lg:w-64"
-                        />
-                    </div>
-                    <Button
-                        class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
-                        @click="openPanel()"
-                    >
-                        <Plus class="size-4" />
-                        New
-                    </Button>
-                </div>
-            </div>
-
             <div
                 class="flex gap-4 overflow-x-auto border-b border-slate-200 pb-1 whitespace-nowrap"
             >
@@ -153,6 +127,17 @@ function setRateStatus(record: ExchangeRateRecord, status: ApprovalStatus) {
                     <Banknote class="size-4" />
                     Rate Registry
                 </button>
+            </div>
+
+            <div class="relative w-full max-w-sm">
+                <Search
+                    class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
+                />
+                <Input
+                    v-model="search"
+                    placeholder="Search rates..."
+                    class="h-9 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882]"
+                />
             </div>
 
             <MasterDataTable

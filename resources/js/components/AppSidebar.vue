@@ -31,7 +31,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { type NavItem, type NavSection as NavSectionType } from '@/types';
-import { dashboard } from '@/wayfinder/routes';
+import { dashboard } from '@/routes';
 import AppLogo from './AppLogo.vue';
 
 const page = usePage();

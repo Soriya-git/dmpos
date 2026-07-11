@@ -39,6 +39,9 @@ class MenuController
                 'id' => $menu->id,
                 'code' => $menu->code ?: 'MENU-'.str_pad((string) $menu->id, 4, '0', STR_PAD_LEFT),
                 'name' => $menu->name,
+                'nameKh' => $menu->name_kh,
+                'nameOther' => $menu->name_other,
+                'nickname' => $menu->nickname,
                 'category' => $menu->menuCategory?->name ?? 'Uncategorized',
                 'branch' => $menu->branch?->name ?? 'All Branches',
                 'type' => $menu->menu_type,
@@ -144,6 +147,9 @@ class MenuController
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'name_kh' => ['nullable', 'string', 'max:255'],
+            'name_other' => ['nullable', 'string', 'max:255'],
+            'nickname' => ['nullable', 'string', 'max:255'],
             'code' => ['nullable', 'string', 'max:255'],
             'menu_category_id' => ['nullable', Rule::exists('menu_categories', 'id')->where('company_id', $companyId)],
             'branch_id' => ['nullable', Rule::exists('branches', 'id')->where('company_id', $companyId)],
@@ -198,11 +204,17 @@ class MenuController
         abort_if($menu->company_id !== $companyId, 404);
 
         $data = $request->validate([
+            'name_kh' => ['nullable', 'string', 'max:255'],
+            'name_other' => ['nullable', 'string', 'max:255'],
+            'nickname' => ['nullable', 'string', 'max:255'],
             'printer_id' => ['nullable', Rule::exists('printers', 'id')->where('company_id', $companyId)],
             'print_route' => ['required', Rule::in(['none', 'stock', 'kitchen', 'bar', 'cashier', 'custom'])],
         ]);
 
         $menu->update([
+            'name_kh' => $data['name_kh'] ?? null,
+            'name_other' => $data['name_other'] ?? null,
+            'nickname' => $data['nickname'] ?? null,
             'print_route' => $data['print_route'],
             'printer_id' => $data['printer_id'] ?: null,
         ]);

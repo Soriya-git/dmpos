@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { submitUseForm } from '@/wayfinder/App/Http/Controllers/Feature/FormController';
+import { submitUseForm } from '@/actions/App/Http/Controllers/Feature/FormController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Forms' },

@@ -13,7 +13,7 @@ import {
     httpException404,
     httpException500,
     httpExceptionUnhandled,
-} from '@/wayfinder/App/Http/Controllers/Feature/NetworkErrorController';
+} from '@/actions/App/Http/Controllers/Feature/NetworkErrorController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Error Handling' },

@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import UserAvatar from '@/components/UserAvatar.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { login } from '@/wayfinder/routes';
+import { login } from '@/routes';
 
 type Terminal = {
     id: number;

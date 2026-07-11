@@ -185,6 +185,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Master data routes
     Route::get('/master-data/products', [ProductController::class, 'index'])->name('master-data.products');
     Route::post('/master-data/products/items', [ProductController::class, 'storeItem'])->name('master-data.products.items.store');
+    Route::patch('/master-data/products/items/{item}', [ProductController::class, 'updateItem'])->name('master-data.products.items.update');
     Route::post('/master-data/products/bom', [ProductController::class, 'storeBom'])->name('master-data.products.bom.store');
     Route::get('/master-data/company-branches', [CompanyBranchController::class, 'index'])->name('master-data.company-branches');
     Route::post('/master-data/company-branches/branches/{branch}', [CompanyBranchController::class, 'updateBranch'])->name('master-data.company-branches.branches.update');

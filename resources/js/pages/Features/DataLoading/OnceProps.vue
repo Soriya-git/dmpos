@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { onceProps } from '@/wayfinder/App/Http/Controllers/Feature/DataLoadingController';
+import { onceProps } from '@/actions/App/Http/Controllers/Feature/DataLoadingController';
 
 const props = defineProps<{
     page: number;

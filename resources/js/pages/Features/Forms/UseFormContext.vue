@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { submitFormComponent } from '@/wayfinder/App/Http/Controllers/Feature/FormController';
+import { submitFormComponent } from '@/actions/App/Http/Controllers/Feature/FormController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Forms' },
@@ -43,7 +43,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                     </template>
 
                     <Form
-                        v-bind="submitFormComponent.form()"
+                        :action="submitFormComponent()"
                         class="space-y-4"
                         #default="{
                             processing,

@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import contactRoutes from '@/wayfinder/routes/contacts';
-import organizationRoutes from '@/wayfinder/routes/organizations';
+import contactRoutes from '@/routes/contacts';
+import organizationRoutes from '@/routes/organizations';
 import type { App, Inertia } from '@/wayfinder/types';
 
 type CursorPaginated<T> = {

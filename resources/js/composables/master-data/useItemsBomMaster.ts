@@ -12,6 +12,16 @@ export type ItemRecord = {
     id: number;
     code: string;
     name: string;
+    nameKh: string | null;
+    nameOther: string | null;
+    nickname: string | null;
+    branchId: number | null;
+    unitId: number;
+    itemType: string;
+    cost: string;
+    minimumStockQty: string;
+    isStockable: boolean;
+    description: string | null;
     category: string;
     primaryUnit: string;
     status: ApprovalStatus;

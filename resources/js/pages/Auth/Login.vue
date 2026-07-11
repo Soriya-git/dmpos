@@ -7,8 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import AuthBase from '@/layouts/AuthLayout.vue';
-import { dashboard } from '@/wayfinder/routes';
-import { store } from '@/wayfinder/routes/login';
+import { dashboard } from '@/routes';
+import { store } from '@/routes/login';
 
 defineProps<{
     status?: string;
@@ -30,7 +30,7 @@ defineProps<{
         </div>
 
         <Form
-            v-bind="store.form()"
+            :action="store()"
             :reset-on-success="['password']"
             @success="router.visit(dashboard().url, { replace: true })"
             v-slot="{ errors, processing }"

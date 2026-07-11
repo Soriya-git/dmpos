@@ -22,7 +22,7 @@ import {
 import UserInfo from '@/components/UserInfo.vue';
 import { useAppearance } from '@/composables/useAppearance';
 import type { User } from '@/types';
-import { logout } from '@/wayfinder/routes';
+import { logout } from '@/routes';
 
 type Props = {
     user: User;

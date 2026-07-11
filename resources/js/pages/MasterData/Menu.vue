@@ -37,6 +37,9 @@ type MenuRecord = {
     id: number;
     code: string;
     name: string;
+    nameKh: string | null;
+    nameOther: string | null;
+    nickname: string | null;
     category: string;
     branch: string;
     type: 'product' | 'service';
@@ -122,6 +125,9 @@ const sourceMode = ref<'item' | 'bom'>('item');
 
 const menuForm = useForm({
     name: '',
+    name_kh: '',
+    name_other: '',
+    nickname: '',
     code: '',
     menu_category_id: '',
     branch_id: '',
@@ -304,6 +310,9 @@ function resetForms(record: PanelRecord | null) {
 
     if (panelKind.value === 'menus' && 'basePrice' in record) {
         menuForm.name = record.name;
+        menuForm.name_kh = record.nameKh ?? '';
+        menuForm.name_other = record.nameOther ?? '';
+        menuForm.nickname = record.nickname ?? '';
         menuForm.code = record.code;
         menuForm.menu_type = record.type;
         menuForm.base_price = record.basePrice;
@@ -335,6 +344,9 @@ function submitPanel() {
             router.patch(
                 `/master-data/menu/menus/${selectedRecord.value.id}`,
                 {
+                    name_kh: menuForm.name_kh,
+                    name_other: menuForm.name_other,
+                    nickname: menuForm.nickname,
                     printer_id: menuForm.printer_id || null,
                     print_route: menuForm.print_route,
                 },
@@ -383,45 +395,19 @@ function submitPanel() {
     <Head title="Menu" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <Button
+                class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
+                @click="openPanel()"
+            >
+                <Plus class="size-4" />
+                New
+            </Button>
+        </template>
+
         <div
             class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
-            <div
-                class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
-            >
-                <div>
-                    <h1
-                        class="text-2xl font-semibold tracking-tight text-[#2A4858]"
-                    >
-                        Menu
-                    </h1>
-                    <p class="mt-1 text-sm text-slate-500">
-                        Menu items, categories, default prices, and
-                        availability.
-                    </p>
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <div class="relative">
-                        <Search
-                            class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
-                        />
-                        <Input
-                            v-model="search"
-                            placeholder="Search menu data..."
-                            class="h-9 w-52 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] lg:w-64"
-                        />
-                    </div>
-                    <Button
-                        class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
-                        @click="openPanel()"
-                    >
-                        <Plus class="size-4" />
-                        New
-                    </Button>
-                </div>
-            </div>
-
             <div
                 class="flex gap-4 overflow-x-auto border-b border-slate-200 pb-1 whitespace-nowrap"
             >
@@ -439,6 +425,17 @@ function submitPanel() {
                     <component :is="tab.icon" class="size-4" />
                     {{ tab.label }}
                 </button>
+            </div>
+
+            <div class="relative w-full max-w-sm">
+                <Search
+                    class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
+                />
+                <Input
+                    v-model="search"
+                    placeholder="Search menu data..."
+                    class="h-9 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882]"
+                />
             </div>
 
             <MasterDataTable
@@ -864,6 +861,21 @@ function submitPanel() {
                                 }}
                             </p>
                         </label>
+
+                        <template v-if="panelKind === 'menus'">
+                            <label class="block">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Khmer Name</span>
+                                <Input v-model="menuForm.name_kh" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter Khmer name" />
+                            </label>
+                            <label class="block">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Other Name</span>
+                                <Input v-model="menuForm.name_other" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter another foreign name" />
+                            </label>
+                            <label class="block">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Nickname</span>
+                                <Input v-model="menuForm.nickname" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter a quick-search nickname" />
+                            </label>
+                        </template>
 
                         <label v-if="panelKind === 'menus'" class="block">
                             <span

@@ -13,7 +13,7 @@ import { type BreadcrumbItem } from '@/types';
 import {
     submitValidation,
     submitValidationSecondary,
-} from '@/wayfinder/App/Http/Controllers/Feature/FormController';
+} from '@/actions/App/Http/Controllers/Feature/FormController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Forms' },

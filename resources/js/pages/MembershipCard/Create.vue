@@ -108,6 +108,17 @@ function submit() {
     <Head title="Create Membership Card" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <Button
+                variant="ghost"
+                class="h-9 rounded-lg px-3 text-xs font-bold text-slate-500"
+                @click="router.get('/membership-cards')"
+            >
+                <ArrowLeft class="size-4" />
+                Back
+            </Button>
+        </template>
+
         <div
             class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
@@ -115,14 +126,6 @@ function submit() {
                 class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
             >
                 <div>
-                    <Button
-                        variant="ghost"
-                        class="mb-2 h-8 rounded-lg px-2 text-xs font-bold text-slate-500"
-                        @click="router.get('/membership-cards')"
-                    >
-                        <ArrowLeft class="size-4" />
-                        Back
-                    </Button>
                     <h1
                         class="text-2xl font-black tracking-tight text-[#2A4858]"
                     >

@@ -15,8 +15,8 @@ import {
     toggleFavorite,
     wayfinder as wayfinderAction,
     storeAccount,
-} from '@/wayfinder/App/Http/Controllers/Feature/FormController';
-import contacts from '@/wayfinder/routes/contacts';
+} from '@/actions/App/Http/Controllers/Feature/FormController';
+import contacts from '@/routes/contacts';
 import type { Inertia } from '@/wayfinder/types';
 
 defineProps<Inertia.Pages.Features.Forms.Wayfinder>();
@@ -392,7 +392,7 @@ const precogForm = useForm({
                         </p>
                         <CodeBlock class="mt-2">
                             <textarea>
-                                import contacts from '@/wayfinder/routes/contacts'
+                                import contacts from '@/routes/contacts'
 
                                 contacts.index()     // {"url":"/contacts","method":"get"}
                                 contacts.show(1)     // {"url":"/contacts/1","method":"get"}
@@ -575,7 +575,7 @@ const precogForm = useForm({
                             />
 
                             <Form
-                                v-bind="submitFormComponent.form()"
+                                :action="submitFormComponent()"
                                 preserve-scroll
                                 set-defaults-on-success
                                 class="mt-3 space-y-3"
@@ -925,14 +925,14 @@ const precogForm = useForm({
                             </template>
                             <CodeBlock>
                                 <textarea>
-                                <Form v-bind="storeAccount.form()"
+                                <Form :action="storeAccount()"
                                       :validation-timeout="500"
                                       #default="{ validate, valid, invalid }">
                                 </textarea>
                             </CodeBlock>
 
                             <Form
-                                v-bind="storeAccount.form()"
+                                :action="storeAccount()"
                                 :validation-timeout="500"
                                 class="mt-3 space-y-3"
                                 #default="{

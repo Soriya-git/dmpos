@@ -17,7 +17,7 @@ import {
 import { computed, type Component } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { dashboard } from '@/wayfinder/routes';
+import { dashboard } from '@/routes';
 
 type OperationLink = {
     title: string;

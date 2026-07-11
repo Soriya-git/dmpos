@@ -350,49 +350,37 @@ function selectList(priceList: PriceListRecord) {
     <Head title="Menu Price Lists" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-1 flex-col gap-5 p-4 lg:p-6">
-            <header
-                class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
-            >
-                <div>
-                    <h1
-                        class="text-2xl font-semibold tracking-tight text-[#2A4858]"
-                    >
-                        Menu Price Lists
-                    </h1>
-                    <p class="mt-1 text-sm text-slate-500">
-                        Manage selectable menu price lists for new orders.
-                    </p>
-                </div>
+        <template #actions>
+            <div class="flex items-center gap-2">
+                <Button
+                    variant="outline"
+                    class="h-9 rounded-lg text-xs font-bold text-[#2A4858]"
+                    @click="openListPanel"
+                >
+                    <ListPlus class="size-4" />
+                    New List
+                </Button>
+                <Button
+                    class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
+                    @click="openPricePanel()"
+                >
+                    <Plus class="size-4" />
+                    Add Price
+                </Button>
+            </div>
+        </template>
 
-                <div class="flex flex-wrap items-center gap-2">
-                    <div class="relative">
-                        <Search
-                            class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
-                        />
-                        <Input
-                            v-model="search"
-                            placeholder="Search menu prices..."
-                            class="h-9 w-56 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] lg:w-72"
-                        />
-                    </div>
-                    <Button
-                        variant="outline"
-                        class="h-9 rounded-lg text-xs font-bold text-[#2A4858]"
-                        @click="openListPanel"
-                    >
-                        <ListPlus class="size-4" />
-                        New List
-                    </Button>
-                    <Button
-                        class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
-                        @click="openPricePanel()"
-                    >
-                        <Plus class="size-4" />
-                        Add Price
-                    </Button>
-                </div>
-            </header>
+        <div class="flex flex-1 flex-col gap-5 p-4 lg:p-6">
+            <div class="relative w-full max-w-sm">
+                <Search
+                    class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
+                />
+                <Input
+                    v-model="search"
+                    placeholder="Search menu prices..."
+                    class="h-9 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882]"
+                />
+            </div>
 
             <section class="grid gap-4 lg:grid-cols-[300px_1fr]">
                 <aside

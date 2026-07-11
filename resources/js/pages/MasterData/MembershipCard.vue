@@ -221,47 +221,32 @@ if (cards.value[0]) {
     <Head title="Membership Cards" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #actions>
+            <Button
+                class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
+                @click="newCard"
+            >
+                <Plus class="size-4" />
+                New Card
+            </Button>
+        </template>
+
         <div
             class="flex h-[calc(100dvh-4rem)] w-full [scrollbar-gutter:stable] flex-col gap-6 overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
         >
-            <div
-                class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
-            >
-                <div>
-                    <h1
-                        class="text-2xl font-semibold tracking-tight text-[#2A4858]"
-                    >
-                        Membership Cards
-                    </h1>
-                    <p class="mt-1 text-sm text-slate-500">
-                        Manage reusable customer payment cards, balances, and
-                        card status.
-                    </p>
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <div class="relative">
+            <div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_460px]">
+                <div class="space-y-6">
+                    <div class="relative w-full max-w-sm">
                         <Search
                             class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
                         />
                         <Input
                             v-model="search"
                             placeholder="Search cards..."
-                            class="h-9 w-52 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882] lg:w-64"
+                            class="h-9 rounded-lg border-slate-200 bg-white pl-9 text-xs focus-visible:ring-[#007882]"
                         />
                     </div>
-                    <Button
-                        class="h-9 rounded-lg bg-[#007882] px-4 text-xs font-bold text-white hover:bg-[#006871]"
-                        @click="newCard"
-                    >
-                        <Plus class="size-4" />
-                        New Card
-                    </Button>
-                </div>
-            </div>
 
-            <div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_460px]">
-                <div class="space-y-6">
                     <MasterDataTable
                         :rows="filteredCards"
                         empty-text="No membership cards found."

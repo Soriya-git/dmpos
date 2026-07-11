@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { storeAccount } from '@/wayfinder/App/Http/Controllers/Feature/FormController';
+import { storeAccount } from '@/actions/App/Http/Controllers/Feature/FormController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Forms' },
@@ -361,7 +361,7 @@ form.setValidationTimeout(500);
                     </template>
 
                     <Form
-                        v-bind="storeAccount.form()"
+                        :action="storeAccount()"
                         :validation-timeout="500"
                         class="space-y-4"
                         #default="{
