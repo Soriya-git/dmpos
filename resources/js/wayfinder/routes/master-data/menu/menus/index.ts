@@ -12,7 +12,7 @@ import {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:141
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:144
  * @route "http://localhost/master-data/menu/menus"
  */
 export const store = (
@@ -29,7 +29,7 @@ store.definition = {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:141
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:144
  * @route "http://localhost/master-data/menu/menus"
  */
 store.url = (options?: RouteQueryOptions) => {
@@ -38,7 +38,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:141
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:144
  * @route "http://localhost/master-data/menu/menus"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -48,7 +48,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:141
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:144
  * @route "http://localhost/master-data/menu/menus"
  */
 const storeForm = (
@@ -60,7 +60,7 @@ const storeForm = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:141
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:144
  * @route "http://localhost/master-data/menu/menus"
  */
 storeForm.post = (
@@ -73,7 +73,7 @@ storeForm.post = (
 store.form = storeForm;
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:194
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:200
  * @route "http://localhost/master-data/menu/menus/{menu}"
  */
 export const update = (
@@ -95,7 +95,7 @@ update.definition = {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:194
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:200
  * @route "http://localhost/master-data/menu/menus/{menu}"
  */
 update.url = (
@@ -135,7 +135,7 @@ update.url = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:194
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:200
  * @route "http://localhost/master-data/menu/menus/{menu}"
  */
 update.patch = (
@@ -152,7 +152,7 @@ update.patch = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:194
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:200
  * @route "http://localhost/master-data/menu/menus/{menu}"
  */
 const updateForm = (
@@ -169,7 +169,7 @@ const updateForm = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:194
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:200
  * @route "http://localhost/master-data/menu/menus/{menu}"
  */
 updateForm.patch = (

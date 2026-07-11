@@ -21,11 +21,11 @@
 // ─────────────────────────────────────────────
 // CONFIG — edit these values
 // ─────────────────────────────────────────────
-define('API_BASE',    'https://dmpos.industrialefficiency.online/api/print-agent');
-define('API_TOKEN',   'YOUR_PRINT_AGENT_TOKEN_HERE');   // from branches.print_agent_token
-define('BRANCH_ID',   1);                                // your branch ID
-define('POLL_SECS',   3);                                // how often to poll (seconds)
-define('LOG_FILE',    __DIR__.'/print_agent.log');
+define('API_BASE', 'https://dmpos.industrialefficiency.online/api/print-agent');
+define('API_TOKEN', 'YOUR_PRINT_AGENT_TOKEN_HERE');   // from branches.print_agent_token
+define('BRANCH_ID', 1);                                // your branch ID
+define('POLL_SECS', 3);                                // how often to poll (seconds)
+define('LOG_FILE', __DIR__.'/print_agent.log');
 // ─────────────────────────────────────────────
 
 function logLine(string $msg): void
@@ -40,8 +40,8 @@ function apiGet(string $url): ?array
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 10,
-        CURLOPT_HTTPHEADER     => [
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_HTTPHEADER => [
             'Authorization: Bearer '.API_TOKEN,
             'Accept: application/json',
         ],
@@ -62,10 +62,10 @@ function apiPost(string $url, array $data = []): bool
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => json_encode($data),
-        CURLOPT_TIMEOUT        => 10,
-        CURLOPT_HTTPHEADER     => [
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => json_encode($data),
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_HTTPHEADER => [
             'Authorization: Bearer '.API_TOKEN,
             'Accept: application/json',
             'Content-Type: application/json',
@@ -81,10 +81,11 @@ function apiPost(string $url, array $data = []): bool
 function sendToPrinter(string $ip, int $port, string $payload, int $timeoutMs): bool
 {
     $timeout = max(1, (int) ceil($timeoutMs / 1000));
-    $socket  = @fsockopen($ip, $port, $errno, $errstr, $timeout);
+    $socket = @fsockopen($ip, $port, $errno, $errstr, $timeout);
 
     if (! $socket) {
         logLine("  Socket error [{$errno}]: {$errstr}");
+
         return false;
     }
 
@@ -102,11 +103,12 @@ logLine('Print agent started. Polling every '.POLL_SECS.' seconds...');
 
 while (true) {
     $pendingUrl = API_BASE.'/pending?branch_id='.BRANCH_ID;
-    $response   = apiGet($pendingUrl);
+    $response = apiGet($pendingUrl);
 
     if ($response === null) {
         logLine('WARNING: Could not reach API, will retry...');
         sleep(POLL_SECS);
+
         continue;
     }
 
@@ -114,40 +116,43 @@ while (true) {
 
     if (empty($jobs)) {
         sleep(POLL_SECS);
+
         continue;
     }
 
     logLine('Found '.count($jobs).' pending job(s).');
 
     foreach ($jobs as $job) {
-        $id   = $job['id'];
-        $no   = $job['job_no'];
-        $ip   = $job['printer_ip'];
+        $id = $job['id'];
+        $no = $job['job_no'];
+        $ip = $job['printer_ip'];
         $port = (int) ($job['printer_port'] ?? 9100);
-        $ms   = (int) ($job['timeout_ms'] ?? 5000);
+        $ms = (int) ($job['timeout_ms'] ?? 5000);
         $data = base64_decode($job['payload_b64'] ?? '');
 
         logLine("  Job #{$id} ({$no}) → {$ip}:{$port}");
 
         if (! $ip) {
-            logLine("  SKIP: no printer IP.");
+            logLine('  SKIP: no printer IP.');
             apiPost(API_BASE.'/jobs/'.$id.'/failed', ['error' => 'No printer IP configured.']);
+
             continue;
         }
 
         if (! $data) {
-            logLine("  SKIP: empty payload.");
+            logLine('  SKIP: empty payload.');
             apiPost(API_BASE.'/jobs/'.$id.'/failed', ['error' => 'Empty payload.']);
+
             continue;
         }
 
         $ok = sendToPrinter($ip, $port, $data, $ms);
 
         if ($ok) {
-            logLine("  SUCCESS");
+            logLine('  SUCCESS');
             apiPost(API_BASE.'/jobs/'.$id.'/printed');
         } else {
-            logLine("  FAILED");
+            logLine('  FAILED');
             apiPost(API_BASE.'/jobs/'.$id.'/failed', ['error' => "Cannot connect to {$ip}:{$port}"]);
         }
     }

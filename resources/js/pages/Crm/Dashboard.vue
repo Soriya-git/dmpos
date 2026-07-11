@@ -16,8 +16,8 @@ import {
 } from 'lucide-vue-next';
 import { computed, type Component } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
 import { dashboard } from '@/routes';
+import { type BreadcrumbItem } from '@/types';
 
 type OperationLink = {
     title: string;

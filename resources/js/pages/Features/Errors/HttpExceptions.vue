@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, onUnmounted } from 'vue';
+import {
+    httpException403,
+    httpException404,
+    httpException500,
+    httpExceptionUnhandled,
+} from '@/actions/App/Http/Controllers/Feature/NetworkErrorController';
 import CodeBlock from '@/components/CodeBlock.vue';
 import FeatureCard from '@/components/FeatureCard.vue';
 import FeatureHeader from '@/components/FeatureHeader.vue';
@@ -8,12 +14,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import {
-    httpException403,
-    httpException404,
-    httpException500,
-    httpExceptionUnhandled,
-} from '@/actions/App/Http/Controllers/Feature/NetworkErrorController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Error Handling' },

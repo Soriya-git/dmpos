@@ -864,16 +864,37 @@ function submitPanel() {
 
                         <template v-if="panelKind === 'menus'">
                             <label class="block">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">Khmer Name</span>
-                                <Input v-model="menuForm.name_kh" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter Khmer name" />
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                    >Khmer Name</span
+                                >
+                                <Input
+                                    v-model="menuForm.name_kh"
+                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                    placeholder="Enter Khmer name"
+                                />
                             </label>
                             <label class="block">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">Other Name</span>
-                                <Input v-model="menuForm.name_other" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter another foreign name" />
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                    >Other Name</span
+                                >
+                                <Input
+                                    v-model="menuForm.name_other"
+                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                    placeholder="Enter another foreign name"
+                                />
                             </label>
                             <label class="block">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">Nickname</span>
-                                <Input v-model="menuForm.nickname" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter a quick-search nickname" />
+                                <span
+                                    class="text-[10px] font-bold text-slate-400 uppercase"
+                                    >Nickname</span
+                                >
+                                <Input
+                                    v-model="menuForm.nickname"
+                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                    placeholder="Enter a quick-search nickname"
+                                />
                             </label>
                         </template>
 

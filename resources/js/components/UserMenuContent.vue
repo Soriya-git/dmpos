@@ -21,8 +21,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import UserInfo from '@/components/UserInfo.vue';
 import { useAppearance } from '@/composables/useAppearance';
-import type { User } from '@/types';
 import { logout } from '@/routes';
+import type { User } from '@/types';
 
 type Props = {
     user: User;

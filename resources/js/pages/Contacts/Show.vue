@@ -12,8 +12,8 @@ import {
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
 import contacts from '@/routes/contacts';
+import { type BreadcrumbItem } from '@/types';
 import type { App, Inertia } from '@/wayfinder/types';
 
 const props = defineProps<

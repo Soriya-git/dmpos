@@ -12,7 +12,7 @@ import {
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:21
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:22
  * @route "http://localhost/purchase"
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -27,7 +27,7 @@ index.definition = {
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:21
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:22
  * @route "http://localhost/purchase"
  */
 index.url = (options?: RouteQueryOptions) => {
@@ -36,7 +36,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:21
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:22
  * @route "http://localhost/purchase"
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -46,7 +46,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:21
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:22
  * @route "http://localhost/purchase"
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -56,7 +56,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:21
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:22
  * @route "http://localhost/purchase"
  */
 const indexForm = (
@@ -68,7 +68,7 @@ const indexForm = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:21
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:22
  * @route "http://localhost/purchase"
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -78,7 +78,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::index
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:21
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:22
  * @route "http://localhost/purchase"
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -89,7 +89,7 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 index.form = indexForm;
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::store
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:100
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:101
  * @route "http://localhost/purchase"
  */
 export const store = (
@@ -106,7 +106,7 @@ store.definition = {
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::store
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:100
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:101
  * @route "http://localhost/purchase"
  */
 store.url = (options?: RouteQueryOptions) => {
@@ -115,7 +115,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::store
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:100
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:101
  * @route "http://localhost/purchase"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -125,7 +125,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::store
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:100
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:101
  * @route "http://localhost/purchase"
  */
 const storeForm = (
@@ -137,7 +137,7 @@ const storeForm = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::store
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:100
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:101
  * @route "http://localhost/purchase"
  */
 storeForm.post = (
@@ -150,7 +150,7 @@ storeForm.post = (
 store.form = storeForm;
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::update
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:274
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:275
  * @route "http://localhost/purchase/{purchaseOrder}"
  */
 export const update = (
@@ -172,7 +172,7 @@ update.definition = {
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::update
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:274
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:275
  * @route "http://localhost/purchase/{purchaseOrder}"
  */
 update.url = (
@@ -215,7 +215,7 @@ update.url = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::update
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:274
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:275
  * @route "http://localhost/purchase/{purchaseOrder}"
  */
 update.patch = (
@@ -232,7 +232,7 @@ update.patch = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::update
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:274
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:275
  * @route "http://localhost/purchase/{purchaseOrder}"
  */
 const updateForm = (
@@ -249,7 +249,7 @@ const updateForm = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::update
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:274
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:275
  * @route "http://localhost/purchase/{purchaseOrder}"
  */
 updateForm.patch = (
@@ -267,7 +267,7 @@ updateForm.patch = (
 update.form = updateForm;
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::approve
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:172
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:173
  * @route "http://localhost/purchase/{purchaseOrder}/approve"
  */
 export const approve = (
@@ -289,7 +289,7 @@ approve.definition = {
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::approve
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:172
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:173
  * @route "http://localhost/purchase/{purchaseOrder}/approve"
  */
 approve.url = (
@@ -332,7 +332,7 @@ approve.url = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::approve
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:172
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:173
  * @route "http://localhost/purchase/{purchaseOrder}/approve"
  */
 approve.patch = (
@@ -349,7 +349,7 @@ approve.patch = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::approve
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:172
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:173
  * @route "http://localhost/purchase/{purchaseOrder}/approve"
  */
 const approveForm = (
@@ -366,7 +366,7 @@ const approveForm = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::approve
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:172
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:173
  * @route "http://localhost/purchase/{purchaseOrder}/approve"
  */
 approveForm.patch = (
@@ -384,7 +384,7 @@ approveForm.patch = (
 approve.form = approveForm;
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::reject
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:185
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:186
  * @route "http://localhost/purchase/{purchaseOrder}/reject"
  */
 export const reject = (
@@ -406,7 +406,7 @@ reject.definition = {
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::reject
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:185
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:186
  * @route "http://localhost/purchase/{purchaseOrder}/reject"
  */
 reject.url = (
@@ -449,7 +449,7 @@ reject.url = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::reject
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:185
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:186
  * @route "http://localhost/purchase/{purchaseOrder}/reject"
  */
 reject.patch = (
@@ -466,7 +466,7 @@ reject.patch = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::reject
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:185
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:186
  * @route "http://localhost/purchase/{purchaseOrder}/reject"
  */
 const rejectForm = (
@@ -483,7 +483,7 @@ const rejectForm = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::reject
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:185
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:186
  * @route "http://localhost/purchase/{purchaseOrder}/reject"
  */
 rejectForm.patch = (
@@ -501,7 +501,7 @@ rejectForm.patch = (
 reject.form = rejectForm;
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::cancel
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:198
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:199
  * @route "http://localhost/purchase/{purchaseOrder}/cancel"
  */
 export const cancel = (
@@ -523,7 +523,7 @@ cancel.definition = {
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::cancel
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:198
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:199
  * @route "http://localhost/purchase/{purchaseOrder}/cancel"
  */
 cancel.url = (
@@ -566,7 +566,7 @@ cancel.url = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::cancel
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:198
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:199
  * @route "http://localhost/purchase/{purchaseOrder}/cancel"
  */
 cancel.patch = (
@@ -583,7 +583,7 @@ cancel.patch = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::cancel
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:198
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:199
  * @route "http://localhost/purchase/{purchaseOrder}/cancel"
  */
 const cancelForm = (
@@ -600,7 +600,7 @@ const cancelForm = (
 
 /**
  * @see \App\Http\Controllers\Purchase\PurchaseOrderController::cancel
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:198
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/Purchase/PurchaseOrderController.php:199
  * @route "http://localhost/purchase/{purchaseOrder}/cancel"
  */
 cancelForm.patch = (

@@ -6,8 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
 import contactRoutes from '@/routes/contacts';
+import { type BreadcrumbItem } from '@/types';
 import type { App, Inertia } from '@/wayfinder/types';
 
 type CursorPaginated<T> = {
