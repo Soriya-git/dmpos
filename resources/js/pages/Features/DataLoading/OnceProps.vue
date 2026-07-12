@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
+import { onceProps } from '@/actions/App/Http/Controllers/Feature/DataLoadingController';
 import CodeBlock from '@/components/CodeBlock.vue';
 import FeatureCard from '@/components/FeatureCard.vue';
 import FeatureHeader from '@/components/FeatureHeader.vue';
@@ -7,7 +8,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { onceProps } from '@/actions/App/Http/Controllers/Feature/DataLoadingController';
 
 const props = defineProps<{
     page: number;

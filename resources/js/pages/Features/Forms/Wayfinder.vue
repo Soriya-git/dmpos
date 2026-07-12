@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { Form, Head, Link, router, useForm } from '@inertiajs/vue3';
+import {
+    submitUseForm,
+    submitFormComponent,
+    toggleFavorite,
+    wayfinder as wayfinderAction,
+    storeAccount,
+} from '@/actions/App/Http/Controllers/Feature/FormController';
 import CodeBlock from '@/components/CodeBlock.vue';
 import FeatureCard from '@/components/FeatureCard.vue';
 import FeatureHeader from '@/components/FeatureHeader.vue';
@@ -8,15 +15,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
-import {
-    submitUseForm,
-    submitFormComponent,
-    toggleFavorite,
-    wayfinder as wayfinderAction,
-    storeAccount,
-} from '@/actions/App/Http/Controllers/Feature/FormController';
 import contacts from '@/routes/contacts';
+import { type BreadcrumbItem } from '@/types';
 import type { Inertia } from '@/wayfinder/types';
 
 defineProps<Inertia.Pages.Features.Forms.Wayfinder>();

@@ -778,15 +778,44 @@ function cancelUnit(record: UnitRecord) {
                         </label>
 
                         <label class="block">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">Khmer Name</span>
-                            <Input v-model="itemForm.name_kh" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter Khmer name" />
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase"
+                                >Khmer Name</span
+                            >
+                            <Input
+                                v-model="itemForm.name_kh"
+                                class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                placeholder="Enter Khmer name"
+                            />
                         </label>
 
                         <label class="block">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">Other Name</span>
-                            <Input v-model="itemForm.name_other" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter another foreign name" />
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase"
+                                >Other Name</span
+                            >
+                            <Input
+                                v-model="itemForm.name_other"
+                                class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                placeholder="Enter another foreign name"
+                            />
                         </label>
 
+<<<<<<< HEAD
+=======
+                        <label class="block">
+                            <span
+                                class="text-[10px] font-bold text-slate-400 uppercase"
+                                >Nickname</span
+                            >
+                            <Input
+                                v-model="itemForm.nickname"
+                                class="mt-1 text-sm focus-visible:ring-[#007882]"
+                                placeholder="Enter a quick-search nickname"
+                            />
+                        </label>
+
+>>>>>>> 5261e5d225e0dd5e882aec18358b989cb2251b46
                         <div class="grid gap-3 sm:grid-cols-2">
                             <label class="block">
                                 <span

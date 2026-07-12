@@ -5,8 +5,8 @@ import { ref, watch } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
 import organizationRoutes from '@/routes/organizations';
+import { type BreadcrumbItem } from '@/types';
 import type { App, Inertia } from '@/wayfinder/types';
 
 type Paginated<T> = {

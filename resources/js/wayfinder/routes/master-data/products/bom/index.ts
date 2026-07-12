@@ -10,7 +10,7 @@ import {
 
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeBom
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php:117
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php:159
  * @route "http://localhost/master-data/products/bom"
  */
 export const store = (
@@ -27,7 +27,7 @@ store.definition = {
 
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeBom
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php:117
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php:159
  * @route "http://localhost/master-data/products/bom"
  */
 store.url = (options?: RouteQueryOptions) => {
@@ -36,7 +36,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeBom
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php:117
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php:159
  * @route "http://localhost/master-data/products/bom"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -46,7 +46,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeBom
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php:117
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php:159
  * @route "http://localhost/master-data/products/bom"
  */
 const storeForm = (
@@ -58,7 +58,7 @@ const storeForm = (
 
 /**
  * @see \App\Http\Controllers\MasterData\ProductController::storeBom
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php:117
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php:159
  * @route "http://localhost/master-data/products/bom"
  */
 storeForm.post = (

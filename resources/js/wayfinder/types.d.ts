@@ -109,6 +109,7 @@ export namespace App {
             created_at: string | null;
             updated_at: string | null;
             vat_number: string | null;
+            print_agent_token: string | null;
             company?: App.Models.Company | null;
             pos_terminals?: App.Models.PosTerminal[];
             users?: App.Models.User[];
@@ -445,6 +446,9 @@ export namespace App {
             item_id: number | null;
             bom_header_id: number | null;
             name: string;
+            name_kh: string | null;
+            name_other: string | null;
+            nickname: string | null;
             code: string | null;
             menu_type: string;
             base_price: number;
@@ -622,6 +626,9 @@ export namespace App {
             branch_id: number | null;
             unit_id: number;
             name: string;
+            name_kh: string | null;
+            name_other: string | null;
+            nickname: string | null;
             code: string | null;
             size: string | null;
             item_type: string;
@@ -2517,6 +2524,29 @@ export namespace App {
                          */
                         export type Request = {
                             name: string;
+                            name_kh?: string | null;
+                            name_other?: string | null;
+                            nickname?: string | null;
+                            code?: string | null;
+                            branch_id?: string | null;
+                            unit_id: string;
+                            item_type: string;
+                            cost: number;
+                            minimum_stock_qty?: number | null;
+                            is_stockable?: boolean;
+                            description?: string | null;
+                        };
+                    }
+
+                    export namespace UpdateItem {
+                        /**
+                         * @see [\App\Http\Controllers\MasterData\ProductController::updateItem](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/ProductController.php)
+                         */
+                        export type Request = {
+                            name: string;
+                            name_kh?: string | null;
+                            name_other?: string | null;
+                            nickname?: string | null;
                             code?: string | null;
                             branch_id?: string | null;
                             unit_id: string;
@@ -2646,6 +2676,9 @@ export namespace App {
                          */
                         export type Request = {
                             name: string;
+                            name_kh?: string | null;
+                            name_other?: string | null;
+                            nickname?: string | null;
                             code?: string | null;
                             menu_category_id?: string | null;
                             branch_id?: string | null;
@@ -2665,6 +2698,9 @@ export namespace App {
                          * @see [\App\Http\Controllers\MasterData\MenuController::updateMenu](/home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php)
                          */
                         export type Request = {
+                            name_kh?: string | null;
+                            name_other?: string | null;
+                            nickname?: string | null;
                             printer_id?: string | null;
                             print_route: string;
                         };

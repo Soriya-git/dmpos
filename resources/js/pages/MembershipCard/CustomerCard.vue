@@ -194,7 +194,6 @@ function goTransactions(card: CustomerCard | null = selectedCard.value) {
                                     activity.
                                 </p>
                             </div>
-
                         </div>
 
                         <div class="mt-5 grid gap-3 md:grid-cols-[1fr_180px]">

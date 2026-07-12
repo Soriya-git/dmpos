@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, useHttp } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { useHttpApi } from '@/actions/App/Http/Controllers/Feature/HttpController';
 import CodeBlock from '@/components/CodeBlock.vue';
 import FeatureCard from '@/components/FeatureCard.vue';
 import FeatureHeader from '@/components/FeatureHeader.vue';
@@ -10,7 +11,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { useHttpApi } from '@/actions/App/Http/Controllers/Feature/HttpController';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'HTTP' }, { title: 'useHttp' }];
 

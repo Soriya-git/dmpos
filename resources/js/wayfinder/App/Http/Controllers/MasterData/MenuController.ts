@@ -89,7 +89,7 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 index.form = indexForm;
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:141
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:144
  * @route "http://localhost/master-data/menu/menus"
  */
 export const storeMenu = (
@@ -106,7 +106,7 @@ storeMenu.definition = {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:141
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:144
  * @route "http://localhost/master-data/menu/menus"
  */
 storeMenu.url = (options?: RouteQueryOptions) => {
@@ -115,7 +115,7 @@ storeMenu.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:141
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:144
  * @route "http://localhost/master-data/menu/menus"
  */
 storeMenu.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -125,7 +125,7 @@ storeMenu.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:141
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:144
  * @route "http://localhost/master-data/menu/menus"
  */
 const storeMenuForm = (
@@ -137,7 +137,7 @@ const storeMenuForm = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:141
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:144
  * @route "http://localhost/master-data/menu/menus"
  */
 storeMenuForm.post = (
@@ -150,7 +150,7 @@ storeMenuForm.post = (
 storeMenu.form = storeMenuForm;
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:194
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:200
  * @route "http://localhost/master-data/menu/menus/{menu}"
  */
 export const updateMenu = (
@@ -172,7 +172,7 @@ updateMenu.definition = {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:194
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:200
  * @route "http://localhost/master-data/menu/menus/{menu}"
  */
 updateMenu.url = (
@@ -212,7 +212,7 @@ updateMenu.url = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:194
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:200
  * @route "http://localhost/master-data/menu/menus/{menu}"
  */
 updateMenu.patch = (
@@ -229,7 +229,7 @@ updateMenu.patch = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:194
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:200
  * @route "http://localhost/master-data/menu/menus/{menu}"
  */
 const updateMenuForm = (
@@ -246,7 +246,7 @@ const updateMenuForm = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::updateMenu
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:194
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:200
  * @route "http://localhost/master-data/menu/menus/{menu}"
  */
 updateMenuForm.patch = (
@@ -264,7 +264,7 @@ updateMenuForm.patch = (
 updateMenu.form = updateMenuForm;
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:213
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:225
  * @route "http://localhost/master-data/menu/categories"
  */
 export const storeCategory = (
@@ -281,7 +281,7 @@ storeCategory.definition = {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:213
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:225
  * @route "http://localhost/master-data/menu/categories"
  */
 storeCategory.url = (options?: RouteQueryOptions) => {
@@ -290,7 +290,7 @@ storeCategory.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:213
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:225
  * @route "http://localhost/master-data/menu/categories"
  */
 storeCategory.post = (
@@ -302,7 +302,7 @@ storeCategory.post = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:213
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:225
  * @route "http://localhost/master-data/menu/categories"
  */
 const storeCategoryForm = (
@@ -314,7 +314,7 @@ const storeCategoryForm = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:213
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:225
  * @route "http://localhost/master-data/menu/categories"
  */
 storeCategoryForm.post = (
@@ -327,7 +327,7 @@ storeCategoryForm.post = (
 storeCategory.form = storeCategoryForm;
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storePrice
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:234
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:246
  * @route "http://localhost/master-data/menu/prices"
  */
 export const storePrice = (
@@ -344,7 +344,7 @@ storePrice.definition = {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storePrice
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:234
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:246
  * @route "http://localhost/master-data/menu/prices"
  */
 storePrice.url = (options?: RouteQueryOptions) => {
@@ -353,7 +353,7 @@ storePrice.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storePrice
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:234
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:246
  * @route "http://localhost/master-data/menu/prices"
  */
 storePrice.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -363,7 +363,7 @@ storePrice.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storePrice
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:234
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:246
  * @route "http://localhost/master-data/menu/prices"
  */
 const storePriceForm = (
@@ -375,7 +375,7 @@ const storePriceForm = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storePrice
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:234
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:246
  * @route "http://localhost/master-data/menu/prices"
  */
 storePriceForm.post = (

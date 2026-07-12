@@ -10,7 +10,7 @@ import {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:213
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:225
  * @route "http://localhost/master-data/menu/categories"
  */
 export const store = (
@@ -27,7 +27,7 @@ store.definition = {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:213
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:225
  * @route "http://localhost/master-data/menu/categories"
  */
 store.url = (options?: RouteQueryOptions) => {
@@ -36,7 +36,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:213
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:225
  * @route "http://localhost/master-data/menu/categories"
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -46,7 +46,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:213
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:225
  * @route "http://localhost/master-data/menu/categories"
  */
 const storeForm = (
@@ -58,7 +58,7 @@ const storeForm = (
 
 /**
  * @see \App\Http\Controllers\MasterData\MenuController::storeCategory
- * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:213
+ * @see /home/runner/work/dmpos/dmpos/app/Http/Controllers/MasterData/MenuController.php:225
  * @route "http://localhost/master-data/menu/categories"
  */
 storeForm.post = (

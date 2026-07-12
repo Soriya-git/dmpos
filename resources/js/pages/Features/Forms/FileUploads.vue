@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
 import { Upload, X } from 'lucide-vue-next';
+import { submitFileUploads } from '@/actions/App/Http/Controllers/Feature/FormController';
 import FeatureCard from '@/components/FeatureCard.vue';
 import FeatureHeader from '@/components/FeatureHeader.vue';
 import InputError from '@/components/InputError.vue';
@@ -9,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { submitFileUploads } from '@/actions/App/Http/Controllers/Feature/FormController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Forms' },
