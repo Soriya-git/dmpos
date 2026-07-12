@@ -65,6 +65,20 @@ class Branch extends Model
         return $this->hasMany(Menu::class);
     }
 
+    public function visibleMenus(): BelongsToMany
+    {
+        return $this->belongsToMany(Menu::class, 'menu_branch')
+            ->withPivot('nickname')
+            ->withTimestamps();
+    }
+
+    public function visibleItems(): BelongsToMany
+    {
+        return $this->belongsToMany(Item::class, 'item_branch')
+            ->withPivot('nickname')
+            ->withTimestamps();
+    }
+
     /** @return HasMany<MenuCategory, $this> */
     public function menuCategories(): HasMany
     {

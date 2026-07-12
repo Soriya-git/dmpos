@@ -50,6 +50,15 @@ return new class extends Migration
             $table->index(['item_id'], 'menus_item_idx');
             $table->index(['bom_header_id'], 'menus_bom_header_idx');
         });
+
+        Schema::create('menu_branch', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('menu_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('branch_id')->constrained()->cascadeOnDelete();
+            $table->string('nickname')->nullable();
+            $table->timestamps();
+            $table->unique(['menu_id', 'branch_id']);
+        });
     }
 
     /**
@@ -57,6 +66,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('menu_branch');
         Schema::dropIfExists('menus');
     }
 };

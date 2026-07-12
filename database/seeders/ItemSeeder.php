@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Company;
+use App\Models\Branch;
 use App\Models\Item;
 use App\Models\Unit;
 use Illuminate\Database\Seeder;
@@ -34,7 +35,7 @@ class ItemSeeder extends Seeder
             foreach ($items as $item) {
                 $unit = $this->unitFor((string) $item['primary unit']);
 
-                Item::updateOrCreate(
+                $masterItem = Item::updateOrCreate(
                     [
                         'company_id' => $company->id,
                         'branch_id' => null,
@@ -51,6 +52,14 @@ class ItemSeeder extends Seeder
                         'is_active' => true,
                         'description' => $item['description'] ?: null,
                     ]
+                );
+
+                $masterItem->branches()->sync(
+                    Branch::query()
+                        ->where('company_id', $company->id)
+                        ->pluck('id')
+                        ->mapWithKeys(fn ($branchId) => [$branchId => ['nickname' => null]])
+                        ->all()
                 );
             }
         });

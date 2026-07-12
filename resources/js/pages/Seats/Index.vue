@@ -97,7 +97,7 @@ const canCloseSelectedPosSession = computed(
 );
 const posActionLabel = computed(() => {
     if (canCloseSelectedPosSession.value) return 'CLOSE NOW';
-    if (hasAvailablePosTerminal.value) return 'OPEN ANOTHER';
+    if (hasAvailablePosTerminal.value) return 'OPEN';
     if (posIsOpen.value) return 'POS SESSION';
 
     return 'OPEN NOW';
@@ -225,6 +225,10 @@ function openPosSessionPage() {
     router.visit('/pos-sessions');
 }
 
+function openAnotherPosSessionPage() {
+    router.visit('/pos-sessions?open_new=1');
+}
+
 async function toggleFullscreen() {
     if (isFullscreen.value) {
         if (document.fullscreenElement) {
@@ -328,8 +332,7 @@ onBeforeUnmount(() => {
                                     v-if="hasAvailablePosTerminal"
                                     type="button"
                                     class="rounded-l-full bg-[#23AA8F] px-3 py-1.5 text-[10px] font-black tracking-wide text-white transition hover:bg-[#007882] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500"
-                                    :disabled="!canCloseSelectedPosSession"
-                                    @click="openPosSessionPage"
+                                    @click="openAnotherPosSessionPage"
                                 >
                                     Open Another Terminal
                                 </button>

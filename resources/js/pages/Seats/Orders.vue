@@ -8,7 +8,6 @@ import {
     Minimize2,
     MonitorCog,
     Pencil,
-    Power,
     Printer,
     ReceiptText,
     RotateCcw,
@@ -31,6 +30,8 @@ import Payment from '@/pages/Seats/Payment.vue';
 type MenuItem = {
     id: number;
     name: string;
+    master_name?: string | null;
+    nickname?: string | null;
     code?: string | null;
     image?: string | null;
     category_name?: string | null;
@@ -348,6 +349,20 @@ const menusById = computed(() => {
     return new Map(props.menus.map((menu) => [menu.id, menu]));
 });
 
+const filteredMenus = computed(() => {
+    const term = search.value.trim().toLowerCase();
+
+    if (!term) {
+        return props.menus;
+    }
+
+    return props.menus.filter((menu) =>
+        [menu.name, menu.master_name, menu.nickname, menu.code].some((value) =>
+            String(value ?? '').toLowerCase().includes(term),
+        ),
+    );
+});
+
 const tabs = computed(() => [
     {
         count: cartLineCount.value,
@@ -414,8 +429,8 @@ function applyFilters() {
     router.get(
         `/orders/${props.diningSession.id}/menu`,
         {
+            pos_session_id: props.posSession.id,
             category_id: categoryId.value || undefined,
-            search: search.value || undefined,
         },
         {
             preserveScroll: true,
@@ -431,7 +446,7 @@ function clearFilters() {
 
     router.get(
         `/orders/${props.diningSession.id}/menu`,
-        {},
+        { pos_session_id: props.posSession.id },
         {
             preserveScroll: true,
             preserveState: true,
@@ -969,16 +984,8 @@ onBeforeUnmount(() => {
                                 v-model="search"
                                 type="text"
                                 placeholder="Search products..."
-                                class="w-full rounded-xl border border-transparent bg-gray-50 py-2.5 pr-24 pl-10 text-sm transition outline-none focus:border-[#007882] focus:bg-white"
-                                @keyup.enter="applyFilters"
+                                class="w-full rounded-xl border border-transparent bg-gray-50 py-2.5 pr-4 pl-10 text-sm transition outline-none focus:border-[#007882] focus:bg-white"
                             />
-                            <button
-                                type="button"
-                                class="absolute top-1/2 right-2 -translate-y-1/2 rounded-lg px-3 py-1.5 text-[10px] font-black text-[#007882] hover:bg-[#23AA8F]/10"
-                                @click="applyFilters"
-                            >
-                                SEARCH
-                            </button>
                         </div>
 
                         <button
@@ -996,18 +1003,13 @@ onBeforeUnmount(() => {
                         </button>
 
                         <button
+                            v-if="!posIsOpen"
                             type="button"
-                            class="hidden h-9 shrink-0 items-center gap-2 rounded-xl px-3 text-xs font-black text-white shadow-lg transition sm:inline-flex"
-                            :class="
-                                posIsOpen
-                                    ? 'bg-red-600 shadow-red-600/20 hover:bg-red-700'
-                                    : 'bg-[#23AA8F] shadow-[#23AA8F]/25 hover:bg-[#007882]'
-                            "
+                            class="hidden h-9 shrink-0 items-center gap-2 rounded-xl bg-[#23AA8F] px-3 text-xs font-black text-white shadow-lg shadow-[#23AA8F]/25 transition hover:bg-[#007882] sm:inline-flex"
                             @click="openPosSessionPage"
                         >
-                            <Power v-if="posIsOpen" class="h-4 w-4" />
-                            <MonitorCog v-else class="h-4 w-4" />
-                            {{ posIsOpen ? 'CLOSE NOW' : 'OPEN NOW' }}
+                            <MonitorCog class="h-4 w-4" />
+                            OPEN NOW
                         </button>
                     </div>
 
@@ -1036,7 +1038,7 @@ onBeforeUnmount(() => {
                         class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
                     >
                         <PosMenuCard
-                            v-for="menu in menus"
+                            v-for="menu in filteredMenus"
                             :key="menu.id"
                             :menu="menu"
                             :image-src="imageUrl(menu.image)"
@@ -1051,7 +1053,7 @@ onBeforeUnmount(() => {
                     </div>
 
                     <div
-                        v-if="menus.length === 0"
+                        v-if="filteredMenus.length === 0"
                         class="flex min-h-64 flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 bg-white p-10 text-center text-gray-400"
                     >
                         <Utensils class="mb-3 h-10 w-10" />

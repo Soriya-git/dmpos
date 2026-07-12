@@ -37,6 +37,14 @@ return new class extends Migration
 
             $table->index(['output_item_id', 'status'], 'bom_output_item_status_idx');
         });
+
+        Schema::create('bom_header_branch', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('bom_header_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('branch_id')->constrained()->cascadeOnDelete();
+            $table->timestamps();
+            $table->unique(['bom_header_id', 'branch_id']);
+        });
     }
 
     /**
@@ -44,6 +52,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('bom_header_branch');
         Schema::dropIfExists('bom_headers');
     }
 };

@@ -21,10 +21,15 @@ class MenuController
     public function index(Request $request): Response
     {
         $companyId = $request->user()?->company_id;
+        $companyBranches = Branch::query()
+            ->when($companyId, fn ($query) => $query->where('company_id', $companyId))
+            ->orderBy('name')
+            ->get(['id', 'name', 'code']);
 
         $menus = Menu::query()
             ->with([
                 'branch:id,name,code',
+                'branches:id,name,code',
                 'menuCategory:id,name,code',
                 'defaultPrice:id,menu_id,price',
                 'item:id,name,code',
@@ -44,6 +49,13 @@ class MenuController
                 'nickname' => $menu->nickname,
                 'category' => $menu->menuCategory?->name ?? 'Uncategorized',
                 'branch' => $menu->branch?->name ?? 'All Branches',
+                'branches' => $menu->branch
+                    ? [$menu->branch->name]
+                    : $menu->branches->pluck('name')->values()->all(),
+                'branchIds' => $menu->branches->pluck('id')->all(),
+                'branchNicknames' => $menu->branches->mapWithKeys(
+                    fn (Branch $branch) => [$branch->id => $branch->pivot->nickname]
+                )->all(),
                 'type' => $menu->menu_type,
                 'item' => $menu->item?->name,
                 'bom' => $menu->bomHeader?->name,
@@ -119,10 +131,11 @@ class MenuController
                     'outputItemId' => $bom->output_item_id,
                     'outputItemName' => $bom->outputItem?->name,
                 ]),
-            'branchOptions' => Branch::query()
-                ->when($companyId, fn ($query) => $query->where('company_id', $companyId))
-                ->orderBy('name')
-                ->get(['id', 'name', 'code']),
+            'branchOptions' => $companyBranches->map(fn (Branch $branch): array => [
+                'id' => $branch->id,
+                'name' => $branch->name,
+                'code' => $branch->code,
+            ])->values(),
             'printerOptions' => Printer::query()
                 ->when($companyId, fn ($query) => $query->where('company_id', $companyId))
                 ->where('is_active', true)
@@ -152,7 +165,10 @@ class MenuController
             'nickname' => ['nullable', 'string', 'max:255'],
             'code' => ['nullable', 'string', 'max:255'],
             'menu_category_id' => ['nullable', Rule::exists('menu_categories', 'id')->where('company_id', $companyId)],
-            'branch_id' => ['nullable', Rule::exists('branches', 'id')->where('company_id', $companyId)],
+            'branch_ids' => ['required', 'array', 'min:1'],
+            'branch_ids.*' => [Rule::exists('branches', 'id')->where('company_id', $companyId)],
+            'branch_nicknames' => ['nullable', 'array'],
+            'branch_nicknames.*' => ['nullable', 'string', 'max:255'],
             'menu_type' => ['required', Rule::in(['product', 'service'])],
             'base_price' => ['required', 'numeric', 'min:0'],
             'item_id' => ['nullable', Rule::exists('items', 'id')->where('company_id', $companyId)],
@@ -171,27 +187,29 @@ class MenuController
         }
 
         $menu = Menu::create([
-            ...$data,
+            ...collect($data)->except(['branch_ids', 'branch_nicknames'])->all(),
             'company_id' => $companyId,
-            'branch_id' => $data['branch_id'] ?? $branchId,
+            'branch_id' => null,
             'is_active' => true,
             'is_available' => $data['is_available'] ?? true,
             'print_route' => $data['print_route'],
             'printer_id' => $data['printer_id'] ?: null,
         ]);
+        $this->syncMenuBranches($menu, $data);
 
-        $defaultPriceList = $this->defaultPriceList($companyId, (int) $menu->branch_id);
-
-        if ($defaultPriceList) {
-            MenuPrice::create([
-                'menu_id' => $menu->id,
-                'branch_id' => $menu->branch_id,
-                'menu_price_list_id' => $defaultPriceList->id,
-                'price_name' => $defaultPriceList->name,
-                'price' => $menu->base_price,
-                'is_default' => true,
-                'is_active' => true,
-            ]);
+        foreach ($data['branch_ids'] as $visibleBranchId) {
+            $defaultPriceList = $this->defaultPriceList($companyId, (int) $visibleBranchId);
+            if ($defaultPriceList) {
+                MenuPrice::create([
+                    'menu_id' => $menu->id,
+                    'branch_id' => $visibleBranchId,
+                    'menu_price_list_id' => $defaultPriceList->id,
+                    'price_name' => $defaultPriceList->name,
+                    'price' => $menu->base_price,
+                    'is_default' => true,
+                    'is_active' => true,
+                ]);
+            }
         }
 
         return back()->with('success', 'Menu has been created.');
@@ -207,9 +225,14 @@ class MenuController
             'name_kh' => ['nullable', 'string', 'max:255'],
             'name_other' => ['nullable', 'string', 'max:255'],
             'nickname' => ['nullable', 'string', 'max:255'],
+            'branch_ids' => ['required', 'array', 'min:1'],
+            'branch_ids.*' => [Rule::exists('branches', 'id')->where('company_id', $companyId)],
+            'branch_nicknames' => ['nullable', 'array'],
+            'branch_nicknames.*' => ['nullable', 'string', 'max:255'],
             'printer_id' => ['nullable', Rule::exists('printers', 'id')->where('company_id', $companyId)],
             'print_route' => ['required', Rule::in(['none', 'stock', 'kitchen', 'bar', 'cashier', 'custom'])],
         ]);
+        $this->syncMenuBranches($menu, $data);
 
         $menu->update([
             'name_kh' => $data['name_kh'] ?? null,
@@ -220,6 +243,14 @@ class MenuController
         ]);
 
         return back()->with('success', 'Menu printer routing has been updated.');
+    }
+
+    private function syncMenuBranches(Menu $menu, array $data): void
+    {
+        $nicknames = $data['branch_nicknames'] ?? [];
+        $menu->branches()->sync(collect($data['branch_ids'])->mapWithKeys(
+            fn ($branchId) => [$branchId => ['nickname' => $nicknames[$branchId] ?? null]]
+        )->all());
     }
 
     public function storeCategory(Request $request)

@@ -62,21 +62,12 @@ class SeatOrderController extends Controller
         $search = $request->query('search');
 
         $menus = Menu::query()
-            ->with(['menuCategory', 'prices'])
+            ->with(['menuCategory', 'prices', 'branches'])
             ->where('company_id', $activePosSession->company_id)
-            ->where(function ($q) use ($activePosSession) {
-                $q->whereNull('branch_id')
-                    ->orWhere('branch_id', $activePosSession->branch_id);
-            })
+            ->whereHas('branches', fn ($q) => $q->whereKey($activePosSession->branch_id))
             ->where('is_active', true)
             ->where('is_available', true)
             ->when($categoryId, fn ($q) => $q->where('menu_category_id', $categoryId))
-            ->when($search, function ($q) use ($search) {
-                $q->where(function ($qq) use ($search) {
-                    $qq->where('name', 'like', "%{$search}%")
-                        ->orWhere('code', 'like', "%{$search}%");
-                });
-            })
             ->orderBy('name')
             ->get()
             ->map(function ($menu) use ($diningSession, $activePosSession) {
@@ -86,9 +77,13 @@ class SeatOrderController extends Controller
                     $activePosSession->branch_id
                 );
 
+                $branchNickname = $menu->branches->firstWhere('id', $activePosSession->branch_id)?->pivot?->nickname;
+
                 return [
                     'id' => $menu->id,
                     'name' => $menu->name,
+                    'master_name' => $menu->name,
+                    'nickname' => $branchNickname,
                     'code' => $menu->code,
                     'image' => $menu->image,
                     'category_name' => $menu->menuCategory?->name,

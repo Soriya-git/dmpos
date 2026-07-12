@@ -94,6 +94,7 @@ class BomSeeder extends Seeder
         }
 
         $bomHeader = $this->bomHeaderFor($company, $branch, $outputItem, $first);
+        $bomHeader->branches()->syncWithoutDetaching([$branch->id]);
 
         BomLine::query()
             ->where('bom_header_id', $bomHeader->id)
@@ -224,7 +225,7 @@ class BomSeeder extends Seeder
 
         $data = [
             'company_id' => $company->id,
-            'branch_id' => $branch->id,
+            'branch_id' => null,
             'output_item_id' => $outputItem->id,
             'name' => $bomName,
             'output_quantity' => $this->decimal($row['output_quantity'] ?? 1, 1),
@@ -240,7 +241,6 @@ class BomSeeder extends Seeder
 
         $existing = BomHeader::query()
             ->where('company_id', $company->id)
-            ->where('branch_id', $branch->id)
             ->where('output_item_id', $outputItem->id)
             ->where('name', $bomName)
             ->first();
@@ -263,7 +263,7 @@ class BomSeeder extends Seeder
 
         $menu = Menu::query()
             ->where('company_id', $company->id)
-            ->where('branch_id', $branch->id)
+            ->whereHas('branches', fn ($query) => $query->whereKey($branch->id))
             ->where(function ($query) use ($menuName, $outputItem): void {
                 $query->where('item_id', $outputItem->id);
 

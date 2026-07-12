@@ -16,6 +16,8 @@ export type ItemRecord = {
     nameOther: string | null;
     nickname: string | null;
     branchId: number | null;
+    branchIds: number[];
+    branchNicknames: Record<number, string | null>;
     unitId: number;
     itemType: string;
     cost: string;
@@ -32,6 +34,7 @@ export type BomRecord = {
     code: string;
     targetProduct: string;
     components: string;
+    branchIds: number[];
     status: ApprovalStatus;
 };
 

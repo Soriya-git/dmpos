@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class BomHeader extends Model
 {
@@ -22,6 +23,12 @@ class BomHeader extends Model
     public function branch()
     {
         return $this->belongsTo(Branch::class);
+    }
+
+    public function branches(): BelongsToMany
+    {
+        return $this->belongsToMany(Branch::class, 'bom_header_branch')
+            ->withTimestamps();
     }
 
     public function outputItem()

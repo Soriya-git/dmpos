@@ -24,7 +24,7 @@ class ProductController extends Controller
 
         return Inertia::render('MasterData/Products', [
             'items' => Item::query()
-                ->with(['branch:id,name,code', 'unit:id,name,code'])
+                ->with(['branches:id,name,code', 'unit:id,name,code'])
                 ->when($companyId, fn ($query) => $query->where('company_id', $companyId))
                 ->orderBy('name')
                 ->get()
@@ -36,6 +36,10 @@ class ProductController extends Controller
                     'nameOther' => $item->name_other,
                     'nickname' => $item->nickname,
                     'branchId' => $item->branch_id,
+                    'branchIds' => $item->branches->pluck('id')->all(),
+                    'branchNicknames' => $item->branches->mapWithKeys(
+                        fn (Branch $branch) => [$branch->id => $branch->pivot->nickname]
+                    )->all(),
                     'unitId' => $item->unit_id,
                     'itemType' => $item->item_type,
                     'cost' => (string) $item->cost,
@@ -47,7 +51,7 @@ class ProductController extends Controller
                     'status' => $item->is_active ? 'approved' : 'cancelled',
                 ]),
             'bom' => BomHeader::query()
-                ->with(['outputItem:id,name,code', 'lines.item:id,name,code', 'lines.unit:id,name,code'])
+                ->with(['branches:id,name,code', 'outputItem:id,name,code', 'lines.item:id,name,code', 'lines.unit:id,name,code'])
                 ->when($companyId, fn ($query) => $query->where('company_id', $companyId))
                 ->orderBy('name')
                 ->get()
@@ -58,6 +62,7 @@ class ProductController extends Controller
                     'components' => $bom->lines
                         ->map(fn (BomLine $line): string => trim(($line->item?->name ?? 'Item').' '.number_format((float) $line->quantity, 4).' '.($line->unit?->code ?? '')))
                         ->implode(', '),
+                    'branchIds' => $bom->branches->pluck('id')->all(),
                     'status' => $bom->status === 'active' ? 'approved' : ($bom->status === 'inactive' ? 'cancelled' : 'draft'),
                 ]),
             'units' => Unit::query()
@@ -98,7 +103,10 @@ class ProductController extends Controller
             'name_other' => ['nullable', 'string', 'max:255'],
             'nickname' => ['nullable', 'string', 'max:255'],
             'code' => ['nullable', 'string', 'max:255'],
-            'branch_id' => ['nullable', Rule::exists('branches', 'id')->where('company_id', $companyId)],
+            'branch_ids' => ['required', 'array', 'min:1'],
+            'branch_ids.*' => [Rule::exists('branches', 'id')->where('company_id', $companyId)],
+            'branch_nicknames' => ['nullable', 'array'],
+            'branch_nicknames.*' => ['nullable', 'string', 'max:255'],
             'unit_id' => ['required', Rule::exists('units', 'id')],
             'item_type' => ['required', Rule::in([
                 'raw_material',
@@ -115,14 +123,15 @@ class ProductController extends Controller
             'description' => ['nullable', 'string'],
         ]);
 
-        Item::create([
-            ...$data,
+        $item = Item::create([
+            ...collect($data)->except(['branch_ids', 'branch_nicknames'])->all(),
             'company_id' => $companyId,
-            'branch_id' => $data['branch_id'] ?? $branchId,
+            'branch_id' => null,
             'minimum_stock_qty' => $data['minimum_stock_qty'] ?? 0,
             'is_stockable' => $data['is_stockable'] ?? true,
             'is_active' => true,
         ]);
+        $this->syncItemBranches($item, $data);
 
         return back()->with('success', 'Item has been created.');
     }
@@ -139,7 +148,10 @@ class ProductController extends Controller
             'name_other' => ['nullable', 'string', 'max:255'],
             'nickname' => ['nullable', 'string', 'max:255'],
             'code' => ['nullable', 'string', 'max:255'],
-            'branch_id' => ['nullable', Rule::exists('branches', 'id')->where('company_id', $companyId)],
+            'branch_ids' => ['required', 'array', 'min:1'],
+            'branch_ids.*' => [Rule::exists('branches', 'id')->where('company_id', $companyId)],
+            'branch_nicknames' => ['nullable', 'array'],
+            'branch_nicknames.*' => ['nullable', 'string', 'max:255'],
             'unit_id' => ['required', Rule::exists('units', 'id')],
             'item_type' => ['required', Rule::in([
                 'raw_material', 'ingredient', 'drink', 'finished_product',
@@ -151,7 +163,8 @@ class ProductController extends Controller
             'description' => ['nullable', 'string'],
         ]);
 
-        $item->update($data);
+        $item->update(collect($data)->except(['branch_ids', 'branch_nicknames'])->all());
+        $this->syncItemBranches($item, $data);
 
         return back()->with('success', 'Item has been updated.');
     }
@@ -163,7 +176,8 @@ class ProductController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'bom_no' => ['nullable', 'string', 'max:255', 'unique:bom_headers,bom_no'],
-            'branch_id' => ['nullable', Rule::exists('branches', 'id')->where('company_id', $companyId)],
+            'branch_ids' => ['required', 'array', 'min:1'],
+            'branch_ids.*' => [Rule::exists('branches', 'id')->where('company_id', $companyId)],
             'output_item_id' => ['required', Rule::exists('items', 'id')->where('company_id', $companyId)],
             'output_quantity' => ['required', 'numeric', 'gt:0'],
             'status' => ['required', Rule::in(['draft', 'active', 'inactive'])],
@@ -180,7 +194,7 @@ class ProductController extends Controller
         DB::transaction(function () use ($data, $companyId, $branchId) {
             $bom = BomHeader::create([
                 'company_id' => $companyId,
-                'branch_id' => $data['branch_id'] ?? $branchId,
+                'branch_id' => null,
                 'output_item_id' => $data['output_item_id'],
                 'bom_no' => $data['bom_no'] ?: DocumentNumber::make(BomHeader::class, 'bom_no', 'BM'),
                 'name' => $data['name'],
@@ -188,6 +202,7 @@ class ProductController extends Controller
                 'status' => $data['status'],
                 'note' => $data['note'] ?? null,
             ]);
+            $bom->branches()->sync($data['branch_ids']);
 
             foreach ($data['lines'] as $line) {
                 $bom->lines()->create([
@@ -202,6 +217,14 @@ class ProductController extends Controller
         });
 
         return back()->with('success', 'BOM has been created.');
+    }
+
+    private function syncItemBranches(Item $item, array $data): void
+    {
+        $nicknames = $data['branch_nicknames'] ?? [];
+        $item->branches()->sync(collect($data['branch_ids'])->mapWithKeys(
+            fn ($branchId) => [$branchId => ['nickname' => $nicknames[$branchId] ?? null]]
+        )->all());
     }
 
     private function scope(Request $request): array

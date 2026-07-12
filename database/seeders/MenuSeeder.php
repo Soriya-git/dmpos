@@ -19,14 +19,12 @@ class MenuSeeder extends Seeder
             return;
         }
 
-        Branch::query()
-            ->with('company')
+        Company::query()
+            ->with('branches')
             ->orderBy('id')
             ->get()
-            ->each(function (Branch $branch): void {
-                $company = $branch->company;
-
-                if (! $company) {
+            ->each(function (Company $company): void {
+                if ($company->branches->isEmpty()) {
                     return;
                 }
 
@@ -39,18 +37,18 @@ class MenuSeeder extends Seeder
                     ->get();
 
                 foreach ($items as $item) {
-                    $category = $this->categoryFor($company, $branch, $item);
+                    $category = $this->categoryFor($company, $item);
                     $menu = Menu::query()->updateOrCreate(
                         [
                             'company_id' => $company->id,
-                            'branch_id' => $branch->id,
-                            'code' => $this->menuCode($branch, $item),
+                            'branch_id' => null,
+                            'code' => $item->code,
                         ],
                         [
                             'menu_category_id' => $category->id,
                             'item_id' => $item->id,
                             'bom_header_id' => null,
-                            'printer_id' => $item->item_type === 'drink' ? 3 : null,
+                            'printer_id' => null,
                             'print_route' => $item->item_type === 'drink' ? 'stock' : 'kitchen',
                             'name' => $item->name,
                             'menu_type' => $item->item_type === 'service_material' ? 'service' : 'product',
@@ -61,25 +59,33 @@ class MenuSeeder extends Seeder
                         ]
                     );
 
-                    MenuPrice::query()->updateOrCreate(
-                        [
-                            'menu_id' => $menu->id,
-                            'branch_id' => $branch->id,
-                            'price_name' => 'Default Price',
-                        ],
-                        [
-                            'price' => $menu->base_price,
-                            'effective_from' => null,
-                            'effective_to' => null,
-                            'is_default' => true,
-                            'is_active' => true,
-                        ]
+                    $menu->branches()->sync(
+                        $company->branches->pluck('id')->mapWithKeys(
+                            fn ($branchId) => [$branchId => ['nickname' => null]]
+                        )->all()
                     );
+
+                    foreach ($company->branches as $branch) {
+                        MenuPrice::query()->updateOrCreate(
+                            [
+                                'menu_id' => $menu->id,
+                                'branch_id' => $branch->id,
+                                'price_name' => 'Default Price',
+                            ],
+                            [
+                                'price' => $menu->base_price,
+                                'effective_from' => null,
+                                'effective_to' => null,
+                                'is_default' => true,
+                                'is_active' => true,
+                            ]
+                        );
+                    }
                 }
             });
     }
 
-    private function categoryFor(Company $company, Branch $branch, Item $item): MenuCategory
+    private function categoryFor(Company $company, Item $item): MenuCategory
     {
         [$name, $suffix] = match ($item->item_type) {
             'drink' => ['Drinks', 'DRI'],
@@ -91,12 +97,12 @@ class MenuSeeder extends Seeder
         return MenuCategory::query()->updateOrCreate(
             [
                 'company_id' => $company->id,
-                'branch_id' => $branch->id,
-                'code' => "{$branch->code}-{$suffix}",
+                'branch_id' => null,
+                'code' => $suffix,
             ],
             [
                 'name' => $name,
-                'description' => "{$name} menu category for {$branch->name}",
+                'description' => "{$name} menu category",
                 'is_active' => true,
             ]
         );
@@ -128,8 +134,4 @@ class MenuSeeder extends Seeder
         };
     }
 
-    private function menuCode(Branch $branch, Item $item): string
-    {
-        return "{$branch->code}-{$item->code}";
-    }
 }

@@ -18,7 +18,9 @@ class PosSessionController extends Controller
     {
         $user = $request->user();
         $branchIds = $this->workableBranchIds($user);
-        $currentSession = $this->currentUserOpenSession($request);
+        $currentSession = $request->boolean('open_new')
+            ? null
+            : $this->currentUserOpenSession($request);
 
         return Inertia::render('POS/Index', [
             'sessions' => PosSession::with(['branch', 'posTerminal', 'opener', 'closer'])
@@ -59,17 +61,6 @@ class PosSessionController extends Controller
             if ($branchIds->isEmpty()) {
                 return back()->withErrors([
                     'pos_terminal_id' => 'Your user account is not assigned to a branch.',
-                ]);
-            }
-
-            $userAlreadyOpen = PosSession::where('opened_by', $user->id)
-                ->where('status', 'open')
-                ->lockForUpdate()
-                ->exists();
-
-            if ($userAlreadyOpen) {
-                return back()->withErrors([
-                    'pos_terminal_id' => 'You already have an open POS session.',
                 ]);
             }
 

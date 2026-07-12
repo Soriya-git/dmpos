@@ -42,6 +42,9 @@ type MenuRecord = {
     nickname: string | null;
     category: string;
     branch: string;
+    branches: string[];
+    branchIds: number[];
+    branchNicknames: Record<number, string | null>;
     type: 'product' | 'service';
     item: string | null;
     bom: string | null;
@@ -130,7 +133,8 @@ const menuForm = useForm({
     nickname: '',
     code: '',
     menu_category_id: '',
-    branch_id: '',
+    branch_ids: [] as number[],
+    branch_nicknames: {} as Record<number, string>,
     menu_type: 'product',
     base_price: '0',
     item_id: '',
@@ -222,10 +226,16 @@ function filterRows<T extends Record<string, unknown>>(rows: T[]) {
     }
 
     return rows.filter((row) =>
-        Object.values(row).some((value) =>
-            String(value).toLowerCase().includes(normalizedSearch.value),
-        ),
+        JSON.stringify(row).toLowerCase().includes(normalizedSearch.value),
     );
+}
+
+function branchNicknameLabel(row: MenuRecord): string {
+    const nicknames = Object.values(row.branchNicknames).filter(
+        (nickname): nickname is string => Boolean(nickname?.trim()),
+    );
+
+    return nicknames.join(', ') || row.nickname || '-';
 }
 
 function switchView(view: MenuView) {
@@ -320,6 +330,10 @@ function resetForms(record: PanelRecord | null) {
         menuForm.is_available = record.available;
         menuForm.print_route = record.printRoute;
         menuForm.printer_id = record.printerId ? String(record.printerId) : '';
+        menuForm.branch_ids = [...record.branchIds];
+        menuForm.branch_nicknames = Object.fromEntries(
+            Object.entries(record.branchNicknames).map(([id, nickname]) => [id, nickname ?? '']),
+        );
     }
 
     if (panelKind.value === 'categories' && 'menusCount' in record) {
@@ -347,6 +361,8 @@ function submitPanel() {
                     name_kh: menuForm.name_kh,
                     name_other: menuForm.name_other,
                     nickname: menuForm.nickname,
+                    branch_ids: menuForm.branch_ids,
+                    branch_nicknames: menuForm.branch_nicknames,
                     printer_id: menuForm.printer_id || null,
                     print_route: menuForm.print_route,
                 },
@@ -452,12 +468,12 @@ function submitPanel() {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Menu Code
+                        Menu Name
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Menu Name
+                        Nickname
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
@@ -506,13 +522,16 @@ function submitPanel() {
                     >
                         {{ String(index + 1).padStart(2, '0') }}
                     </td>
-                    <td
-                        class="px-4 py-3 font-mono text-xs font-bold text-[#007882]"
-                    >
-                        {{ row.code }}
+                    <td class="px-4 py-3">
+                        <div class="text-sm font-bold text-slate-700">
+                            {{ row.name }}
+                        </div>
+                        <div class="mt-0.5 font-mono text-[10px] font-bold text-[#007882]">
+                            {{ row.code }}
+                        </div>
                     </td>
-                    <td class="px-4 py-3 text-sm font-bold text-slate-700">
-                        {{ row.name }}
+                    <td class="px-4 py-3 text-xs text-slate-500">
+                        {{ branchNicknameLabel(row) }}
                     </td>
                     <td class="px-4 py-3">
                         <span
@@ -521,8 +540,28 @@ function submitPanel() {
                             {{ row.category }}
                         </span>
                     </td>
-                    <td class="px-4 py-3 text-xs text-slate-500">
-                        {{ row.branch }}
+                    <td class="px-4 py-3">
+                        <div class="flex flex-wrap items-center gap-1">
+                            <span
+                                v-for="branch in row.branches.slice(0, 2)"
+                                :key="branch"
+                                class="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600"
+                            >
+                                {{ branch }}
+                            </span>
+                            <span
+                                v-if="row.branches.length > 2"
+                                class="rounded bg-[#23AA8F]/10 px-2 py-0.5 text-[10px] font-bold text-[#007882]"
+                            >
+                                2+
+                            </span>
+                            <span
+                                v-if="row.branches.length === 0"
+                                class="text-xs text-slate-400"
+                            >
+                                No branches
+                            </span>
+                        </div>
                     </td>
                     <td class="px-4 py-3">
                         <span
@@ -871,10 +910,6 @@ function submitPanel() {
                                 <span class="text-[10px] font-bold text-slate-400 uppercase">Other Name</span>
                                 <Input v-model="menuForm.name_other" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter another foreign name" />
                             </label>
-                            <label class="block">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">Nickname</span>
-                                <Input v-model="menuForm.nickname" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter a quick-search nickname" />
-                            </label>
                         </template>
 
                         <label v-if="panelKind === 'menus'" class="block">
@@ -1111,38 +1146,29 @@ function submitPanel() {
                                     placeholder="0.00"
                                 />
                             </label>
-                            <label class="block">
+                            <div v-if="panelKind === 'menus'" class="block">
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
                                 >
-                                    Branch
+                                    Visible Branches & Nicknames
                                 </span>
-                                <Input
-                                    v-if="selectedRecord"
-                                    :model-value="
-                                        'branch' in selectedRecord
-                                            ? selectedRecord.branch
-                                            : ''
-                                    "
-                                    disabled
-                                    class="mt-1 text-sm focus-visible:ring-[#007882]"
-                                />
-                                <select
-                                    v-else-if="panelKind === 'menus'"
-                                    v-model="menuForm.branch_id"
-                                    class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                                <div class="mt-2 space-y-2 rounded-md border border-slate-200 bg-white p-3"
                                 >
-                                    <option value="">Default branch</option>
-                                    <option
+                                    <div
                                         v-for="branch in props.branchOptions"
                                         :key="branch.id"
-                                        :value="branch.id"
+                                        class="grid items-center gap-2 sm:grid-cols-[auto_1fr_1fr]"
                                     >
-                                        {{ branch.name }}
-                                    </option>
-                                </select>
+                                        <input v-model="menuForm.branch_ids" type="checkbox" :value="branch.id" class="size-4 rounded border-slate-300 text-[#007882]" />
+                                        <span class="text-xs font-semibold text-slate-600">{{ branch.name }}</span>
+                                        <Input v-model="menuForm.branch_nicknames[branch.id]" :disabled="!menuForm.branch_ids.includes(branch.id)" class="h-8 text-xs" placeholder="Menu nickname" />
+                                    </div>
+                                </div>
+                            </div>
+                            <label v-else class="block">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Branch</span>
                                 <select
-                                    v-else-if="panelKind === 'categories'"
+                                    v-if="panelKind === 'categories'"
                                     v-model="categoryForm.branch_id"
                                     class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
                                 >

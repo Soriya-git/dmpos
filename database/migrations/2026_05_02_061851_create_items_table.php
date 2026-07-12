@@ -75,6 +75,15 @@ return new class extends Migration
             $table->index(['company_id', 'branch_id'], 'iuc_company_branch_idx');
             $table->index(['from_unit_id', 'to_unit_id'], 'iuc_from_to_idx');
         });
+
+        Schema::create('item_branch', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('item_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('branch_id')->constrained()->cascadeOnDelete();
+            $table->string('nickname')->nullable();
+            $table->timestamps();
+            $table->unique(['item_id', 'branch_id']);
+        });
     }
 
     /**
@@ -82,6 +91,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('item_branch');
         Schema::dropIfExists('item_unit_conversions');
         Schema::dropIfExists('items');
     }

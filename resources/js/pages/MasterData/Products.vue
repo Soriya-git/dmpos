@@ -78,7 +78,8 @@ const itemForm = useForm({
     name_other: '',
     nickname: '',
     code: '',
-    branch_id: '',
+    branch_ids: [] as number[],
+    branch_nicknames: {} as Record<number, string>,
     unit_id: '',
     item_type: 'raw_material',
     cost: '0',
@@ -90,7 +91,7 @@ const itemForm = useForm({
 const bomForm = useForm({
     name: '',
     bom_no: '',
-    branch_id: '',
+    branch_ids: [] as number[],
     output_item_id: '',
     output_quantity: '1',
     status: 'active',
@@ -145,10 +146,16 @@ function filterRows<T extends Record<string, unknown>>(rows: T[]) {
     }
 
     return rows.filter((row) =>
-        Object.values(row).some((value) =>
-            String(value).toLowerCase().includes(normalizedSearch.value),
-        ),
+        JSON.stringify(row).toLowerCase().includes(normalizedSearch.value),
     );
+}
+
+function branchNicknameLabel(row: ItemRecord): string {
+    const nicknames = Object.values(row.branchNicknames).filter(
+        (nickname): nickname is string => Boolean(nickname?.trim()),
+    );
+
+    return nicknames.join(', ') || row.nickname || '-';
 }
 
 function statusLabel(status: ApprovalStatus) {
@@ -177,7 +184,10 @@ function viewItem(record: ItemRecord) {
     itemForm.name_other = record.nameOther ?? '';
     itemForm.nickname = record.nickname ?? '';
     itemForm.code = record.code;
-    itemForm.branch_id = record.branchId ? String(record.branchId) : '';
+    itemForm.branch_ids = [...record.branchIds];
+    itemForm.branch_nicknames = Object.fromEntries(
+        Object.entries(record.branchNicknames).map(([id, nickname]) => [id, nickname ?? '']),
+    );
     itemForm.unit_id = String(record.unitId);
     itemForm.item_type = record.itemType;
     itemForm.cost = record.cost;
@@ -362,12 +372,12 @@ function cancelUnit(record: UnitRecord) {
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        SKU / Item Code
+                        Item Name
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
                     >
-                        Item Description
+                        Nickname
                     </th>
                     <th
                         class="px-4 py-3 text-left text-[10px] font-extrabold tracking-wider text-slate-500 uppercase"
@@ -396,13 +406,16 @@ function cancelUnit(record: UnitRecord) {
                     >
                         {{ String(index + 1).padStart(2, '0') }}
                     </td>
-                    <td
-                        class="px-4 py-3 font-mono text-xs font-bold text-[#007882]"
-                    >
-                        {{ row.code }}
+                    <td class="px-4 py-3">
+                        <div class="text-sm font-bold text-slate-700">
+                            {{ row.name }}
+                        </div>
+                        <div class="mt-0.5 font-mono text-[10px] font-bold text-[#007882]">
+                            {{ row.code }}
+                        </div>
                     </td>
-                    <td class="px-4 py-3 text-sm font-bold text-slate-700">
-                        {{ row.name }}
+                    <td class="px-4 py-3 text-xs text-slate-500">
+                        {{ branchNicknameLabel(row) }}
                     </td>
                     <td class="px-4 py-3">
                         <span
@@ -774,11 +787,6 @@ function cancelUnit(record: UnitRecord) {
                             <Input v-model="itemForm.name_other" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter another foreign name" />
                         </label>
 
-                        <label class="block">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">Nickname</span>
-                            <Input v-model="itemForm.nickname" class="mt-1 text-sm focus-visible:ring-[#007882]" placeholder="Enter a quick-search nickname" />
-                        </label>
-
                         <div class="grid gap-3 sm:grid-cols-2">
                             <label class="block">
                                 <span
@@ -860,26 +868,36 @@ function cancelUnit(record: UnitRecord) {
                             </label>
                         </div>
 
-                        <label class="block">
+                        <div class="block">
                             <span
                                 class="text-[10px] font-bold text-slate-400 uppercase"
                             >
-                                Branch
+                                Visible Branches & Nicknames
                             </span>
-                            <select
-                                v-model="itemForm.branch_id"
-                                class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                            <div
+                                class="mt-2 space-y-2 rounded-md border border-slate-200 bg-white p-3"
                             >
-                                <option value="">Default branch</option>
-                                <option
+                                <div
                                     v-for="branch in props.branchOptions"
                                     :key="branch.id"
-                                    :value="branch.id"
+                                    class="grid items-center gap-2 sm:grid-cols-[auto_1fr_1fr]"
                                 >
-                                    {{ branch.name }}
-                                </option>
-                            </select>
-                        </label>
+                                    <input
+                                        v-model="itemForm.branch_ids"
+                                        type="checkbox"
+                                        :value="branch.id"
+                                        class="size-4 rounded border-slate-300 text-[#007882]"
+                                    />
+                                    <span class="text-xs font-semibold text-slate-600">{{ branch.name }}</span>
+                                    <Input
+                                        v-model="itemForm.branch_nicknames[branch.id]"
+                                        :disabled="!itemForm.branch_ids.includes(branch.id)"
+                                        class="h-8 text-xs"
+                                        placeholder="Item nickname"
+                                    />
+                                </div>
+                            </div>
+                        </div>
 
                         <label class="flex items-center gap-2">
                             <input
@@ -898,7 +916,7 @@ function cancelUnit(record: UnitRecord) {
                         class="space-y-4 rounded-lg bg-slate-50 p-4"
                     >
                         <div class="grid gap-3 sm:grid-cols-2">
-                            <label class="block">
+                            <div class="block">
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
                                 >
@@ -909,7 +927,7 @@ function cancelUnit(record: UnitRecord) {
                                     class="mt-1 font-mono text-sm focus-visible:ring-[#007882]"
                                     placeholder="Auto if blank"
                                 />
-                            </label>
+                            </div>
 
                             <label class="block">
                                 <span
@@ -977,26 +995,24 @@ function cancelUnit(record: UnitRecord) {
                                 />
                             </label>
 
-                            <label class="block">
+                            <div class="block">
                                 <span
                                     class="text-[10px] font-bold text-slate-400 uppercase"
                                 >
-                                    Branch
+                                    Visible Branches
                                 </span>
-                                <select
-                                    v-model="bomForm.branch_id"
-                                    class="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus:border-[#007882]"
+                                <div class="mt-2 space-y-2 rounded-md border border-slate-200 bg-white p-3"
                                 >
-                                    <option value="">Default branch</option>
-                                    <option
+                                    <label
                                         v-for="branch in props.branchOptions"
                                         :key="branch.id"
-                                        :value="branch.id"
+                                        class="flex items-center gap-2"
                                     >
-                                        {{ branch.name }}
-                                    </option>
-                                </select>
-                            </label>
+                                        <input v-model="bomForm.branch_ids" type="checkbox" :value="branch.id" class="size-4 rounded border-slate-300 text-[#007882]" />
+                                        <span class="text-xs font-semibold text-slate-600">{{ branch.name }}</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="space-y-3 border-t border-slate-200 pt-3">
