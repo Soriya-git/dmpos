@@ -23,8 +23,7 @@ class AuthenticatePrintAgent
             return response()->json(['message' => 'Invalid token'], 401);
         }
 
-        // Make branch available to the controller
-        $request->merge(['_branch' => $branch]);
+        $request->attributes->set('print_agent_branch', $branch);
 
         return $next($request);
     }

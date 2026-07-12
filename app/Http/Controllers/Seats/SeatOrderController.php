@@ -25,7 +25,6 @@ use App\Models\Printer;
 use App\Models\PrintJob;
 use App\Models\PrintTemplate;
 use App\Services\MembershipCardLedger;
-use App\Services\RawTcpPrinter;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -420,9 +419,12 @@ class SeatOrderController extends Controller
             return $this->createPrintJobsForOrder($order, $request);
         });
 
-        $printJobs->each(fn (PrintJob $printJob) => app(RawTcpPrinter::class)->print($printJob));
-
-        return back()->with('success', 'Order sent to kitchen.');
+        return back()->with(
+            'success',
+            $printJobs->isEmpty()
+                ? 'Order confirmed. No printable menu lines were found.'
+                : 'Order confirmed and printing has been queued.'
+        );
     }
 
     public function reprint(Request $request, DiningSession $diningSession, PrintJob $printJob)

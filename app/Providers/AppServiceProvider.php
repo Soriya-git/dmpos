@@ -95,6 +95,9 @@ class AppServiceProvider extends ServiceProvider
     protected function configureRateLimiting(): void
     {
         RateLimiter::for('global', fn () => Limit::perMinute(120)->by(request()->ip()));
+        RateLimiter::for('print-agent', fn () => Limit::perMinute(120)->by(
+            request()->bearerToken() ?: request()->ip()
+        ));
     }
 
     /**

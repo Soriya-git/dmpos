@@ -11,6 +11,7 @@ class PrintJob extends Model
     protected $casts = [
         'payload' => 'array',
         'printed_at' => 'datetime',
+        'claimed_at' => 'datetime',
     ];
 
     public function company()

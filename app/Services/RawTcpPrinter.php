@@ -7,6 +7,13 @@ use Throwable;
 
 class RawTcpPrinter
 {
+    public function payload(PrintJob $printJob): string
+    {
+        $printJob->loadMissing('printer', 'branch');
+
+        return $this->buildEscPosPayload($printJob);
+    }
+
     public function print(PrintJob $printJob): bool
     {
         $printJob->loadMissing('printer', 'branch');
@@ -42,7 +49,7 @@ class RawTcpPrinter
             }
 
             stream_set_timeout($socket, $timeout);
-            fwrite($socket, $this->buildEscPosPayload($printJob));
+            fwrite($socket, $this->payload($printJob));
             fclose($socket);
 
             $printJob->forceFill([

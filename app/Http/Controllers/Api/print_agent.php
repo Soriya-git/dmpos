@@ -57,7 +57,7 @@ function apiGet(string $url): ?array
     return json_decode($body, true);
 }
 
-function apiPost(string $url, array $data = []): bool
+function apiPost(string $url, array $data = []): array|false
 {
     $ch = curl_init($url);
     curl_setopt_array($ch, [
@@ -75,7 +75,11 @@ function apiPost(string $url, array $data = []): bool
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    return $code === 200;
+    if ($code !== 200 || ! $body) {
+        return false;
+    }
+
+    return json_decode($body, true) ?: [];
 }
 
 function sendToPrinter(string $ip, int $port, string $payload, int $timeoutMs): bool
@@ -102,8 +106,7 @@ function sendToPrinter(string $ip, int $port, string $payload, int $timeoutMs): 
 logLine('Print agent started. Polling every '.POLL_SECS.' seconds...');
 
 while (true) {
-    $pendingUrl = API_BASE.'/pending?branch_id='.BRANCH_ID;
-    $response = apiGet($pendingUrl);
+    $response = apiPost(API_BASE.'/claim', ['limit' => 10]);
 
     if ($response === null) {
         logLine('WARNING: Could not reach API, will retry...');
@@ -128,20 +131,27 @@ while (true) {
         $ip = $job['printer_ip'];
         $port = (int) ($job['printer_port'] ?? 9100);
         $ms = (int) ($job['timeout_ms'] ?? 5000);
+        $claimToken = $job['claim_token'] ?? '';
         $data = base64_decode($job['payload_b64'] ?? '');
 
         logLine("  Job #{$id} ({$no}) → {$ip}:{$port}");
 
         if (! $ip) {
             logLine('  SKIP: no printer IP.');
-            apiPost(API_BASE.'/jobs/'.$id.'/failed', ['error' => 'No printer IP configured.']);
+            apiPost(API_BASE.'/jobs/'.$id.'/failed', [
+                'claim_token' => $claimToken,
+                'error' => 'No printer IP configured.',
+            ]);
 
             continue;
         }
 
         if (! $data) {
             logLine('  SKIP: empty payload.');
-            apiPost(API_BASE.'/jobs/'.$id.'/failed', ['error' => 'Empty payload.']);
+            apiPost(API_BASE.'/jobs/'.$id.'/failed', [
+                'claim_token' => $claimToken,
+                'error' => 'Empty payload.',
+            ]);
 
             continue;
         }
@@ -150,10 +160,13 @@ while (true) {
 
         if ($ok) {
             logLine('  SUCCESS');
-            apiPost(API_BASE.'/jobs/'.$id.'/printed');
+            apiPost(API_BASE.'/jobs/'.$id.'/printed', ['claim_token' => $claimToken]);
         } else {
             logLine('  FAILED');
-            apiPost(API_BASE.'/jobs/'.$id.'/failed', ['error' => "Cannot connect to {$ip}:{$port}"]);
+            apiPost(API_BASE.'/jobs/'.$id.'/failed', [
+                'claim_token' => $claimToken,
+                'error' => "Cannot connect to {$ip}:{$port}",
+            ]);
         }
     }
 
