@@ -179,7 +179,7 @@ const filteredReceipts = computed(() => {
                         No completed GRs found
                     </h3>
                     <p class="mt-1 text-sm text-slate-500">
-                        No approved goods receipts are waiting for putaway.
+                        No received goods receipts are waiting for putaway.
                     </p>
                 </div>
             </div>

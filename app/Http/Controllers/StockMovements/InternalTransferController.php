@@ -35,6 +35,27 @@ class InternalTransferController extends Controller
         return Inertia::render('InternalTransfer/Create', $this->pageProps($request));
     }
 
+    public function show(Request $request, StockTransfer $stockTransfer): Response
+    {
+        [$companyId, $branchId] = $this->scope($request);
+        abort_if((int) $stockTransfer->company_id !== (int) $companyId, 403);
+        abort_if(
+            (int) $stockTransfer->from_branch_id !== (int) $branchId
+                && (int) $stockTransfer->to_branch_id !== (int) $branchId,
+            403
+        );
+        abort_if($stockTransfer->transfer_type !== 'internal_transfer' || $stockTransfer->goods_receipt_id, 404);
+
+        $props = $this->pageProps($request);
+        $transfer = collect($props['transfers'])->firstWhere('id', $stockTransfer->id);
+        abort_if(! $transfer, 404);
+
+        return Inertia::render('InternalTransfer/Show', [
+            'transfer' => $transfer,
+            'locations' => $props['locations'],
+        ]);
+    }
+
     private function pageProps(Request $request): array
     {
         [$companyId, $branchId] = $this->scope($request);
@@ -86,8 +107,8 @@ class InternalTransferController extends Controller
             ]);
 
         $warehouses = Warehouse::query()
+            ->with('branch:id,name')
             ->where('company_id', $companyId)
-            ->where('branch_id', $branchId)
             ->where('is_active', true)
             ->orderBy('name')
             ->get()
@@ -131,7 +152,9 @@ class InternalTransferController extends Controller
             ])
             ->withCount('lines')
             ->where('company_id', $companyId)
-            ->where('from_branch_id', $branchId)
+            ->where(fn ($query) => $query
+                ->where('from_branch_id', $branchId)
+                ->orWhere('to_branch_id', $branchId))
             ->where('transfer_type', 'internal_transfer')
             ->whereNull('goods_receipt_id')
             ->when($filters['warehouse_id'] ?? null, fn ($query, $warehouseId) => $query
@@ -185,7 +208,7 @@ class InternalTransferController extends Controller
             'lines.*.stock_balance_id' => ['required', Rule::exists('stock_balances', 'id')->where('company_id', $companyId)],
             'lines.*.quantity' => ['required', 'numeric', 'gt:0'],
             'lines.*.to_warehouse_id' => ['required', Rule::exists('warehouses', 'id')->where('company_id', $companyId)],
-            'lines.*.to_location_id' => ['required', Rule::exists('stock_locations', 'id')->where('company_id', $companyId)],
+            'lines.*.to_location_id' => ['nullable', Rule::exists('stock_locations', 'id')->where('company_id', $companyId)],
             'lines.*.note' => ['nullable', 'string'],
         ]);
 
@@ -200,7 +223,23 @@ class InternalTransferController extends Controller
                 ->get()
                 ->keyBy('id');
 
-            $destinationIds = collect($data['lines'])->pluck('to_location_id')->unique()->values();
+            $sourceWarehouseIds = collect($data['lines'])->pluck('from_warehouse_id')->unique();
+            $destinationWarehouseIds = collect($data['lines'])->pluck('to_warehouse_id')->unique();
+
+            if ($sourceWarehouseIds->count() !== 1 || $destinationWarehouseIds->count() !== 1) {
+                throw ValidationException::withMessages(['lines' => 'All lines in one transfer must use the same source and destination warehouse.']);
+            }
+
+            $destinationWarehouse = Warehouse::query()
+                ->where('company_id', $companyId)
+                ->where('is_active', true)
+                ->find($destinationWarehouseIds->first());
+
+            if (! $destinationWarehouse) {
+                throw ValidationException::withMessages(['lines' => 'The selected destination warehouse is not available.']);
+            }
+
+            $destinationIds = collect($data['lines'])->pluck('to_location_id')->filter()->unique()->values();
             $destinations = StockLocation::query()
                 ->where('company_id', $companyId)
                 ->where('branch_id', $branchId)
@@ -225,7 +264,8 @@ class InternalTransferController extends Controller
 
             foreach ($data['lines'] as $line) {
                 $balance = $balances->get((int) $line['stock_balance_id']);
-                $destination = $destinations->get((int) $line['to_location_id']);
+                $crossWarehouse = (int) $balance->warehouse_id !== (int) $line['to_warehouse_id'];
+                $destination = $line['to_location_id'] ? $destinations->get((int) $line['to_location_id']) : null;
 
                 if (! $balance || (int) $balance->item_id !== (int) $line['item_id']) {
                     throw ValidationException::withMessages(['lines' => 'Selected item does not match the source stock.']);
@@ -235,28 +275,32 @@ class InternalTransferController extends Controller
                     throw ValidationException::withMessages(['lines' => 'Selected source warehouse does not match the source location.']);
                 }
 
-                if (! $destination || (int) $destination->warehouse_id !== (int) $line['to_warehouse_id']) {
+                if (! $crossWarehouse && (! $destination || (int) $destination->warehouse_id !== (int) $line['to_warehouse_id'])) {
                     throw ValidationException::withMessages(['lines' => 'Selected destination location does not match the warehouse.']);
                 }
 
-                if ((int) $balance->stock_location_id === (int) $destination->id) {
+                if ($crossWarehouse && $destination) {
+                    throw ValidationException::withMessages(['lines' => 'Do not choose a destination location for a cross-warehouse transfer. It will be selected when received.']);
+                }
+
+                if ($destination && (int) $balance->stock_location_id === (int) $destination->id) {
                     throw ValidationException::withMessages(['lines' => 'Source and destination location must be different.']);
                 }
             }
 
             $firstLine = $data['lines'][0];
             $firstBalance = $balances->get((int) $firstLine['stock_balance_id']);
-            $firstDestination = $destinations->get((int) $firstLine['to_location_id']);
+            $firstDestination = $firstLine['to_location_id'] ? $destinations->get((int) $firstLine['to_location_id']) : null;
             $transferNo = DocumentNumber::make(StockTransfer::class, 'transfer_no', 'IT');
 
             $transfer = StockTransfer::create([
                 'company_id' => $companyId,
                 'from_branch_id' => $branchId,
-                'to_branch_id' => $branchId,
+                'to_branch_id' => $destinationWarehouse->branch_id,
                 'from_warehouse_id' => $firstBalance->warehouse_id,
-                'to_warehouse_id' => $firstDestination->warehouse_id,
+                'to_warehouse_id' => $firstLine['to_warehouse_id'],
                 'from_location_id' => $firstBalance->stock_location_id,
-                'to_location_id' => $firstDestination->id,
+                'to_location_id' => $firstDestination?->id,
                 'transfer_no' => $transferNo,
                 'transfer_type' => 'internal_transfer',
                 'status' => 'draft',
@@ -267,7 +311,7 @@ class InternalTransferController extends Controller
 
             foreach ($data['lines'] as $line) {
                 $source = $balances->get((int) $line['stock_balance_id']);
-                $destination = $destinations->get((int) $line['to_location_id']);
+                $destination = $line['to_location_id'] ? $destinations->get((int) $line['to_location_id']) : null;
                 $quantity = (float) $line['quantity'];
                 $unitCost = (float) $source->average_cost;
 
@@ -275,7 +319,7 @@ class InternalTransferController extends Controller
                     'stock_transfer_id' => $transfer->id,
                     'item_id' => $source->item_id,
                     'unit_id' => $source->unit_id,
-                    'to_location_id' => $destination->id,
+                    'to_location_id' => $destination?->id,
                     'quantity_requested' => $quantity,
                     'quantity_dispatched' => 0,
                     'quantity_received' => 0,
@@ -300,6 +344,7 @@ class InternalTransferController extends Controller
 
         DB::transaction(function () use ($request, $stockTransfer) {
             $stockTransfer->load(['lines.toLocation']);
+            $crossWarehouse = (int) $stockTransfer->from_warehouse_id !== (int) $stockTransfer->to_warehouse_id;
 
             foreach ($stockTransfer->lines as $line) {
                 $sourceBalanceId = $this->sourceBalanceId($line);
@@ -338,7 +383,7 @@ class InternalTransferController extends Controller
                     ->whereIn('location_type', self::LOCATION_TYPES)
                     ->find($line->to_location_id);
 
-                if (! $destination) {
+                if (! $crossWarehouse && ! $destination) {
                     throw ValidationException::withMessages([
                         'lines' => 'Destination location is no longer available.',
                     ]);
@@ -352,38 +397,40 @@ class InternalTransferController extends Controller
                     'quantity_available' => (float) $source->quantity_available - $quantity,
                 ]);
 
-                $target = StockBalance::firstOrCreate(
-                    [
-                        'company_id' => $stockTransfer->company_id,
-                        'branch_id' => $stockTransfer->to_branch_id,
-                        'warehouse_id' => $destination->warehouse_id,
-                        'stock_location_id' => $destination->id,
-                        'item_id' => $source->item_id,
-                    ],
-                    [
+                if (! $crossWarehouse) {
+                    $target = StockBalance::firstOrCreate(
+                        [
+                            'company_id' => $stockTransfer->company_id,
+                            'branch_id' => $stockTransfer->to_branch_id,
+                            'warehouse_id' => $destination->warehouse_id,
+                            'stock_location_id' => $destination->id,
+                            'item_id' => $source->item_id,
+                        ],
+                        [
+                            'unit_id' => $source->unit_id,
+                            'quantity_on_hand' => 0,
+                            'quantity_reserved' => 0,
+                            'quantity_available' => 0,
+                            'average_cost' => $source->average_cost,
+                        ]
+                    );
+
+                    $targetBefore = (float) $target->quantity_available;
+                    $targetQuantity = $targetBefore + $quantity;
+                    $targetValue = ($targetBefore * (float) $target->average_cost) + ($quantity * $unitCost);
+
+                    $target->update([
                         'unit_id' => $source->unit_id,
-                        'quantity_on_hand' => 0,
-                        'quantity_reserved' => 0,
-                        'quantity_available' => 0,
-                        'average_cost' => $source->average_cost,
-                    ]
-                );
-
-                $targetBefore = (float) $target->quantity_available;
-                $targetQuantity = $targetBefore + $quantity;
-                $targetValue = ($targetBefore * (float) $target->average_cost) + ($quantity * $unitCost);
-
-                $target->update([
-                    'unit_id' => $source->unit_id,
-                    'quantity_on_hand' => (float) $target->quantity_on_hand + $quantity,
-                    'quantity_available' => $targetQuantity,
-                    'average_cost' => $targetQuantity > 0 ? $targetValue / $targetQuantity : $unitCost,
-                ]);
+                        'quantity_on_hand' => (float) $target->quantity_on_hand + $quantity,
+                        'quantity_available' => $targetQuantity,
+                        'average_cost' => $targetQuantity > 0 ? $targetValue / $targetQuantity : $unitCost,
+                    ]);
+                }
 
                 $line->update([
                     'quantity_dispatched' => $quantity,
-                    'quantity_received' => $quantity,
-                    'status' => 'received',
+                    'quantity_received' => $crossWarehouse ? 0 : $quantity,
+                    'status' => $crossWarehouse ? 'dispatched' : 'received',
                 ]);
 
                 $movement = StockMovement::create([
@@ -391,7 +438,7 @@ class InternalTransferController extends Controller
                     'branch_id' => $stockTransfer->from_branch_id,
                     'warehouse_id' => $source->warehouse_id,
                     'from_location_id' => $source->stock_location_id,
-                    'to_location_id' => $destination->id,
+                    'to_location_id' => $destination?->id,
                     'item_id' => $source->item_id,
                     'unit_id' => $source->unit_id,
                     'movement_type' => 'internal_transfer',
@@ -424,29 +471,143 @@ class InternalTransferController extends Controller
             }
 
             $stockTransfer->update([
-                'status' => 'received',
+                'status' => $crossWarehouse ? 'in_transit' : 'received',
                 'approved_at' => now(),
                 'dispatched_at' => now(),
-                'received_at' => now(),
+                'received_at' => $crossWarehouse ? null : now(),
                 'approved_by' => $request->user()->id,
                 'dispatched_by' => $request->user()->id,
-                'received_by' => $request->user()->id,
+                'received_by' => $crossWarehouse ? null : $request->user()->id,
             ]);
         });
 
-        return back()->with('success', "Internal transfer {$stockTransfer->transfer_no} approved.");
+        $message = (int) $stockTransfer->from_warehouse_id !== (int) $stockTransfer->to_warehouse_id
+            ? "Internal transfer {$stockTransfer->transfer_no} dispatched to the destination warehouse."
+            : "Internal transfer {$stockTransfer->transfer_no} completed.";
+
+        return back()->with('success', $message);
+    }
+
+    public function receive(Request $request, StockTransfer $stockTransfer)
+    {
+        [$companyId, $branchId] = $this->scope($request);
+        abort_if((int) $stockTransfer->company_id !== (int) $companyId, 403);
+        abort_if((int) $stockTransfer->to_branch_id !== (int) $branchId, 403);
+        abort_if($stockTransfer->status !== 'in_transit', 422, 'Only transfers in transit can be received.');
+
+        $data = $request->validate([
+            'lines' => ['required', 'array', 'min:1'],
+            'lines.*.id' => ['required', 'integer'],
+            'lines.*.to_location_id' => ['required', Rule::exists('stock_locations', 'id')->where('company_id', $companyId)],
+            'lines.*.quantity' => ['required', 'numeric', 'gte:0'],
+        ]);
+
+        DB::transaction(function () use ($request, $stockTransfer, $data, $companyId, $branchId) {
+            $stockTransfer->load('lines');
+            $lines = $stockTransfer->lines->keyBy('id');
+            $receivedAny = false;
+
+            foreach ($data['lines'] as $input) {
+                $quantity = (float) $input['quantity'];
+                if ($quantity <= 0) {
+                    continue;
+                }
+
+                $line = $lines->get((int) $input['id']);
+                abort_if(! $line, 422, 'A selected transfer line is invalid.');
+                $outstanding = (float) $line->quantity_dispatched - (float) $line->quantity_received;
+                if ($quantity > $outstanding) {
+                    throw ValidationException::withMessages(['lines' => 'Putaway quantity cannot exceed the outstanding transfer quantity.']);
+                }
+
+                $location = StockLocation::query()
+                    ->where('company_id', $companyId)->where('branch_id', $branchId)
+                    ->where('warehouse_id', $stockTransfer->to_warehouse_id)
+                    ->where('is_active', true)->whereIn('location_type', self::LOCATION_TYPES)
+                    ->find($input['to_location_id']);
+                abort_if(! $location, 422, 'The destination location is not available in the destination warehouse.');
+
+                $sourceId = $this->sourceBalanceId($line);
+                $source = StockBalance::query()->find($sourceId);
+                abort_if(! $source, 422, 'Source stock is missing.');
+                $target = StockBalance::firstOrCreate([
+                    'company_id' => $companyId, 'branch_id' => $branchId,
+                    'warehouse_id' => $stockTransfer->to_warehouse_id,
+                    'stock_location_id' => $location->id, 'item_id' => $line->item_id,
+                ], [
+                    'unit_id' => $line->unit_id, 'quantity_on_hand' => 0,
+                    'quantity_reserved' => 0, 'quantity_available' => 0,
+                    'average_cost' => $line->unit_cost,
+                ]);
+                $before = (float) $target->quantity_available;
+                $after = $before + $quantity;
+                $value = ($before * (float) $target->average_cost) + ($quantity * (float) $line->unit_cost);
+                $target->update([
+                    'quantity_on_hand' => (float) $target->quantity_on_hand + $quantity,
+                    'quantity_available' => $after,
+                    'average_cost' => $after > 0 ? $value / $after : $line->unit_cost,
+                ]);
+                $newReceived = (float) $line->quantity_received + $quantity;
+                $line->update([
+                    'to_location_id' => $location->id,
+                    'quantity_received' => $newReceived,
+                    'status' => $newReceived >= (float) $line->quantity_dispatched ? 'received' : 'dispatched',
+                ]);
+                $receivedAny = true;
+            }
+
+            if (! $receivedAny) {
+                throw ValidationException::withMessages(['lines' => 'Enter a quantity to put away for at least one item.']);
+            }
+
+            $stockTransfer->load('lines');
+            $complete = $stockTransfer->lines->every(fn (StockTransferLine $line) => (float) $line->quantity_received >= (float) $line->quantity_dispatched);
+            $stockTransfer->update([
+                'to_location_id' => $stockTransfer->lines->first()?->to_location_id,
+                'status' => $complete ? 'received' : 'in_transit',
+                'received_at' => $complete ? now() : null,
+                'received_by' => $complete ? $request->user()->id : null,
+            ]);
+        });
+
+        return back()->with('success', "Transfer {$stockTransfer->transfer_no} putaway quantities saved.");
     }
 
     public function reject(Request $request, StockTransfer $stockTransfer)
     {
-        $this->ensureDraftTransfer($request, $stockTransfer);
+        [$companyId, $branchId] = $this->scope($request);
+        abort_if((int) $stockTransfer->company_id !== (int) $companyId, 403);
+        abort_if(! in_array($stockTransfer->status, ['draft', 'in_transit'], true), 422, 'Only draft or in-transit transfers can be rejected.');
+        abort_if($stockTransfer->status === 'draft' && (int) $stockTransfer->from_branch_id !== (int) $branchId, 403);
+        abort_if($stockTransfer->status === 'in_transit' && (int) $stockTransfer->to_branch_id !== (int) $branchId, 403);
 
-        $stockTransfer->update([
-            'status' => 'rejected',
-            'cancelled_at' => now(),
-            'cancelled_by' => $request->user()->id,
-            'cancel_reason' => 'Rejected by approver',
-        ]);
+        DB::transaction(function () use ($request, $stockTransfer) {
+            if ($stockTransfer->status === 'in_transit') {
+                $stockTransfer->load('lines');
+                foreach ($stockTransfer->lines as $line) {
+                    $outstanding = (float) $line->quantity_dispatched - (float) $line->quantity_received;
+                    if ($outstanding <= 0) {
+                        continue;
+                    }
+                    $source = StockBalance::query()->lockForUpdate()->find($this->sourceBalanceId($line));
+                    abort_if(! $source, 422, 'Source stock is missing and cannot be returned.');
+                    $source->update([
+                        'quantity_on_hand' => (float) $source->quantity_on_hand + $outstanding,
+                        'quantity_available' => (float) $source->quantity_available + $outstanding,
+                    ]);
+                    $line->update(['status' => 'cancelled']);
+                }
+            }
+
+            $stockTransfer->update([
+                'status' => 'rejected',
+                'cancelled_at' => now(),
+                'cancelled_by' => $request->user()->id,
+                'cancel_reason' => $stockTransfer->status === 'in_transit'
+                    ? 'Rejected by destination warehouse; outstanding stock returned'
+                    : 'Rejected by approver',
+            ]);
+        });
 
         return back()->with('success', "Internal transfer {$stockTransfer->transfer_no} rejected.");
     }
@@ -546,7 +707,7 @@ class InternalTransferController extends Controller
             'fromWarehouse' => $transfer->fromWarehouse?->name ?? 'Warehouse',
             'toWarehouse' => $transfer->toWarehouse?->name ?? 'Warehouse',
             'fromLocation' => $transfer->fromLocation?->name ?? 'Location',
-            'toLocation' => $transfer->toLocation?->name ?? 'Location',
+            'toLocation' => $transfer->toLocation?->name ?? ((int) $transfer->from_warehouse_id !== (int) $transfer->to_warehouse_id ? 'Pending putaway' : 'Location'),
             'itemCount' => (int) $transfer->lines_count,
             'totalQuantity' => (float) $transfer->lines->sum(fn (StockTransferLine $line) => (float) ($transfer->status === 'received' ? $line->quantity_received : $line->quantity_requested)),
             'totalCost' => (float) $transfer->lines->sum(fn (StockTransferLine $line) => (float) $line->total_cost),
@@ -567,6 +728,10 @@ class InternalTransferController extends Controller
                     'itemName' => $line->item?->name ?? 'Unknown Item',
                     'unit' => $line->unit?->code ?? $line->unit?->name ?? 'Unit',
                     'quantity' => $quantity,
+                    'quantityRequested' => (float) $line->quantity_requested,
+                    'quantityDispatched' => (float) $line->quantity_dispatched,
+                    'quantityReceived' => (float) $line->quantity_received,
+                    'quantityOutstanding' => max(0, (float) $line->quantity_dispatched - (float) $line->quantity_received),
                     'unitCost' => (float) $line->unit_cost,
                     'totalCost' => (float) $line->total_cost,
                     'fromWarehouse' => $movement?->fromLocation?->warehouse?->name ?? $sourceBalance?->stockLocation?->warehouse?->name ?? null,

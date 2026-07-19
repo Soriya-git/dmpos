@@ -9,12 +9,14 @@ type GoodsReceiptLine = {
     unit_code?: string | null;
     staging_area?: string | null;
     quantity_received: number;
+    unit_cost: number;
 };
 
 type GoodsReceipt = {
     id: number;
     receipt_no: string;
     purchase_order_no?: string | null;
+    note?: string | null;
     status: string;
     created_at?: string | null;
     updated_at?: string | null;
@@ -23,6 +25,7 @@ type GoodsReceipt = {
     operator?: string | null;
     cancelled_by?: string | null;
     line_count: number;
+    photos?: string[];
     lines: GoodsReceiptLine[];
 };
 
@@ -75,9 +78,9 @@ function statusLabel(status: string) {
     const labels: Record<string, string> = {
         draft: 'Draft',
         in_progress: 'In Progress',
-        approved: 'Approved',
-        partially_received: 'Partially Received',
+        approved: 'Received',
         received: 'Received',
+        partially_received: 'Partially Received',
         cancelled: 'Cancelled',
         rejected: 'Rejected',
     };
@@ -204,6 +207,44 @@ function numberValue(value: number | string | null | undefined) {
                             >
                                 {{ statusLabel(receipt.status) }}
                             </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    v-if="receipt.note || receipt.photos?.length"
+                    class="rounded-lg border border-slate-100 bg-white p-5 shadow-sm"
+                >
+                    <div v-if="receipt.note" class="mb-4">
+                        <p
+                            class="mb-1 text-xs font-bold text-slate-400 uppercase"
+                        >
+                            Note
+                        </p>
+                        <p class="text-sm whitespace-pre-wrap text-slate-700">
+                            {{ receipt.note }}
+                        </p>
+                    </div>
+                    <div v-if="receipt.photos?.length">
+                        <p
+                            class="mb-2 text-xs font-bold text-slate-400 uppercase"
+                        >
+                            Receipt Pictures
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <a
+                                v-for="photo in receipt.photos"
+                                :key="photo"
+                                :href="photo"
+                                target="_blank"
+                                rel="noopener"
+                            >
+                                <img
+                                    :src="photo"
+                                    alt="Goods receipt"
+                                    class="aspect-square w-full rounded-lg object-cover"
+                                />
+                            </a>
                         </div>
                     </div>
                 </div>

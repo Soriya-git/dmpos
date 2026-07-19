@@ -113,17 +113,18 @@ class PurchaseOrderController extends Controller
             'order_date' => ['required', 'date'],
             'expected_date' => ['nullable', 'date'],
             'note' => ['nullable', 'string'],
+            'est_cost' => ['nullable', 'numeric', 'min:0'],
             'lines' => ['required', 'array', 'min:1'],
             'lines.*.item_id' => ['required', Rule::exists('items', 'id')->where('company_id', $companyId)],
             'lines.*.unit_id' => ['required', Rule::exists('units', 'id')],
             'lines.*.quantity_ordered' => ['required', 'numeric', 'gt:0'],
-            'lines.*.unit_cost' => ['required', 'numeric', 'min:0'],
+            'lines.*.est_cost' => ['nullable', 'numeric', 'min:0'],
             'lines.*.note' => ['nullable', 'string'],
         ]);
 
         DB::transaction(function () use ($data, $companyId, $branchId, $user) {
             $subtotal = collect($data['lines'])->sum(function (array $line) {
-                return (float) $line['quantity_ordered'] * (float) $line['unit_cost'];
+                return (float) $line['quantity_ordered'] * (float) ($line['est_cost'] ?? 0);
             });
 
             $order = PurchaseOrder::create([
@@ -139,6 +140,7 @@ class PurchaseOrderController extends Controller
                 'discount_amount' => 0,
                 'tax_amount' => 0,
                 'grand_total' => $subtotal,
+                'est_cost' => $subtotal > 0 ? $subtotal : null,
                 'order_date' => $data['order_date'],
                 'expected_date' => $data['expected_date'] ?? null,
                 'created_by' => $user->id,
@@ -147,7 +149,7 @@ class PurchaseOrderController extends Controller
 
             foreach ($data['lines'] as $line) {
                 $quantity = (float) $line['quantity_ordered'];
-                $unitCost = (float) $line['unit_cost'];
+                $estimatedCost = (float) ($line['est_cost'] ?? 0);
 
                 PurchaseOrderLine::create([
                     'purchase_order_id' => $order->id,
@@ -157,10 +159,11 @@ class PurchaseOrderController extends Controller
                     'quantity_ordered' => $quantity,
                     'quantity_received' => 0,
                     'quantity_remaining' => $quantity,
-                    'unit_cost' => $unitCost,
+                    'est_cost' => $estimatedCost,
+                    'unit_cost' => 0,
                     'discount_amount' => 0,
                     'tax_amount' => 0,
-                    'line_total' => $quantity * $unitCost,
+                    'line_total' => $quantity * $estimatedCost,
                     'status' => 'open',
                     'note' => $line['note'] ?? null,
                 ]);
@@ -253,6 +256,7 @@ class PurchaseOrderController extends Controller
             'discount_amount' => (float) $order->discount_amount,
             'tax_amount' => (float) $order->tax_amount,
             'grand_total' => (float) $order->grand_total,
+            'est_cost' => $order->est_cost !== null ? (float) $order->est_cost : null,
             'note' => $order->note,
             'lines' => $order->lines->map(fn (PurchaseOrderLine $line) => [
                 'id' => $line->id,
@@ -265,6 +269,7 @@ class PurchaseOrderController extends Controller
                 'quantity_received' => (float) $line->quantity_received,
                 'quantity_remaining' => (float) $line->quantity_remaining,
                 'unit_cost' => (float) $line->unit_cost,
+                'est_cost' => (float) $line->est_cost,
                 'line_total' => (float) $line->line_total,
                 'status' => $line->status,
                 'note' => $line->note,
@@ -287,17 +292,18 @@ class PurchaseOrderController extends Controller
             'order_date' => ['required', 'date'],
             'expected_date' => ['nullable', 'date'],
             'note' => ['nullable', 'string'],
+            'est_cost' => ['nullable', 'numeric', 'min:0'],
             'lines' => ['required', 'array', 'min:1'],
             'lines.*.item_id' => ['required', Rule::exists('items', 'id')->where('company_id', $companyId)],
             'lines.*.unit_id' => ['required', Rule::exists('units', 'id')],
             'lines.*.quantity_ordered' => ['required', 'numeric', 'gt:0'],
-            'lines.*.unit_cost' => ['required', 'numeric', 'min:0'],
+            'lines.*.est_cost' => ['nullable', 'numeric', 'min:0'],
             'lines.*.note' => ['nullable', 'string'],
         ]);
 
         DB::transaction(function () use ($data, $purchaseOrder) {
             $subtotal = collect($data['lines'])->sum(
-                fn (array $line) => (float) $line['quantity_ordered'] * (float) $line['unit_cost']
+                fn (array $line) => (float) $line['quantity_ordered'] * (float) ($line['est_cost'] ?? 0)
             );
 
             $purchaseOrder->update([
@@ -311,13 +317,14 @@ class PurchaseOrderController extends Controller
                 'discount_amount' => 0,
                 'tax_amount' => 0,
                 'grand_total' => $subtotal,
+                'est_cost' => $subtotal > 0 ? $subtotal : null,
             ]);
 
             $purchaseOrder->lines()->delete();
 
             foreach ($data['lines'] as $line) {
                 $quantity = (float) $line['quantity_ordered'];
-                $unitCost = (float) $line['unit_cost'];
+                $estimatedCost = (float) ($line['est_cost'] ?? 0);
 
                 PurchaseOrderLine::create([
                     'purchase_order_id' => $purchaseOrder->id,
@@ -327,10 +334,11 @@ class PurchaseOrderController extends Controller
                     'quantity_ordered' => $quantity,
                     'quantity_received' => 0,
                     'quantity_remaining' => $quantity,
-                    'unit_cost' => $unitCost,
+                    'est_cost' => $estimatedCost,
+                    'unit_cost' => 0,
                     'discount_amount' => 0,
                     'tax_amount' => 0,
-                    'line_total' => $quantity * $unitCost,
+                    'line_total' => $quantity * $estimatedCost,
                     'status' => 'open',
                     'note' => $line['note'] ?? null,
                 ]);

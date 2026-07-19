@@ -41,7 +41,7 @@ const emit = defineEmits<{
 const actionInfo = computed(() => {
     if (props.putaway.status === 'approved') {
         return {
-            status: 'Approved',
+            status: 'Putaway',
             name: props.putaway.approved_by,
             at: actionDate(props.putaway.approved_at),
         };

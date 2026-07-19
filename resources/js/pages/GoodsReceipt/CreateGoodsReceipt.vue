@@ -1,8 +1,23 @@
 <script setup lang="ts">
 import { Head, router, useForm } from '@inertiajs/vue3';
-import { PackageOpen, Plus, Trash2 } from 'lucide-vue-next';
-import { computed, watch } from 'vue';
+import {
+    Camera,
+    PackageOpen,
+    Plus,
+    Trash2,
+    TriangleAlert,
+} from 'lucide-vue-next';
+import { computed, ref, watch } from 'vue';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 
@@ -49,14 +64,20 @@ const breadcrumbs: BreadcrumbItem[] = [
 const form = useForm({
     purchase_order_id: props.purchaseOrder?.id ?? '',
     note: '',
+    photos: [] as File[],
     lines: [] as {
         allocation_key: string;
         purchase_order_line_id: number;
         stock_location_id: number | '';
         quantity_received: number;
+        unit_cost: number;
         selected: boolean;
     }[],
 });
+
+const closeDialogOpen = ref(false);
+const closing = ref(false);
+const closeReason = ref('');
 
 const selectedPurchaseOrder = computed(() => {
     return (
@@ -79,6 +100,7 @@ watch(
                 purchase_order_line_id: line.id,
                 stock_location_id: props.stagingLocations[0]?.id ?? '',
                 quantity_received: Number(line.quantity_remaining || 0),
+                unit_cost: Number(line.unit_cost || 0),
                 selected: Number(line.quantity_remaining || 0) > 0,
             })) ?? [];
     },
@@ -143,6 +165,7 @@ function addAllocation(lineId: number) {
         purchase_order_line_id: lineId,
         stock_location_id: props.stagingLocations[0]?.id ?? '',
         quantity_received: remaining,
+        unit_cost: Number(poLine.unit_cost || 0),
         selected: true,
     });
 }
@@ -210,7 +233,38 @@ function updateStagingZone(allocationKey: string, event: Event) {
 }
 
 function submit() {
-    form.post('/goods-receipts', { preserveScroll: true });
+    form.post('/goods-receipts', { preserveScroll: true, forceFormData: true });
+}
+
+function closePurchaseOrder() {
+    const purchaseOrderId = Number(form.purchase_order_id);
+    if (
+        !purchaseOrderId ||
+        closeReason.value.trim().length < 5 ||
+        closing.value
+    )
+        return;
+
+    closing.value = true;
+    router.patch(
+        `/goods-receipts/purchase-orders/${purchaseOrderId}/close`,
+        { reason: closeReason.value.trim() },
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                closeDialogOpen.value = false;
+            },
+            onFinish: () => {
+                closing.value = false;
+            },
+        },
+    );
+}
+
+function selectPhotos(event: Event) {
+    form.photos = Array.from(
+        (event.target as HTMLInputElement).files ?? [],
+    ).slice(0, 6);
 }
 
 function fieldError(name: string) {
@@ -258,8 +312,83 @@ const canSubmit = computed(() => {
                 >
                     {{ form.processing ? 'Saving...' : 'Save GR' }}
                 </Button>
+                <Button
+                    type="button"
+                    variant="destructive"
+                    class="h-9 rounded-lg px-4 text-xs font-bold shadow-md"
+                    :disabled="
+                        !form.purchase_order_id || form.processing || closing
+                    "
+                    @click="closeDialogOpen = true"
+                >
+                    Cancel GR
+                </Button>
             </div>
         </template>
+
+        <Dialog v-model:open="closeDialogOpen">
+            <DialogContent class="sm:max-w-md" :show-close-button="!closing">
+                <DialogHeader>
+                    <DialogTitle class="flex items-center gap-2 text-rose-700">
+                        <TriangleAlert class="size-5" />
+                        Cancel this receiving case?
+                    </DialogTitle>
+                    <DialogDescription>
+                        This closes the selected purchase order and cancels
+                        every remaining undelivered quantity.
+                    </DialogDescription>
+                </DialogHeader>
+
+                <Alert variant="destructive">
+                    <TriangleAlert />
+                    <AlertTitle>This action cannot be undone</AlertTitle>
+                    <AlertDescription>
+                        Previously received items will be kept, but no more
+                        Goods Receipts can be created for this PO. Confirm only
+                        when the supplier cannot deliver the remaining items.
+                    </AlertDescription>
+                </Alert>
+
+                <div class="space-y-2">
+                    <label
+                        for="gr-cancel-reason"
+                        class="text-sm font-bold text-slate-700"
+                    >
+                        Cancellation reason <span class="text-rose-600">*</span>
+                    </label>
+                    <textarea
+                        id="gr-cancel-reason"
+                        v-model="closeReason"
+                        rows="4"
+                        maxlength="1000"
+                        class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100"
+                        placeholder="Explain why the supplier cannot deliver the remaining quantity..."
+                    ></textarea>
+                    <p class="text-xs text-slate-400">
+                        At least 5 characters are required.
+                    </p>
+                </div>
+
+                <DialogFooter class="gap-2 sm:gap-0">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        :disabled="closing"
+                        @click="closeDialogOpen = false"
+                    >
+                        No, Keep Open
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        :disabled="closing || closeReason.trim().length < 5"
+                        @click="closePurchaseOrder"
+                    >
+                        {{ closing ? 'Cancelling...' : 'Yes, Cancel GR' }}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
 
         <main
             class="h-[calc(100dvh-4rem)] w-full scrollbar-gutter-stable overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
@@ -369,6 +498,31 @@ const canSubmit = computed(() => {
                                     placeholder="Optional receipt note"
                                 ></textarea>
                             </div>
+                            <div>
+                                <label
+                                    class="mb-1 flex items-center gap-2 text-xs font-bold text-slate-500 uppercase"
+                                >
+                                    <Camera class="size-4" /> Receipt Pictures
+                                </label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    capture="environment"
+                                    multiple
+                                    class="block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-[#007882]/10 file:px-3 file:py-2 file:font-bold file:text-[#007882]"
+                                    @change="selectPhotos"
+                                />
+                                <p class="mt-1 text-xs text-slate-400">
+                                    Up to 6 pictures.
+                                    {{ form.photos.length }} selected.
+                                </p>
+                                <p
+                                    v-if="form.errors.photos"
+                                    class="mt-1 text-xs text-rose-600"
+                                >
+                                    {{ form.errors.photos }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </aside>
@@ -397,7 +551,63 @@ const canSubmit = computed(() => {
                             </span>
                         </div>
 
-                        <div class="overflow-x-auto">
+                        <!-- Phone receiving view: only operational receiving fields. -->
+                        <div class="space-y-3 p-4 md:hidden">
+                            <div
+                                v-for="allocation in form.lines"
+                                :key="`mobile-${allocation.allocation_key}`"
+                                class="rounded-xl border border-slate-200 bg-white p-4"
+                            >
+                                <div class="mb-3 font-bold text-[#2a4858]">
+                                    {{
+                                        poLineFor(
+                                            allocation.purchase_order_line_id,
+                                        )?.item_name ?? 'Item'
+                                    }}
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <p
+                                            class="text-xs font-bold text-slate-400 uppercase"
+                                        >
+                                            Qty in PO
+                                        </p>
+                                        <p
+                                            class="mt-1 text-lg font-bold text-slate-700"
+                                        >
+                                            {{
+                                                poLineFor(
+                                                    allocation.purchase_order_line_id,
+                                                )?.quantity_ordered ?? 0
+                                            }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="text-xs font-bold text-[#007882] uppercase"
+                                            >Qty Received</label
+                                        >
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            :max="maxQuantityFor(allocation)"
+                                            :value="
+                                                allocation.quantity_received
+                                            "
+                                            class="mt-1 h-11 w-full rounded-lg border-2 border-[#007882] px-3 text-lg font-bold text-[#007882]"
+                                            @input="
+                                                updateQuantityFromEvent(
+                                                    allocation.allocation_key,
+                                                    $event,
+                                                )
+                                            "
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hidden overflow-x-auto md:block">
                             <table class="w-full text-sm">
                                 <thead
                                     class="border-b border-slate-100 text-slate-500"
@@ -427,6 +637,11 @@ const canSubmit = computed(() => {
                                             class="px-4 py-3 text-center font-semibold text-[#007882]"
                                         >
                                             Received Today
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-right font-semibold text-[#007882]"
+                                        >
+                                            Actual Unit Cost
                                         </th>
                                         <th
                                             class="px-4 py-3 text-left font-semibold text-[#007882]"
@@ -535,6 +750,17 @@ const canSubmit = computed(() => {
                                                 "
                                             />
                                         </td>
+                                        <td class="px-4 py-4 text-center">
+                                            <input
+                                                v-model.number="
+                                                    allocation.unit_cost
+                                                "
+                                                type="number"
+                                                min="0"
+                                                step="0.0001"
+                                                class="mx-auto h-9 w-28 rounded-lg border border-slate-200 px-2 text-right font-mono"
+                                            />
+                                        </td>
                                         <td class="px-4 py-4">
                                             <select
                                                 :value="
@@ -625,7 +851,7 @@ const canSubmit = computed(() => {
                                     </tr>
                                     <tr v-if="form.lines.length === 0">
                                         <td
-                                            colspan="7"
+                                            colspan="8"
                                             class="px-6 py-16 text-center text-sm text-slate-400"
                                         >
                                             <PackageOpen

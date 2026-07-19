@@ -30,6 +30,7 @@ type GoodsReceiptLine = {
     unit_code?: string | null;
     staging_area?: string | null;
     quantity_received: number;
+    unit_cost: number;
 };
 
 type GoodsReceipt = {
@@ -38,6 +39,7 @@ type GoodsReceipt = {
     purchase_order_id?: number | null;
     purchase_order_no?: string | null;
     note?: string | null;
+    photos?: string[];
     status: string;
     created_at?: string | null;
     updated_at?: string | null;
@@ -139,9 +141,9 @@ function statusLabel(status: string) {
     const labels: Record<string, string> = {
         draft: 'Draft',
         in_progress: 'In Progress',
-        approved: 'Approved',
-        partially_received: 'Partially Received',
+        approved: 'Received',
         received: 'Received',
+        partially_received: 'Partially Received',
         cancelled: 'Cancelled',
         rejected: 'Rejected',
     };
@@ -366,7 +368,7 @@ function updateReceiptStatus(
                             <option value="">All Status</option>
                             <option value="draft">Draft</option>
                             <option value="in_progress">In Progress</option>
-                            <option value="approved">Approved</option>
+                            <option value="received">Received</option>
                             <option value="partially_received">
                                 Partially Received
                             </option>

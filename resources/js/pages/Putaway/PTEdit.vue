@@ -237,7 +237,7 @@ defineExpose({
                             <label
                                 class="mb-1.5 block text-xs font-bold text-slate-500 uppercase"
                             >
-                                Assign Putaway Staff
+                                Putaway By
                             </label>
                             <div class="relative">
                                 <UserRound

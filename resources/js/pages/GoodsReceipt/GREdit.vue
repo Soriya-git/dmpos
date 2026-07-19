@@ -20,6 +20,7 @@ type GRLine = {
     item_code?: string | null;
     unit_code?: string | null;
     quantity_received: number;
+    unit_cost: number;
 };
 
 type GoodsReceipt = {
@@ -51,12 +52,14 @@ const form = useForm({
         stock_location_id:
             l.stock_location_id ?? props.stagingLocations[0]?.id ?? '',
         quantity_received: l.quantity_received,
+        unit_cost: l.unit_cost,
         selected: l.quantity_received > 0,
     })) as {
         allocation_key: string;
         purchase_order_line_id: number;
         stock_location_id: number | '';
         quantity_received: number;
+        unit_cost: number;
         selected: boolean;
     }[],
 });
@@ -112,6 +115,7 @@ function addAllocation(lineId: number) {
         purchase_order_line_id: lineId,
         stock_location_id: props.stagingLocations[0]?.id ?? '',
         quantity_received: remaining,
+        unit_cost: 0,
         selected: true,
     });
 }
@@ -285,6 +289,11 @@ defineExpose({
                                         Qty Received
                                     </th>
                                     <th
+                                        class="px-4 py-3 text-right font-semibold text-[#007882]"
+                                    >
+                                        Actual Unit Cost
+                                    </th>
+                                    <th
                                         class="px-4 py-3 text-left font-semibold text-[#007882]"
                                     >
                                         Staging Zone
@@ -377,6 +386,17 @@ defineExpose({
                                             "
                                         />
                                     </td>
+                                    <td class="px-4 py-4 text-center">
+                                        <input
+                                            v-model.number="
+                                                allocation.unit_cost
+                                            "
+                                            type="number"
+                                            min="0"
+                                            step="0.0001"
+                                            class="mx-auto h-9 w-28 rounded-lg border border-slate-200 px-2 text-right font-mono"
+                                        />
+                                    </td>
                                     <td class="px-4 py-4">
                                         <select
                                             :value="
@@ -450,7 +470,7 @@ defineExpose({
                                 </tr>
                                 <tr v-if="form.lines.length === 0">
                                     <td
-                                        colspan="6"
+                                        colspan="7"
                                         class="px-6 py-16 text-center text-sm text-slate-400"
                                     >
                                         <PackageOpen

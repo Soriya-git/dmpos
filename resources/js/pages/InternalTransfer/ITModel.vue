@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { CalendarDays, X } from 'lucide-vue-next';
+import { router, useForm } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import SearchDropdown from '@/components/SearchDropdown.vue';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 type TransferLine = {
     id: number;
@@ -9,6 +12,9 @@ type TransferLine = {
     itemName: string;
     unit: string;
     quantity: number;
+    quantityDispatched?: number;
+    quantityReceived?: number;
+    quantityOutstanding?: number;
     unitCost: number;
     totalCost: number;
     fromWarehouse?: string | null;
@@ -47,6 +53,15 @@ type TransferRecord = {
 
 const props = defineProps<{
     transfer: TransferRecord;
+    page?: boolean;
+    locations: Array<{
+        id: number;
+        warehouseId: number;
+        code: string;
+        name: string;
+        warehouse: string;
+        type: string;
+    }>;
 }>();
 
 const emit = defineEmits<{
@@ -59,6 +74,48 @@ const allowedTypeLabels: Record<string, string> = {
     obsolete: 'Obsolete',
     scrap: 'Scrap',
 };
+
+const receiveForm = useForm({
+    lines: props.transfer.lines.map((line) => ({
+        id: line.id,
+        to_location_id: '' as number | '',
+        quantity: Number(line.quantityOutstanding ?? 0),
+    })),
+});
+
+const destinationOptions = computed(() =>
+    props.locations
+        .filter(
+            (location) => location.warehouse === props.transfer.toWarehouse,
+        )
+        .map((location) => ({
+            value: location.id,
+            label: `${location.code} - ${location.name}`,
+            description: locationTypeLabel(location.type),
+        })),
+);
+
+const canReceive = computed(() =>
+    receiveForm.lines.some(
+        (line) => Number(line.quantity) > 0 && line.to_location_id,
+    ),
+);
+
+function savePutaway() {
+    receiveForm.patch(
+        `/stock-movements/internal-transfer/${props.transfer.id}/receive`,
+        { preserveScroll: true, onSuccess: () => emit('close') },
+    );
+}
+
+function rejectInbound() {
+    if (!window.confirm('Reject this inbound transfer? All outstanding stock will be returned to the source warehouse.')) return;
+    router.patch(
+        `/stock-movements/internal-transfer/${props.transfer.id}/reject`,
+        {},
+        { preserveScroll: true, onSuccess: () => emit('close') },
+    );
+}
 
 const actionInfo = computed(() => {
     if (props.transfer.actionStatus === 'Approved') {
@@ -141,6 +198,7 @@ function statusLabel(value: string) {
     const labels: Record<string, string> = {
         draft: 'Draft',
         approved: 'Approved',
+        in_transit: 'Awaiting Putaway',
         received: 'Completed',
         cancelled: 'Cancelled',
         rejected: 'Rejected',
@@ -153,6 +211,7 @@ function statusClass(value: string) {
     const classes: Record<string, string> = {
         draft: 'bg-amber-100 text-amber-700',
         approved: 'bg-blue-100 text-blue-700',
+        in_transit: 'bg-blue-100 text-blue-700',
         received: 'bg-green-100 text-green-700',
         cancelled: 'bg-slate-100 text-slate-600',
         rejected: 'bg-red-100 text-red-700',
@@ -164,11 +223,18 @@ function statusClass(value: string) {
 
 <template>
     <div
-        class="fixed inset-0 z-[75] flex items-center justify-center bg-[#2a4858]/20 p-4 backdrop-blur-sm"
+        :class="
+            page
+                ? 'w-full'
+                : 'fixed inset-0 z-[75] flex items-center justify-center bg-[#2a4858]/20 p-4 backdrop-blur-sm'
+        "
         @click.self="emit('close')"
     >
         <section
-            class="flex max-h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-lg bg-white shadow-2xl"
+            :class="[
+                'flex w-full flex-col overflow-hidden rounded-lg bg-white',
+                page ? 'shadow-sm' : 'max-h-[90vh] max-w-6xl shadow-2xl',
+            ]"
         >
             <header
                 class="flex items-start justify-between gap-4 border-b border-slate-100 p-5"
@@ -188,6 +254,7 @@ function statusClass(value: string) {
                     </p>
                 </div>
                 <Button
+                    v-if="!page"
                     type="button"
                     variant="outline"
                     class="h-9 w-9 rounded-lg border-slate-100 p-0 text-slate-400"
@@ -367,6 +434,70 @@ function statusClass(value: string) {
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <div
+                    v-if="transfer.status === 'in_transit'"
+                    class="mt-5 rounded-lg border border-blue-100 bg-blue-50/50 p-4"
+                >
+                    <h3 class="font-bold text-[#2a4858]">Destination Putaway</h3>
+                    <p class="mt-1 text-sm text-slate-500">
+                        Choose a location and receive all or part of each outstanding quantity.
+                    </p>
+                    <div class="mt-4 space-y-3">
+                        <div
+                            v-for="(line, index) in transfer.lines"
+                            :key="line.id"
+                            class="grid gap-3 rounded-lg bg-white p-3 md:grid-cols-[minmax(0,1fr)_minmax(15rem,1fr)_9rem] md:items-end"
+                        >
+                            <div>
+                                <p class="font-bold text-[#2a4858]">{{ line.itemName }}</p>
+                                <p class="text-xs text-slate-500">
+                                    Received {{ numberValue(line.quantityReceived) }} / Dispatched {{ numberValue(line.quantityDispatched) }} {{ line.unit }}
+                                </p>
+                            </div>
+                            <div>
+                                <label class="mb-1 block text-xs font-bold text-slate-500">Putaway Location</label>
+                                <SearchDropdown
+                                    v-model="receiveForm.lines[index].to_location_id"
+                                    :options="destinationOptions"
+                                    placeholder="Choose location"
+                                    search-placeholder="Search location..."
+                                />
+                            </div>
+                            <div>
+                                <label class="mb-1 block text-xs font-bold text-slate-500">Qty to Putaway</label>
+                                <Input
+                                    v-model.number="receiveForm.lines[index].quantity"
+                                    type="number"
+                                    min="0"
+                                    :max="line.quantityOutstanding"
+                                    step="0.0001"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <p v-if="receiveForm.errors.lines" class="mt-3 text-sm font-semibold text-red-600">
+                        {{ receiveForm.errors.lines }}
+                    </p>
+                    <div class="mt-4 flex justify-end gap-2">
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            :disabled="receiveForm.processing"
+                            @click="rejectInbound"
+                        >
+                            Reject Transfer
+                        </Button>
+                        <Button
+                            type="button"
+                            class="bg-[#007882] text-white hover:bg-[#006773]"
+                            :disabled="!canReceive || receiveForm.processing"
+                            @click="savePutaway"
+                        >
+                            Accept & Putaway
+                        </Button>
+                    </div>
                 </div>
             </div>
 

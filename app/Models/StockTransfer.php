@@ -11,6 +11,7 @@ class StockTransfer extends Model
     protected $casts = [
         'transfer_date' => 'datetime',
         'approved_at' => 'datetime',
+        'rejected_at' => 'datetime',
         'dispatched_at' => 'datetime',
         'received_at' => 'datetime',
         'cancelled_at' => 'datetime',
@@ -74,6 +75,16 @@ class StockTransfer extends Model
     public function approver()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function assignee()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    public function rejecter()
+    {
+        return $this->belongsTo(User::class, 'rejected_by');
     }
 
     public function canceller()

@@ -98,6 +98,7 @@ function statusClass(status: string) {
 }
 
 function statusLabel(status: string) {
+    if (status === 'approved' || status === 'received') return 'Received';
     return status
         .split('_')
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

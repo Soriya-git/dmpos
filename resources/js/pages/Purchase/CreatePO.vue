@@ -26,7 +26,7 @@ type FormLine = {
     item_id: number | '';
     unit_id: number | '';
     quantity_ordered: number;
-    unit_cost: number;
+    est_cost: number;
     note: string;
 };
 
@@ -60,7 +60,7 @@ const makeLine = (): FormLine => ({
     item_id: '',
     unit_id: '',
     quantity_ordered: 1,
-    unit_cost: 0,
+    est_cost: 0,
     note: '',
 });
 
@@ -71,17 +71,9 @@ const form = useForm({
     order_date: today(),
     expected_date: '',
     note: '',
+    est_cost: '' as number | '',
     lines: [makeLine()],
 });
-
-const grandTotal = computed(() =>
-    form.lines.reduce(
-        (total, line) =>
-            total +
-            Number(line.quantity_ordered || 0) * Number(line.unit_cost || 0),
-        0,
-    ),
-);
 
 const itemOptions = computed(() =>
     props.items.map((item) => ({
@@ -90,6 +82,10 @@ const itemOptions = computed(() =>
         description: item.code,
         meta: `${item.unit_code ?? 'Unit'} / ${money(item.cost)}`,
     })),
+);
+
+const estimatedTotal = computed(() =>
+    form.lines.reduce((total, line) => total + lineTotal(line), 0),
 );
 
 const canSubmit = computed(
@@ -135,7 +131,6 @@ function selectItem(line: FormLine) {
     const item = selectedItem(line.item_id);
     if (!item) return;
     line.unit_id = item.unit_id;
-    line.unit_cost = Number(item.cost || 0);
 }
 
 function selectSupplier(
@@ -147,7 +142,7 @@ function selectSupplier(
 }
 
 function lineTotal(line: FormLine) {
-    return Number(line.quantity_ordered || 0) * Number(line.unit_cost || 0);
+    return Number(line.quantity_ordered || 0) * Number(line.est_cost || 0);
 }
 
 function submit() {
@@ -162,6 +157,8 @@ function submit() {
         }
         return;
     }
+
+    form.est_cost = estimatedTotal.value > 0 ? estimatedTotal.value : '';
 
     form.post('/purchase', {
         preserveScroll: true,
@@ -313,19 +310,14 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                                         Qty
                                     </th>
                                     <th
+                                        class="w-36 px-4 py-3 text-center font-semibold"
+                                    >
+                                        Est. Cost
+                                    </th>
+                                    <th
                                         class="px-4 py-3 text-left font-semibold"
                                     >
                                         Unit
-                                    </th>
-                                    <th
-                                        class="px-4 py-3 text-right font-semibold"
-                                    >
-                                        Cost
-                                    </th>
-                                    <th
-                                        class="px-4 py-3 text-right font-semibold"
-                                    >
-                                        Total
                                     </th>
                                     <th class="w-12 px-4 py-3"></th>
                                 </tr>
@@ -359,6 +351,15 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                                         />
                                     </td>
                                     <td class="px-4 py-4">
+                                        <Input
+                                            v-model.number="line.est_cost"
+                                            type="number"
+                                            min="0"
+                                            step="0.0001"
+                                            class="mx-auto h-9 w-28 rounded border-slate-200 text-right font-mono"
+                                        />
+                                    </td>
+                                    <td class="px-4 py-4">
                                         <select
                                             v-model="line.unit_id"
                                             class="h-9 w-24 rounded border border-slate-200 bg-white px-2 text-xs outline-none focus:border-[#007882] focus:ring-2 focus:ring-[#007882]/20"
@@ -372,20 +373,6 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                                                 {{ unit.code }}
                                             </option>
                                         </select>
-                                    </td>
-                                    <td class="px-4 py-4">
-                                        <Input
-                                            v-model.number="line.unit_cost"
-                                            type="number"
-                                            min="0"
-                                            step="0.0001"
-                                            class="h-9 w-28 rounded border-slate-200 text-right font-mono"
-                                        />
-                                    </td>
-                                    <td
-                                        class="px-4 py-4 text-right font-mono font-bold text-slate-700"
-                                    >
-                                        {{ money(lineTotal(line)) }}
                                     </td>
                                     <td class="px-4 py-4 text-center">
                                         <Button
@@ -403,15 +390,14 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                         </table>
                     </div>
                     <InputError class="px-4 pb-4" :message="firstLineError" />
-                </div>
-
-                <div class="rounded-lg bg-[#2a4858] p-6 text-white shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <span class="text-lg font-bold">
-                            Estimated Grand Total
+                    <div
+                        class="flex items-center justify-between border-t border-slate-100 bg-[#2a4858] px-5 py-4 text-white"
+                    >
+                        <span class="text-sm font-bold uppercase">
+                            Est. Total Amount
                         </span>
-                        <span class="text-2xl font-bold text-[#fafa6e]">
-                            {{ money(grandTotal) }}
+                        <span class="text-xl font-bold text-[#fafa6e]">
+                            {{ money(estimatedTotal) }}
                         </span>
                     </div>
                 </div>

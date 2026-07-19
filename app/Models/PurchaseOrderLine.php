@@ -12,6 +12,7 @@ class PurchaseOrderLine extends Model
         'quantity_ordered' => 'decimal:4',
         'quantity_received' => 'decimal:4',
         'quantity_remaining' => 'decimal:4',
+        'est_cost' => 'decimal:4',
         'unit_cost' => 'decimal:4',
         'discount_amount' => 'decimal:2',
         'tax_amount' => 'decimal:2',

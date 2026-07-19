@@ -7,6 +7,7 @@ import {
     Eye,
     PackageX,
     Search,
+    UserRound,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import MasterDataTable from '@/components/master-data/MasterDataTable.vue';
@@ -15,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 
-type BalanceView = 'all' | 'good' | 'low' | 'none';
+type BalanceView = 'all' | 'good' | 'low' | 'none' | 'customer';
 
 type BalanceItem = {
     id: number;
@@ -62,6 +63,7 @@ const tabs: {
     { key: 'good', label: 'Good Stock', icon: CheckCircle2 },
     { key: 'low', label: 'Low Stock', icon: AlertTriangle },
     { key: 'none', label: 'No Stock', icon: PackageX },
+    { key: 'customer', label: 'Customer Kept', icon: UserRound },
 ];
 
 const normalizedSearch = computed(() => search.value.trim().toLowerCase());
@@ -69,7 +71,11 @@ const visibleItems = computed(() => {
     const rows =
         activeView.value === 'all'
             ? props.items
-            : props.items.filter((item) => item.status === activeView.value);
+            : activeView.value === 'customer'
+              ? props.items.filter(
+                    (item) => Number(item.customerQuantityAvailable) > 0,
+                )
+              : props.items.filter((item) => item.status === activeView.value);
 
     if (!normalizedSearch.value) {
         return rows;
@@ -83,6 +89,7 @@ const visibleItems = computed(() => {
             item.unit,
             item.status,
             item.quantityAvailable,
+            item.customerQuantityAvailable,
             item.minimumStockQty,
         ].some((value) =>
             String(value).toLowerCase().includes(normalizedSearch.value),
@@ -304,14 +311,24 @@ function viewCustomerStock(item: BalanceItem) {
                     </td>
                     <td class="px-4 py-3 text-xs">
                         <div class="font-bold text-[#16836f]">
-                            {{ numberValue(row.quantityAvailable) }}
+                            {{
+                                numberValue(
+                                    activeView === 'customer'
+                                        ? row.customerQuantityAvailable
+                                        : row.quantityAvailable,
+                                )
+                            }}
                             {{ row.unit }}
                         </div>
-                        <div class="mt-1 text-slate-600">
+                        <div
+                            v-if="activeView !== 'customer'"
+                            class="mt-1 text-slate-600"
+                        >
                             {{ numberValue(row.companyQuantityAvailable) }}
                             {{ row.unit }} company stock
                         </div>
                         <button
+                            v-if="activeView !== 'customer'"
                             type="button"
                             class="mt-1 text-left text-rose-600 italic underline-offset-2 hover:underline disabled:cursor-default disabled:text-rose-300 disabled:no-underline"
                             :disabled="
@@ -321,6 +338,14 @@ function viewCustomerStock(item: BalanceItem) {
                         >
                             {{ numberValue(row.customerQuantityAvailable) }}
                             {{ row.unit }} customer keep stock
+                        </button>
+                        <button
+                            v-else
+                            type="button"
+                            class="mt-1 text-left text-[#007882] underline-offset-2 hover:underline"
+                            @click="viewCustomerStock(row)"
+                        >
+                            View customer-kept details
                         </button>
                     </td>
                     <td class="px-4 py-3 text-xs font-bold text-slate-700">

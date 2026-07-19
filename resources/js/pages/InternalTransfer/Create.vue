@@ -143,7 +143,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 const search = ref(props.filters.search ?? '');
 const warehouseId = ref<number | string | ''>(props.filters.warehouse_id ?? '');
 const locationId = ref<number | string | ''>(props.filters.location_id ?? '');
-const detailTransfer = ref<TransferRecord | null>(null);
 const page = usePage();
 
 const {
@@ -176,10 +175,10 @@ const today = () => {
 
 const makeLine = (): FormLine => ({
     item_id: '',
-    from_warehouse_id: props.warehouses[0]?.id ?? '',
+    from_warehouse_id: props.inventory[0]?.warehouseId ?? '',
     stock_balance_id: '',
     quantity: 1,
-    to_warehouse_id: props.warehouses[0]?.id ?? '',
+    to_warehouse_id: props.inventory[0]?.warehouseId ?? '',
     to_location_id: '',
     note: '',
 });
@@ -228,6 +227,16 @@ const warehouseOptions = computed(() =>
     })),
 );
 
+const sourceWarehouseOptions = computed(() => {
+    const availableWarehouseIds = new Set(
+        props.inventory.map((balance) => Number(balance.warehouseId)),
+    );
+
+    return warehouseOptions.value.filter((warehouse) =>
+        availableWarehouseIds.has(Number(warehouse.value)),
+    );
+});
+
 const canSubmit = computed(
     () =>
         Boolean(form.transfer_date) &&
@@ -239,7 +248,9 @@ const canSubmit = computed(
                 line.stock_balance_id &&
                 line.quantity > 0 &&
                 line.to_warehouse_id &&
-                line.to_location_id,
+                (Number(line.from_warehouse_id) !==
+                    Number(line.to_warehouse_id) ||
+                    line.to_location_id),
         ),
 );
 
@@ -523,12 +534,14 @@ function submitTransfer() {
                     (!line.from_warehouse_id ||
                         !line.stock_balance_id ||
                         !line.to_warehouse_id ||
-                        !line.to_location_id),
+                        (Number(line.from_warehouse_id) ===
+                            Number(line.to_warehouse_id) &&
+                            !line.to_location_id)),
             )
         ) {
             form.setError(
                 'lines',
-                'Select source warehouse, source location, destination warehouse, and destination location for every item.',
+                'Select the source and destination warehouse. A destination location is required only within the same warehouse.',
             );
         }
 
@@ -570,12 +583,9 @@ function submitTransfer() {
 }
 
 function openDetail(transfer: TransferRecord) {
-    detailTransfer.value = transfer;
+    router.visit(`/stock-movements/internal-transfer/${transfer.id}`);
 }
 
-function closeDetail() {
-    detailTransfer.value = null;
-}
 
 function updateTransferStatus(
     transfer: TransferRecord,
@@ -695,7 +705,7 @@ function updateTransferStatus(
                                                                 line.from_warehouse_id
                                                             "
                                                             :options="
-                                                                warehouseOptions
+                                                                sourceWarehouseOptions
                                                             "
                                                             placeholder="From warehouse"
                                                             search-placeholder="Search warehouse..."
@@ -793,6 +803,14 @@ function updateTransferStatus(
                                                         "
                                                     />
                                                     <SearchDropdown
+                                                        v-if="
+                                                            Number(
+                                                                line.from_warehouse_id,
+                                                            ) ===
+                                                            Number(
+                                                                line.to_warehouse_id,
+                                                            )
+                                                        "
                                                         v-model="
                                                             line.to_location_id
                                                         "
@@ -809,6 +827,12 @@ function updateTransferStatus(
                                                         empty-text="No target location found."
                                                         input-class="border-transparent font-medium"
                                                     />
+                                                    <p
+                                                        v-else
+                                                        class="rounded-md bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-700"
+                                                    >
+                                                        Location will be chosen by the destination warehouse during putaway.
+                                                    </p>
                                                 </div>
                                             </td>
                                             <td class="px-4 py-4 text-center">

@@ -6,10 +6,20 @@ import {
     Info,
     Plus,
     Trash2,
+    TriangleAlert,
     UserRound,
 } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 
@@ -103,6 +113,9 @@ const form = useForm({
 });
 
 const hydratedDraft = ref(Boolean(props.putaway));
+const cancelDialogOpen = ref(false);
+const cancelReason = ref('');
+const cancelling = ref(false);
 
 const selectedReceipt = computed(
     () =>
@@ -251,6 +264,26 @@ function cancel() {
         router.visit('/putaway/completed-goods-receipts');
     }
 }
+
+function cancelPutaway() {
+    const receiptId = Number(form.goods_receipt_id);
+    if (!receiptId || cancelReason.value.trim().length < 5 || cancelling.value)
+        return;
+
+    cancelling.value = true;
+    router.patch(
+        `/putaway/goods-receipts/${receiptId}/cancel`,
+        { reason: cancelReason.value.trim() },
+        {
+            onSuccess: () => {
+                cancelDialogOpen.value = false;
+            },
+            onFinish: () => {
+                cancelling.value = false;
+            },
+        },
+    );
+}
 </script>
 
 <template>
@@ -282,8 +315,84 @@ function cancel() {
                               : 'Save Draft'
                     }}
                 </Button>
+                <Button
+                    type="button"
+                    variant="destructive"
+                    class="h-9 rounded-lg px-4 text-xs font-bold shadow-md"
+                    :disabled="
+                        !form.goods_receipt_id || form.processing || cancelling
+                    "
+                    @click="cancelDialogOpen = true"
+                >
+                    Cancel Putaway
+                </Button>
             </div>
         </template>
+
+        <Dialog v-model:open="cancelDialogOpen">
+            <DialogContent class="sm:max-w-md" :show-close-button="!cancelling">
+                <DialogHeader>
+                    <DialogTitle class="flex items-center gap-2 text-rose-700">
+                        <TriangleAlert class="size-5" />
+                        Cancel this putaway case?
+                    </DialogTitle>
+                    <DialogDescription>
+                        This closes the remaining putaway work for the selected
+                        Goods Receipt.
+                    </DialogDescription>
+                </DialogHeader>
+
+                <Alert variant="destructive">
+                    <TriangleAlert />
+                    <AlertTitle>This action cannot be undone</AlertTitle>
+                    <AlertDescription>
+                        The received stock will remain in staging, but this GR
+                        will no longer be available for new putaway tasks.
+                    </AlertDescription>
+                </Alert>
+
+                <div class="space-y-2">
+                    <label
+                        for="putaway-cancel-reason"
+                        class="text-sm font-bold text-slate-700"
+                    >
+                        Cancellation reason <span class="text-rose-600">*</span>
+                    </label>
+                    <textarea
+                        id="putaway-cancel-reason"
+                        v-model="cancelReason"
+                        rows="4"
+                        maxlength="1000"
+                        class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100"
+                        placeholder="Explain why this putaway case must be cancelled..."
+                    ></textarea>
+                    <p class="text-xs text-slate-400">
+                        At least 5 characters are required.
+                    </p>
+                </div>
+
+                <DialogFooter class="gap-2 sm:gap-0">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        :disabled="cancelling"
+                        @click="cancelDialogOpen = false"
+                    >
+                        No, Keep Open
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        :disabled="cancelling || cancelReason.trim().length < 5"
+                        @click="cancelPutaway"
+                    >
+                        {{
+                            cancelling ? 'Cancelling...' : 'Yes, Cancel Putaway'
+                        }}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
 
         <main
             class="h-[calc(100dvh-4rem)] w-full scrollbar-gutter-stable overflow-y-scroll bg-[#f8fafc] p-4 text-slate-800 md:h-[calc(100dvh-5rem)] md:p-6 xl:p-8 2xl:p-10"
@@ -576,7 +685,7 @@ function cancel() {
                                 <label
                                     class="mb-1.5 block text-xs font-bold text-slate-500 uppercase"
                                 >
-                                    Assign Putaway Staff
+                                    Putaway By
                                 </label>
                                 <div class="relative">
                                     <UserRound

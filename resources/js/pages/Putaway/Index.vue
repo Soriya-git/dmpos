@@ -58,10 +58,12 @@ type Putaway = {
     updated_at?: string | null;
     approved_at?: string | null;
     cancelled_at?: string | null;
+    rejected_at?: string | null;
     assigned_staff: string;
     created_by?: string | null;
     approved_by?: string | null;
     cancelled_by?: string | null;
+    rejected_by?: string | null;
     item_count: number;
     total_quantity: number;
     status: string;
@@ -148,7 +150,7 @@ function statusLabel(status: string) {
     const labels: Record<string, string> = {
         draft: 'Draft',
         submitted: 'Submitted',
-        approved: 'Approved',
+        approved: 'Putaway',
         in_transit: 'In Transit',
         received: 'Received',
         cancelled: 'Cancelled',
@@ -375,7 +377,7 @@ function updatePutawayStatus(
                             <option value="">All Status</option>
                             <option value="draft">Draft</option>
                             <option value="submitted">Submitted</option>
-                            <option value="approved">Approved</option>
+                            <option value="approved">Putaway</option>
                             <option value="in_transit">In Transit</option>
                             <option value="received">Received</option>
                             <option value="cancelled">Cancelled</option>

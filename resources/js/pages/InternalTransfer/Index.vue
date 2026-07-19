@@ -10,7 +10,6 @@ import { Input } from '@/components/ui/input';
 import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import ITModel from './ITModel.vue';
 
 type InventoryBalance = {
     id: number;
@@ -124,7 +123,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 const search = ref(props.filters.search ?? '');
 const warehouseId = ref<number | string | ''>(props.filters.warehouse_id ?? '');
 const locationId = ref<number | string | ''>(props.filters.location_id ?? '');
-const detailTransfer = ref<TransferRecord | null>(null);
 const page = usePage();
 
 const {
@@ -188,6 +186,7 @@ function numberValue(value: number | string | null | undefined) {
 function statusLabel(value: string) {
     const labels: Record<string, string> = {
         draft: 'Draft',
+        in_transit: 'Awaiting Putaway',
         approved: 'Approved',
         received: 'Completed',
         cancelled: 'Cancelled',
@@ -200,6 +199,7 @@ function statusLabel(value: string) {
 function statusClass(value: string) {
     const classes: Record<string, string> = {
         draft: 'bg-amber-100 text-amber-700',
+        in_transit: 'bg-blue-100 text-blue-700',
         approved: 'bg-blue-100 text-blue-700',
         received: 'bg-green-100 text-green-700',
         cancelled: 'bg-slate-100 text-slate-600',
@@ -242,12 +242,9 @@ function showCreate() {
 }
 
 function openDetail(transfer: TransferRecord) {
-    detailTransfer.value = transfer;
+    router.visit(`/stock-movements/internal-transfer/${transfer.id}`);
 }
 
-function closeDetail() {
-    detailTransfer.value = null;
-}
 
 function updateTransferStatus(
     transfer: TransferRecord,
@@ -535,11 +532,6 @@ function updateTransferStatus(
                 />
             </section>
 
-            <ITModel
-                v-if="detailTransfer"
-                :transfer="detailTransfer"
-                @close="closeDetail"
-            />
         </main>
     </AppLayout>
 </template>

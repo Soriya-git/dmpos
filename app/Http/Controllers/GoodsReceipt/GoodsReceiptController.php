@@ -85,6 +85,8 @@ class GoodsReceiptController extends Controller
                     ->where('company_id', $companyId),
             ],
             'note' => ['nullable', 'string'],
+            'photos' => ['nullable', 'array', 'max:6'],
+            'photos.*' => ['image', 'max:10240'],
             'lines' => ['required', 'array', 'min:1'],
             'lines.*.purchase_order_line_id' => ['required', 'integer'],
             'lines.*.stock_location_id' => [
@@ -95,9 +97,15 @@ class GoodsReceiptController extends Controller
                     ->where('location_type', 'inbound_staging'),
             ],
             'lines.*.quantity_received' => ['required', 'numeric', 'min:0'],
+            'lines.*.unit_cost' => ['required', 'numeric', 'min:0'],
         ]);
 
-        $receipt = DB::transaction(function () use ($request, $data, $companyId, $branchId) {
+        $photoPaths = collect($request->file('photos', []))
+            ->map(fn ($photo) => $photo->store('goods-receipts', 'public'))
+            ->values()
+            ->all();
+
+        $receipt = DB::transaction(function () use ($request, $data, $photoPaths, $companyId, $branchId) {
             $purchaseOrder = $this->receivablePurchaseOrders($companyId, $branchId)
                 ->lockForUpdate()
                 ->findOrFail($data['purchase_order_id']);
@@ -151,12 +159,14 @@ class GoodsReceiptController extends Controller
                 'received_at' => null,
                 'received_by' => $request->user()->id,
                 'note' => $data['note'] ?? null,
+                'photos' => $photoPaths,
             ]);
 
             foreach ($lineInput as $inputLine) {
                 $line = $purchaseOrder->lines->firstWhere('id', (int) $inputLine['purchase_order_line_id']);
                 $quantity = (float) $inputLine['quantity_received'];
-                $totalCost = $quantity * (float) $line->unit_cost;
+                $unitCost = (float) $inputLine['unit_cost'];
+                $totalCost = $quantity * $unitCost;
 
                 GoodsReceiptLine::create([
                     'goods_receipt_id' => $receipt->id,
@@ -165,7 +175,7 @@ class GoodsReceiptController extends Controller
                     'unit_id' => $line->unit_id,
                     'stock_location_id' => $inputLine['stock_location_id'],
                     'quantity_received' => $quantity,
-                    'unit_cost' => $line->unit_cost,
+                    'unit_cost' => $unitCost,
                     'total_cost' => $totalCost,
                 ]);
             }
@@ -196,6 +206,7 @@ class GoodsReceiptController extends Controller
                     ->where('location_type', 'inbound_staging'),
             ],
             'lines.*.quantity_received' => ['required', 'numeric', 'min:0'],
+            'lines.*.unit_cost' => ['required', 'numeric', 'min:0'],
         ]);
 
         DB::transaction(function () use ($data, $goodsReceipt) {
@@ -226,8 +237,8 @@ class GoodsReceiptController extends Controller
                     'unit_id' => $poLine->unit_id,
                     'stock_location_id' => (int) $inputLine['stock_location_id'],
                     'quantity_received' => $quantity,
-                    'unit_cost' => $poLine->unit_cost,
-                    'total_cost' => $quantity * (float) $poLine->unit_cost,
+                    'unit_cost' => (float) $inputLine['unit_cost'],
+                    'total_cost' => $quantity * (float) $inputLine['unit_cost'],
                 ]);
             }
 
@@ -253,6 +264,64 @@ class GoodsReceiptController extends Controller
         return Inertia::render('GoodsReceipt/ApprovedPO_forGR', [
             'orders' => $this->formattedReceivablePurchaseOrders($companyId, $branchId),
         ]);
+    }
+
+    public function closePurchaseOrder(Request $request, PurchaseOrder $purchaseOrder)
+    {
+        [$companyId, $branchId] = $this->scope($request);
+
+        $data = $request->validate([
+            'reason' => ['required', 'string', 'min:5', 'max:1000'],
+        ]);
+
+        abort_if((int) $purchaseOrder->company_id !== (int) $companyId, 403);
+        abort_if($purchaseOrder->branch_id && (int) $purchaseOrder->branch_id !== (int) $branchId, 403);
+        abort_unless(
+            in_array($purchaseOrder->status, ['approved', 'in_progress_receipt', 'partially_received'], true),
+            422,
+            'Only an open purchase order can be closed.'
+        );
+
+        DB::transaction(function () use ($request, $data, $purchaseOrder): void {
+            $purchaseOrder = PurchaseOrder::query()
+                ->with('lines')
+                ->lockForUpdate()
+                ->findOrFail($purchaseOrder->id);
+
+            $receivedByLine = GoodsReceiptLine::query()
+                ->whereHas('goodsReceipt', fn ($query) => $query
+                    ->where('purchase_order_id', $purchaseOrder->id)
+                    ->whereIn('status', ['approved', 'partially_received', 'received']))
+                ->selectRaw('purchase_order_line_id, sum(quantity_received) as quantity')
+                ->groupBy('purchase_order_line_id')
+                ->pluck('quantity', 'purchase_order_line_id');
+
+            foreach ($purchaseOrder->lines as $line) {
+                $received = min(
+                    (float) $line->quantity_ordered,
+                    (float) $receivedByLine->get($line->id, 0)
+                );
+
+                $line->update([
+                    'quantity_received' => $received,
+                    'quantity_remaining' => 0,
+                    'status' => $received >= (float) $line->quantity_ordered
+                        ? 'received'
+                        : 'cancelled',
+                ]);
+            }
+
+            $purchaseOrder->update([
+                'status' => 'closed',
+                'close_reason' => $data['reason'],
+                'closed_at' => now(),
+                'closed_by' => $request->user()->id,
+            ]);
+        });
+
+        return redirect()
+            ->route('goods-receipts.index')
+            ->with('success', "Purchase order {$purchaseOrder->po_no} was closed. Its remaining quantities will not be received.");
     }
 
     public function approve(Request $request, GoodsReceipt $goodsReceipt)
@@ -309,17 +378,30 @@ class GoodsReceiptController extends Controller
                     'reference_no' => $goodsReceipt->receipt_no,
                     'movement_date' => now(),
                     'created_by' => $request->user()->id,
-                    'note' => 'Approved goods receipt into staging',
+                    'note' => 'Received goods into staging',
                 ]);
             }
 
+            $goodsReceipt->lines
+                ->groupBy('purchase_order_line_id')
+                ->each(function ($lines, $purchaseOrderLineId): void {
+                    $quantity = $lines->sum(fn (GoodsReceiptLine $line) => (float) $line->quantity_received);
+                    $totalCost = $lines->sum(fn (GoodsReceiptLine $line) => (float) $line->quantity_received * (float) $line->unit_cost);
+
+                    if ($quantity > 0) {
+                        PurchaseOrderLine::whereKey($purchaseOrderLineId)->update([
+                            'unit_cost' => $totalCost / $quantity,
+                        ]);
+                    }
+                });
+
             $goodsReceipt->update([
-                'status' => 'approved',
+                'status' => 'received',
                 'received_at' => now(),
             ]);
         });
 
-        return back()->with('success', "Goods receipt {$goodsReceipt->receipt_no} approved.");
+        return back()->with('success', "Goods receipt {$goodsReceipt->receipt_no} received.");
     }
 
     public function reject(Request $request, GoodsReceipt $goodsReceipt)
@@ -453,6 +535,7 @@ class GoodsReceiptController extends Controller
             'purchase_order_id' => $receipt->purchase_order_id,
             'purchase_order_no' => $receipt->purchaseOrder?->po_no,
             'note' => $receipt->note,
+            'photos' => collect($receipt->photos ?? [])->map(fn (string $path) => '/storage/'.ltrim($path, '/'))->values(),
             'status' => $receipt->status,
             'created_at' => $receipt->created_at?->format('M d, Y h:i A'),
             'updated_at' => $receipt->updated_at?->format('M d, Y h:i A'),
@@ -471,6 +554,7 @@ class GoodsReceiptController extends Controller
                 'unit_code' => $line->unit?->code,
                 'staging_area' => $line->stockLocation?->code ?? $line->stockLocation?->name,
                 'quantity_received' => (float) $line->quantity_received,
+                'unit_cost' => (float) $line->unit_cost,
             ]),
         ];
     }
@@ -505,7 +589,11 @@ class GoodsReceiptController extends Controller
                 'quantity_ordered' => (float) $line->quantity_ordered,
                 'quantity_received' => (float) $activeReceivedByLine->get($line->id, 0),
                 'quantity_remaining' => max(0, (float) $line->quantity_ordered - (float) $activeReceivedByLine->get($line->id, 0)),
-                'unit_cost' => (float) $line->unit_cost,
+                // The draft GR starts from the PO estimate. The confirmed
+                // actual cost is stored separately on the PO line.
+                'unit_cost' => (float) $line->est_cost,
+                'est_cost' => (float) $line->est_cost,
+                'actual_cost' => (float) $line->unit_cost,
             ]),
         ];
     }

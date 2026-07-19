@@ -24,9 +24,11 @@ type Putaway = {
     updated_at?: string | null;
     approved_at?: string | null;
     cancelled_at?: string | null;
+    rejected_at?: string | null;
     created_by?: string | null;
     approved_by?: string | null;
     cancelled_by?: string | null;
+    rejected_by?: string | null;
     item_count: number;
     total_quantity: number;
     status: string;
@@ -54,8 +56,8 @@ const actionInfo = computed(() => {
     if (s === 'rejected') {
         return {
             label: 'Rejected',
-            name: props.putaway.created_by ?? props.putaway.assigned_staff,
-            at: props.putaway.updated_at,
+            name: props.putaway.rejected_by,
+            at: props.putaway.rejected_at ?? props.putaway.updated_at,
         };
     }
     return null;
@@ -87,7 +89,7 @@ function statusLabel(status: string) {
     const labels: Record<string, string> = {
         draft: 'Draft',
         submitted: 'Submitted',
-        approved: 'Approved',
+        approved: 'Putaway',
         in_transit: 'In Transit',
         received: 'Received',
         cancelled: 'Cancelled',
@@ -139,18 +141,6 @@ function statusLabel(status: string) {
                                 class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 font-mono text-sm font-semibold text-slate-700"
                             >
                                 {{ putaway.goods_receipt_no ?? 'Direct' }}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label
-                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
-                                >Assigned Staff</label
-                            >
-                            <div
-                                class="flex h-10 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700"
-                            >
-                                {{ putaway.assigned_staff ?? '-' }}
                             </div>
                         </div>
 
@@ -225,6 +215,19 @@ function statusLabel(status: string) {
                                 <p class="text-xs text-slate-400">Created by</p>
                                 <p class="font-semibold text-slate-700">
                                     {{ putaway.created_by ?? '-' }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span
+                                class="mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full bg-[#23aa8f]"
+                            ></span>
+                            <div>
+                                <p class="text-xs text-slate-400">
+                                    Putaway staff
+                                </p>
+                                <p class="font-semibold text-slate-700">
+                                    {{ putaway.assigned_staff ?? '-' }}
                                 </p>
                             </div>
                         </div>

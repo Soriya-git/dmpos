@@ -10,6 +10,8 @@ class GoodsReceipt extends Model
 
     protected $casts = [
         'received_at' => 'datetime',
+        'putaway_cancelled_at' => 'datetime',
+        'photos' => 'array',
     ];
 
     public function company()

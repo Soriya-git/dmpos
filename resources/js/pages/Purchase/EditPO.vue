@@ -34,7 +34,7 @@ type OrderLine = {
     item_id: number | '';
     unit_id: number | '';
     quantity_ordered: number;
-    unit_cost: number;
+    est_cost: number;
     note: string;
 };
 
@@ -47,12 +47,13 @@ type PurchaseOrder = {
     order_date?: string | null;
     expected_date?: string | null;
     note?: string | null;
+    est_cost?: number | null;
     lines: Array<{
         id: number;
         item_id: number;
         unit_id: number;
         quantity_ordered: number;
-        unit_cost: number;
+        est_cost: number;
         note?: string | null;
     }>;
 };
@@ -72,7 +73,7 @@ const makeLine = (line?: PurchaseOrder['lines'][number]): OrderLine => ({
     item_id: line?.item_id ?? '',
     unit_id: line?.unit_id ?? '',
     quantity_ordered: line?.quantity_ordered ?? 1,
-    unit_cost: line?.unit_cost ?? 0,
+    est_cost: line?.est_cost ?? 0,
     note: line?.note ?? '',
 });
 
@@ -83,6 +84,7 @@ const form = useForm({
     order_date: props.order.order_date ?? '',
     expected_date: props.order.expected_date ?? '',
     note: props.order.note ?? '',
+    est_cost: props.order.est_cost ?? ('' as number | ''),
     lines:
         props.order.lines.length > 0
             ? props.order.lines.map((l) => makeLine(l))
@@ -93,7 +95,7 @@ const grandTotal = computed(() =>
     form.lines.reduce(
         (total, line) =>
             total +
-            Number(line.quantity_ordered || 0) * Number(line.unit_cost || 0),
+            Number(line.quantity_ordered || 0) * Number(line.est_cost || 0),
         0,
     ),
 );
@@ -150,7 +152,7 @@ function selectItem(line: OrderLine) {
     const item = selectedItem(line.item_id);
     if (!item) return;
     line.unit_id = item.unit_id;
-    line.unit_cost = Number(item.cost || 0);
+    line.est_cost = Number(item.cost || 0);
 }
 
 function selectSupplier(
@@ -162,7 +164,7 @@ function selectSupplier(
 }
 
 function lineTotal(line: OrderLine) {
-    return Number(line.quantity_ordered || 0) * Number(line.unit_cost || 0);
+    return Number(line.quantity_ordered || 0) * Number(line.est_cost || 0);
 }
 
 function submit() {
@@ -276,6 +278,22 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                             <label
                                 class="mb-1 block text-xs font-bold text-slate-500 uppercase"
                             >
+                                Estimated Cost (Optional)
+                            </label>
+                            <Input
+                                v-model.number="form.est_cost"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                class="h-10 rounded-lg border-slate-200"
+                                placeholder="Enter estimated total cost"
+                            />
+                            <InputError :message="form.errors.est_cost" />
+                        </div>
+                        <div>
+                            <label
+                                class="mb-1 block text-xs font-bold text-slate-500 uppercase"
+                            >
                                 Note
                             </label>
                             <textarea
@@ -335,7 +353,7 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                                     <th
                                         class="px-4 py-3 text-right font-semibold"
                                     >
-                                        Cost
+                                        Est. Cost
                                     </th>
                                     <th
                                         class="px-4 py-3 text-right font-semibold"
@@ -390,7 +408,7 @@ defineExpose({ submit, isProcessing: computed(() => form.processing) });
                                     </td>
                                     <td class="px-4 py-4">
                                         <Input
-                                            v-model.number="line.unit_cost"
+                                            v-model.number="line.est_cost"
                                             type="number"
                                             min="0"
                                             step="0.0001"

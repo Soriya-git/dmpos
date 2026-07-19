@@ -89,6 +89,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/goods-receipts', [GoodsReceiptController::class, 'index'])->name('goods-receipts.index');
     Route::get('/goods-receipts/create', [GoodsReceiptController::class, 'create'])->name('goods-receipts.create');
     Route::post('/goods-receipts', [GoodsReceiptController::class, 'store'])->name('goods-receipts.store');
+    Route::patch('/goods-receipts/purchase-orders/{purchaseOrder}/close', [GoodsReceiptController::class, 'closePurchaseOrder'])
+        ->name('goods-receipts.close-purchase-order');
     Route::patch('/goods-receipts/{goodsReceipt}', [GoodsReceiptController::class, 'update'])->name('goods-receipts.update');
     Route::patch('/goods-receipts/{goodsReceipt}/approve', [GoodsReceiptController::class, 'approve'])
         ->name('goods-receipts.approve');
@@ -103,6 +105,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/putaway', [PutawayController::class, 'index'])->name('putaway.index');
     Route::get('/putaway/create', [PutawayController::class, 'create'])->name('putaway.create');
     Route::post('/putaway', [PutawayController::class, 'store'])->name('putaway.store');
+    Route::patch('/putaway/goods-receipts/{goodsReceipt}/cancel', [PutawayController::class, 'cancelReceipt'])
+        ->name('putaway.cancel-receipt');
     Route::patch('/putaway/{stockTransfer}', [PutawayController::class, 'update'])->name('putaway.update');
     Route::patch('/putaway/{stockTransfer}/approve', [PutawayController::class, 'approve'])
         ->name('putaway.approve');
@@ -141,10 +145,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('stock-movements.internal-transfer');
     Route::get('/stock-movements/internal-transfer/create', [InternalTransferController::class, 'create'])
         ->name('stock-movements.internal-transfer.create');
+    Route::get('/stock-movements/internal-transfer/{stockTransfer}', [InternalTransferController::class, 'show'])
+        ->name('stock-movements.internal-transfer.show');
     Route::post('/stock-movements/internal-transfer', [InternalTransferController::class, 'store'])
         ->name('stock-movements.internal-transfer.store');
     Route::patch('/stock-movements/internal-transfer/{stockTransfer}/approve', [InternalTransferController::class, 'approve'])
         ->name('stock-movements.internal-transfer.approve');
+    Route::patch('/stock-movements/internal-transfer/{stockTransfer}/receive', [InternalTransferController::class, 'receive'])
+        ->name('stock-movements.internal-transfer.receive');
     Route::patch('/stock-movements/internal-transfer/{stockTransfer}/reject', [InternalTransferController::class, 'reject'])
         ->name('stock-movements.internal-transfer.reject');
     Route::patch('/stock-movements/internal-transfer/{stockTransfer}/cancel', [InternalTransferController::class, 'cancel'])

@@ -32,7 +32,9 @@ class PutawayController extends Controller
                 'goodsReceipt.lines.item',
                 'goodsReceipt.lines.unit',
                 'creator',
+                'assignee',
                 'approver',
+                'rejecter',
                 'canceller',
                 'lines.item',
                 'lines.unit',
@@ -146,6 +148,7 @@ class PutawayController extends Controller
                 'status' => 'draft',
                 'transfer_date' => now(),
                 'created_by' => $request->user()->id,
+                'assigned_to' => $data['assigned_to'] ?? null,
                 'note' => $this->putawayNote($data),
             ]);
 
@@ -212,6 +215,7 @@ class PutawayController extends Controller
                 'to_warehouse_id' => $firstDestination->warehouse_id,
                 'from_location_id' => $receipt->stock_location_id,
                 'to_location_id' => $firstDestination->id,
+                'assigned_to' => $data['assigned_to'] ?? null,
                 'note' => $this->putawayNote($data),
             ]);
 
@@ -251,14 +255,52 @@ class PutawayController extends Controller
             'approved_by' => $request->user()->id,
         ]);
 
-        return back()->with('success', "Putaway movement {$stockTransfer->transfer_no} approved.");
+        return back()->with('success', "Putaway movement {$stockTransfer->transfer_no} completed.");
+    }
+
+    public function cancelReceipt(Request $request, GoodsReceipt $goodsReceipt)
+    {
+        [$companyId, $branchId] = $this->scope($request);
+        $data = $request->validate([
+            'reason' => ['required', 'string', 'min:5', 'max:1000'],
+        ]);
+
+        abort_if((int) $goodsReceipt->company_id !== (int) $companyId, 403);
+        abort_if((int) $goodsReceipt->branch_id !== (int) $branchId, 403);
+        abort_unless(in_array($goodsReceipt->status, ['approved', 'received'], true), 422, 'Only a received GR can have putaway cancelled.');
+        abort_if($goodsReceipt->putaway_cancelled_at, 422, 'Putaway has already been cancelled for this GR.');
+
+        DB::transaction(function () use ($request, $data, $goodsReceipt): void {
+            $goodsReceipt->update([
+                'putaway_cancel_reason' => $data['reason'],
+                'putaway_cancelled_at' => now(),
+                'putaway_cancelled_by' => $request->user()->id,
+            ]);
+
+            $goodsReceipt->putawayTransfers()
+                ->where('status', 'draft')
+                ->update([
+                    'status' => 'cancelled',
+                    'cancel_reason' => $data['reason'],
+                    'cancelled_at' => now(),
+                    'cancelled_by' => $request->user()->id,
+                ]);
+        });
+
+        return redirect()
+            ->route('putaway.index')
+            ->with('success', "Putaway for {$goodsReceipt->receipt_no} was cancelled. The stock remains in staging.");
     }
 
     public function reject(Request $request, StockTransfer $stockTransfer)
     {
         $this->ensureDraftTransfer($request, $stockTransfer);
 
-        $stockTransfer->update(['status' => 'rejected']);
+        $stockTransfer->update([
+            'status' => 'rejected',
+            'rejected_at' => now(),
+            'rejected_by' => $request->user()->id,
+        ]);
 
         return back()->with('success', "Putaway movement {$stockTransfer->transfer_no} rejected.");
     }
@@ -335,6 +377,7 @@ class PutawayController extends Controller
             ->where('company_id', $companyId)
             ->where('branch_id', $branchId)
             ->whereIn('status', ['approved', 'received'])
+            ->whereNull('putaway_cancelled_at')
             ->whereHas('stockLocation', fn ($query) => $query->where('location_type', 'inbound_staging'))
             ->whereHas('lines')
             ->latest('received_at');
@@ -391,6 +434,11 @@ class PutawayController extends Controller
             $assignedToId = (int) $matches[1];
         }
 
+        $assignedStaff = $transfer->assignee;
+        if (! $assignedStaff && $assignedToId) {
+            $assignedStaff = User::query()->find($assignedToId);
+        }
+
         return [
             'id' => $transfer->id,
             'transfer_no' => $transfer->transfer_no,
@@ -402,10 +450,12 @@ class PutawayController extends Controller
             'created_at' => $transfer->created_at?->format('M d, Y H:i'),
             'updated_at' => $transfer->updated_at?->format('M d, Y H:i'),
             'approved_at' => $transfer->approved_at?->format('M d, Y H:i'),
+            'rejected_at' => $transfer->rejected_at?->format('M d, Y H:i'),
             'cancelled_at' => $transfer->cancelled_at?->format('M d, Y H:i'),
-            'assigned_staff' => $transfer->creator?->name ?? 'Unassigned',
+            'assigned_staff' => $assignedStaff?->name ?? 'Unassigned',
             'created_by' => $transfer->creator?->name,
             'approved_by' => $transfer->approver?->name,
+            'rejected_by' => $transfer->rejecter?->name,
             'cancelled_by' => $transfer->canceller?->name,
             'item_count' => $transfer->lines->count(),
             'total_quantity' => $transfer->lines->sum(fn (StockTransferLine $line) => (float) ($transfer->status === 'received' ? $line->quantity_received : $line->quantity_requested)),

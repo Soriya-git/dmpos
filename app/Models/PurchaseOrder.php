@@ -13,11 +13,13 @@ class PurchaseOrder extends Model
         'discount_amount' => 'decimal:2',
         'tax_amount' => 'decimal:2',
         'grand_total' => 'decimal:2',
+        'est_cost' => 'decimal:2',
         'order_date' => 'date',
         'expected_date' => 'date',
         'approved_at' => 'datetime',
         'rejected_at' => 'datetime',
         'cancelled_at' => 'datetime',
+        'closed_at' => 'datetime',
     ];
 
     public function company()

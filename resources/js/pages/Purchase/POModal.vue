@@ -22,6 +22,7 @@ type PurchaseOrderLine = {
     quantity_received: number;
     quantity_remaining: number;
     unit_cost: number;
+    est_cost: number;
     line_total: number;
     status: string;
     note?: string | null;
@@ -49,6 +50,7 @@ type PurchaseOrder = {
     cancelled_at?: string | null;
     display_cancelled_at?: string | null;
     grand_total: number;
+    est_cost?: number | null;
     lines: PurchaseOrderLine[];
 };
 
@@ -310,7 +312,7 @@ function statusClass(value: string) {
                                 <td
                                     class="px-4 py-4 text-right font-mono font-bold text-[#2a4858]"
                                 >
-                                    {{ money(line.unit_cost) }}
+                                    {{ money(line.est_cost) }}
                                 </td>
                                 <td
                                     class="py-4 pl-4 text-right font-mono font-bold text-[#007882]"
@@ -336,10 +338,14 @@ function statusClass(value: string) {
                     <p
                         class="text-xs font-bold tracking-widest text-slate-400 uppercase"
                     >
-                        Grand Total
+                        Est. Total Cost
                     </p>
                     <p class="text-xl font-bold text-[#007882]">
-                        {{ money(order.grand_total) }}
+                        {{
+                            order.est_cost == null
+                                ? 'Not provided'
+                                : money(order.est_cost)
+                        }}
                     </p>
                 </div>
             </footer>

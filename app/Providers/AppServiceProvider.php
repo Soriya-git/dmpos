@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Inertia\ExceptionResponse;
@@ -32,26 +31,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
-        $this->configureUrls();
         $this->configureRateLimiting();
         $this->configureInertia();
-    }
-
-    protected function configureUrls(): void
-    {
-        $appUrl = config('app.url');
-
-        if (! is_string($appUrl) || $appUrl === '') {
-            return;
-        }
-
-        URL::forceRootUrl($appUrl);
-
-        $scheme = parse_url($appUrl, PHP_URL_SCHEME);
-
-        if (is_string($scheme) && $scheme !== '') {
-            URL::forceScheme($scheme);
-        }
     }
 
     /**
