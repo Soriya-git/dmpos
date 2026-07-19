@@ -83,7 +83,7 @@ class MembershipCardLedger
                 'branch_id' => $attributes['branch_id'] ?? $card->branch_id,
                 'membership_card_id' => $card->id,
                 'customer_id' => $card->customer_id,
-                'transaction_no' => $attributes['transaction_no'] ?? DocumentNumber::make(MembershipCardTransaction::class, 'transaction_no', 'MCT'),
+                'transaction_no' => $attributes['transaction_no'] ?? DocumentNumber::make(MembershipCardTransaction::class, 'transaction_no', 'MCT', $attributes['branch_id'] ?? $card->branch_id),
                 'transaction_type' => $attributes['transaction_type'],
                 'direction' => $direction,
                 'currency' => $currency,

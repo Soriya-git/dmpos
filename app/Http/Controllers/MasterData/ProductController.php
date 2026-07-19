@@ -196,7 +196,7 @@ class ProductController extends Controller
                 'company_id' => $companyId,
                 'branch_id' => null,
                 'output_item_id' => $data['output_item_id'],
-                'bom_no' => $data['bom_no'] ?: DocumentNumber::make(BomHeader::class, 'bom_no', 'BM'),
+                'bom_no' => $data['bom_no'] ?: DocumentNumber::make(BomHeader::class, 'bom_no', 'BM', $branchId),
                 'name' => $data['name'],
                 'output_quantity' => $data['output_quantity'],
                 'status' => $data['status'],

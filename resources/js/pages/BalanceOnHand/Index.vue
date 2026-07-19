@@ -26,6 +26,7 @@ type BalanceItem = {
     unit: string;
     minimumStockQty: number;
     quantityOnHand: number;
+    goodsReceiptQuantity: number;
     quantityAvailable: number;
     companyQuantityAvailable: number;
     customerQuantityAvailable: number;
@@ -151,6 +152,10 @@ function viewCustomerStock(item: BalanceItem) {
     }
 
     router.visit(`/stock-customer/items/${item.id}`);
+}
+
+function viewGoodsReceipts(item: BalanceItem) {
+    router.visit(`/putaway/completed-goods-receipts?item_id=${item.id}`);
 }
 </script>
 
@@ -350,6 +355,15 @@ function viewCustomerStock(item: BalanceItem) {
                     </td>
                     <td class="px-4 py-3 text-xs font-bold text-slate-700">
                         {{ numberValue(row.quantityOnHand) }} {{ row.unit }}
+                        <button
+                            v-if="Number(row.goodsReceiptQuantity) > 0"
+                            type="button"
+                            class="ml-1 cursor-pointer rounded font-medium text-blue-600 underline decoration-blue-300 underline-offset-2 hover:text-blue-800 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none"
+                            title="View goods receipts waiting for putaway"
+                            @click.stop="viewGoodsReceipts(row)"
+                        >
+                            (GR: {{ numberValue(row.goodsReceiptQuantity) }})
+                        </button>
                     </td>
                     <td class="px-4 py-3 text-xs text-slate-500">
                         {{ numberValue(row.minimumStockQty) }} {{ row.unit }}

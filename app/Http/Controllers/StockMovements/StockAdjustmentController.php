@@ -253,7 +253,7 @@ class StockAdjustmentController extends Controller
             'locations' => $locations,
             'warehouses' => $warehouses,
             'items' => $items,
-            'nextAdjustmentNo' => DocumentNumber::make(StockAdjustment::class, 'adjustment_no', 'SA'),
+            'nextAdjustmentNo' => DocumentNumber::preview(StockAdjustment::class, 'adjustment_no', 'SA', $branchId),
             'filters' => [
                 'search' => $filters['search'] ?? null,
                 'status' => $filters['status'] ?? null,
@@ -380,7 +380,7 @@ class StockAdjustmentController extends Controller
             'branch_id' => $branchId,
             'warehouse_id' => $warehouse->id,
             'stock_location_id' => $locationId,
-            'adjustment_no' => DocumentNumber::make(StockAdjustment::class, 'adjustment_no', 'SA'),
+            'adjustment_no' => DocumentNumber::make(StockAdjustment::class, 'adjustment_no', 'SA', $branchId),
             'adjustment_type' => $data['adjustment_type'],
             'status' => 'draft',
             'adjustment_date' => $data['adjustment_date'],

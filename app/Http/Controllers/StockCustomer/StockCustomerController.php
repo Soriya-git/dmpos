@@ -94,7 +94,7 @@ class StockCustomerController extends Controller
         }
 
         return Inertia::render('StockCustomer/CreateStockCus', [
-            'nextTransferNo' => $keep?->transfer_no ?? DocumentNumber::make(StockTransfer::class, 'transfer_no', 'CS'),
+            'nextTransferNo' => $keep?->transfer_no ?? DocumentNumber::preview(StockTransfer::class, 'transfer_no', 'CS', $branchId),
             'keep' => $keep ? $this->formatEditableTransfer($keep) : null,
             'invoice' => $invoice ? $this->formatInvoice($invoice, $keep?->id) : null,
             'invoices' => $this->formattedInvoices($companyId, $branchId),
@@ -129,7 +129,7 @@ class StockCustomerController extends Controller
                 'to_warehouse_id' => $firstLocation->warehouse_id,
                 'from_location_id' => $firstLocation->id,
                 'to_location_id' => $firstLocation->id,
-                'transfer_no' => DocumentNumber::make(StockTransfer::class, 'transfer_no', 'CS'),
+                'transfer_no' => DocumentNumber::make(StockTransfer::class, 'transfer_no', 'CS', $branchId),
                 'transfer_type' => 'customer_stock_keep',
                 'status' => 'draft',
                 'transfer_date' => now(),

@@ -23,8 +23,8 @@ class CompanySeeder extends Seeder
                 'name' => 'Demo Restaurant Group',
                 'code' => 'DRG',
                 'branches' => [
-                    ['name' => 'DRG Riverside', 'code' => 'DRG-RIV'],
-                    ['name' => 'DRG Central', 'code' => 'DRG-CEN'],
+                    ['name' => 'DRG Riverside', 'code' => 'DM01'],
+                    ['name' => 'DRG Central', 'code' => 'DM02'],
                 ],
                 'users' => [
                     ['name' => 'DRG Admin', 'email' => 'drg.admin@diamond.com', 'role' => 'Admin'],

@@ -71,7 +71,7 @@ type TransferLine = {
     itemCode: string;
     itemName: string;
     unit: string;
-    quantity: number;
+    quantity: number | '';
     unitCost: number;
     totalCost: number;
     fromWarehouse?: string | null;
@@ -175,10 +175,10 @@ const today = () => {
 
 const makeLine = (): FormLine => ({
     item_id: '',
-    from_warehouse_id: props.inventory[0]?.warehouseId ?? '',
+    from_warehouse_id: '',
     stock_balance_id: '',
-    quantity: 1,
-    to_warehouse_id: props.inventory[0]?.warehouseId ?? '',
+    quantity: '',
+    to_warehouse_id: '',
     to_location_id: '',
     note: '',
 });
@@ -586,7 +586,6 @@ function openDetail(transfer: TransferRecord) {
     router.visit(`/stock-movements/internal-transfer/${transfer.id}`);
 }
 
-
 function updateTransferStatus(
     transfer: TransferRecord,
     action: 'approve' | 'reject' | 'cancel',
@@ -831,7 +830,10 @@ function updateTransferStatus(
                                                         v-else
                                                         class="rounded-md bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-700"
                                                     >
-                                                        Location will be chosen by the destination warehouse during putaway.
+                                                        Location will be chosen
+                                                        by the destination
+                                                        warehouse during
+                                                        putaway.
                                                     </p>
                                                 </div>
                                             </td>

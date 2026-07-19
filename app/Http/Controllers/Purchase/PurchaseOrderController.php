@@ -90,7 +90,7 @@ class PurchaseOrderController extends Controller
             'items' => $items,
             'units' => $units,
             'suppliers' => $suppliers,
-            'nextPoNo' => DocumentNumber::make(PurchaseOrder::class, 'po_no', 'PO'),
+            'nextPoNo' => DocumentNumber::preview(PurchaseOrder::class, 'po_no', 'PO', $branchId),
             'filters' => [
                 'search' => $filters['search'] ?? null,
                 'status' => $filters['status'] ?? null,
@@ -130,7 +130,7 @@ class PurchaseOrderController extends Controller
             $order = PurchaseOrder::create([
                 'company_id' => $companyId,
                 'branch_id' => $branchId,
-                'po_no' => DocumentNumber::make(PurchaseOrder::class, 'po_no', 'PO'),
+                'po_no' => DocumentNumber::make(PurchaseOrder::class, 'po_no', 'PO', $branchId),
                 'purchase_scope' => $branchId ? 'branch' : 'company_group',
                 'supplier_name' => $data['supplier_name'],
                 'supplier_phone' => $data['supplier_phone'] ?? null,

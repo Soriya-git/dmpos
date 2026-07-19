@@ -255,7 +255,7 @@ class SeatController extends Controller
                 'customer_id' => $customerId,
                 'dining_resource_id' => $resource->id,
                 'menu_price_list_id' => $data['menu_price_list_id'] ?? $this->defaultPriceListId($activePosSession),
-                'session_no' => DocumentNumber::make(DiningSession::class, 'session_no', 'DS'),
+                'session_no' => DocumentNumber::make(DiningSession::class, 'session_no', 'DS', $activePosSession->branch_id),
                 'guest_count' => $data['guest_count'] ?? null,
                 'status' => 'open',
                 'opened_at' => now(),

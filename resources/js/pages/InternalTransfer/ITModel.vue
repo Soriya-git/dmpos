@@ -54,6 +54,7 @@ type TransferRecord = {
 const props = defineProps<{
     transfer: TransferRecord;
     page?: boolean;
+    canManageDestinationPutaway?: boolean;
     locations: Array<{
         id: number;
         warehouseId: number;
@@ -85,9 +86,7 @@ const receiveForm = useForm({
 
 const destinationOptions = computed(() =>
     props.locations
-        .filter(
-            (location) => location.warehouse === props.transfer.toWarehouse,
-        )
+        .filter((location) => location.warehouse === props.transfer.toWarehouse)
         .map((location) => ({
             value: location.id,
             label: `${location.code} - ${location.name}`,
@@ -95,13 +94,17 @@ const destinationOptions = computed(() =>
         })),
 );
 
-const canReceive = computed(() =>
-    receiveForm.lines.some(
-        (line) => Number(line.quantity) > 0 && line.to_location_id,
-    ),
+const canReceive = computed(
+    () =>
+        Boolean(props.canManageDestinationPutaway) &&
+        receiveForm.lines.some(
+            (line) => Number(line.quantity) > 0 && line.to_location_id,
+        ),
 );
 
 function savePutaway() {
+    if (!props.canManageDestinationPutaway) return;
+
     receiveForm.patch(
         `/stock-movements/internal-transfer/${props.transfer.id}/receive`,
         { preserveScroll: true, onSuccess: () => emit('close') },
@@ -109,7 +112,14 @@ function savePutaway() {
 }
 
 function rejectInbound() {
-    if (!window.confirm('Reject this inbound transfer? All outstanding stock will be returned to the source warehouse.')) return;
+    if (!props.canManageDestinationPutaway) return;
+
+    if (
+        !window.confirm(
+            'Reject this inbound transfer? All outstanding stock will be returned to the source warehouse.',
+        )
+    )
+        return;
     router.patch(
         `/stock-movements/internal-transfer/${props.transfer.id}/reject`,
         {},
@@ -440,35 +450,64 @@ function statusClass(value: string) {
                     v-if="transfer.status === 'in_transit'"
                     class="mt-5 rounded-lg border border-blue-100 bg-blue-50/50 p-4"
                 >
-                    <h3 class="font-bold text-[#2a4858]">Destination Putaway</h3>
+                    <h3 class="font-bold text-[#2a4858]">
+                        Destination Putaway
+                    </h3>
                     <p class="mt-1 text-sm text-slate-500">
-                        Choose a location and receive all or part of each outstanding quantity.
+                        Choose a location and receive all or part of each
+                        outstanding quantity.
                     </p>
-                    <div class="mt-4 space-y-3">
+                    <p
+                        v-if="!canManageDestinationPutaway"
+                        class="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-700"
+                    >
+                        Only users assigned to the destination warehouse branch
+                        can manage destination putaway.
+                    </p>
+                    <fieldset
+                        :disabled="!canManageDestinationPutaway"
+                        class="mt-4 space-y-3 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
                         <div
                             v-for="(line, index) in transfer.lines"
                             :key="line.id"
                             class="grid gap-3 rounded-lg bg-white p-3 md:grid-cols-[minmax(0,1fr)_minmax(15rem,1fr)_9rem] md:items-end"
                         >
                             <div>
-                                <p class="font-bold text-[#2a4858]">{{ line.itemName }}</p>
+                                <p class="font-bold text-[#2a4858]">
+                                    {{ line.itemName }}
+                                </p>
                                 <p class="text-xs text-slate-500">
-                                    Received {{ numberValue(line.quantityReceived) }} / Dispatched {{ numberValue(line.quantityDispatched) }} {{ line.unit }}
+                                    Received
+                                    {{ numberValue(line.quantityReceived) }} /
+                                    Dispatched
+                                    {{ numberValue(line.quantityDispatched) }}
+                                    {{ line.unit }}
                                 </p>
                             </div>
                             <div>
-                                <label class="mb-1 block text-xs font-bold text-slate-500">Putaway Location</label>
+                                <label
+                                    class="mb-1 block text-xs font-bold text-slate-500"
+                                    >Putaway Location</label
+                                >
                                 <SearchDropdown
-                                    v-model="receiveForm.lines[index].to_location_id"
+                                    v-model="
+                                        receiveForm.lines[index].to_location_id
+                                    "
                                     :options="destinationOptions"
                                     placeholder="Choose location"
                                     search-placeholder="Search location..."
                                 />
                             </div>
                             <div>
-                                <label class="mb-1 block text-xs font-bold text-slate-500">Qty to Putaway</label>
+                                <label
+                                    class="mb-1 block text-xs font-bold text-slate-500"
+                                    >Qty to Putaway</label
+                                >
                                 <Input
-                                    v-model.number="receiveForm.lines[index].quantity"
+                                    v-model.number="
+                                        receiveForm.lines[index].quantity
+                                    "
                                     type="number"
                                     min="0"
                                     :max="line.quantityOutstanding"
@@ -476,28 +515,36 @@ function statusClass(value: string) {
                                 />
                             </div>
                         </div>
-                    </div>
-                    <p v-if="receiveForm.errors.lines" class="mt-3 text-sm font-semibold text-red-600">
-                        {{ receiveForm.errors.lines }}
-                    </p>
-                    <div class="mt-4 flex justify-end gap-2">
-                        <Button
-                            type="button"
-                            variant="destructive"
-                            :disabled="receiveForm.processing"
-                            @click="rejectInbound"
+                        <p
+                            v-if="receiveForm.errors.lines"
+                            class="mt-3 text-sm font-semibold text-red-600"
                         >
-                            Reject Transfer
-                        </Button>
-                        <Button
-                            type="button"
-                            class="bg-[#007882] text-white hover:bg-[#006773]"
-                            :disabled="!canReceive || receiveForm.processing"
-                            @click="savePutaway"
-                        >
-                            Accept & Putaway
-                        </Button>
-                    </div>
+                            {{ receiveForm.errors.lines }}
+                        </p>
+                        <div class="mt-4 flex justify-end gap-2">
+                            <Button
+                                type="button"
+                                variant="destructive"
+                                :disabled="
+                                    receiveForm.processing ||
+                                    !canManageDestinationPutaway
+                                "
+                                @click="rejectInbound"
+                            >
+                                Reject Transfer
+                            </Button>
+                            <Button
+                                type="button"
+                                class="bg-[#007882] text-white hover:bg-[#006773]"
+                                :disabled="
+                                    !canReceive || receiveForm.processing
+                                "
+                                @click="savePutaway"
+                            >
+                                Accept & Putaway
+                            </Button>
+                        </div>
+                    </fieldset>
                 </div>
             </div>
 

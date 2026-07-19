@@ -67,7 +67,7 @@ class GoodsReceiptController extends Controller
         }
 
         return Inertia::render('GoodsReceipt/CreateGoodsReceipt', [
-            'nextReceiptNo' => DocumentNumber::make(GoodsReceipt::class, 'receipt_no', 'GR'),
+            'nextReceiptNo' => DocumentNumber::preview(GoodsReceipt::class, 'receipt_no', 'GR', $branchId),
             'purchaseOrder' => $purchaseOrder ? $this->formatPurchaseOrder($purchaseOrder) : null,
             'purchaseOrders' => $this->formattedReceivablePurchaseOrders($companyId, $branchId),
             'stagingLocations' => $this->stagingLocations($companyId, $branchId),
@@ -154,7 +154,7 @@ class GoodsReceiptController extends Controller
                 'purchase_order_id' => $purchaseOrder->id,
                 'warehouse_id' => $location->warehouse_id,
                 'stock_location_id' => $location->id,
-                'receipt_no' => DocumentNumber::make(GoodsReceipt::class, 'receipt_no', 'GR'),
+                'receipt_no' => DocumentNumber::make(GoodsReceipt::class, 'receipt_no', 'GR', $branchId),
                 'status' => 'draft',
                 'received_at' => null,
                 'received_by' => $request->user()->id,

@@ -6,7 +6,6 @@ use App\Models\Branch;
 use App\Models\Item;
 use App\Models\StockBalance;
 use App\Models\StockLocation;
-use App\Models\StockMovement;
 use App\Models\Warehouse;
 use Illuminate\Database\Seeder;
 
@@ -177,13 +176,6 @@ class WarehouseSeeder extends Seeder
                 ->get();
 
             foreach ($items as $item) {
-                $openingQty = match ($item->code) {
-                    'RM-RICE' => 50,
-                    'RM-EGG' => 200,
-                    'DRK-COKE' => 100,
-                    default => 10,
-                };
-
                 $item->update([
                     'minimum_stock_qty' => match ($item->code) {
                         'RM-RICE' => 25,
@@ -203,32 +195,10 @@ class WarehouseSeeder extends Seeder
                     [
                         'company_id' => $company->id,
                         'unit_id' => $item->unit_id,
-                        'quantity_on_hand' => $openingQty,
+                        'quantity_on_hand' => 0,
                         'quantity_reserved' => 0,
-                        'quantity_available' => $openingQty,
+                        'quantity_available' => 0,
                         'average_cost' => $item->cost,
-                    ]
-                );
-
-                StockMovement::updateOrCreate(
-                    [
-                        'branch_id' => $branch->id,
-                        'item_id' => $item->id,
-                        'reference_type' => 'opening_balance',
-                        'reference_no' => 'OPENING-STOCK-'.$branch->code,
-                    ],
-                    [
-                        'company_id' => $company->id,
-                        'warehouse_id' => $warehouse->id,
-                        'from_location_id' => null,
-                        'to_location_id' => $putawayLocation->id,
-                        'unit_id' => $item->unit_id,
-                        'movement_type' => 'adjustment_in',
-                        'quantity' => $openingQty,
-                        'unit_cost' => $item->cost,
-                        'total_cost' => $openingQty * $item->cost,
-                        'movement_date' => now(),
-                        'note' => 'Demo opening stock balance',
                     ]
                 );
             }

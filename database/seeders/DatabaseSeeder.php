@@ -30,10 +30,6 @@ class DatabaseSeeder extends Seeder
             MenuPriceListSeeder::class,
             BomSeeder::class,
             WarehouseSeeder::class,
-            PurchaseSeeder::class,
-            StockOperationSeeder::class,
-            OrderKitchenSeeder::class,
-            InvoicePaymentSeeder::class,
             AuditLogSeeder::class,
         ]);
     }

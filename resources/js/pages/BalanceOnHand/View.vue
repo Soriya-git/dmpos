@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { ArrowLeft, Boxes, MapPinned, Search } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import MasterDataTable from '@/components/master-data/MasterDataTable.vue';
@@ -16,6 +16,7 @@ type BalanceItem = {
     unit: string;
     minimumStockQty: number;
     quantityOnHand: number;
+    goodsReceiptQuantity: number;
     quantityAvailable: number;
     quantityReserved: number;
     stockValue: number;
@@ -130,6 +131,10 @@ function locationTypeClass(value: string) {
 
     return classes[value] ?? classes.general;
 }
+
+function viewGoodsReceipts() {
+    router.visit(`/putaway/completed-goods-receipts?item_id=${props.item.id}`);
+}
 </script>
 
 <template>
@@ -200,6 +205,15 @@ function locationTypeClass(value: string) {
                     </p>
                     <h3 class="mt-1 text-2xl font-bold text-blue-600">
                         {{ numberValue(item.quantityOnHand) }}
+                        <button
+                            v-if="Number(item.goodsReceiptQuantity) > 0"
+                            type="button"
+                            class="cursor-pointer rounded text-base font-medium underline decoration-blue-300 underline-offset-2 hover:text-blue-800 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none"
+                            title="View goods receipts waiting for putaway"
+                            @click="viewGoodsReceipts"
+                        >
+                            (GR: {{ numberValue(item.goodsReceiptQuantity) }})
+                        </button>
                     </h3>
                 </div>
                 <div

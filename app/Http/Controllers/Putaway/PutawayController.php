@@ -7,11 +7,11 @@ use App\Models\Branch;
 use App\Models\Company;
 use App\Models\GoodsReceipt;
 use App\Models\GoodsReceiptLine;
-use App\Models\StockBalance;
 use App\Models\StockLocation;
 use App\Models\StockTransfer;
 use App\Models\StockTransferLine;
 use App\Models\User;
+use App\Services\PutawayPostingService;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -66,9 +66,20 @@ class PutawayController extends Controller
     public function receipts(Request $request)
     {
         [$companyId, $branchId] = $this->scope($request);
+        $itemId = $request->integer('item_id');
+        $receipts = $this->formattedPutawayReceipts($companyId, $branchId);
+
+        if ($itemId) {
+            $receipts = $receipts
+                ->filter(fn (array $receipt) => collect($receipt['lines'])->contains(
+                    fn (array $line) => (int) $line['item_id'] === $itemId
+                        && (float) $line['quantity_remaining'] > 0
+                ))
+                ->values();
+        }
 
         return Inertia::render('Putaway/CompleteGR_forPutaway', [
-            'receipts' => $this->formattedPutawayReceipts($companyId, $branchId),
+            'receipts' => $receipts,
         ]);
     }
 
@@ -96,7 +107,7 @@ class PutawayController extends Controller
         }
 
         return Inertia::render('Putaway/CreatePutaway', [
-            'nextTransferNo' => $putaway?->transfer_no ?? DocumentNumber::make(StockTransfer::class, 'transfer_no', 'PTW'),
+            'nextTransferNo' => $putaway?->transfer_no ?? DocumentNumber::preview(StockTransfer::class, 'transfer_no', 'PTW', $branchId),
             'putaway' => $putaway ? $this->formatEditableTransfer($putaway) : null,
             'receipt' => $receipt ? $this->formatReceipt($receipt) : null,
             'receipts' => $this->formattedPutawayReceipts($companyId, $branchId),
@@ -143,7 +154,7 @@ class PutawayController extends Controller
                 'to_warehouse_id' => $firstDestination->warehouse_id,
                 'from_location_id' => $receipt->stock_location_id,
                 'to_location_id' => $firstDestination->id,
-                'transfer_no' => DocumentNumber::make(StockTransfer::class, 'transfer_no', 'PTW'),
+                'transfer_no' => DocumentNumber::make(StockTransfer::class, 'transfer_no', 'PTW', $branchId),
                 'transfer_type' => 'internal_transfer',
                 'status' => 'draft',
                 'transfer_date' => now(),
@@ -245,15 +256,11 @@ class PutawayController extends Controller
             ->with('success', "Putaway movement {$stockTransfer->transfer_no} updated.");
     }
 
-    public function approve(Request $request, StockTransfer $stockTransfer)
+    public function approve(Request $request, StockTransfer $stockTransfer, PutawayPostingService $postingService)
     {
         $this->ensureDraftTransfer($request, $stockTransfer);
 
-        $stockTransfer->update([
-            'status' => 'approved',
-            'approved_at' => now(),
-            'approved_by' => $request->user()->id,
-        ]);
+        $postingService->post($stockTransfer, $request->user()->id);
 
         return back()->with('success', "Putaway movement {$stockTransfer->transfer_no} completed.");
     }
@@ -552,50 +559,5 @@ class PutawayController extends Controller
             ->pluck('quantity', 'item_id')
             ->map(fn ($quantity) => (float) $quantity)
             ->all();
-    }
-
-    private function moveBalance(
-        int $companyId,
-        int $branchId,
-        GoodsReceipt $receipt,
-        StockLocation $destination,
-        GoodsReceiptLine $receiptLine,
-        float $quantity
-    ): void {
-        $source = StockBalance::where('branch_id', $branchId)
-            ->where('warehouse_id', $receipt->warehouse_id)
-            ->where('stock_location_id', $receipt->stock_location_id)
-            ->where('item_id', $receiptLine->item_id)
-            ->first();
-
-        abort_if(! $source || (float) $source->quantity_available < $quantity, 422, 'Not enough stock in staging for putaway.');
-
-        $source->update([
-            'quantity_on_hand' => (float) $source->quantity_on_hand - $quantity,
-            'quantity_available' => (float) $source->quantity_available - $quantity,
-        ]);
-
-        $target = StockBalance::firstOrCreate(
-            [
-                'company_id' => $companyId,
-                'branch_id' => $branchId,
-                'warehouse_id' => $destination->warehouse_id,
-                'stock_location_id' => $destination->id,
-                'item_id' => $receiptLine->item_id,
-            ],
-            [
-                'unit_id' => $receiptLine->unit_id,
-                'quantity_on_hand' => 0,
-                'quantity_reserved' => 0,
-                'quantity_available' => 0,
-                'average_cost' => $receiptLine->unit_cost,
-            ]
-        );
-
-        $target->update([
-            'quantity_on_hand' => (float) $target->quantity_on_hand + $quantity,
-            'quantity_available' => (float) $target->quantity_available + $quantity,
-            'average_cost' => $receiptLine->unit_cost,
-        ]);
     }
 }

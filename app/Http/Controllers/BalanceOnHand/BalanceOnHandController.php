@@ -30,16 +30,19 @@ class BalanceOnHandController extends Controller
             ->orderBy('name')
             ->get()
             ->map(function (Item $item): array {
-                $companyBalances = $item->stockBalances
-                    ->filter(fn (StockBalance $balance) => $balance->stockLocation?->location_type !== 'customer_stock');
+                $saleableBalances = $item->stockBalances
+                    ->filter(fn (StockBalance $balance) => $balance->stockLocation?->location_type === 'putaway');
+                $goodsReceiptBalances = $item->stockBalances
+                    ->filter(fn (StockBalance $balance) => $balance->stockLocation?->location_type === 'inbound_staging');
                 $customerBalances = $item->stockBalances
                     ->filter(fn (StockBalance $balance) => $balance->stockLocation?->location_type === 'customer_stock');
-                $companyAvailable = $companyBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available);
+                $companyAvailable = $saleableBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available);
                 $customerAvailable = $customerBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available);
-                $quantityOnHand = $item->stockBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_on_hand);
-                $quantityAvailable = $companyAvailable + $customerAvailable;
-                $quantityReserved = $item->stockBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_reserved);
-                $stockValue = $companyBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available * (float) $balance->average_cost);
+                $quantityOnHand = $saleableBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_on_hand);
+                $goodsReceiptQuantity = $goodsReceiptBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_on_hand);
+                $quantityAvailable = $companyAvailable;
+                $quantityReserved = $saleableBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_reserved);
+                $stockValue = $saleableBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available * (float) $balance->average_cost);
                 $minimumStock = (float) $item->minimum_stock_qty;
 
                 return [
@@ -50,12 +53,13 @@ class BalanceOnHandController extends Controller
                     'unit' => $item->unit?->code ?? $item->unit?->name ?? 'Unit',
                     'minimumStockQty' => $minimumStock,
                     'quantityOnHand' => $quantityOnHand,
+                    'goodsReceiptQuantity' => $goodsReceiptQuantity,
                     'quantityAvailable' => $quantityAvailable,
                     'companyQuantityAvailable' => $companyAvailable,
                     'customerQuantityAvailable' => $customerAvailable,
                     'quantityReserved' => $quantityReserved,
                     'stockValue' => $stockValue,
-                    'locationsCount' => $companyBalances->where('quantity_available', '>', 0)->count(),
+                    'locationsCount' => $saleableBalances->where('quantity_available', '>', 0)->count(),
                     'status' => $this->stockStatus($companyAvailable, $minimumStock),
                 ];
             });
@@ -94,8 +98,13 @@ class BalanceOnHandController extends Controller
             ->orderBy('stock_location_id')
             ->get();
 
-        $quantityOnHand = $balances->sum(fn (StockBalance $balance) => (float) $balance->quantity_on_hand);
-        $quantityAvailable = $balances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available);
+        $saleableBalances = $balances
+            ->filter(fn (StockBalance $balance) => $balance->stockLocation?->location_type === 'putaway');
+        $goodsReceiptQuantity = $balances
+            ->filter(fn (StockBalance $balance) => $balance->stockLocation?->location_type === 'inbound_staging')
+            ->sum(fn (StockBalance $balance) => (float) $balance->quantity_on_hand);
+        $quantityOnHand = $saleableBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_on_hand);
+        $quantityAvailable = $saleableBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available);
         $minimumStock = (float) $item->minimum_stock_qty;
 
         return Inertia::render('BalanceOnHand/View', [
@@ -107,9 +116,10 @@ class BalanceOnHandController extends Controller
                 'unit' => $item->unit?->code ?? $item->unit?->name ?? 'Unit',
                 'minimumStockQty' => $minimumStock,
                 'quantityOnHand' => $quantityOnHand,
+                'goodsReceiptQuantity' => $goodsReceiptQuantity,
                 'quantityAvailable' => $quantityAvailable,
-                'quantityReserved' => $balances->sum(fn (StockBalance $balance) => (float) $balance->quantity_reserved),
-                'stockValue' => $balances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available * (float) $balance->average_cost),
+                'quantityReserved' => $saleableBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_reserved),
+                'stockValue' => $saleableBalances->sum(fn (StockBalance $balance) => (float) $balance->quantity_available * (float) $balance->average_cost),
                 'status' => $this->stockStatus($quantityAvailable, $minimumStock),
             ],
             'balances' => $balances->map(fn (StockBalance $balance): array => [

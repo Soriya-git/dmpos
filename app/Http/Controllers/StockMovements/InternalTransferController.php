@@ -37,11 +37,11 @@ class InternalTransferController extends Controller
 
     public function show(Request $request, StockTransfer $stockTransfer): Response
     {
-        [$companyId, $branchId] = $this->scope($request);
+        [$companyId] = $this->scope($request);
         abort_if((int) $stockTransfer->company_id !== (int) $companyId, 403);
         abort_if(
-            (int) $stockTransfer->from_branch_id !== (int) $branchId
-                && (int) $stockTransfer->to_branch_id !== (int) $branchId,
+            ! $request->user()->canWorkAtBranch($stockTransfer->from_branch_id)
+                && ! $request->user()->canWorkAtBranch($stockTransfer->to_branch_id),
             403
         );
         abort_if($stockTransfer->transfer_type !== 'internal_transfer' || $stockTransfer->goods_receipt_id, 404);
@@ -52,13 +52,25 @@ class InternalTransferController extends Controller
 
         return Inertia::render('InternalTransfer/Show', [
             'transfer' => $transfer,
-            'locations' => $props['locations'],
+            'locations' => StockLocation::query()
+                ->with('warehouse:id,name,code')
+                ->where('company_id', $companyId)
+                ->where('branch_id', $stockTransfer->to_branch_id)
+                ->where('warehouse_id', $stockTransfer->to_warehouse_id)
+                ->where('is_active', true)
+                ->whereIn('location_type', self::LOCATION_TYPES)
+                ->orderBy('location_type')
+                ->orderBy('code')
+                ->get()
+                ->map(fn (StockLocation $location): array => $this->formatLocation($location)),
+            'canManageDestinationPutaway' => $request->user()->canWorkAtBranch($stockTransfer->to_branch_id),
         ]);
     }
 
     private function pageProps(Request $request): array
     {
         [$companyId, $branchId] = $this->scope($request);
+        $accessibleBranchIds = $this->accessibleBranchIds($request, $branchId);
 
         $filters = $request->validate([
             'search' => ['nullable', 'string', 'max:255'],
@@ -97,14 +109,7 @@ class InternalTransferController extends Controller
             ->orderBy('location_type')
             ->orderBy('code')
             ->get()
-            ->map(fn (StockLocation $location): array => [
-                'id' => $location->id,
-                'warehouseId' => $location->warehouse_id,
-                'code' => $location->code ?? 'LOC',
-                'name' => $location->name,
-                'warehouse' => $location->warehouse?->name ?? 'Warehouse',
-                'type' => $location->location_type,
-            ]);
+            ->map(fn (StockLocation $location): array => $this->formatLocation($location));
 
         $warehouses = Warehouse::query()
             ->with('branch:id,name')
@@ -153,8 +158,8 @@ class InternalTransferController extends Controller
             ->withCount('lines')
             ->where('company_id', $companyId)
             ->where(fn ($query) => $query
-                ->where('from_branch_id', $branchId)
-                ->orWhere('to_branch_id', $branchId))
+                ->whereIn('from_branch_id', $accessibleBranchIds)
+                ->orWhereIn('to_branch_id', $accessibleBranchIds))
             ->where('transfer_type', 'internal_transfer')
             ->whereNull('goods_receipt_id')
             ->when($filters['warehouse_id'] ?? null, fn ($query, $warehouseId) => $query
@@ -186,7 +191,7 @@ class InternalTransferController extends Controller
             'locations' => $locations,
             'warehouses' => $warehouses,
             'items' => $items,
-            'nextTransferNo' => DocumentNumber::make(StockTransfer::class, 'transfer_no', 'IT'),
+            'nextTransferNo' => DocumentNumber::preview(StockTransfer::class, 'transfer_no', 'IT', $branchId),
             'filters' => [
                 'search' => $filters['search'] ?? null,
                 'location_id' => $filters['location_id'] ?? null,
@@ -291,7 +296,7 @@ class InternalTransferController extends Controller
             $firstLine = $data['lines'][0];
             $firstBalance = $balances->get((int) $firstLine['stock_balance_id']);
             $firstDestination = $firstLine['to_location_id'] ? $destinations->get((int) $firstLine['to_location_id']) : null;
-            $transferNo = DocumentNumber::make(StockTransfer::class, 'transfer_no', 'IT');
+            $transferNo = DocumentNumber::make(StockTransfer::class, 'transfer_no', 'IT', $branchId);
 
             $transfer = StockTransfer::create([
                 'company_id' => $companyId,
@@ -490,10 +495,11 @@ class InternalTransferController extends Controller
 
     public function receive(Request $request, StockTransfer $stockTransfer)
     {
-        [$companyId, $branchId] = $this->scope($request);
+        [$companyId] = $this->scope($request);
         abort_if((int) $stockTransfer->company_id !== (int) $companyId, 403);
-        abort_if((int) $stockTransfer->to_branch_id !== (int) $branchId, 403);
+        abort_if(! $request->user()->canWorkAtBranch($stockTransfer->to_branch_id), 403);
         abort_if($stockTransfer->status !== 'in_transit', 422, 'Only transfers in transit can be received.');
+        $destinationBranchId = (int) $stockTransfer->to_branch_id;
 
         $data = $request->validate([
             'lines' => ['required', 'array', 'min:1'],
@@ -502,7 +508,7 @@ class InternalTransferController extends Controller
             'lines.*.quantity' => ['required', 'numeric', 'gte:0'],
         ]);
 
-        DB::transaction(function () use ($request, $stockTransfer, $data, $companyId, $branchId) {
+        DB::transaction(function () use ($request, $stockTransfer, $data, $companyId, $destinationBranchId) {
             $stockTransfer->load('lines');
             $lines = $stockTransfer->lines->keyBy('id');
             $receivedAny = false;
@@ -521,7 +527,7 @@ class InternalTransferController extends Controller
                 }
 
                 $location = StockLocation::query()
-                    ->where('company_id', $companyId)->where('branch_id', $branchId)
+                    ->where('company_id', $companyId)->where('branch_id', $destinationBranchId)
                     ->where('warehouse_id', $stockTransfer->to_warehouse_id)
                     ->where('is_active', true)->whereIn('location_type', self::LOCATION_TYPES)
                     ->find($input['to_location_id']);
@@ -531,7 +537,7 @@ class InternalTransferController extends Controller
                 $source = StockBalance::query()->find($sourceId);
                 abort_if(! $source, 422, 'Source stock is missing.');
                 $target = StockBalance::firstOrCreate([
-                    'company_id' => $companyId, 'branch_id' => $branchId,
+                    'company_id' => $companyId, 'branch_id' => $destinationBranchId,
                     'warehouse_id' => $stockTransfer->to_warehouse_id,
                     'stock_location_id' => $location->id, 'item_id' => $line->item_id,
                 ], [
@@ -575,11 +581,11 @@ class InternalTransferController extends Controller
 
     public function reject(Request $request, StockTransfer $stockTransfer)
     {
-        [$companyId, $branchId] = $this->scope($request);
+        [$companyId] = $this->scope($request);
         abort_if((int) $stockTransfer->company_id !== (int) $companyId, 403);
         abort_if(! in_array($stockTransfer->status, ['draft', 'in_transit'], true), 422, 'Only draft or in-transit transfers can be rejected.');
-        abort_if($stockTransfer->status === 'draft' && (int) $stockTransfer->from_branch_id !== (int) $branchId, 403);
-        abort_if($stockTransfer->status === 'in_transit' && (int) $stockTransfer->to_branch_id !== (int) $branchId, 403);
+        abort_if($stockTransfer->status === 'draft' && ! $request->user()->canWorkAtBranch($stockTransfer->from_branch_id), 403);
+        abort_if($stockTransfer->status === 'in_transit' && ! $request->user()->canWorkAtBranch($stockTransfer->to_branch_id), 403);
 
         DB::transaction(function () use ($request, $stockTransfer) {
             if ($stockTransfer->status === 'in_transit') {
@@ -636,6 +642,29 @@ class InternalTransferController extends Controller
         abort_if(! $branchId, 422, 'No branch is available for internal transfer.');
 
         return [$companyId, $branchId];
+    }
+
+    private function accessibleBranchIds(Request $request, int $primaryBranchId): array
+    {
+        return collect([$primaryBranchId])
+            ->merge($request->user()->branches()->pluck('branches.id'))
+            ->filter()
+            ->map(fn ($branchId) => (int) $branchId)
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    private function formatLocation(StockLocation $location): array
+    {
+        return [
+            'id' => $location->id,
+            'warehouseId' => $location->warehouse_id,
+            'code' => $location->code ?? 'LOC',
+            'name' => $location->name,
+            'warehouse' => $location->warehouse?->name ?? 'Warehouse',
+            'type' => $location->location_type,
+        ];
     }
 
     private function ensureDraftTransfer(Request $request, StockTransfer $stockTransfer): void

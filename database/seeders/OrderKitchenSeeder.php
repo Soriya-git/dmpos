@@ -36,7 +36,7 @@ class OrderKitchenSeeder extends Seeder
             'pos_terminal_id' => $terminal->id,
             'customer_id' => $customer->id,
             'dining_resource_id' => $resource->id,
-            'session_no' => DocumentNumber::make(DiningSession::class, 'session_no', 'DS'),
+            'session_no' => DocumentNumber::make(DiningSession::class, 'session_no', 'DS', $branch),
             'guest_count' => 4,
             'status' => 'open',
             'opened_at' => now(),
@@ -46,7 +46,7 @@ class OrderKitchenSeeder extends Seeder
             'company_id' => $company->id,
             'branch_id' => $branch->id,
             'dining_session_id' => $session->id,
-            'order_no' => DocumentNumber::make(Order::class, 'order_no', 'OR'),
+            'order_no' => DocumentNumber::make(Order::class, 'order_no', 'OR', $branch),
             'status' => 'sent_to_kitchen',
             'sent_to_kitchen_at' => now(),
             'note' => 'Demo order',
@@ -81,7 +81,7 @@ class OrderKitchenSeeder extends Seeder
             'order_id' => $order->id,
             'dining_session_id' => $session->id,
             'dining_resource_id' => $resource->id,
-            'ticket_no' => DocumentNumber::make(KitchenTicket::class, 'ticket_no', 'KT'),
+            'ticket_no' => DocumentNumber::make(KitchenTicket::class, 'ticket_no', 'KT', $branch),
             'status' => 'pending',
         ]);
 

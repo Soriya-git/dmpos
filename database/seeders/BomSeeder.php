@@ -253,7 +253,7 @@ class BomSeeder extends Seeder
 
         return BomHeader::query()->create([
             ...$data,
-            'bom_no' => DocumentNumber::make(BomHeader::class, 'bom_no', 'BM'),
+            'bom_no' => DocumentNumber::make(BomHeader::class, 'bom_no', 'BM', $branch),
         ]);
     }
 

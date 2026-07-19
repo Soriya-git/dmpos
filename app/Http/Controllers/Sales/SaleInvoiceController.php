@@ -180,7 +180,7 @@ class SaleInvoiceController extends Controller
                 'branch_id' => $invoice->branch_id,
                 'invoice_id' => $invoice->id,
                 'payment_method_id' => $method?->id,
-                'payment_no' => DocumentNumber::make(Payment::class, 'payment_no', 'PY'),
+                'payment_no' => DocumentNumber::make(Payment::class, 'payment_no', 'PY', $invoice->branch_id),
                 'status' => $paidUsd >= $balanceUsd ? 'paid' : 'partial',
                 'currency' => $data['currency'],
                 'amount_paid' => $amountPaid,

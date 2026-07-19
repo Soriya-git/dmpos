@@ -184,7 +184,7 @@ class StockWriteOffController extends Controller
             'warehouses' => $warehouses,
             'items' => $items,
             'writeOffs' => $writeOffs,
-            'nextWriteOffNo' => DocumentNumber::make(StockAdjustment::class, 'adjustment_no', 'WO'),
+            'nextWriteOffNo' => DocumentNumber::preview(StockAdjustment::class, 'adjustment_no', 'WO', $branchId),
             'filters' => [
                 'search' => $filters['search'] ?? null,
                 'status' => $filters['status'] ?? null,
@@ -260,7 +260,7 @@ class StockWriteOffController extends Controller
                 'branch_id' => $branchId,
                 'warehouse_id' => $warehouse->id,
                 'stock_location_id' => $firstBalance->stock_location_id,
-                'adjustment_no' => DocumentNumber::make(StockAdjustment::class, 'adjustment_no', 'WO'),
+                'adjustment_no' => DocumentNumber::make(StockAdjustment::class, 'adjustment_no', 'WO', $branchId),
                 'adjustment_type' => 'write_off',
                 'status' => 'draft',
                 'adjustment_date' => $data['adjustment_date'],

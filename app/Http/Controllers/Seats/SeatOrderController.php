@@ -25,6 +25,7 @@ use App\Models\Printer;
 use App\Models\PrintJob;
 use App\Models\PrintTemplate;
 use App\Services\MembershipCardLedger;
+use App\Services\RawTcpPrinter;
 use App\Support\DocumentNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -61,12 +62,21 @@ class SeatOrderController extends Controller
         $search = $request->query('search');
 
         $menus = Menu::query()
-            ->with(['menuCategory', 'prices', 'branches'])
+            ->with(['menuCategory', 'prices'])
             ->where('company_id', $activePosSession->company_id)
-            ->whereHas('branches', fn ($q) => $q->whereKey($activePosSession->branch_id))
+            ->where(function ($q) use ($activePosSession) {
+                $q->whereNull('branch_id')
+                    ->orWhere('branch_id', $activePosSession->branch_id);
+            })
             ->where('is_active', true)
             ->where('is_available', true)
             ->when($categoryId, fn ($q) => $q->where('menu_category_id', $categoryId))
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($qq) use ($search) {
+                    $qq->where('name', 'like', "%{$search}%")
+                        ->orWhere('code', 'like', "%{$search}%");
+                });
+            })
             ->orderBy('name')
             ->get()
             ->map(function ($menu) use ($diningSession, $activePosSession) {
@@ -76,13 +86,9 @@ class SeatOrderController extends Controller
                     $activePosSession->branch_id
                 );
 
-                $branchNickname = $menu->branches->firstWhere('id', $activePosSession->branch_id)?->pivot?->nickname;
-
                 return [
                     'id' => $menu->id,
                     'name' => $menu->name,
-                    'master_name' => $menu->name,
-                    'nickname' => $branchNickname,
                     'code' => $menu->code,
                     'image' => $menu->image,
                     'category_name' => $menu->menuCategory?->name,
@@ -419,12 +425,9 @@ class SeatOrderController extends Controller
             return $this->createPrintJobsForOrder($order, $request);
         });
 
-        return back()->with(
-            'success',
-            $printJobs->isEmpty()
-                ? 'Order confirmed. No printable menu lines were found.'
-                : 'Order confirmed and printing has been queued.'
-        );
+        $printJobs->each(fn (PrintJob $printJob) => app(RawTcpPrinter::class)->print($printJob));
+
+        return back()->with('success', 'Order sent to kitchen.');
     }
 
     public function reprint(Request $request, DiningSession $diningSession, PrintJob $printJob)
@@ -448,7 +451,7 @@ class SeatOrderController extends Controller
             'branch_id' => $printJob->branch_id,
             'printer_id' => $printJob->printer_id,
             'print_template_id' => $printJob->print_template_id,
-            'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ'),
+            'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ', $printJob->branch_id),
             'job_type' => $printJob->job_type,
             'status' => 'pending',
             'reference_type' => $printJob->reference_type,
@@ -817,7 +820,7 @@ class SeatOrderController extends Controller
                     ?? now()->toDateString(),
                 'dining_session_id' => $diningSession->id,
                 'customer_id' => $diningSession->customer_id,
-                'invoice_no' => DocumentNumber::make(Invoice::class, 'invoice_no', 'IN'),
+                'invoice_no' => DocumentNumber::make(Invoice::class, 'invoice_no', 'IN', $diningSession->branch_id),
                 'currency' => 'USD',
                 'exchange_rate_snapshot' => $exchangeRate,
                 'issued_at' => now(),
@@ -922,7 +925,7 @@ class SeatOrderController extends Controller
                     'branch_id' => $diningSession->branch_id,
                     'invoice_id' => $invoice->id,
                     'payment_method_id' => $method?->id,
-                    'payment_no' => DocumentNumber::make(Payment::class, 'payment_no', 'PY'),
+                    'payment_no' => DocumentNumber::make(Payment::class, 'payment_no', 'PY', $diningSession->branch_id),
                     'status' => $invoiceStatus === 'paid' ? 'paid' : 'partial',
                     'currency' => $data['currency'],
                     'amount_paid' => $paymentAmount,
@@ -1116,42 +1119,32 @@ class SeatOrderController extends Controller
 
     private function getCartOrder(DiningSession $diningSession): Order
     {
-        return Order::firstOrCreate(
-            [
-                'dining_session_id' => $diningSession->id,
-                'status' => 'draft',
-            ],
-            [
-                'company_id' => $diningSession->company_id,
-                'branch_id' => $diningSession->branch_id,
-                'pos_open_date' => $diningSession->pos_open_date
-                    ?? $diningSession->opened_at?->toDateString()
-                    ?? now()->toDateString(),
-                'menu_price_list_id' => $diningSession->menu_price_list_id,
-                'order_no' => $this->makeDiningSessionOrderNumber($diningSession),
-                'created_by' => auth()->id(),
-            ]
-        );
+        $order = Order::query()
+            ->where('dining_session_id', $diningSession->id)
+            ->where('status', 'draft')
+            ->first();
+
+        if ($order) {
+            return $order;
+        }
+
+        return Order::create([
+            'company_id' => $diningSession->company_id,
+            'branch_id' => $diningSession->branch_id,
+            'dining_session_id' => $diningSession->id,
+            'pos_open_date' => $diningSession->pos_open_date
+                ?? $diningSession->opened_at?->toDateString()
+                ?? now()->toDateString(),
+            'menu_price_list_id' => $diningSession->menu_price_list_id,
+            'order_no' => $this->makeDiningSessionOrderNumber($diningSession),
+            'created_by' => auth()->id(),
+            'status' => 'draft',
+        ]);
     }
 
     private function makeDiningSessionOrderNumber(DiningSession $diningSession): string
     {
-        $prefix = $diningSession->session_no.'-OR';
-
-        $lastOrderNo = Order::query()
-            ->where('dining_session_id', $diningSession->id)
-            ->where('order_no', 'like', $prefix.'%')
-            ->lockForUpdate()
-            ->orderByDesc('order_no')
-            ->value('order_no');
-
-        $sequence = 1;
-
-        if (is_string($lastOrderNo) && str_starts_with($lastOrderNo, $prefix)) {
-            $sequence = ((int) substr($lastOrderNo, strlen($prefix))) + 1;
-        }
-
-        return $prefix.str_pad((string) $sequence, 3, '0', STR_PAD_LEFT);
+        return DocumentNumber::make(Order::class, 'order_no', 'OR', $diningSession->branch_id);
     }
 
     private function openSessionForResource(
@@ -1189,7 +1182,7 @@ class SeatOrderController extends Controller
             'customer_id' => $sourceSession->customer_id,
             'dining_resource_id' => $resource->id,
             'menu_price_list_id' => $sourceSession->menu_price_list_id,
-            'session_no' => DocumentNumber::make(DiningSession::class, 'session_no', 'DS'),
+            'session_no' => DocumentNumber::make(DiningSession::class, 'session_no', 'DS', $activePosSession->branch_id),
             'guest_count' => null,
             'status' => 'open',
             'opened_at' => now(),
@@ -1376,7 +1369,7 @@ class SeatOrderController extends Controller
                     'branch_id' => $order->branch_id,
                     'printer_id' => $printer?->id,
                     'print_template_id' => $templates->get($jobType)?->id ?? $templates->get('kitchen_ticket')?->id,
-                    'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ'),
+                    'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ', $order->branch_id),
                     'job_type' => $jobType,
                     'status' => 'pending',
                     'reference_type' => 'order',
@@ -1461,7 +1454,7 @@ class SeatOrderController extends Controller
             'branch_id' => $order->branch_id,
             'printer_id' => $printer?->id,
             'print_template_id' => $template?->id,
-            'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ'),
+            'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ', $order->branch_id),
             'job_type' => 'cancel_slip',
             'status' => 'pending',
             'reference_type' => 'order',
@@ -1547,7 +1540,7 @@ class SeatOrderController extends Controller
             'branch_id' => $order->branch_id,
             'printer_id' => $printer?->id,
             'print_template_id' => $template?->id,
-            'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ'),
+            'job_no' => DocumentNumber::make(PrintJob::class, 'job_no', 'PJ', $order->branch_id),
             'job_type' => 'cancel_slip',
             'status' => 'pending',
             'reference_type' => 'order',
@@ -1898,7 +1891,7 @@ class SeatOrderController extends Controller
             'branch_id' => $diningSession->branch_id,
             'invoice_id' => $invoice->id,
             'payment_method_id' => $method->id,
-            'payment_no' => DocumentNumber::make(Payment::class, 'payment_no', 'PY'),
+            'payment_no' => DocumentNumber::make(Payment::class, 'payment_no', 'PY', $diningSession->branch_id),
             'status' => $invoiceStatus === 'paid' ? 'paid' : 'partial',
             'currency' => $data['currency'],
             'amount_paid' => $paymentAmount,

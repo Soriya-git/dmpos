@@ -9,6 +9,7 @@ import ITModel from './ITModel.vue';
 defineProps<{
     transfer: Record<string, any>;
     locations: Array<Record<string, any>>;
+    canManageDestinationPutaway: boolean;
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -35,10 +36,13 @@ const breadcrumbs: BreadcrumbItem[] = [
             </Button>
         </template>
 
-        <main class="min-h-[calc(100dvh-4rem)] bg-[#f8fafc] p-4 md:p-6 xl:p-8 2xl:p-10">
+        <main
+            class="min-h-[calc(100dvh-4rem)] bg-[#f8fafc] p-4 md:p-6 xl:p-8 2xl:p-10"
+        >
             <ITModel
                 :transfer="transfer as any"
                 :locations="locations as any"
+                :can-manage-destination-putaway="canManageDestinationPutaway"
                 page
                 @close="router.visit('/stock-movements/internal-transfer')"
             />

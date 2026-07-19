@@ -42,7 +42,7 @@ class PurchaseSeeder extends Seeder
         $po = PurchaseOrder::create([
             'company_id' => $company->id,
             'branch_id' => $branch->id,
-            'po_no' => DocumentNumber::make(PurchaseOrder::class, 'po_no', 'PO'),
+            'po_no' => DocumentNumber::make(PurchaseOrder::class, 'po_no', 'PO', $branch),
             'purchase_scope' => 'branch',
             'supplier_name' => 'Demo Supplier',
             'supplier_phone' => '012345678',
@@ -96,7 +96,7 @@ class PurchaseSeeder extends Seeder
             'purchase_order_id' => $po->id,
             'warehouse_id' => $warehouse->id,
             'stock_location_id' => $stagingLocation->id,
-            'receipt_no' => DocumentNumber::make(GoodsReceipt::class, 'receipt_no', 'GR'),
+            'receipt_no' => DocumentNumber::make(GoodsReceipt::class, 'receipt_no', 'GR', $branch),
             'status' => 'received',
             'received_at' => now(),
             'note' => 'Demo goods receipt',

@@ -92,7 +92,7 @@ class PosSessionController extends Controller
                 'company_id' => $terminal->company_id,
                 'branch_id' => $terminal->branch_id,
                 'pos_terminal_id' => $terminal->id,
-                'session_no' => DocumentNumber::make(PosSession::class, 'session_no', 'PS'),
+                'session_no' => DocumentNumber::make(PosSession::class, 'session_no', 'PS', $terminal->branch_id),
                 'status' => 'open',
                 'opening_cash_usd' => $openingCash['USD'] ?? 0,
                 'opening_cash_khr' => $openingCash['KHR'] ?? 0,
